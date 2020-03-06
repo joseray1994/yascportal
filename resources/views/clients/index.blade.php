@@ -23,11 +23,9 @@
                                     <input type="text" class="form-control" id="search">
                                     <button type="button" class="btn btn-primary search-query"><i class="fa fa-search"></i></button>
                                 </div>
-                                
+                                @include('clients.table')
                             </div>
-                            @include('clients.table')
                         </div>
-                        
                     </div>
                 </div>
 </div>
