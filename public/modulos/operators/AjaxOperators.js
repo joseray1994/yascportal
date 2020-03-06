@@ -49,6 +49,7 @@ $(document).ready(function(){
         $(".show_pass_div").hide();
         $('#id_client').val("");
         $('#id_client').trigger('change');
+        $(".seccion-sugerencia").hide();
 
         var drEvent = $('#dropify-event').dropify();
         drEvent = drEvent.data('dropify');
@@ -66,6 +67,7 @@ $(document).ready(function(){
         $("#btn_add").show();
         $("#formOperators").trigger('reset');
         $('#tag_put').remove();
+        $(".seccion-sugerencia").hide();
     });
 
     //SAVE OPERATOR
@@ -104,6 +106,7 @@ $(document).ready(function(){
         disablePassInput();
         $(".show_pass_div").show();
         $(".pass").hide();
+        $(".seccion-sugerencia").hide();
 
         actions.show(my_url);
     });
@@ -232,7 +235,7 @@ $(document).ready(function(){
         valor = $(this).val();
         if(valor != ""){
             $("#nickname").val(valor);
-            $("#email").val(valor);
+            $("#email").val(valor+'@yascemail.com');
             $("#password").val(valor + "*2020");
             $("#password_confirmation").val(valor + "*2020");
         }
@@ -275,12 +278,12 @@ const success = {
         $('#btn-save').attr('disabled', false);
         var dato = data;
        
-        switch(dato) {
+        switch(dato.No) {
             case 2:
                 $.notify({
                     // options
                     title: "Error!",
-                    message:data[0].name,
+                    message:data.msg,
                 },{
                     // settings
                     type: 'danger'
