@@ -1,4 +1,4 @@
-
+getData(1);
 $(document).ready(function(){
      
     
@@ -166,6 +166,7 @@ $(document).ready(function(){
             my_url += '/' + id;
         }
         actions.edit_create(type,my_url,state,formData, file);
+        $('#modalDocuments').modal('hide');
     });
     
 

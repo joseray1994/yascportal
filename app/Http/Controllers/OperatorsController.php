@@ -53,10 +53,6 @@ class OperatorsController extends Controller
     public function validateForm($request,$user=''){
         $user=='' ? $email = 'required|email|unique:users,email,NULL,id,id_status,1 | unique:users,email,'.$user.',id,id_status,2' :  $email = 'required|unique:users,email,'.$user.',id,id_status,1 | unique:users,email,'.$user.',id,id_status,2';
         $this->validate(request(), [
-            'email' => $email,
-            'password' => 'sometimes|required|confirmed|min:8',
-            'image' => 'image',
-            'id_client' => 'required',
             'name' => 'required|max:150|regex:/^([a-zA-Z]+)(\s[a-zA-Z]+)*$/',
             'last_name' => 'required|max:150|regex:/^([a-zA-Z]+)(\s[a-zA-Z]+)*$/',
             'phone' => 'required|max:20|regex:/^[0-9]{0,20}(\.?)[0-9]{0,2}$/',
@@ -65,6 +61,10 @@ class OperatorsController extends Controller
             'emergency_contact_phone' => 'numeric|nullable',
             'birthdate' => 'required|date|before:18 years ago',
             'nickname' => 'sometimes|required',
+            'email' => $email,
+            'password' => 'sometimes|required|confirmed|min:8',
+            'image' => 'image',
+            'id_client' => 'required',
         ]);
     }
 
@@ -76,25 +76,28 @@ class OperatorsController extends Controller
     }
 
     public function store(Request $request){
-
-        $request->email = $request->email."@yascemail.com";
+        //VALIDADOR DE FORMULARIO
         OperatorsController::validateForm($request);
-
-        $validaNick = OperatorsController::validateNickname($request->name);
+        //VALIDAR NICK NAME
+        $validaNick = OperatorsController::validateNickname($request->nickname);
         
         if($validaNick){
             $msg= 'Another user already has that Nickname';
-            $data=['No'=>1,'msg'=>$msg];
+            $data=['No'=>2,'msg'=>$msg];
             return response()->json($data);
         }
+        //CREAR USUARIO
         $user =  User::Create([
             'id_type_user'=>9,
             'id_status'=>1,
-            'nickname'=>$request->name,
+            'nickname'=>$request->nickname,
             'email'=>$request->email,
             'password'=>Hash::make($request->password),
         ]);
 
+        // SUBIR IMAGE
+        $imageName = OperatorsController::documents($request, "operators");
+        // GUARDAR INFO DE USUARIO
         $User_info =  User_info::Create([
             'id_user'=>$user->id,
             'name'=>$request->name,
@@ -113,13 +116,16 @@ class OperatorsController extends Controller
             'entrance_date'=>$request->entrance_date,
         ]);
 
+        // GUARDAR DETALLE CLIENTE
         $user_client = User_client::Create([
             'id_user'=>$user->id,
             'id_client'=>$request->id_client
         ]);
+        // GET ROW
         $result = OperatorsController::getResult($user->id);
 
         return response()->json($result);
+
     }
 
     public function show($id){

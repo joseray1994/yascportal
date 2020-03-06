@@ -329,12 +329,13 @@ const types ={
     button: function(dato){
            var buttons='<div class="btn-group">';
             if(dato.id_status== 1){
-               buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="'+dato.id+'"><i class="fa fa-edit"></i></button>';
-               buttons += '	<button type="button" class="btn btn-outline-danger off-type" title="Desactivar Usuario" data-type="confirm" value="'+dato.id+'" ><i class="fa fa-window-close"></i></button>';
+                buttons += ` <button type="button" class="btn btn-sm btn-outline-secondary btn-edit" data-toggle="tooltip" title="Edit" value="${dato.id}"  ><i class="fa fa-edit"></i></button>
+                            <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert delete-op" data-toggle="tooltip" title="Desactivated" data-type="confirm" value="${dato.id}"><i class="fa fa-window-close"></i></button>
+               ` ;
           
            }else if(dato.id_status == 2){
-               buttons  +=' <button type="button" class="btn btn-sm btn-outline-success off-type" title="Activated" data-type="confirm" value="'+dato.id+'"><i class="fa fa-check-square-o"></i></button>'
-               buttons  += ' <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert deletetype" title="Delete" data-type="confirm" value="'+dato.id+'"><i class="fa fa-trash-o"></i></button>';
+            buttons  += `<button type="button" class="btn btn-sm btn-outline-success delete-op" title="Activated" data-toggle="tooltip" data-type="confirm" value="${dato.id}" ><i class="fa fa-check-square-o"></i></button>
+            <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert destroy-op" data-toggle="tooltip" title="Delete" data-type="confirm" value="${dato.id}"><i class="fa fa-trash-o"></i></button>`;
            }
            buttons+='</div>';
            return buttons;
@@ -442,38 +443,38 @@ const success = {
         $('#myModal').modal('show');
     },
     deactivated:  function(data){
-        // console.log(data.user.status);
-        if(data.user.id_status == 0){
-            $('#myTable').dataTable().fnDeleteRow('#user_id' + data.user.id);
+        console.log(data)
+        var dato = data;
+        if(dato.id_status != 0){
 
-            $.notify({
-                // options
-                title: "Error!",
-                message:"Se elimino correctamente",
-            },{
-                // settings
-                type: 'danger'
-            });
-        }else if(data.user.id_status == 1 || data.user.id_status == 2){
-            var dato=data;
-            var edit = [
-                // dato.mat+dato.id,
-                // dato.name,
-                dato.user.profile.name,
-                dato.user.name,
-                dato.user.email,
-                dato.user.phone,
-                category.status(dato),
-                category.buttons(dato),
-            ];
-
-            $('#myTable').dataTable().fnUpdate(edit,$('tr#user_id'+dato.user.id)[0]);
-            if(dato.user.id_status==1){
-                $('#user_id'+dato.user.id).css("background-color", "#c3e6cb");
-            }else{
-                $('#user_id'+dato.user.id).css("background-color", "#f2dede");
+            var user = `<tr id="user_id${dato.id}">
+            <td>${dato.id}</td>
+            <td>${dato.user_info.name}</td>
+            <td>${dato.user_info.last_name}</td>
+            <td>${dato.email}</td>
+            <td>${dato.user_info.phone}</td>
+            <td>${dato.user_info.entrance_date}</td>
+            <td>${dato.user_info.birthdate}</td>
+            <td class="hidden-xs">${types.status(dato)}</td>
+            <td>${types.button(dato)}</td>
+        </tr>`;
+          
+            $("#user_id"+dato.id).replaceWith(user);
+            if(dato.id_status == 1){
+                color ="#c3e6cb";
+            }else if(dato.id_status == 2){
+                color ="#ed969e";
             }
+            $("#user_id"+dato.id).css("background-color", color);  
+            
+        }else if(dato.id_status == 0){
+            
+            $("#user_id"+dato.id).remove();
+            if ($('.rowType').length == 0) {
+                $('#table-row').show();
+              }
         }
+        
        
             
         },
