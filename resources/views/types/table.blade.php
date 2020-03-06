@@ -50,6 +50,4 @@
         @endforelse
     </tbody>
 </table>
-
-
 {!! $data->render() !!}
