@@ -195,17 +195,20 @@ class ClientsController extends Controller
 
      //Functions for Documents
      public function documents($request, $folder){
-        dd($request->file('document'));
-       $count = count($request->file('document'));
-        $documentName = '';
-        if ($request->file('document')) {
-            $count = count($request);
-            dd($count);
-            // $document = $request->file('document');
-            // $documentName = $document->getClientOriginalName();
-            // $document->move(public_path().'/documents/'.$folder.'/',$documentName);
+    //     dd($request->file('document'));
+    //    $count = count($request->file('document'));
+    //     $documentName = '';
+    //     if ($request->file('document')) {
+    //         $count = count($request);
+    //         dd($count);
+    //         // $document = $request->file('document');
+    //         // $documentName = $document->getClientOriginalName();
+    //         // $document->move(public_path().'/documents/'.$folder.'/',$documentName);
 
-         }
+    //      }
+         $document = $request->file('document');
+         $documentName = $document->getClientOriginalName();
+         $document->move(public_path().'/documents/'.$folder.'/',$documentName);
          return $documentName;
     }
 
