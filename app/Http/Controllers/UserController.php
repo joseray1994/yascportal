@@ -35,9 +35,9 @@ class UserController extends Controller
             $search = trim($request->dato);
 
             if(strlen($request->type) > 0 &&  strlen($search) > 0){
-                $data2 = User::with('User_info')->paginate(10);
+                $data2 = User::with('User_info')->whereIn('id_status', [1,2])->paginate(10);
             } else{
-                $data2 = User::with('User_info')->paginate(10);
+                $data2 = User::with('User_info')->whereIn('id_status', [1,2])->paginate(10);
             } 
             $data=$data2;
             if ($request->ajax()) {
@@ -205,7 +205,7 @@ class UserController extends Controller
         }
         $user->save();
 
-        $result = OperatorsController::getResult($id);
+        $result = User::where('id',$id)->with('User_info')->first();
 
         return response()->json($result);
     } 
@@ -218,6 +218,12 @@ class UserController extends Controller
      */
     public function delete($id)
     {
-        //
+        $user = User::find($id);
+        $user->id_status = 0;
+        $user->save();
+    
+        $result = User::where('id',$id)->with('User_info')->first();
+
+        return response()->json($result);
     }
 }
