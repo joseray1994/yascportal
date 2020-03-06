@@ -9,9 +9,6 @@
                                 <li><a href="javascript:void(0);" class="btn btn-success" disabled id="btn_add" >New Client <i class="fa fa-plus"></i></a></li>
                             </ul>
                         </div>
-                        @include('clients.form')
-                        @include('clients.form_contacts')
-                        <!--Container de tabla clientes-->    
                         <div class="body tableClient"> 
                                 <div class="table-responsive">
                                     <div class="input-group mb-3 input-group-sm">
@@ -23,8 +20,12 @@
                                     <input type="text" class="form-control" id="search">
                                     <button type="button" class="btn btn-primary search-query"><i class="fa fa-search"></i></button>
                                 </div>
-                                @include('clients.table')
+                              
                             </div>
+                         @include('clients.table')
+                        @include('clients.form')
+                        @include('clients.form_contacts')
+                        <!--Container de tabla clientes-->    
                         </div>
                     </div>
                 </div>
