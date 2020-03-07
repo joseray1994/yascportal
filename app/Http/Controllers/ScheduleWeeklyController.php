@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\ScheduleDetailModel;
 use App\DaysModel;
 use App\ClientModel;
+use App\DayOffModel;
 use App\ScheduleModel;
 use App\AssignamentTypeModel;
 use Carbon\Carbon; 
