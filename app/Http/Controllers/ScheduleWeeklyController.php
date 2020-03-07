@@ -155,9 +155,9 @@ class ScheduleWeeklyController extends Controller
             $weekly->save();
      
             foreach($request->days as $days){
-                $weeklyDO = DayOffModel::::Create([
+                DayOffModel::Create([
                     "id_schedule"=>$weekly->id_schedule,
-                    "id_day"=>$weekly->id_day,
+                    "id_day"=>$days,
                     ]);
                 }
 
