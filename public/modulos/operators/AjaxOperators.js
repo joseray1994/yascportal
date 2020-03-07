@@ -214,6 +214,7 @@ $(document).ready(function(){
             dataType:"json",
             success: function(data){
                 var html = "";
+                $.notifyClose();
                 if(data.No){
                     $.notify({
                         // options
