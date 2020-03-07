@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\ScheduleDetailModel;
 use App\DaysModel;
 use App\ClientModel;
+use App\DayOffModel;
 use App\ScheduleModel;
 use App\AssignamentTypeModel;
 use Carbon\Carbon; 
@@ -153,18 +154,20 @@ class ScheduleWeeklyController extends Controller
             $weekly->status=1;
             $weekly->save();
      
-            $weeklySch = ScheduleModel::where('id',$weekly->id_schedule)->first();
-            $weeklySch->dayoff = $request->days;
-            $weeklySch->save();
+            foreach($request->days as $days){
+                $weeklyDO = DayOffModel::::Create([
+                    "id_schedule"=>$weekly->id_schedule,
+                    "id_day"=>$weekly->id_day,
+                    ]);
+                }
 
-
-            ScheduleDetailModel::Create([
-                "id_schedule"=>$weekly->id_schedule,
-                "id_operator"=>$weekly->id_operator,
-                "id_day"=>$weekly->id_day,
-                "time_start"=>$request->time_extra,
-                "time_end"=>$request->time_extra,
-            ]);
+                ScheduleDetailModel::Create([
+                    "id_schedule"=>$weekly->id_schedule,
+                    "id_operator"=>$weekly->id_operator,
+                    "id_day"=>$weekly->id_day,
+                    "time_start"=>$request->time_extra,
+                    "time_end"=>$request->time_extra,
+                ]);
 
 
 

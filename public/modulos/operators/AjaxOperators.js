@@ -1,5 +1,4 @@
 $(document).ready(function(){
-    getData(1);
     var url = $('#url').val();
     var baseUrl = $('#baseUrl').val();
     var radioState;
@@ -50,6 +49,10 @@ $(document).ready(function(){
         $('#id_client').val("");
         $('#id_client').trigger('change');
         $(".seccion-sugerencia").hide();
+        $(".segunda-seccion").hide();
+        $("#nickname").attr('disabled', true);
+        $("#flag").val(false);
+
 
         var drEvent = $('#dropify-event').dropify();
         drEvent = drEvent.data('dropify');
@@ -107,6 +110,10 @@ $(document).ready(function(){
         $(".show_pass_div").show();
         $(".pass").hide();
         $(".seccion-sugerencia").hide();
+        $(".segunda-seccion").show();
+        $("#nickname").attr('disabled', false);
+        $("#email").attr('disabled', true);
+        $("#flag").val(true);
 
         actions.show(my_url);
     });
@@ -206,6 +213,7 @@ $(document).ready(function(){
             dataType:"json",
             success: function(data){
                 var html = "";
+                $.notifyClose();
                 if(data.No){
                     $.notify({
                         // options
@@ -217,6 +225,7 @@ $(document).ready(function(){
                     });
                 }else{
                     html += `<option value="">Seleccionar</option> `;
+                    html += `<option value="0">None</option> `;
                     data.forEach(function(data){
                         html += `<option value="${data}">${data}</option> `;
                     });
@@ -233,12 +242,46 @@ $(document).ready(function(){
 
     $("#sugerencias").change(function(){
         valor = $(this).val();
-        if(valor != ""){
+        if(valor != 0 || valor != ""){
+            if(valor == 0){
+                valor = "";
+            }
             $("#nickname").val(valor);
+            $("#nickname").attr('disabled', false);
             $("#email").val(valor+'@yascemail.com');
+            $("#email").attr('disabled', false);
             $("#password").val(valor + "*2020");
             $("#password_confirmation").val(valor + "*2020");
+            $(".segunda-seccion").show();
+        }else{
+            $(".segunda-seccion").hide();
+            $("#nickname").val("");
+            $("#email").val("");
+            $("#password").val("");
+            $("#password_confirmation").val("");
+            
         }
+    });
+
+    $("#nickname").keyup(function(){
+
+        flag = $("#flag").val();
+
+        if(flag === "false"){
+            nickname = $(this).val();
+            nickname = nickname.toLowerCase();
+            if(nickname != ""){
+                $("#email").val(nickname+'@yascemail.com');
+                $("#password").val(nickname + "*2020");
+                $("#password_confirmation").val(nickname + "*2020");
+            }else{
+                $("#nickname").val("");
+                $("#email").val('@yascemail.com');
+                $("#password").val("*2020");
+                $("#password_confirmation").val("*2020");
+            }
+        }
+
     });
 
  });      
@@ -276,6 +319,7 @@ const success = {
     new_update: function (data,state){
         console.log(data);
         $('#btn-save').attr('disabled', false);
+        $("#table-row").remove();
         var dato = data;
        
         switch(dato.No) {
@@ -395,9 +439,14 @@ const success = {
         }else if(dato.id_status == 0){
             
             $("#operator_id"+dato.id).remove();
-            if ($('.rowType').length == 0) {
-                $('#table-row').show();
-              }
+            if($("#tag_container tr").length == 1){
+                $("#tag_container").append(` <tr id="table-row" class="text-center">
+                                                    <th colspan="8" class="text-center">
+                                                        <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
+                                                    </th>
+                                                </tr>`);
+
+            }
         }
        
             
