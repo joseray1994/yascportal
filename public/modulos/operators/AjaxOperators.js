@@ -1,5 +1,4 @@
 $(document).ready(function(){
-    getData(1);
     var url = $('#url').val();
     var baseUrl = $('#baseUrl').val();
     var radioState;
