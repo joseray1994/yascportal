@@ -195,31 +195,34 @@ class ClientsController extends Controller
 
      //Functions for Documents
      public function documents($request, $folder){
-    //     dd($request->file('document'));
-    //    $count = count($request->file('document'));
-    //     $documentName = '';
-    //     if ($request->file('document')) {
-    //         $count = count($request);
-    //         dd($count);
-    //         // $document = $request->file('document');
-    //         // $documentName = $document->getClientOriginalName();
-    //         // $document->move(public_path().'/documents/'.$folder.'/',$documentName);
-
-    //      }
-         $document = $request->file('document');
-         $documentName = $document->getClientOriginalName();
-         $document->move(public_path().'/documents/'.$folder.'/',$documentName);
-         return $documentName;
+        if ($request->file('document')) {
+            $count = count($request->file('document'));
+            $documentName = '';
+            $document = $request->file('document');
+            $arrayNames = array();
+            for($i=0; $i<$count; $i++){
+              
+                $documentName = time().$document[$i]->getClientOriginalName();
+                $document[$i]->move(public_path().'/documents/'.$folder.'/',$documentName);
+                array_push($arrayNames,$documentName);
+                }
+            return $arrayNames;
+         }
+       
     }
 
     public function storeDocuments(Request $request, $id){
-       $name = ClientsController::documents($request, "clients");
-       $document = ClientDocumentModel::create([
-       'id_client'=> $id,
-       'name'=> $name,
-       ]);
 
-       return response()->json([$document, $name]);
+       $names = ClientsController::documents($request, "clients");
+       foreach($names as $name){
+        $document = ClientDocumentModel::create([
+            'id_client'=> $id,
+            'name'=> $name,
+            ]);
+
+       }
+    
+       return response()->json(["success" => "Data inserted correctly"]);
 
     }
 

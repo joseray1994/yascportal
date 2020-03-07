@@ -336,7 +336,10 @@ const contacts ={
     },
 }
 const success = {
-
+    response: function(data){
+        console.log(data.success)
+    },
+    
     new_update: function (data,state){
         console.log(data);
         var dato = data;

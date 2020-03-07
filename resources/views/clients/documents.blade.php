@@ -14,7 +14,7 @@
                               <div class="row">
                                   <div class="col-sm-9 form-group">
                                   <h6>Document:</h6>
-                                    <input type="file" class="dropify" name="document" id="doc" data-default-file="" data-show-remove="false" multiple>
+                                    <input type="file" class="dropify" name="document[]" id="doc" data-default-file="" data-show-remove="false" multiple>
                                   </div>
                                   <div class="col-sm-3 form-group">
                                   <h6></h6>
