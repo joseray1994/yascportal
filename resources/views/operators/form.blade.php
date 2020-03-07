@@ -57,7 +57,7 @@
         <hr>
         <div class="col-sm-3 form-group">
             <h6>Nickname:</h6>
-            <input type="text" name="nickname" id="nickname" class="form-control" maxlength="150" =>
+            <input type="text" name="nickname" id="nickname" class="form-control text-lowercase" maxlength="150" onKeyUp="document.getElementById(this.id).value=document.getElementById(this.id).value.toLowerCase()" disabled>
             <div class="my-2 seccion-sugerencia" style="display:none">
                 <span class="badge badge-success my-2">available</span>
                 <select name="sugerencias" id="sugerencias" class="form-control"></select>
@@ -70,21 +70,22 @@
         
     </div>
     <hr>
-    <div class="row">
+    <div class="row segunda-seccion" style="display:none">
+    <input type="hidden" id="flag">
         <div class="col-sm-7">
             <div class="row">
                 <div class="col-sm-12 form-group">
                     <h6>Email:</h6>
                     <div class="input-group">
-                        <input type="text" class="form-control" name="email" id="email" aria-label="Input group example" aria-describedby="btnGroupAddon">
-                        <div class="input-group-prepend">
+                        <input type="text" class="form-control" name="email" id="email" aria-label="Input group example" aria-describedby="btnGroupAddon" disabled>
+                        <!-- <div class="input-group-prepend">
                             <div class="input-group-text" id="btnGroupAddon">@yascemail.com</div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="form-group error btn-group col-sm-12 show_pass_div">
                     <div class="fancy-checkbox" bis_skin_checked="1" style="text-align:center; vertical-align:middle;">
-                    <label><input type="checkbox" id="show_pass"><span>Cambiar Contraseña</span></label>
+                    <label><input type="checkbox" id="show_pass"><span>Change password</span></label>
                     </div>  
                 </div>
                 <div class="col-sm-6 form-group pass">
@@ -117,9 +118,9 @@
         </div>
     </div>
 
-    <div class="col-sm-12 text-center">					 
+    <div class="col-sm-12 text-center " >					 
         <button type="button" class="btn btn-danger btn-cancel">Cancel</button>
-        <button type="submit" class="btn btn-success" id="btn-save" value="add">Save</button>
+        <button type="submit" class="btn btn-success segunda-seccion" id="btn-save" value="add" style="display:none">Save</button>
         <input type="hidden" id="id_hidden" name="id_hidden" value="0">
     </div>	
 </form>

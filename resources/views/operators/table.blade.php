@@ -12,14 +12,7 @@
         </tr>
     </thead>
     <tbody id="operator-list">
-        @if(count($data) > 0)
-            <tr id="table-row" class="text-center" style="display:none;">
-                <th colspan="8" class="text-center">
-                    <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
-                </th>
-            </tr>
-        @endif
-      @foreach($data as $op)
+      @forelse($data as $op)
         <tr id="operator_id{{$op->id}}"  class="rowType">
             <td>{{$op->id}}</td>
             <td>{{$op->email}}</td>
@@ -48,7 +41,13 @@
                 @break
             @endswitch
         </tr>
-      @endforeach
+        @empty
+            <tr id="table-row" class="text-center">
+                <th colspan="8" class="text-center">
+                    <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
+                </th>
+            </tr>
+        @endforelse
     </tbody>
 </table>
 {!! $data->render() !!}
