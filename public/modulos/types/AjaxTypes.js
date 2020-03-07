@@ -1,4 +1,4 @@
-getData(1);
+
 $(document).ready(function(){
      
     
@@ -214,7 +214,7 @@ const success = {
                 });
             break;
             default:
-                var profile = `<tr id="usertype_id${dato.id}">
+                var profile = `<tr id="usertype_id${dato.id}" class="rowType">
                                     <td>${dato.id}</td>
                                     <td>${dato.name}</td>
                                     <td class="hidden-xs">${types.status(dato)}</td>

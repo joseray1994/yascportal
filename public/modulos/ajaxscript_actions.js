@@ -1,3 +1,4 @@
+clearload();
 const actions ={
     edit_create:function(type,my_url,state,formData, actions = ''){
                 $.ajaxSetup({
@@ -144,6 +145,12 @@ function messages(title,type, text ='')
         text: text
         
     });
+}
+
+function clearload(){
+    if ($('.rowType').length == 0 || $('.rowType').length > 0) {
+        $('.loading-table').hide();
+    }
 }
 
 function RestrictSpace() {
