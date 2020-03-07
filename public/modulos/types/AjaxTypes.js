@@ -224,7 +224,7 @@ const success = {
                 if (state == "add"){ 
                 $("#usertype-list").append(profile);
                 $("#usertype_id"+dato.id).css("background-color", "#c3e6cb");
-                $('#table-row').hide(); 
+                $('#table-row').remove(); 
                 }else{
                 $("#usertype_id"+dato.id).replaceWith(profile);
                 $("#usertype_id"+dato.id).css("background-color", "#ffdf7e");  
@@ -257,7 +257,13 @@ const success = {
         }else if(dato.status == 0){
             $("#usertype_id"+dato.id).remove();
             if ($('.rowType').length == 0) {
-                $('#table-row').show();
+                var profile = `<tr id="table-row" class="text-center">
+                                    <th colspan="7" class="text-center">
+                                    <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
+                                     </th>
+                                </tr>`;
+
+                $("#usertype-list").append(profile);
               }
         }
        
