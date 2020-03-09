@@ -35,12 +35,6 @@ $(document).ready(function(){
         e.preventDefault(); 
         var formData =  $("#vacancyForm").serialize();
         
-        if($("#name").val().length > 30)
-        {
-            alert("Ingrese un nombre menor a 30 caracteres");
-            return false;
-        }
-
         //used to determine the http verb to use [add=POST], [update=PUT]
         var state = $('#btn-save').val();
         var type = "POST"; //for creating new resource
@@ -171,6 +165,16 @@ const vacancies ={
         }
        return status;
     },
+
+    nullo:function(dato){
+        var description = "";
+        if(dato.description != null)
+        {
+            description = dato.description;
+        }
+
+        return description;
+    }
 }
 
 const success = {
@@ -178,21 +182,28 @@ const success = {
     new_update: function (data,state){
         console.log(data);
         var dato = data;
-        var vacancyname =$('#name').val();
-        
-        if(dato =='error en agregar datos.'){
-            swal({
-                title: "Datos Existentes",
-                text: "La vacante: "+vacancyname+" ya existe",
-                type: "warning",
-
-              });
+        if(data[0]){
+            datos = data[0].No;
+        }else{
+            datos = data;
         }
-        else{
+        switch(datos) {
+            case 2:
+                $.notify({
+                    // options
+                    title: "Error!",
+                    message:data[0].name,
+                },{
+                    // settings
+                    type: 'danger'
+                });
+            break;
+            default:
+           
             var vacancy = `<tr id="vacancy_id${dato.id}">
                                 <td>${dato.id}</td>
                                 <td>${dato.name}</td>
-                                <td>${dato.description}</td>
+                                <td>${vacancies.nullo(dato)}</td>
                                 <td class="hidden-xs">${vacancies.status(dato)}</td>
                                 <td>${vacancies.button(dato)}</td>
                             </tr>`;
@@ -226,7 +237,7 @@ const success = {
             var vacancy = `<tr id="vacancy_id${dato.id}">
                                 <td>${dato.id}</td>
                                 <td>${dato.name}</td>
-                                <td>${dato.description}</td>
+                                <td>${vacancies.nullo(dato)}</td>
                                 <td class="hidden-xs">${vacancies.status(dato)}</td>
                                 <td>${vacancies.button(dato)}</td>
                             </tr>`;
