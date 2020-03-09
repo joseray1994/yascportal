@@ -51,7 +51,7 @@ class OperatorsController extends Controller
     }
 
     public function validateForm($request,$user=''){
-        $user=='' ? $email = 'required|email|unique:users,email,NULL,id,id_status,1 | unique:users,email,'.$user.',id,id_status,2' :  $email = 'required|unique:users,email,'.$user.',id,id_status,1 | unique:users,email,'.$user.',id,id_status,2';
+        $user=='' ? $email = 'required|email|unique:users,email,NULL,id,id_status,1 | unique:users,email,'.$user.',id,id_status,2' :  $email = 'sometimes|required|unique:users,email,'.$user.',id,id_status,1 | unique:users,email,'.$user.',id,id_status,2';
         $this->validate(request(), [
             'name' => 'required|max:150|regex:/^([a-zA-Z]+)(\s[a-zA-Z]+)*$/',
             'last_name' => 'required|max:150|regex:/^([a-zA-Z]+)(\s[a-zA-Z]+)*$/',
@@ -68,8 +68,9 @@ class OperatorsController extends Controller
         ]);
     }
 
-    public function validateNickname($nickname){
+    public function validateNickname($nickname, $user=""){
         $validaNick = User::where('nickname',$nickname)
+        ->whereNotIn('id', [$user])
         ->whereIn('id_status', [1,2])
         ->exists();
         return $validaNick;
@@ -142,9 +143,19 @@ class OperatorsController extends Controller
 
         //BUSCA Y ACTUALIZA USER
         $user = User::find($id);
+        //VALIDADOR DE FORMULARIO
         OperatorsController::validateForm($request, $id);
+        //VALIDAR NICK NAME
+        $validaNick = OperatorsController::validateNickname($request->nickname, $id);
+        
+        if($validaNick){
+            $msg= 'Another user already has that Nickname';
+            $data=['No'=>2,'msg'=>$msg];
+            return response()->json($data);
+        }
+
         $user->nickname = $request->nickname;
-        $user->email = $request->email;
+        // $user->email = $request->email;
         
         if($request->password != null)
         {
