@@ -115,6 +115,10 @@ $(document).ready(function(){
         $(".pass").show();
         $(".show_pass_div").hide();
         $('.selectpick').selectpicker("deselectAll");
+        $(".seccion-sugerencia").hide();
+        $(".segunda-seccion").hide();
+        $("#nickname").attr('disabled', true);
+        $("#flag").val(false);
         // $('#myModal').modal('show');
     
     });
@@ -150,6 +154,11 @@ $(document).ready(function(){
         $(".show_pass_div").show();
         $(".pass").hide();
         var id_user = $(this).val();
+        $(".seccion-sugerencia").hide();
+        $(".segunda-seccion").show();
+        $("#nickname").attr('disabled', false);
+        $("#email").attr('disabled', true);
+        $("#flag").val(true);
         $('#id_user').val(id_user);
         var my_url= baseUrl + '/users/' + id_user;
         actions.show(my_url);
@@ -180,36 +189,6 @@ $(document).ready(function(){
             event.preventDefault();
         }
     });
-
-    
-    //delete category and remove it from TABLE list ***************************
-    $(document).on('click','.deleteCategory',function(){
-        var id = $(this).val();
-        var my_url = baseUrl + '/user/delete/' + id;
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        })
-        swal({
-            title: "¿Desea eliminar este usuario",
-            text: "El usuarioo se eliminara permanentemente",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonClass: "btn btn-danger",
-            confirmButtonText: "Eliminar",
-            cancelButtonText: "Cancelar",
-            closeOnConfirm: true,
-            closeOnCancel: false
-            },
-            function(isConfirm) {
-            if (isConfirm) {
-                actions.deactivated(my_url);
-            }else {
-                swal("Cancelado", "Eliminacion cancelada", "error");
-            }
-            });
-    });
        
     //DELETE
     $(document).on('click','.delete-op',function(){
@@ -222,16 +201,16 @@ $(document).ready(function(){
                 }
             })
         if($(this).attr('class') == 'btn btn-sm btn-outline-success delete-op'){
-            title= "Do you want to activate this operator?";
-            text="Operator will be activated";
+            title= "Do you want to activate this user?";
+            text="User will be activated";
             confirmButtonText="Activate";
 
             datatitle="Activated";
             datatext="activated";
             datatext2="Activation";
         }else {
-            title= "Do you want to disable this Operator?";
-            text= "Operator will be deactivated";
+            title= "Do you want to disable this user?";
+            text= "User will be deactivated";
             confirmButtonText="Desactivar";
 
             datatitle="Deactivated";
@@ -289,6 +268,95 @@ $(document).ready(function(){
         });
     });
 
+    $("#btn-nick-generate").click(function(e){
+        e.preventDefault();
+
+        var name = $("#name").val();
+        var last_name = $("#last_name").val();
+        
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        })
+        $.ajax({
+            type:"POST",
+            url:baseUrl+'/generate',
+            data:{name:name, last_name:last_name},
+            dataType:"json",
+            success: function(data){
+                var html = "";
+                $.notifyClose();
+                if(data.No){
+                    $.notify({
+                        // options
+                        title: "Error!",
+                        message:data.msg,
+                    },{
+                        // settings
+                        type: 'danger'
+                    });
+                }else{
+                    html += `<option value="">Seleccionar</option> `;
+                    html += `<option value="0">None</option> `;
+                    data.forEach(function(data){
+                        html += `<option value="${data}">${data}</option> `;
+                    });
+                    $("#sugerencias").html(html);
+                    $(".seccion-sugerencia").show();
+                }
+            },
+            error: function(err){
+                $(".seccion-sugerencia").hide();
+                console.log(err);
+            }
+        });
+    });
+
+    $("#sugerencias").change(function(){
+        valor = $(this).val();
+        if(valor != 0 || valor != ""){
+            if(valor == 0){
+                valor = "";
+            }
+            $("#nickname").val(valor);
+            $("#nickname").attr('disabled', false);
+            $("#email").val(valor+'@yascemail.com');
+            $("#email").attr('disabled', false);
+            $("#password").val(valor + "*2020");
+            $("#password_confirmation").val(valor + "*2020");
+            $(".segunda-seccion").show();
+        }else{
+            $(".segunda-seccion").hide();
+            $("#nickname").val("");
+            $("#email").val("");
+            $("#password").val("");
+            $("#password_confirmation").val("");
+            
+        }
+    });
+
+    $("#nickname").keyup(function(){
+
+        flag = $("#flag").val();
+
+        if(flag === "false"){
+            nickname = $(this).val();
+            nickname = nickname.toLowerCase();
+            if(nickname != ""){
+                $("#email").val(nickname+'@yascemail.com');
+                $("#password").val(nickname + "*2020");
+                $("#password_confirmation").val(nickname + "*2020");
+            }else{
+                $("#nickname").val("");
+                $("#email").val('@yascemail.com');
+                $("#password").val("*2020");
+                $("#password_confirmation").val("*2020");
+            }
+        }
+
+    });
+
 
     
  });      
@@ -311,7 +379,7 @@ $(document).ready(function(){
 // console.log(dato)
         var buttons='<div>';
         if(dato.id_status== 1){
-        buttons += ` <button type="button" class="btn btn-sm btn-outline-secondary btn-edit" data-toggle="tooltip" title="Edit" value="${dato.id}"  ><i class="fa fa-edit"></i></button>
+        buttons += ` <button type="button" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="${dato.id}"  ><i class="fa fa-edit"></i></button>
                         <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert delete-op" data-toggle="tooltip" title="Desactivated" data-type="confirm" value="${dato.id}"><i class="fa fa-window-close"></i></button>
         ` ;
 
@@ -327,9 +395,9 @@ $(document).ready(function(){
 
 const types ={
     button: function(dato){
-           var buttons='<div class="btn-group">';
+           var buttons='<div>';
             if(dato.id_status== 1){
-                buttons += ` <button type="button" class="btn btn-sm btn-outline-secondary btn-edit" data-toggle="tooltip" title="Edit" value="${dato.id}"  ><i class="fa fa-edit"></i></button>
+                buttons += ` <button type="button" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="${dato.id}"  ><i class="fa fa-edit"></i></button>
                             <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert delete-op" data-toggle="tooltip" title="Desactivated" data-type="confirm" value="${dato.id}"><i class="fa fa-window-close"></i></button>
                ` ;
           
@@ -420,12 +488,24 @@ const success = {
                 
         },
     show: function(data){
-
+        console.log(data)
         if(data.id_type_user == 2) $(".clients").show();
         $.each(data.clients, function (key, val) {
             $('.selectpick option[value=' + val.id_client + ']').attr('selected', true);
         });
         $('.selectpick').selectpicker('refresh'); 
+        var rutaImage = baseUrl + '/images/users/' + data.user_info.profile_picture;
+          
+        var drEvent = $('#dropify-event').dropify(
+            {
+                defaultFile: rutaImage
+            });
+            drEvent = drEvent.data('dropify');
+            drEvent.resetPreview();
+            drEvent.clearElement();
+            drEvent.settings.defaultFile = rutaImage;
+            drEvent.destroy();
+            drEvent.init();
         $('#name').val(data.user_info.name);
         $('#last_name').val(data.user_info.last_name);
         $('#address').val(data.user_info.address);
