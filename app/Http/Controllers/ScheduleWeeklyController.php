@@ -166,8 +166,6 @@ class ScheduleWeeklyController extends Controller
             $weekly->status=1;
             $weekly->save();
 
-            if(count($request->days) > 0){
-
                 DayOffModel::where("id_schedule",$weekly->id_schedule)->truncate();
 
                 foreach($request->days as $days){
@@ -176,15 +174,15 @@ class ScheduleWeeklyController extends Controller
                         "id_day"=>$days,
                         ]);
                     }
-            }
-        
+            
+            
            ScheduleDetailModel::Create([
                     "id_schedule"=>$weekly->id_schedule,
                     "id_operator"=>$weekly->id_operator,
                     "id_day"=>$weekly->id_day,
                     "time_start"=>$request->time_extra,
                     "time_end"=>$request->time_extra,
-                    "type_daily"=>1,
+                    "type_daily"=>2,
                     "option"=>1,
                     "status"=>1,
                 ]);

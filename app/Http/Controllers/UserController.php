@@ -13,7 +13,7 @@ use App\TypeUserModel;
 use App\ClientModel;
 use App\User_client;
 use DB;
-
+use Illuminate\Support\Facades\File;
 
 class UserController extends Controller
 {
@@ -55,7 +55,7 @@ class UserController extends Controller
     }
 
     public function validateUser($request,$user=''){
-        $user=='' ? $email = 'required|unique:users,email,NULL,id,id_status,1 | unique:users,email,'.$user.',id,id_status,2' :  $email = 'required|unique:users,email,'.$user.',id,id_status,1 | unique:users,email,'.$user.',id,id_status,2';
+        $user=='' ? $email = 'required|unique:users,email,NULL,id,id_status,1 | required|unique:users,email,NULL,id,id_status,2' :  $email = 'sometimes|required|unique:users,email,'.$user.',id,id_status,1 | required|unique:users,email,'.$user.',id,id_status,2';
         // dd($email);
         $this->validate(request(), [
             'name' => 'required|max:40',
@@ -91,6 +91,15 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->validateUser($request);
+
+        //VALIDAR NICK NAME
+        $validaNick = UserController::validateNickname($request->nickname);
+        
+        if($validaNick){
+            $msg= 'Another user already has that Nickname';
+            $data=['No'=>2,'msg'=>$msg];
+            return response()->json($data);
+        }
         try {
             DB::beginTransaction();
                 $input = $request->input();
@@ -99,6 +108,10 @@ class UserController extends Controller
                 $input['password'] = Hash::make($input['password']);
                 $user = User::create($input);
 
+                // SUBIR IMAGE
+                $imageName = UserController::documents($request, "users");
+                
+                $input['profile_picture'] = $imageName;
                 $input['id_user'] = $user->id;
                 $user_info = User_info::create($input);
                 
@@ -158,7 +171,20 @@ class UserController extends Controller
         }
         $user->update();
 
+        
         $user_info = User_info::where('id_user',$user->id)->first();
+
+        if($request->file('image')) {
+            $file_path = public_path().'/images/users/'.$user_info->profile_picture;
+            File::delete($file_path);
+            $image = $request->file('image');
+            $name = time().$image->getClientOriginalName();
+            $image->move(public_path().'/images/users/',$name);
+            $user_info->profile_picture = $name;
+        }else
+        {
+            $user_info->profile_picture = $user_info->profile_picture;
+        }
         $user_info->id_user = $user->id;
         $user_info->name = $request->name;
         $user_info->last_name = $request->last_name;
@@ -190,6 +216,26 @@ class UserController extends Controller
             ->where('usr.id', $id)
             ->first();
         return $data;
+    }
+
+    //save document
+    public function documents($request, $folder){
+        
+        $imageName = '';
+        if ($request->file('image')) {
+            $image = $request->file('image');
+            $imageName = time().$image->getClientOriginalName();
+            $image->move(public_path().'/images/'.$folder.'/',$imageName);
+            return $imageName;
+
+         }
+    }
+
+    public function validateNickname($nickname){
+        $validaNick = User::where('nickname',$nickname)
+        ->whereIn('id_status', [1,2])
+        ->exists();
+        return $validaNick;
     }
 
     public function destroy($id)
