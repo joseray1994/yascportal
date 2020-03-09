@@ -295,6 +295,7 @@ $(document).ready(function(){
 
 //Activate or Deactivated Contacts
 $(document).on('click','.off-type-contacts',function(){
+    var url = $('#url').val(); 
     var id = $(this).val();
     var my_url =url + '/contacts/destroy/' + id;
         $.ajaxSetup({
@@ -348,6 +349,35 @@ $(document).on('click','.off-type-contacts',function(){
             }
     });
 });
+
+ //Delete Contact
+ $(document).on('click','.deleteContact',function(){
+    var contact_id = $(this).val();
+    var my_url = url + '/delete/contacts/' + contact_id;
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+        }
+    })
+    swal({
+        title: "Are you sure you wish to delete this option?",
+        text: "All records with this option will be modified",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn btn-danger",
+        confirmButtonText: "Delete",
+        cancelButtonText: "Cancel",
+        closeOnConfirm: true,
+        closeOnCancel: false
+      },
+      function(isConfirm) {
+        if (isConfirm) {
+            actions.deactivated(my_url);
+        }else {
+           swal("Cancelled", "Deletion Canceled", "error");
+        }
+      });
+    });
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Constante Buttons para la tabla Clientes
@@ -439,30 +469,64 @@ const success = {
     },
 
     deactivated:function(data) {
-        console.log(data);
-        var dato = data;
-        if(dato.status != 0){
-            var client = `<tr id="client_id${dato.id}">
-                                <td><span class="badge badge-secondary" style = "background:${dato.color}">&nbsp;&nbsp;&nbsp;</span></td>
-                                <td>${dato.name}</td>
-                                <td>${dato.description}</td>
-                                <td>${dato.interval}</td>
-                                <td>${dato.duration}</td>
-                                <td class="hidden-xs">${clients.status(dato)}</td>
-                                <td>${clients.button(dato)}</td>
-                            </tr>`;
+        switch (data.flag){
+            case 1:
+                console.log(data.client);
+                var dato = data.client;
+                if(dato.status != 0){
+                    if(dato.description = ''){
+                        dato.description = '';
+                    }
+                    var client = `<tr id="client_id${dato.id}">
+                                        <td><span class="badge badge-secondary" style = "background:${dato.color}">&nbsp;&nbsp;&nbsp;</span></td>
+                                        <td>${dato.name}</td>
+                                        <td>${dato.description}</td>
+                                        <td>${dato.interval}</td>
+                                        <td>${dato.duration}</td>
+                                        <td class="hidden-xs">${clients.status(dato)}</td>
+                                        <td>${clients.button(dato)}</td>
+                                    </tr>`;
           
-            $("#client_id"+dato.id).replaceWith(client);
-            if(dato.status == 1){
-                color ="#c3e6cb";
-            }else if(dato.status == 2){
-                color ="#ed969e";
-            }
-            $("#client_id"+dato.id).css("background-color", color); 
+                $("#client_id"+dato.id).replaceWith(client);
+                if(dato.status == 1){
+                    color ="#c3e6cb";
+                }else if(dato.status == 2){
+                    color ="#ed969e";
+                }
+                $("#client_id"+dato.id).css("background-color", color); 
 
-        }else if(dato.status == 0){
-            $("#client_id"+dato.id).remove();
+            }else if(dato.status == 0){
+                $("#client_id"+dato.id).remove();
+            }
+
+            case 2:
+               
+                var dato = data.contact;
+                if(dato.status != 0){
+                    var contact = `<tr id="client_id${dato.id}">
+                                        <td>${dato.name}</td>
+                                        <td>${dato.description}</td>
+                                        <td>${dato.phone}</td>
+                                        <td>${dato.email}</td>
+                                        <td class="hidden-xs">${contacts.status(dato)}</td>
+                                        <td>${contacts.button(dato)}</td>
+                                    </tr>`;
+          
+                $("#client_id"+dato.id).replaceWith(contact);
+                if(dato.status == 1){
+                    color ="#c3e6cb";
+                }else if(dato.status == 2){
+                    color ="#ed969e";
+                }
+                $("#client_id"+dato.id).css("background-color", color); 
+
+            }else if(dato.status == 0){
+                $("#client_id"+dato.id).remove();
+            }
+
+
         }
+        
        
     },
 

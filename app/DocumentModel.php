@@ -4,11 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ClientDocumentModel extends Model
+class DocumentModel extends Model
 {
-    protected $table = 'client_documents';
+    protected $table = 'documents';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'mat','id_client','name','status',
+        'mat','id_dad','name','status', 'path'
     ];
 }

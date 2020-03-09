@@ -10,7 +10,7 @@ use App\AssignamentTypeModel;
 use App\ClientModel;
 use App\ClientColorModel;
 use App\ClientContactsModel;
-use App\ClientDocumentModel;
+use App\DocumentModel;
 use App\BreakRulesModel;
 use Illuminate\Support\Facades\Auth;
 
@@ -181,7 +181,7 @@ class ClientsController extends Controller
         }
         $client->save();
 
-        return response()->json($client);
+        return response()->json(['client' => $client, 'flag' => 1]);
     } 
 
     public function delete($client_id)
@@ -204,7 +204,14 @@ class ClientsController extends Controller
               
                 $documentName = time().$document[$i]->getClientOriginalName();
                 $document[$i]->move(public_path().'/documents/'.$folder.'/',$documentName);
-                array_push($arrayNames,$documentName);
+                $path = '/documents/'.$folder.'/'.$documentName;
+                
+                $array = [
+                    'name' => $documentName,
+                    'path' => $path
+                ];
+                array_push($arrayNames,$array);
+
                 }
             return $arrayNames;
          }
@@ -212,12 +219,15 @@ class ClientsController extends Controller
     }
 
     public function storeDocuments(Request $request, $id){
+        // dd($id);
 
        $names = ClientsController::documents($request, "clients");
        foreach($names as $name){
-        $document = ClientDocumentModel::create([
-            'id_client'=> $id,
-            'name'=> $name,
+        // dd($name);
+        $document = DocumentModel::create([
+            'id_dad'=> $id,
+            'name'=> $name['name'],
+            'path'=> $name['path']
             ]);
 
        }
@@ -228,7 +238,7 @@ class ClientsController extends Controller
 
     public function showDocuments($id)
     {  
-        $document = ClientDocumentModel::where('id_client', $id)->get();
+        $document = DocumentModel::where('id_dad', $id)->where('mat', 'CLD')->get();
         return response()->json(["document" => $document, "flag" => 3]);
         
     }
@@ -279,7 +289,7 @@ class ClientsController extends Controller
     public function destroyContacts($id)
     {
         $contact = ClientContactsModel::where('id', $id)->where('status', "!=", 0)->first();
-        dd($contact);
+        // dd($contact);
         if($contact->status == 2)
         {
             $contact->status = 1;
@@ -290,7 +300,7 @@ class ClientsController extends Controller
         }
         $contact->save();
 
-        return response()->json($contact);
+        return response()->json(['contact' => $contact, 'flag' => 2]);
     } 
 
 }
