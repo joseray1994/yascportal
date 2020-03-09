@@ -1,7 +1,6 @@
 
 $(document).ready(function(){
-     
-    
+    clearload();
     var nameDeli='<a href="/types">Users Types</i></a>';
     $('.nameDeli').html(nameDeli);
     $('#sidebar1').addClass('active') 

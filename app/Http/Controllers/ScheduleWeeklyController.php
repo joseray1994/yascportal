@@ -81,12 +81,24 @@ class ScheduleWeeklyController extends Controller
     }
 
     public function data_weekly($id){
-        $data2 = ScheduleDetailModel::select( "detail_schedule_user.id as id","detail_schedule_user.id_day as id_day","sch.dayoff as days","inf.name as name", "inf.last_name as lastname","cli.name as client",'detail_schedule_user.time_start as time_s','detail_schedule_user.time_end as time_e',"detail_schedule_user.status as status")
+        $days=[];
+        $data = ScheduleDetailModel::select( "detail_schedule_user.id as id","detail_schedule_user.id_schedule as id_schedule","detail_schedule_user.id_day as id_day","sch.dayoff as days","inf.name as name", "inf.last_name as lastname","cli.name as client",'detail_schedule_user.time_start as time_s','detail_schedule_user.time_end as time_e',"detail_schedule_user.status as status")
                     ->join('schedule as sch','sch.id', "=", 'detail_schedule_user.id_schedule')
                     ->join('clients as cli', 'cli.id',"=","sch.id_client")
                     ->join('users_info as inf','inf.id_user', "=", 'detail_schedule_user.id_operator')
                     ->where('detail_schedule_user.id',$id)
                     ->first();
+
+        $daysN = DayOffModel::select('id')
+        ->where("id_schedule",$data->id_schedule)
+        ->get();
+
+        foreach($daysN as $day){
+                array_push($days,$day->id);
+            } 
+
+        $data2=[ "detail"=>$data, "days"=>$days,];
+
         return $data2;
     }
 
@@ -153,20 +165,28 @@ class ScheduleWeeklyController extends Controller
             $weekly->time_end = $request->time_end;
             $weekly->status=1;
             $weekly->save();
-     
-            foreach($request->days as $days){
-                $weeklyDO = DayOffModel::::Create([
-                    "id_schedule"=>$weekly->id_schedule,
-                    "id_day"=>$weekly->id_day,
-                    ]);
-                }
 
-                ScheduleDetailModel::Create([
+            if(count($request->days) > 0){
+
+                DayOffModel::where("id_schedule",$weekly->id_schedule)->truncate();
+
+                foreach($request->days as $days){
+                    DayOffModel::Create([
+                        "id_schedule"=>$weekly->id_schedule,
+                        "id_day"=>$days,
+                        ]);
+                    }
+            }
+        
+           ScheduleDetailModel::Create([
                     "id_schedule"=>$weekly->id_schedule,
                     "id_operator"=>$weekly->id_operator,
                     "id_day"=>$weekly->id_day,
                     "time_start"=>$request->time_extra,
                     "time_end"=>$request->time_extra,
+                    "type_daily"=>1,
+                    "option"=>1,
+                    "status"=>1,
                 ]);
 
 

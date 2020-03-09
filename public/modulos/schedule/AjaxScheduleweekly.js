@@ -1,7 +1,7 @@
-getData(1);
+
 $(document).ready(function(){
      
-    
+    schedule.get_data(1);
     var nameDeli='<a href="/weekly">Schedule Weekly</i></a>';
     $('.nameDeli').html(nameDeli);
     $('#sidebar5').addClass('active') 
@@ -67,7 +67,7 @@ $(document).ready(function(){
     
     });
 
-        $(document).on('click','.off-type',function(){
+ $(document).on('click','.off-type',function(){
             var id = $(this).val();
             var my_url =url + '/' + id;
                 $.ajaxSetup({
@@ -238,6 +238,12 @@ const schedule ={
      
         return data;
     },
+    selectClient: function(){
+        select="";
+        $.each(data, function(idx, ope) {
+            var select=`<option value="${ope.id}">${ope.name}</option>`;
+        });
+    }
     
 }
 const success = {
@@ -303,21 +309,18 @@ const success = {
 
     show: function(data){
         console.log(data);
-        $('#usertype_id').val(data.id);
-        $('#time_start').val(data.time_s);
-        $('#time_end').val(data.time_e);
+        $('#usertype_id').val(data.detail.id);
+        $('#time_start').val(data.detail.time_s);
+        $('#time_end').val(data.detail.time_e);
 
-        if(data.days == 0){
+        if(data.days.length == 0){
             $('#days').val(null);
             $('#days').trigger('change');
         }else{
+
+            var select="";
             $('#days').val(data.days)
-            $('#days').trigger({
-                type: 'select2:select',
-                params: {
-                    data: data.days
-                }
-            });
+            $('#days').trigger('change');
         }
         $('#btn-save').val("update");
         $('#myModal').modal('show');
