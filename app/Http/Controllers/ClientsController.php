@@ -254,5 +254,43 @@ class ClientsController extends Controller
         
     }
 
+    public function editContacts($id)
+    {
+        $contact_edit = ClientContactsModel::where('id', $id)->first();
+        return response()->json(["contact_edit" => $contact_edit, "flag" => 4]);
+        
+    }
+
+    public function updateContacts(Request $request, $id)
+    {
+        // dd($request);
+        $contact = ClientContactsModel::where('id',$id)->first();
+        // dd($contact);
+        $contact->name = $request['name_contact'];
+        $contact->description = $request['description_contact'];
+        $contact->phone = $request['phone_contact'];
+        $contact->email = $request['email_contact'];
+        $contact->save();
+
+        // $result = $this->getResult($contact->id);
+        // return response()->json($result);
+    }
+
+    public function destroyContacts($id)
+    {
+        $contact = ClientContactsModel::where('id', $id)->where('status', "!=", 0)->first();
+        dd($contact);
+        if($contact->status == 2)
+        {
+            $contact->status = 1;
+        }
+        else
+        {
+            $contact->status = 2;  
+        }
+        $contact->save();
+
+        return response()->json($contact);
+    } 
 
 }
