@@ -5,43 +5,7 @@
 <div class="col-sm-12 formulario" style="display:none">
   <form id="userForm" class="form-horizontal" enctype="multipart/form-data">
   {{ csrf_field() }}
-<div class="row">
-  <div class="col-sm-7">
-      <div class="row">
-      {{-- <input type="hidden" id="id_type_ user" name="id_type_user" value="9"> --}}
-          <div class="col-sm-12 form-group">
-              <h6>Email:</h6>
-              <input type="text" name="email" id="email" class="form-control" title="Email" maxlength="120">
-          </div>
-
-          <div class="form-group error btn-group col-sm-12 show_pass_div">
-            <div class="fancy-checkbox" bis_skin_checked="1" style="text-align:center; vertical-align:middle;">
-              <label><input type="checkbox" id="show_pass"><span>Cambiar Contraseña</span></label>
-            </div>  
-          </div>
-          <div class="col-sm-6 form-group pass">
-            <h6>Password:</h6>
-            <input type="password" name="password" id="password" class="form-control" title="Este campo solo admite letras" maxlength="60">
-          </div>
-          <div class="col-sm-6 form-group pass">
-            <h6>Confirm Password:</h6>
-            <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" title="Este campo solo admite letras" maxlength="60">
-          </div>
-      </div>
-  </div>
-  <div class="col-sm-5">
-      <div id="codigo_qr" style="display:none;"></div>
-      <input type="hidden" id="img_base64">
-      <div class="col-sm-12 form-group">
-        <h6>Profile Image:</h6>
-          <div class="card">
-              <div class="body">
-                  <input type="file" class="dropify" name="image" id="dropify-event" data-default-file="" data-show-remove="false">
-              </div>
-          </div>  
-      </div>          
-  </div>
-</div>
+  
 <h4>Personal Information</h4>
 <hr>
 <div class="row">
@@ -52,10 +16,6 @@
   <div class="col-sm-3 form-group">
       <h6>Last  Name:</h6>
       <input type="text" name="last_name" id="last_name" class="form-control" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$" title="Este campo solo admite letras" maxlength="60">
-  </div>
-  <div class="col-sm-3 form-group" style="display:none">
-      <h6>Nickname:</h6>
-      <input type="text" name="nickname" id="nickname" class="form-control" title="Este campo solo admite letras" maxlength="60">
   </div>
   <div class="col-sm-3 form-group">
       <h6>First Day of Work (YYYY-MM-DD):</h6>
@@ -120,11 +80,60 @@
       <h6>Additional information:</h6>
       <textarea name="description" id="description" class="form-control"></textarea>
   </div>
+  <div class="col-sm-3 form-group">
+    <h6>Nickname:</h6>
+    <input type="text" name="nickname" id="nickname" class="form-control text-lowercase" maxlength="150" onKeyUp="document.getElementById(this.id).value=document.getElementById(this.id).value.toLowerCase()" disabled>
+    <div class="my-2 seccion-sugerencia" style="display:none">
+        <span class="badge badge-success my-2">available</span>
+        <select name="sugerencias" id="sugerencias" class="form-control"></select>
+    </div>
+  </div>
+  <div class="col-sm-3 form-group">
+      <h6>&nbsp;</h6>
+      <button type="button" class="btn btn-info" id="btn-nick-generate">Generate</button>
+  </div>
+
 </div>
+
+<div class="row segunda-seccion" style="display:none">
+  <input type="hidden" id="flag">
+  <div class="col-sm-7">
+    <div class="row">
+      <div class="col-sm-12 form-group">
+        <h6>Email:</h6>
+        <input type="text" name="email" id="email" class="form-control" title="Email" maxlength="120">
+      </div>
+      <div class="form-group error btn-group col-sm-12 show_pass_div">
+        <div class="fancy-checkbox" bis_skin_checked="1" style="text-align:center; vertical-align:middle;">
+          <label><input type="checkbox" id="show_pass"><span>Cambiar Contraseña</span></label>
+        </div>  
+      </div>
+      <div class="col-sm-6 form-group pass">
+        <h6>Password:</h6>
+        <input type="password" name="password" id="password" class="form-control" title="Este campo solo admite letras" maxlength="60">
+      </div>
+      <div class="col-sm-6 form-group pass">
+        <h6>Confirm Password:</h6>
+        <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" title="Este campo solo admite letras" maxlength="60">
+      </div>  
+    </div>
+  </div>
+  <div class="col-sm-5">
+    <div class="col-sm-12 form-group">
+      <h6>Profile Image:</h6>
+        <div class="card">
+            <div class="body">
+                <input type="file" class="dropify" name="image" id="dropify-event" data-default-file="" data-show-remove="false">
+            </div>
+        </div>  
+    </div>          
+  </div>
+</div>
+
 <div class="modal-footer">
   <div class="col-sm-12 text-center">					 
     <button type="button" class="btn btn-danger btn-cancel">Cancel</button>
-    <button type="submit" class="btn btn-success" id="btn-save" value="add">Save</button>
+    <button type="submit" class="btn btn-success  segunda-seccion" id="btn-save" value="add" style="display:none">Save</button>
     <input type="text" name="" id="id_user" value="" disabled hidden>
   </div>
 </div>

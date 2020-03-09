@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
-
+use Illuminate\Support\Facades\Auth;
 class ServiceGeneralController extends Controller
 {
     public function generateNick(Request $request){
@@ -178,5 +178,26 @@ class ServiceGeneralController extends Controller
         ->whereIn('id_status', [1,2])
         ->exists();
         return $validaNick;
+    }
+
+    public function selectOperatorRefresh($id){
+        if($id > 0){
+            $ope += User::select('users.id as id', 'ui.name as name', 'ui.last_name as lname')
+            ->join('users_info as ui', 'ui.id_user', '=','users.id')
+            ->join('users_client as uc','uc.id_user', '=','users.id')
+            ->where('users.id_type_user','=',9)
+            ->where('uc.id_client',$id)
+            ->get();
+
+         }else if($id == "all"){
+           $ope += User::select('users.id as id', 'ui.name as name', 'ui.last_name as lname')
+            ->join('users_info as ui', 'ui.id_user', '=','users.id')
+            ->join('users_client as uc','uc.id_user', '=','users.id')
+            ->where('users.id_type_user','=',9)
+            ->get();
+         }else{
+            $ope += User::where('id_type_user',$id)->get();
+         }
+        
     }
 }
