@@ -195,31 +195,34 @@ class ClientsController extends Controller
 
      //Functions for Documents
      public function documents($request, $folder){
-    //     dd($request->file('document'));
-    //    $count = count($request->file('document'));
-    //     $documentName = '';
-    //     if ($request->file('document')) {
-    //         $count = count($request);
-    //         dd($count);
-    //         // $document = $request->file('document');
-    //         // $documentName = $document->getClientOriginalName();
-    //         // $document->move(public_path().'/documents/'.$folder.'/',$documentName);
-
-    //      }
-         $document = $request->file('document');
-         $documentName = $document->getClientOriginalName();
-         $document->move(public_path().'/documents/'.$folder.'/',$documentName);
-         return $documentName;
+        if ($request->file('document')) {
+            $count = count($request->file('document'));
+            $documentName = '';
+            $document = $request->file('document');
+            $arrayNames = array();
+            for($i=0; $i<$count; $i++){
+              
+                $documentName = time().$document[$i]->getClientOriginalName();
+                $document[$i]->move(public_path().'/documents/'.$folder.'/',$documentName);
+                array_push($arrayNames,$documentName);
+                }
+            return $arrayNames;
+         }
+       
     }
 
     public function storeDocuments(Request $request, $id){
-       $name = ClientsController::documents($request, "clients");
-       $document = ClientDocumentModel::create([
-       'id_client'=> $id,
-       'name'=> $name,
-       ]);
 
-       return response()->json([$document, $name]);
+       $names = ClientsController::documents($request, "clients");
+       foreach($names as $name){
+        $document = ClientDocumentModel::create([
+            'id_client'=> $id,
+            'name'=> $name,
+            ]);
+
+       }
+    
+       return response()->json(["success" => "Data inserted correctly"]);
 
     }
 
@@ -251,5 +254,43 @@ class ClientsController extends Controller
         
     }
 
+    public function editContacts($id)
+    {
+        $contact_edit = ClientContactsModel::where('id', $id)->first();
+        return response()->json(["contact_edit" => $contact_edit, "flag" => 4]);
+        
+    }
+
+    public function updateContacts(Request $request, $id)
+    {
+        // dd($request);
+        $contact = ClientContactsModel::where('id',$id)->first();
+        // dd($contact);
+        $contact->name = $request['name_contact'];
+        $contact->description = $request['description_contact'];
+        $contact->phone = $request['phone_contact'];
+        $contact->email = $request['email_contact'];
+        $contact->save();
+
+        // $result = $this->getResult($contact->id);
+        // return response()->json($result);
+    }
+
+    public function destroyContacts($id)
+    {
+        $contact = ClientContactsModel::where('id', $id)->where('status', "!=", 0)->first();
+        dd($contact);
+        if($contact->status == 2)
+        {
+            $contact->status = 1;
+        }
+        else
+        {
+            $contact->status = 2;  
+        }
+        $contact->save();
+
+        return response()->json($contact);
+    } 
 
 }

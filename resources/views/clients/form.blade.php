@@ -47,9 +47,3 @@
 <input type="hidden" id="client_id" name="client_id">
 
 </div>
-<script>
-function colorSelect() {
-  var x = document.getElementById("color").value;
-  console.log(x);
-}
-</script>

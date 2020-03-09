@@ -1,4 +1,4 @@
-clearload();
+
 const actions ={
     edit_create:function(type,my_url,state,formData, actions = ''){
                 $.ajaxSetup({

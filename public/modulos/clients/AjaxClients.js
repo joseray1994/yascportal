@@ -1,4 +1,4 @@
-getData(1);
+
 $(document).ready(function(){
      
     
@@ -112,8 +112,8 @@ $(document).ready(function(){
         var my_url = url + '/contacts';
         if (state == "update"){
             type = "PUT"; //for updating existing resource
-            my_url += '/';
-            $('#myModal').modal('hide');
+            my_url += '/' +client_id_contacts;
+         
         }
             console.log(formData);
             actions.edit_create(type,my_url,state,formData);   
@@ -125,6 +125,22 @@ $(document).ready(function(){
             $('#formContacts').trigger("reset");
             $('#tag_put').remove();
     });
+
+        //Edit Contact
+        $(document).on('click','.btn-edit-contact',function(){
+        
+            $('#formClients').trigger("reset");
+            $('#tag_put').remove();
+            $('#btn-save-contacts').val("update");
+    
+            var client_id_document = $(this).val();
+            var my_url = url + '/contacts/edit/' + client_id_document;
+    
+                actions.show(my_url);
+           
+        });
+
+
 
     //Modal of Documents
     $('.open-documents').click(function(){
@@ -189,7 +205,7 @@ $(document).ready(function(){
        
     });
 
-    //Activate or Deactivated
+    //Activate or Deactivated Clients
         $(document).on('click','.off-type',function(){
             var id = $(this).val();
             var my_url =url + '/' + id;
@@ -277,6 +293,62 @@ $(document).ready(function(){
     
 });
 
+//Activate or Deactivated Contacts
+$(document).on('click','.off-type-contacts',function(){
+    var id = $(this).val();
+    var my_url =url + '/contacts/destroy/' + id;
+        $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+        }
+    })
+        if($(this).attr('class') == 'btn btn-sm btn-outline-success off-type')
+        {
+            title= "Do you want to activate this client?";
+            text="The client will be activated";
+            confirmButtonText="Activate";
+
+            datatitle="Activated";
+            datatext="activated";
+            datatext2="Activation";
+        }
+        else 
+        {
+            title= "Do you want to disable this client?";
+            text= "The client will be deactivated";
+            confirmButtonText="Deactivate";
+
+            datatitle="Deactivated";
+            datatext="deactivated";
+            datatext2="Deactivation";
+
+        }
+
+
+        swal({
+            title: title,
+            text: text,
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn btn-danger",
+            confirmButtonText: confirmButtonText,
+            cancelButtonText: "Cancel",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        },
+        function(isConfirm) {
+            if (isConfirm) {
+            swal(datatitle, "Contact "+datatext, "success");
+            actions.deactivated(my_url);
+            } 
+            else {
+            
+            swal("Cancelled", datatext2+" cancelled", "error");
+        
+            }
+    });
+});
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Constante Buttons para la tabla Clientes
 const clients ={
@@ -316,11 +388,11 @@ const contacts ={
             if(dato.status== 1){
               
                buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary btn-edit-contact" data-toggle="tooltip" title="Edit" value="'+dato.id+'"> <i class="fa fa-edit"></i></li></button>';
-               buttons += '	<button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-type-contact" data-toggle="tooltip" title="Deactivated" data-type="confirm" value="'+dato.id+'" ><i class="fa fa-window-close"></i></button>';
+               buttons += '	<button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-type-contacts" data-toggle="tooltip" title="Deactivated" data-type="confirm" value="'+dato.id+'" ><i class="fa fa-window-close"></i></button>';
           
            }else if(dato.status == 2){
              
-               buttons += ' <button type="button" class="btn btn-sm btn-outline-success off-type-contact" data-toggle="tooltip" title="Activated" data-type="confirm" value="'+dato.id+'" > <i class="fa fa-check-square-o"></i></button>'
+               buttons += ' <button type="button" class="btn btn-sm btn-outline-success off-type-contacts" data-toggle="tooltip" title="Activated" data-type="confirm" value="'+dato.id+'" > <i class="fa fa-check-square-o"></i></button>'
                buttons += ' <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert deleteContact" data-toggle="tooltip" title="Delete" data-type="confirm" value="'+dato.id+'"> <i class="fa fa-trash-o"></i> </button>';
            }
            return buttons;
@@ -336,7 +408,10 @@ const contacts ={
     },
 }
 const success = {
-
+    response: function(data){
+        console.log(data.success)
+    },
+    
     new_update: function (data,state){
         console.log(data);
         var dato = data;
@@ -435,6 +510,16 @@ const success = {
                     `;
             })
             $('#document-list').html(document);
+
+            case 4:
+            var data = dato.contact_edit;
+            console.log(data)   
+                $('#client_id_contacts').val(data.id);
+                $('#name_contact').val(data.name);
+                $('#description_contact').val(data.description);
+                $('#email_contact').val(data.email);
+                $('#phone_contact').val(data.phone);
+                $('#btn-save-contacts').val("update");
               
           }
     
@@ -460,3 +545,7 @@ const success = {
 
 
     
+function newFunction() {
+    return '#url';
+}
+
