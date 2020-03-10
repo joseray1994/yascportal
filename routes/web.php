@@ -82,6 +82,8 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::delete('/clients/delete/{id}', 'ClientsController@delete');
     Route::post('/clients/document/{id}', 'ClientsController@storeDocuments');
     Route::get('/clients/document/show/{id}', 'ClientsController@showDocuments');
+    Route::post('/clients/download/{id}', 'ClientsController@download');
+    Route::delete('/clients/documents/delete/{id}', 'ClientsController@deleteDocuments');
 
 
     //Contacts for Clients
@@ -90,6 +92,7 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::get('/clients/contacts/edit/{id}', 'ClientsController@editContacts');
     Route::put('/clients/contacts/{id}', 'ClientsController@updateContacts');
     Route::delete('/clients/contacts/destroy/{id}', 'ClientsController@destroyContacts');
+    Route::delete('/clients/contacts/delete/{id}', 'ClientsController@deleteContact');
 
     //User
     Route::get('/users','UserController@index');

@@ -35,7 +35,7 @@
                           <thead class="text-white thead-yasc">
                               <tr>
                                   <th>Document</th>
-                              
+                                  <th>Options</th>
                               </tr>
                           </thead>
                           <tbody id = 'document-list'>
