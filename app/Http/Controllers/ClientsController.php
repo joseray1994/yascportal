@@ -51,7 +51,7 @@ class ClientsController extends Controller
                 return view('clients.table', ["data"=>$data]);
             }
        
-             return view('clients.index',["data"=>$data,"menu"=>$menu, "color" => $color]);
+             return view('clients.index',["data"=>$data,"menu"=>$menu, "color" => $color, "flag" =>1]);
             
      
         }else{
@@ -79,7 +79,6 @@ class ClientsController extends Controller
                                     )
                             ->join('break_rules as brk', 'brk.id_client', '=', 'clients.id')
                             ->join('client_color as clc', 'clc.id', '=', 'clients.color')
-                            ->where('clients.status', '!=', 0)
                             ->where('clients.id', $client_id)->first();
         // ClientModel::whereNotIn('status',[0])->where('id', $client_id)->first();
         return $data;
@@ -106,7 +105,7 @@ class ClientsController extends Controller
 
         ]);
          $result = $this->getResult($id_client);
-        return response()->json($result);
+        return response()->json(['client' => $result, 'flag' => 1]);
 
     }
 
@@ -151,7 +150,7 @@ class ClientsController extends Controller
         $break->save();
 
         $result = $this->getResult($client->id);
-        return response()->json($result);
+        return response()->json(['client' => $result, 'flag' => 1]);
     }
 
     public function destroy($client_id)
@@ -190,7 +189,8 @@ class ClientsController extends Controller
             $client->status = 0;
             $client->save();
       
-        return response()->json($client);
+            $result = $this->getResult($client_id);
+        return response()->json(['client'=>$result, 'flag' => 1 ]);
     } 
 
      //Functions for Documents
@@ -275,6 +275,11 @@ class ClientsController extends Controller
 
     }
 
+    public function getResultContacts($id){
+        $data = ClientContactsModel::select('name', 'description', 'phone', 'email', 'status')->where('id', $id)->first();
+        // ClientModel::whereNotIn('status',[0])->where('id', $client_id)->first();
+        return $data;
+    }
     public function validateContact($request){
 
         $this->validate(request(), [
@@ -286,14 +291,14 @@ class ClientsController extends Controller
     public function showContacts($id)
     {  
         $contact = ClientContactsModel::where('id_client', $id)->whereNotIn('status',[0])->get();
-        return response()->json(["contact" => $contact, "flag" => 2]);
+        // return response()->json(["contact" => $contact, "flag" => 2]);
         
     }
 
     public function editContacts($id)
     {
         $contact_edit = ClientContactsModel::where('id', $id)->first();
-        return response()->json(["contact_edit" => $contact_edit, "flag" => 4]);
+        return response()->json(["contact_edit" => $contact_edit, "flag" => 2]);
         
     }
 
@@ -334,8 +339,8 @@ class ClientsController extends Controller
             $contact = ClientContactsModel::find($id);
             $contact->status = 0;
             $contact->save();
-      
-        return response()->json($contact);
+            $result = $this->getResultContacts($id);
+        return response()->json(['contact'=>$result, 'flag'=> 2]);
     } 
 
 
