@@ -39,7 +39,7 @@ $(document).ready(function(){
 
     //Add Contacts
     $('.btn_add_contacts').click(function(){
-        $('#labelTitle').html("Add Contacts  <i class='fa fa-plus'></i>");
+        $('#labelTitle').html(" <button type='button' class='btn btn-back'><i class='fa fa-arrow-left'></i></button> Add Contacts  <i class='fa fa-plus'></i>");
         $(".formulario").hide();
         $(".formulario_contacts").show();
         $(".tableClient").hide();
@@ -56,7 +56,7 @@ $(document).ready(function(){
 
     });
 
-    $('.btn-cancel-contacts').click(function(){
+    $('.btn-back').click(function(){
         $('#labelTitle').html("Clients  <i class='fa fa-briefcase'></i>");
         $(".formulario").hide();
         $(".tableClient").show();
@@ -64,6 +64,12 @@ $(document).ready(function(){
         $(".formulario_contacts").hide();
         $('#formContacts').trigger("reset");
         $('#tag_put').remove();
+        
+    });
+    $('.btn-cancel-contacts').click(function(){
+       
+        $('#tag_put').remove();
+        $('#formContacts').trigger("reset");
     });
 
 
@@ -184,11 +190,40 @@ $(document).ready(function(){
         actions.edit_create(type,my_url,state,formData, file);
         $('#modalDocuments').modal('hide');
     });
-    
+
+    //Delete Document
+ $(document).on('click','.deleteDocument',function(){
+    var url = $('#url').val();  
+    var document_id = $(this).val();
+    var my_url = url + '/documents/delete/' + document_id;
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+        }
+    })
+    swal({
+        title: "Are you sure you wish to delete this document?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn btn-danger",
+        confirmButtonText: "Delete",
+        cancelButtonText: "Cancel",
+        closeOnConfirm: true,
+        closeOnCancel: false
+      },
+      function(isConfirm) {
+        if (isConfirm) {
+            actions.deactivated(my_url);
+            $('#modalDocuments').modal('hide');
+        }else {
+           swal("Cancelled", "Deletion Canceled", "error");
+        }
+      });
+    });
 
 
-    //Edit Client
-     $(document).on('click','.btn-edit',function(){
+      //Edit Client
+    $(document).on('click','.btn-edit',function(){
         $('#labelTitle').html("Edit Client  <i class='fa fa-briefcase'></i>");
         $(".formulario").show();
         $(".formulario_contacts").hide();
@@ -202,6 +237,24 @@ $(document).ready(function(){
         var my_url = url + '/' + client_id;
 
             actions.show(my_url);
+       
+    });
+    
+
+
+    //Download
+     $(document).on('click','.download',function(){
+       
+        // $('#btn-save-documents').attr('disabled', true);
+        
+      
+        // var formData = $("#formOperators").serialize();
+        var id = $(this).val();
+        var type = "POST"; //for creating new resource
+        var my_url = url + '/download/' + id;
+       
+        actions.edit_create(type,my_url);
+    
        
     });
 
@@ -303,10 +356,10 @@ $(document).on('click','.off-type-contacts',function(){
             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
         }
     })
-        if($(this).attr('class') == 'btn btn-sm btn-outline-success off-type')
+        if($(this).attr('class') == 'btn btn-sm btn-outline-success off-type-contacts')
         {
-            title= "Do you want to activate this client?";
-            text="The client will be activated";
+            title= "Do you want to activate this contact?";
+            text="The contact will be activated";
             confirmButtonText="Activate";
 
             datatitle="Activated";
@@ -315,8 +368,8 @@ $(document).on('click','.off-type-contacts',function(){
         }
         else 
         {
-            title= "Do you want to disable this client?";
-            text= "The client will be deactivated";
+            title= "Do you want to disable this contact?";
+            text= "The contact will be deactivated";
             confirmButtonText="Deactivate";
 
             datatitle="Deactivated";
@@ -352,8 +405,9 @@ $(document).on('click','.off-type-contacts',function(){
 
  //Delete Contact
  $(document).on('click','.deleteContact',function(){
+    var url = $('#url').val();  
     var contact_id = $(this).val();
-    var my_url = url + '/delete/contacts/' + contact_id;
+    var my_url = url + '/contacts/delete/' + contact_id;
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -437,6 +491,21 @@ const contacts ={
        return status;
     },
 }
+
+const documents ={
+    button: function(dato){
+           var buttons='';
+            if(dato.status== 1){
+              
+               buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary download" data-toggle="tooltip" title="Download" value="'+dato.id+'"> <i class="fa fa-download"></i></li></button>';
+               buttons += ' <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert deleteDocument" data-toggle="tooltip" title="Delete" data-type="confirm" value="'+dato.id+'"> <i class="fa fa-trash-o"></i> </button>';
+          
+           }
+           return buttons;
+    },
+    
+}
+
 const success = {
     response: function(data){
         console.log(data.success)
@@ -525,9 +594,7 @@ const success = {
             }
 
 
-        }
-        
-       
+        }   
     },
 
     show: function(dato){
@@ -569,7 +636,7 @@ const success = {
                
                     <tr id="client_id${data.id}">
                         <td>${data.name}</td>
-
+                        <td>${documents.button(data)}</td>
                     </tr>
                     `;
             })
