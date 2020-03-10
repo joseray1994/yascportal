@@ -34,6 +34,7 @@
                     </div>
                 </div>
             </div>
+            @include('users.documents')
              <!-- Passing BASE URL to AJAX -->
         <input id="url" type="hidden" value="{{ \Request::url() }}">
         <input id="baseUrl" type="hidden" value="{{ \Request::root() }}">

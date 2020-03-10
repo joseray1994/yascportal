@@ -144,7 +144,7 @@
 </div>
 
 <!-- Javascript -->
-<script src="{{asset('js/app.js')}}"></script>
+{{-- <script src="{{asset('js/app.js')}}"></script> --}}
 <script src="{{asset('bundles/libscripts.bundle.js')}}"></script>    
 <script src="{{asset('bundles/vendorscripts.bundle.js')}}"></script>
 <script src="{{asset('bundles/datatablescripts.bundle.js')}}"></script>
@@ -165,10 +165,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 <script>
-    Echo.channel('home')
-    .listen('NewMessage', (e) => {
-        console.log(e.message);
-        $('#webs').html(e.message);
+    // Echo.channel('home')
+    // .listen('NewMessage', (e) => {
+    //     console.log(e.message);
+    //     $('#webs').html(e.message);
         // var dato = e.message;
         //         swal({
         //             title: dato.user_info.name,

@@ -37,6 +37,7 @@
                         <button type="button" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="{{$candidate->id}}"  ><i class="fa fa-edit"></i></button>
                         <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-candidate" title="Deactivated" data-type="confirm" value="{{$candidate->id}}"><i class="fa fa-window-close"></i></button>
                         <button type="button" class="btn btn-sm btn-outline-secondary open-documents" title="Documents" data-toggle="tooltip" value="{{$candidate->id}}"><i class="fa  fa-folder-open"></i></button>
+
                     </td>
                 @break
                 @case(2)

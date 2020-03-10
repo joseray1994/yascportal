@@ -29,6 +29,7 @@
                     </td>
                     <td class="text-center">
                         @if($user->id != 1)
+                        <button type="button" class="btn btn-sm btn-outline-secondary open-documents" title="Documents" data-toggle="tooltip" value="{{$user->id}}"><i class="fa  fa-folder-open"></i></button>
                             <button type="button" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="{{$user->id}}"  ><i class="fa fa-edit"></i></button>
                             <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert delete-op" data-toggle="tooltip" title="Desactivated" data-type="confirm" value="{{$user->id}}"><i class="fa fa-window-close"></i></button>
                         @endif

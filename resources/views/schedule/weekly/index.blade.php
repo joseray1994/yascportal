@@ -36,6 +36,9 @@
                 </div>
             </div>
             @include('schedule.weekly.form')
+
+          
+
              <!-- Passing BASE URL to AJAX -->
         <input id="url" type="hidden" value="{{ \Request::url() }}">
 @endsection

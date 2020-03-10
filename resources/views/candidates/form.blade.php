@@ -41,7 +41,7 @@
 									<div class="input-group-prepend">
 										<button class="btn modaldelichef" disabled><i class="fa fa-phone"></i></button>
 									</div>
-									<input type="number" class="form-control has-error" id="phone" name="phone" placeholder="Phone" value="" maxlength ="15">
+									<input type="number" class="form-control has-error" id="phone" name="phone" placeholder="Phone" value="" >
 								</div> 
 							</div>
 							<div class="col-md-4 mb-3">
@@ -96,27 +96,10 @@
 							<div class="col-md-3 mb-3">
 								<label>Typing Test</label>
 								<div class="input-group">
-									<input type="number" class="form-control has-error" id="typing_test" name="typing_test" placeholder="" value="" maxlength ="15">
+									<input type="number" class="form-control has-error" id="typing_test" name="typing_test" placeholder="" value="" >
 								</div> 
 							</div>
-							<div class="col-md-3 mb-3">
-								<label>&nbsp</label>
-								<div class="input-group">
-									<input type="number" class="form-control has-error" id="" name="" placeholder="" value="" maxlength ="15">
-								</div> 
-							</div>
-							<div class="col-md-3 mb-3">
-								<label>&nbsp</label>
-								<div class="input-group">
-									<input type="number" class="form-control has-error" id="" name="" placeholder="" value="" maxlength ="15">
-								</div> 
-							</div>
-							<div class="col-md-3 mb-3">
-								<label>&nbsp</label>
-								<div class="input-group">
-									<input type="number" class="form-control has-error" id="" name="" placeholder="" value="" maxlength ="15">
-								</div> 
-							</div>
+						
                    		</div>
 
 						<div class="form-row">
