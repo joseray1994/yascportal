@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
+use App\Events\NewMessage;
 use Carbon\Carbon;
 use App\User;
 use App\User_info;
@@ -31,17 +32,26 @@ class UserController extends Controller
         $types = TypeUserModel::whereNotIn('id',[9])->get(); 
         $clients = ClientModel::all();
         if($menu['validate']){ 
-
             $search = trim($request->dato);
-
+            $type = $request->type;
             if(strlen($request->type) > 0 &&  strlen($search) > 0){
-                $data2 = User::with('User_info')->whereIn('id_status', [1,2])->paginate(10);
+
+                $data2 = User::select('id','email','id_status')
+                ->whereHas("User_info",function($q) use ($type,$search){
+                    $q->where($type,'LIKE','%'.$search.'%');
+                })
+                ->with('User_info:id_user,name,last_name,phone,entrance_date,birthdate')
+                ->whereIn('id_status', [1,2])
+                ->paginate(10);
             } else{
-                $data2 = User::with('User_info')->whereIn('id_status', [1,2])->paginate(10);
+                $data2 = User::select('id','email','id_status')->
+                with('User_info:id_user,name,last_name,phone,entrance_date,birthdate')
+                ->whereIn('id_status', [1,2])
+                ->paginate(10);
             } 
             $data=$data2;
             if ($request->ajax()) {
-                return view('users.table', compact('data'));
+                return view('users.table', ["data"=>$data]);
             }
             // return view('users.index',compact('data'));
             return view('users.index',["data"=>$data,"menu"=>$menu,'types'=>$types, 'clients'=>$clients]);
@@ -123,6 +133,7 @@ class UserController extends Controller
                     }
                 }
             DB::commit();
+            // event(new NewMessage(User::where('id',$user->id)->with('User_info')->first()));
             return response()->json(User::where('id',$user->id)->with('User_info')->first());
         } catch (\Exception $e) {
             return response()->json($e);    
