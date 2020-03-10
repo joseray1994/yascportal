@@ -39,7 +39,7 @@ $(document).ready(function(){
 
     //Add Contacts
     $('.btn_add_contacts').click(function(){
-        $('#labelTitle').html("Add Contacts  <i class='fa fa-plus'></i>");
+        $('#labelTitle').html(" <button type='button' class='btn btn-back'><i class='fa fa-arrow-left'></i></button> Add Contacts  <i class='fa fa-plus'></i>");
         $(".formulario").hide();
         $(".formulario_contacts").show();
         $(".tableClient").hide();
@@ -56,7 +56,7 @@ $(document).ready(function(){
 
     });
 
-    $('.btn-cancel-contacts').click(function(){
+    $('.btn-back').click(function(){
         $('#labelTitle').html("Clients  <i class='fa fa-briefcase'></i>");
         $(".formulario").hide();
         $(".tableClient").show();
@@ -64,6 +64,12 @@ $(document).ready(function(){
         $(".formulario_contacts").hide();
         $('#formContacts').trigger("reset");
         $('#tag_put').remove();
+        
+    });
+    $('.btn-cancel-contacts').click(function(){
+       
+        $('#tag_put').remove();
+        $('#formContacts').trigger("reset");
     });
 
 
@@ -117,11 +123,7 @@ $(document).ready(function(){
         }
             console.log(formData);
             actions.edit_create(type,my_url,state,formData);   
-            $('#labelTitle').html("Clients  <i class='fa fa-briefcase'></i>");
-            $(".formulario").hide();
-            $(".tableClient").show();
-            $('#btn_add').show();
-            $(".formulario_contacts").hide();
+        
             $('#formContacts').trigger("reset");
             $('#tag_put').remove();
     });
@@ -184,11 +186,40 @@ $(document).ready(function(){
         actions.edit_create(type,my_url,state,formData, file);
         $('#modalDocuments').modal('hide');
     });
-    
+
+    //Delete Document
+ $(document).on('click','.deleteDocument',function(){
+    var url = $('#url').val();  
+    var document_id = $(this).val();
+    var my_url = url + '/documents/delete/' + document_id;
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+        }
+    })
+    swal({
+        title: "Are you sure you wish to delete this document?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn btn-danger",
+        confirmButtonText: "Delete",
+        cancelButtonText: "Cancel",
+        closeOnConfirm: true,
+        closeOnCancel: false
+      },
+      function(isConfirm) {
+        if (isConfirm) {
+            actions.deactivated(my_url);
+            $('#modalDocuments').modal('hide');
+        }else {
+           swal("Cancelled", "Deletion Canceled", "error");
+        }
+      });
+    });
 
 
-    //Edit Client
-     $(document).on('click','.btn-edit',function(){
+      //Edit Client
+    $(document).on('click','.btn-edit',function(){
         $('#labelTitle').html("Edit Client  <i class='fa fa-briefcase'></i>");
         $(".formulario").show();
         $(".formulario_contacts").hide();
@@ -202,6 +233,24 @@ $(document).ready(function(){
         var my_url = url + '/' + client_id;
 
             actions.show(my_url);
+       
+    });
+    
+
+
+    //Download
+     $(document).on('click','.download',function(){
+       
+        // $('#btn-save-documents').attr('disabled', true);
+        
+      
+        // var formData = $("#formOperators").serialize();
+        var id = $(this).val();
+        var type = "POST"; //for creating new resource
+        var my_url = url + '/download/' + id;
+       
+        actions.edit_create(type,my_url);
+    
        
     });
 
@@ -303,10 +352,10 @@ $(document).on('click','.off-type-contacts',function(){
             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
         }
     })
-        if($(this).attr('class') == 'btn btn-sm btn-outline-success off-type')
+        if($(this).attr('class') == 'btn btn-sm btn-outline-success off-type-contacts')
         {
-            title= "Do you want to activate this client?";
-            text="The client will be activated";
+            title= "Do you want to activate this contact?";
+            text="The contact will be activated";
             confirmButtonText="Activate";
 
             datatitle="Activated";
@@ -315,8 +364,8 @@ $(document).on('click','.off-type-contacts',function(){
         }
         else 
         {
-            title= "Do you want to disable this client?";
-            text= "The client will be deactivated";
+            title= "Do you want to disable this contact?";
+            text= "The contact will be deactivated";
             confirmButtonText="Deactivate";
 
             datatitle="Deactivated";
@@ -352,8 +401,9 @@ $(document).on('click','.off-type-contacts',function(){
 
  //Delete Contact
  $(document).on('click','.deleteContact',function(){
+    var url = $('#url').val();  
     var contact_id = $(this).val();
-    var my_url = url + '/delete/contacts/' + contact_id;
+    var my_url = url + '/contacts/delete/' + contact_id;
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -389,14 +439,14 @@ const clients ={
                buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary btn-edit" data-toggle="tooltip" title="Edit" value="'+dato.id+'"> <i class="fa fa-edit"></i></li></button>';
                buttons += '	<button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-type" data-toggle="tooltip" title="Deactivated" data-type="confirm" value="'+dato.id+'" ><i class="fa fa-window-close"></i></button>';
                buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary btn_add_contacts" data-toggle="tooltip" title="Contacts" value="'+dato.id+'"> <i class="fa fa-users"></i> </button>';
-               buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" title="Documents" value="'+dato.id+'"> <i class="fa fa-folder-open"></i> </button>';
+               buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary open-documents" data-toggle="tooltip" title="Documents" value="'+dato.id+'"> <i class="fa fa-folder-open"></i> </button>';
           
            }else if(dato.status == 2){
              
                buttons += ' <button type="button" class="btn btn-sm btn-outline-success off-type" data-toggle="tooltip" title="Activated" data-type="confirm" value="'+dato.id+'" > <i class="fa fa-check-square-o"></i></button>'
                buttons += ' <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert deleteClient" data-toggle="tooltip" title="Delete" data-type="confirm" value="'+dato.id+'"> <i class="fa fa-trash-o"></i> </button>';
                buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary btn_add_contacts" data-toggle="tooltip" title="Contacts" value="'+dato.id+'"> <i class="fa fa-users"></i> </button>';
-               buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" title="Documents" value="'+dato.id+'"> <i class="fa fa-folder-open"></i> </button>';
+               buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary open-documents" data-toggle="tooltip" title="Documents" value="'+dato.id+'"> <i class="fa fa-folder-open"></i> </button>';
            }
            return buttons;
     },
@@ -437,35 +487,79 @@ const contacts ={
        return status;
     },
 }
+
+const documents ={
+    button: function(dato){
+           var buttons='';
+            if(dato.status== 1){
+              
+               buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary download" data-toggle="tooltip" title="Download" value="'+dato.id+'"> <i class="fa fa-download"></i></li></button>';
+               buttons += ' <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert deleteDocument" data-toggle="tooltip" title="Delete" data-type="confirm" value="'+dato.id+'"> <i class="fa fa-trash-o"></i> </button>';
+          
+           }
+           return buttons;
+    },
+    
+}
+
 const success = {
     response: function(data){
         console.log(data.success)
     },
     
     new_update: function (data,state){
-        console.log(data);
-        var dato = data;
-        var clientname =$('#name').val();
-        var type =$('#type').val();
+        switch (data.flag){
+            case 1:
+                console.log(data);
+                var dato = data.client;
+                var clientname =$('#name').val();
+                var type =$('#type').val();
 
-            var client = `<tr id="client_id${dato.id}">
-                                <td><span class="badge badge-secondary" style = "background:${dato.color}">&nbsp;&nbsp;&nbsp;</span></td>
-                                <td>${dato.name}</td>
-                                <td>${dato.description}</td>
-                                <td>${dato.interval}</td>
-                                <td>${dato.duration}</td>
-                                <td class="hidden-xs">${clients.status(dato)}</td>
-                                <td>${clients.button(dato)}</td>
-                            </tr>`;
-        
-            if (state == "add"){ 
-              $("#client-list").append(client);
-              $("#client_id"+dato.id).css("background-color", "#c3e6cb");    
-            }else{
-              $("#client_id"+dato.id).replaceWith(client);
-              $("#client_id"+dato.id).css("background-color", "#ffdf7e");  
-            }
-        
+                    var client = `<tr id="client_id${dato.id}">
+                                        <td><span class="badge badge-secondary" style = "background:${dato.color}">&nbsp;&nbsp;&nbsp;</span></td>
+                                        <td>${dato.name}</td>
+                                        <td>${dato.description}</td>
+                                        <td>${dato.interval}</td>
+                                        <td>${dato.duration}</td>
+                                        <td class="hidden-xs">${clients.status(dato)}</td>
+                                        <td>${clients.button(dato)}</td>
+                                    </tr>`;
+                
+                    if (state == "add"){ 
+                    $("#client-list").append(client);
+                    $("#client_id"+dato.id).css("background-color", "#c3e6cb");    
+                    }else{
+                    $("#client_id"+dato.id).replaceWith(client);
+                    $("#client_id"+dato.id).css("background-color", "#ffdf7e");  
+                    }
+                break    
+                case 2:
+                    console.log(data);
+                    var dato = data.contact;
+                    var clientname =$('#name').val();
+                    var type =$('#type').val();
+    
+                        var contact = `<tr id="client_id${dato.id}">
+                                            <td>${dato.name}</td>
+                                            <td>${dato.description}</td>
+                                            <td>${dato.phone}</td>
+                                            <td>${dato.email}</td>
+                                            <td class="hidden-xs">${contacts.status(dato)}</td>
+                                            <td>${contacts.button(dato)}</td>
+                                        </tr>`;
+                    
+                        if (state == "add"){ 
+                        $("#contact-list").append(contact);
+                        $("#client_id"+dato.id).css("background-color", "#c3e6cb");    
+                        }else{
+                        $("#client_id"+dato.id).replaceWith(contact);
+                        $("#client_id"+dato.id).css("background-color", "#ffdf7e");  
+                        }
+                break        
+                case 3:
+                    swal("Saved!", data.doc_success, "success")
+
+        }
     },
 
     deactivated:function(data) {
@@ -498,7 +592,7 @@ const success = {
             }else if(dato.status == 0){
                 $("#client_id"+dato.id).remove();
             }
-
+            break
             case 2:
                
                 var dato = data.contact;
@@ -523,11 +617,9 @@ const success = {
             }else if(dato.status == 0){
                 $("#client_id"+dato.id).remove();
             }
+            break
 
-
-        }
-        
-       
+        }   
     },
 
     show: function(dato){
@@ -543,7 +635,7 @@ const success = {
                 $('#duration').val(data.duration);
                 $('#btn-save').val("update");
                 $('#myModal').modal('show');
-             
+            break
             case 2:
                 var contact = "";
                 dato.contact.forEach(function(data){
@@ -560,7 +652,7 @@ const success = {
                         `;
                 })
                 $('#contact-list').html(contact);
-        
+            break
             case 3:
             
             var document = "";
@@ -569,12 +661,12 @@ const success = {
                
                     <tr id="client_id${data.id}">
                         <td>${data.name}</td>
-
+                        <td>${documents.button(data)}</td>
                     </tr>
                     `;
             })
             $('#document-list').html(document);
-
+            break
             case 4:
             var data = dato.contact_edit;
             console.log(data)   
@@ -584,7 +676,7 @@ const success = {
                 $('#email_contact').val(data.email);
                 $('#phone_contact').val(data.phone);
                 $('#btn-save-contacts').val("update");
-              
+            break
           }
     
     },

@@ -28,6 +28,7 @@ $(document).ready(function(){
        
     });
 
+
      //create new product / update existing product ***************************
      $("#candidateForm").on('submit',function (e) {
         console.log('button');
@@ -128,7 +129,7 @@ $(document).ready(function(){
         })
         swal({
             title: "¿Desea eliminar este Candidato?",
-            text: "La vacante se eliminara permanentemente",
+            text: "El candidato se eliminara permanentemente",
             type: "warning",
             showCancelButton: true,
             confirmButtonClass: "btn btn-danger",
@@ -146,6 +147,80 @@ $(document).ready(function(){
           });
         });
 
+
+           //Modal of Documents
+    $('.open-documents').click(function(){
+        $('#formContacts').trigger("reset");
+        $('#formClients').trigger("reset");
+
+        // $("#image").attr('src','');
+        $('#modalDocuments').modal('show');
+        var id = $(this).val();
+        $('#client_id_document').val(id);
+        var my_url = url + '/document/show/' + id;
+        actions.show(my_url)
+
+    });
+
+    $('.close-documents').click(function(){
+        $('#doc').trigger("reset");
+
+        $('#modalDocuments').modal('hide');
+
+    });
+
+    //Create documents
+    $("#formDocuments").on('submit',function (e) {
+        console.log('button');
+      
+        e.preventDefault(); 
+        // $('#btn-save-documents').attr('disabled', true);
+        
+        var formData = new FormData(this);
+        // var formData = $("#formOperators").serialize();
+        var state = $('#btn-save-documents').val();
+        var id = $('#client_id_document').val();
+        var type = "POST"; //for creating new resource
+        var my_url = url + '/document/' + id;
+        var file = "file";
+        if (state == "update"){
+            type = "POST"; //for updating existing resource
+            my_url += '/' + id;
+        }
+        actions.edit_create(type,my_url,state,formData, file);
+        $('#modalDocuments').modal('hide');
+    });
+
+    //Delete Document
+ $(document).on('click','.deleteDocument',function(){
+    var url = $('#url').val();  
+    var document_id = $(this).val();
+    var my_url = url + '/documents/delete/' + document_id;
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+        }
+    })
+    swal({
+        title: "Are you sure you wish to delete this document?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn btn-danger",
+        confirmButtonText: "Delete",
+        cancelButtonText: "Cancel",
+        closeOnConfirm: true,
+        closeOnCancel: false
+      },
+      function(isConfirm) {
+        if (isConfirm) {
+            actions.deactivated(my_url);
+            $('#modalDocuments').modal('hide');
+        }else {
+           swal("Cancelled", "Deletion Canceled", "error");
+        }
+      });
+    });
+
   
 });
 
@@ -156,7 +231,6 @@ const candidates ={
            var buttons='<div class="btn-group">';
             if(dato.status== 1){
                
-                buttons += '<a class="btn btn-sm btn-outline-primary" data-toggle="tooltip" title="Ver Documentos" href=""><i class="fa fa-cubes"></i></a>';
                 buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="'+dato.id+'"  ><i class="fa fa-edit"></i></button>';
                 buttons += ' <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-candidate" title="Deactivated" data-type="confirm" value="'+dato.id+'"><i class="fa fa-window-close"></i></button>';
           
@@ -205,9 +279,6 @@ const success = {
                                 <td>${dato.listening_test}</td>
                                 <td>${dato.grammar_test}</td>
                                 <td>${dato.typing_test}</td>
-                                <td>${dato.personality_test}</td>
-                                <td>${dato.recording}</td>
-                                <td>${dato.cv}</td>
                                 <td class="hidden-xs">${candidates.status(dato)}</td>
                                 <td>${candidates.button(dato)}</td>
                             </tr>`;
@@ -227,21 +298,37 @@ const success = {
 
     show: function(data){
         console.log(data);
-        $('#candidate_id').val(data.id);
-        $('#id_vacancy').val(data.id_vacancy);
-        $('#name').val(data.name);
-        $('#last_name').val(data.last_name);
-        $('#phone').val(data.phone);
-        $('#mail').val(data.mail);
-        $('#channel').val(data.channel);
-        $('#listening_test').val(data.listening_test);
-        $('#grammar_test').val(data.grammar_test);
-        $('#typing_test').val(data.typing_test);
-        $('#personality_test').val(data.personality_test);
-        $('#recording').val(data.recording);
-        $('#cv').val(data.cv);
-        $('#btn-save').val("update");
-        $('#myModal').modal('show');
+        switch (data.flag) {
+            case 1:
+              
+                $('#candidate_id').val(data.candidates.id);
+                $('#id_vacancy').val(data.candidates.id_vacancy);
+                $('#name').val(data.candidates.name);
+                $('#last_name').val(data.candidates.last_name);
+                $('#phone').val(data.candidates.phone);
+                $('#mail').val(data.candidates.mail);
+                $('#channel').val(data.candidates.channel);
+                $('#listening_test').val(data.candidates.listening_test);
+                $('#grammar_test').val(data.candidates.grammar_test);
+                $('#typing_test').val(data.candidates.typing_test);
+                $('#btn-save').val("update");
+                $('#myModal').modal('show');
+            break;  
+            case 2:
+            
+                    var document = "";
+                    data.document.forEach(function(data){
+                        document += `
+                       
+                            <tr id="client_id${data.id}">
+                                <td>${data.name}</td>
+                                <td>${documents.button(data)}</td>
+                            </tr>
+                            `;
+                    })
+                    $('#document-list').html(document);
+            break;
+        }
     },
 
     
@@ -261,9 +348,6 @@ const success = {
                                 <td>${dato.listening_test}</td>
                                 <td>${dato.grammar_test}</td>
                                 <td>${dato.typing_test}</td>
-                                <td>${dato.personality_test}</td>
-                                <td>${dato.recording}</td>
-                                <td>${dato.cv}</td>
                                 <td class="hidden-xs">${candidates.status(dato)}</td>
                                 <td>${candidates.button(dato)}</td>
                             </tr>`;
@@ -292,4 +376,9 @@ const success = {
         });
 
     },
+
+}
+
+function newFunction() {
+    return '#url';
 }

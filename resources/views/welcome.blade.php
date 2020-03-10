@@ -101,7 +101,7 @@
                     <div class="col-lg-6 col-md-4 col-sm-12 text-right">
                         <div class="bh_chart hidden-xs">
                             <div class="float-left m-r-15">
-                                <small>Operators Start Shift</small>
+                                <small id="webs">Operators Start Shift</small>
                                 <h6 class="mb-0 mt-1"><i class="icon-user"></i> </h6>
                             </div>
                             <span class="bh_visitors float-right">2,5,1,8,3,6,7,5</span>
@@ -144,6 +144,7 @@
 </div>
 
 <!-- Javascript -->
+{{-- <script src="{{asset('js/app.js')}}"></script> --}}
 <script src="{{asset('bundles/libscripts.bundle.js')}}"></script>    
 <script src="{{asset('bundles/vendorscripts.bundle.js')}}"></script>
 <script src="{{asset('bundles/datatablescripts.bundle.js')}}"></script>
@@ -163,6 +164,36 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+<script>
+    // Echo.channel('home')
+    // .listen('NewMessage', (e) => {
+    //     console.log(e.message);
+    //     $('#webs').html(e.message);
+        // var dato = e.message;
+        //         swal({
+        //             title: dato.user_info.name,
+        //             text: "Usuario añadido",
+        //             type: "success",
+        //             button: "OK",
+        //         });
+            
+        //         var user = `<tr id="user_id${dato.id}">
+        //                         <td>${dato.id}</td>
+        //                         <td>${dato.user_info.name}</td>
+        //                         <td>${dato.user_info.last_name}</td>
+        //                         <td>${dato.email}</td>
+        //                         <td>${dato.user_info.phone}</td>
+        //                         <td>${dato.user_info.entrance_date}</td>
+        //                         <td>${dato.user_info.birthdate}</td>
+        //                         <td class="hidden-xs">${types.status(dato)}</td>
+        //                         <td>${types.button(dato)}</td>
+        //                     </tr>`;
+    
+        //         $("#user-list").append(user);
+        //         $("#user_id"+dato.id).css("background-color", "#c3e6cb");  
+        //                 }); 
+    
+</script>
 @yield('script')
 </body>
 </html>

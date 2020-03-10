@@ -9,9 +9,9 @@
                                 <li><a href="javascript:void(0);" class="btn btn-success" disabled id="btn_add" >New Candidate <i class="fa fa-plus"></i></a></li>
                             </ul>
                         </div>
+                        @include('candidates.form')
                         <div class="body">
-                                <div class="table-responsive">
-                                    <div class="input-group mb-3 input-group-sm">
+                                <div class="input-group mb-3 input-group-sm">
                                     <div class="input-group-prepend">
                                         <select class="form-control" id="typesearch">
                                             <option value="name">name</option>
@@ -21,13 +21,22 @@
                                     <input type="text" class="form-control" id="search">
                                     <button type="button" class="btn btn-primary search-query">Search</button>
                                 </div>
-                              @include('candidates.table')
-                            </div>
+                                <div class="table-responsive">
+                                 @include('candidates.table')
+                                </div>
+                                <div class="loading-table col-sm-12 text-center">
+                                        <div class="spinner-grow text-success"></div>
+                                        <div class="spinner-grow text-info"></div>
+                                        <div class="spinner-grow text-warning"></div>
+                                        <div class="spinner-grow text-danger"></div>
+                                </div>
                         </div>
                     </div>
                 </div>
             </div>
-            @include('candidates.form')
+           
+@include('candidates.documents')
+
              <!-- Passing BASE URL to AJAX -->
         <input id="url" type="hidden" value="{{ \Request::url() }}">
 @endsection

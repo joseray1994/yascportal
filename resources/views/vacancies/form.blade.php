@@ -11,7 +11,7 @@
 							<div class="form-group error">
 								<div class="btn-group col-sm-12">
 									<button class="btn modaldelichef" disabled><i class="fa fa-user-plus"></i></button>
-									<input type="text" class="form-control has-error" id="name" name="name" placeholder="Ingrese nueva Vacante" value="" maxlength ="15">
+									<input type="text" class="form-control has-error" id="name" name="name" placeholder="Ingrese nueva Vacante" value="" maxlength ="60">
 								</div>
 							</div>
 							<div class="form-group error">
