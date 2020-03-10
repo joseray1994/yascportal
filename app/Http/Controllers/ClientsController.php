@@ -51,7 +51,7 @@ class ClientsController extends Controller
                 return view('clients.table', ["data"=>$data]);
             }
        
-             return view('clients.index',["data"=>$data,"menu"=>$menu, "color" => $color, "flag" =>1]);
+             return view('clients.index',["data"=>$data,"menu"=>$menu, "color" => $color]);
             
      
         }else{
@@ -272,11 +272,14 @@ class ClientsController extends Controller
         'phone'=>$data['phone_contact'],
         'email'=>$data['email_contact'],
         ]);
-
+        $id = $clients->id;
+       
+        $result = $this->getResultContacts($id);
+        return response()->json(["contact" => $result, "flag" => 2]);
     }
 
     public function getResultContacts($id){
-        $data = ClientContactsModel::select('name', 'description', 'phone', 'email', 'status')->where('id', $id)->first();
+        $data = ClientContactsModel::select('id','name', 'description', 'phone', 'email', 'status')->where('id', $id)->first();
         // ClientModel::whereNotIn('status',[0])->where('id', $client_id)->first();
         return $data;
     }
@@ -291,14 +294,14 @@ class ClientsController extends Controller
     public function showContacts($id)
     {  
         $contact = ClientContactsModel::where('id_client', $id)->whereNotIn('status',[0])->get();
-        // return response()->json(["contact" => $contact, "flag" => 2]);
+        return response()->json(["contact" => $contact, "flag" => 2]);
         
     }
 
     public function editContacts($id)
     {
         $contact_edit = ClientContactsModel::where('id', $id)->first();
-        return response()->json(["contact_edit" => $contact_edit, "flag" => 2]);
+        return response()->json(["contact_edit" => $contact_edit, "flag" => 4]);
         
     }
 

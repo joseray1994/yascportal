@@ -11,7 +11,6 @@
         </tr>
     </thead>
     <tbody id="client-list">
-       @if($flag == 1)
         @foreach ($data as $client)
         <tr id="client_id{{$client->id}}" >
             <td><span class="badge badge-secondary" style = "background:{{$client->color}}">&nbsp;&nbsp;&nbsp;</span></td>
@@ -46,7 +45,6 @@
         
         </tr>
         @endforeach
-        @endif
     </tbody>
 </table>
 {!! $data->render() !!}
