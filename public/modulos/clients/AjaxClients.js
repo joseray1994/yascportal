@@ -527,11 +527,15 @@ const success = {
                 
                     if (state == "add"){ 
                     $("#client-list").append(client);
-                    $("#client_id"+dato.id).css("background-color", "#c3e6cb");    
+                    $("#client_id"+dato.id).css("background-color", "#c3e6cb");  
+                    swal("Saved!", data.client_success, "success")  
                     }else{
                     $("#client_id"+dato.id).replaceWith(client);
                     $("#client_id"+dato.id).css("background-color", "#ffdf7e");  
+                    swal("Updated!", data.client_update, "success")
                     }
+
+                    
                 break    
                 case 2:
                     console.log(data);
@@ -550,10 +554,12 @@ const success = {
                     
                         if (state == "add"){ 
                         $("#contact-list").append(contact);
-                        $("#client_id"+dato.id).css("background-color", "#c3e6cb");    
+                        $("#client_id"+dato.id).css("background-color", "#c3e6cb");  
+                        swal("Saved!", data.contact_success, "success")   
                         }else{
                         $("#client_id"+dato.id).replaceWith(contact);
                         $("#client_id"+dato.id).css("background-color", "#ffdf7e");  
+                        swal("Saved!", data.contact_updated, "success")   
                         }
                 break        
                 case 3:
@@ -591,6 +597,7 @@ const success = {
 
             }else if(dato.status == 0){
                 $("#client_id"+dato.id).remove();
+                swal("Deleted!", data.client_deleted, "success")
             }
             break
             case 2:
@@ -616,6 +623,7 @@ const success = {
 
             }else if(dato.status == 0){
                 $("#client_id"+dato.id).remove();
+                swal("Deleted!", data.contact_deleted, "success")
             }
             break
 

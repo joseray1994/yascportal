@@ -17,7 +17,7 @@ $(document).ready(function(){
         $('#days').val(null).trigger('change');
         $('#typeUserForm').trigger("reset");
         $("#image").attr('src','');
-        $('#myModal').modal('show');
+        $('#myModal2').modal('show');
     });
 
     $('.cancel_data').click(function(){
@@ -25,7 +25,8 @@ $(document).ready(function(){
         $('#days').val(null).trigger('change');
         $('#typeUserForm').trigger("reset");
         $("#image").attr('src','');
-        $('#myModal').modal('show');
+        $('#myModal2').modal('hide');
+        $('#myModal').modal('hide');
     });
 
     $('.scheduleWeeklySearch').change(function(){
@@ -43,7 +44,6 @@ $(document).ready(function(){
             actions.show(my_url);
        
     });
-
 
 
     //create new product / update existing product ***************************
@@ -231,7 +231,8 @@ const schedule ={
                 time_end:$('#time_end').val(),
                 days:$("#days").val(),
                 time_extra:$('#time_extra').val(),
-                duration:$("#duration").val(),
+                durationH:$("#durationH").val(),
+                durationM:$("#durationM").val(),
                 now:n,
                 today:t,
         }
@@ -309,21 +310,34 @@ const success = {
 
     show: function(data){
         console.log(data);
-        $('#usertype_id').val(data.detail.id);
-        $('#time_start').val(data.detail.time_s);
-        $('#time_end').val(data.detail.time_e);
-
-        if(data.days.length == 0){
-            $('#days').val(null);
-            $('#days').trigger('change');
+    
+      
+        if(data.detail.type == 2){
+            $('#btn-saveE').val("update");
+            $('#usertype_idE').val(data.detail.id);
+            $('#time_startE').val(data.detail.time_s);
+            $('#time_endE').val(data.detail.time_e);
+            $('#myModal2').modal('show');
+            
         }else{
-
-            var select="";
-            $('#days').val(data.days)
-            $('#days').trigger('change');
+            $('#btn-save').val("update");
+            $('#usertype_id').val(data.detail.id);
+            $('#time_start').val(data.detail.time_s);
+            $('#time_end').val(data.detail.time_e);
+    
+            if(data.days.length == 0){
+                $('#days').val(null);
+                $('#days').trigger('change');
+            }else{
+    
+                var select="";
+                $('#days').val(data.days)
+                $('#days').trigger('change');
+            }
+            $('#myModal').modal('show');
         }
-        $('#btn-save').val("update");
-        $('#myModal').modal('show');
+        
+        
     },
 
     msj: function(data){

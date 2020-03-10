@@ -3,21 +3,23 @@
         <tr>
             <th>Operator</th>
             <th>Client</th>
+            <th>Day</th>
             <th>Log in</th>
             <th>Log out</th>
-            <th>Note</th>
+            <th>Work Type</th>
             <th class="hidden-xs" >Status</th>
             <th>Options</th>
         </tr>
     </thead>
     <tbody id="usertype-list" class="table-data" >
         @forelse($data as $type)
-        <tr id="usertype_id{{$type->id}}">
+        <tr id="usertype_id{{$type->id}}" style ="background:{{$type->color}}">
             <td>{{ $type->name }} {{ $type->lastname }}</td>
             <td>{{ $type->client }}</td>
+            <td>{{ $type->day }}</td>
             <td>{{ $type->time_s }}</td>
             <td>{{ $type->time_e }}</td>
-            <td>adc</td>
+            <td>@if($type->type == 1) <span class="badge badge-light">Workday</span>@else<span class="badge badge-dark">Extra</span>@endif</td>
             @switch($type->status)
                 @case(1)
                     <td class="hidden-xs">
@@ -42,7 +44,7 @@
         </tr>
         @empty
             <tr id="table-row" class="text-center">
-                <th colspan="7" class="text-center">
+                <th colspan="8" class="text-center">
                     <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
                 </th>
             </tr>
