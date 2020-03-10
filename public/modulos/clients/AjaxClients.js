@@ -123,11 +123,7 @@ $(document).ready(function(){
         }
             console.log(formData);
             actions.edit_create(type,my_url,state,formData);   
-            $('#labelTitle').html("Clients  <i class='fa fa-briefcase'></i>");
-            $(".formulario").hide();
-            $(".tableClient").show();
-            $('#btn_add').show();
-            $(".formulario_contacts").hide();
+        
             $('#formContacts').trigger("reset");
             $('#tag_put').remove();
     });
@@ -512,29 +508,54 @@ const success = {
     },
     
     new_update: function (data,state){
-        console.log(data);
-        var dato = data;
-        var clientname =$('#name').val();
-        var type =$('#type').val();
+        switch (data.flag){
+            case 1:
+                console.log(data);
+                var dato = data.client;
+                var clientname =$('#name').val();
+                var type =$('#type').val();
 
-            var client = `<tr id="client_id${dato.id}">
-                                <td><span class="badge badge-secondary" style = "background:${dato.color}">&nbsp;&nbsp;&nbsp;</span></td>
-                                <td>${dato.name}</td>
-                                <td>${dato.description}</td>
-                                <td>${dato.interval}</td>
-                                <td>${dato.duration}</td>
-                                <td class="hidden-xs">${clients.status(dato)}</td>
-                                <td>${clients.button(dato)}</td>
-                            </tr>`;
-        
-            if (state == "add"){ 
-              $("#client-list").append(client);
-              $("#client_id"+dato.id).css("background-color", "#c3e6cb");    
-            }else{
-              $("#client_id"+dato.id).replaceWith(client);
-              $("#client_id"+dato.id).css("background-color", "#ffdf7e");  
-            }
-        
+                    var client = `<tr id="client_id${dato.id}">
+                                        <td><span class="badge badge-secondary" style = "background:${dato.color}">&nbsp;&nbsp;&nbsp;</span></td>
+                                        <td>${dato.name}</td>
+                                        <td>${dato.description}</td>
+                                        <td>${dato.interval}</td>
+                                        <td>${dato.duration}</td>
+                                        <td class="hidden-xs">${clients.status(dato)}</td>
+                                        <td>${clients.button(dato)}</td>
+                                    </tr>`;
+                
+                    if (state == "add"){ 
+                    $("#client-list").append(client);
+                    $("#client_id"+dato.id).css("background-color", "#c3e6cb");    
+                    }else{
+                    $("#client_id"+dato.id).replaceWith(client);
+                    $("#client_id"+dato.id).css("background-color", "#ffdf7e");  
+                    }
+                case 2:
+                    console.log(data);
+                    var dato = data.contact;
+                    var clientname =$('#name').val();
+                    var type =$('#type').val();
+    
+                        var contact = `<tr id="client_id${dato.id}">
+                                            <td>${dato.name}</td>
+                                            <td>${dato.description}</td>
+                                            <td>${dato.phone}</td>
+                                            <td>${dato.email}</td>
+                                            <td class="hidden-xs">${contacts.status(dato)}</td>
+                                            <td>${contacts.button(dato)}</td>
+                                        </tr>`;
+                    
+                        if (state == "add"){ 
+                        $("#contact-list").append(contact);
+                        $("#client_id"+dato.id).css("background-color", "#c3e6cb");    
+                        }else{
+                        $("#client_id"+dato.id).replaceWith(contact);
+                        $("#client_id"+dato.id).css("background-color", "#ffdf7e");  
+                        }
+
+        }
     },
 
     deactivated:function(data) {

@@ -10,7 +10,7 @@
             <th>Options</th>
         </tr>
     </thead>
-    <tbody id="contact-list">
+    <tbody id="client-list">
         @foreach ($data as $client)
         <tr id="client_id{{$client->id}}" >
             <td><span class="badge badge-secondary" style = "background:{{$client->color}}">&nbsp;&nbsp;&nbsp;</span></td>

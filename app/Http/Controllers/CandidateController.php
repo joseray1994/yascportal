@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\CandidateModel;
 use App\VacancyModel;
+use App\DocumentModel;
 
 class CandidateController extends Controller
 {
@@ -25,7 +26,7 @@ class CandidateController extends Controller
                     $data2 = CandidateModel::select('candidates.id as id',  'vac.name as name_vacancy', 'candidates.name as name', 'candidates.last_name as last_name', 'candidates.phone as phone', 
                     'candidates.mail as mail', 'candidates.channel as channel', 
                     'candidates.listening_test as listening_test', 'candidates.grammar_test as grammar_test', 
-                    'candidates.typing_test as typing_test', 'candidates.personality_test as personality_test', 'candidates.recording as recording', 'candidates.cv as cv', 'candidates.status as status')
+                    'candidates.typing_test as typing_test', 'candidates.status as status')
                     ->join('vacancies as vac', 'vac.id', '=', 'candidates.id_vacancy')
                     ->where('candidates.id_vacancy',$id)
                     ->whereNotIn('candidates.status',[0])
@@ -37,7 +38,7 @@ class CandidateController extends Controller
                     $data2 = CandidateModel::select('candidates.id as id',  'vac.name as name_vacancy', 'candidates.name as name', 'candidates.last_name as last_name', 'candidates.phone as phone', 
                     'candidates.mail as mail', 'candidates.channel as channel', 
                     'candidates.listening_test as listening_test', 'candidates.grammar_test as grammar_test', 
-                    'candidates.typing_test as typing_test', 'candidates.personality_test as personality_test', 'candidates.recording as recording', 'candidates.cv as cv', 'candidates.status as status')
+                    'candidates.typing_test as typing_test', 'candidates.status as status')
                     ->join('vacancies as vac', 'vac.id', '=', 'candidates.id_vacancy')
                     ->where('candidates.id_vacancy',$id)
                     ->whereNotIn('candidates.status',[0])
@@ -61,7 +62,7 @@ class CandidateController extends Controller
         $candidate = CandidateModel::select('candidates.id as id',  'vac.name as name_vacancy', 'candidates.name as name', 'candidates.last_name as last_name', 'candidates.phone as phone', 
         'candidates.mail as mail', 'candidates.channel as channel', 
         'candidates.listening_test as listening_test', 'candidates.grammar_test as grammar_test', 
-        'candidates.typing_test as typing_test', 'candidates.personality_test as personality_test', 'candidates.recording as recording', 'candidates.cv as cv', 'candidates.status as status')
+        'candidates.typing_test as typing_test', 'candidates.status as status')
         ->join('vacancies as vac', 'vac.id', '=', 'candidates.id_vacancy')
         ->where('candidates.id',$id)
         ->first();
@@ -81,9 +82,6 @@ class CandidateController extends Controller
             'channel' => 'required',
             'listening_test' => 'required',
             'grammar_test' => 'required',
-            'personality_test' => 'required',
-            'recording' => 'required',
-            'cv' => 'required',
         ]); 
         }else{
             $this->validate(request(), [
@@ -94,10 +92,7 @@ class CandidateController extends Controller
                 'channel' => 'required',
                 'listening_test' => 'required',
                 'grammar_test' => 'required',
-                'personality_test' => 'required',
-                'recording' => 'required',
-                'cv' => 'required',
-
+                
             ]);   
         }
     }
@@ -116,9 +111,6 @@ class CandidateController extends Controller
             'listening_test'=>$request->listening_test,
             'grammar_test'=>$request->grammar_test,
             'typing_test'=>$request->typing_test,
-            'personality_test'=>$request->personality_test,
-            'recording'=>$request->recording,
-            'cv'=>$request->cv,
             'status'=>1,]);
 
             $id=$candidate->id;
@@ -134,7 +126,7 @@ class CandidateController extends Controller
 
         $candidate = CandidateModel::find($candidate_id);
         $candidate->status=1;
-        return response()->json($candidate);
+        return response()->json(["candidates" => $candidate, "flag" => 1]);
     }
 
 
@@ -159,9 +151,6 @@ class CandidateController extends Controller
             $candidate->listening_test = $request->listening_test;
             $candidate->grammar_test = $request->grammar_test;
             $candidate->typing_test = $request->typing_test;
-            $candidate->personality_test = $request->personality_test;
-            $candidate->recording = $request->recording;
-            $candidate->cv = $request->cv;
             $candidate->status=1;
             $candidate->save();
 
@@ -172,13 +161,12 @@ class CandidateController extends Controller
             return response()->json($candidate2);
         }
         else{
-            $candidate='Otra Vacante ya cuenta con ese Nombre.';
-            return response()->json($candidate);
+            $candidate2='Otra Vacante ya cuenta con ese Nombre.';
+            return response()->json($candidate2);
         }
        
     }
-
-
+    
     public function destroy($id, $candidate_id)
     {
         $candidate = CandidateModel::find($candidate_id);
@@ -209,6 +197,55 @@ class CandidateController extends Controller
 
     } 
 
+       //Functions for Documents
+       public function documents($request, $folder){
+        if ($request->file('document')) {
+            $count = count($request->file('document'));
+            $documentName = '';
+            $document = $request->file('document');
+            $arrayNames = array();
+            for($i=0; $i<$count; $i++){
+              
+                $documentName = time().$document[$i]->getVacancyOriginalName();
+                $document[$i]->move(public_path().'/documents/'.$folder.'/',$documentName);
+                $path = '/documents/'.$folder.'/'.$documentName;
+                
+                $array = [
+                    'name' => $documentName,
+                    'path' => $path
+                ];
+                array_push($arrayNames,$array);
 
+                }
+            return $arrayNames;
+         }
+       
+    }
 
+    public function storeDocuments(Request $request, $id, $candidate_id){
+     dd($candidate_id);
+
+       $names = CandidateController::documents($request, "candidates");
+       foreach($names as $name){
+        dd($name);
+        $document = DocumentModel::create([
+            'id_dad'=> $candidate_id,
+            'mat'=> 'CAD',
+            'name'=> $name['name'],
+            'path'=> $name['path']
+            ]);
+
+       }
+    
+       return response()->json(["success" => "Data inserted correctly"]);
+
+    }
+    
+    public function showDocuments($id, $candidate_id)
+    {  
+        dd($candidate_id);
+        $document = DocumentModel::where('id_dad', $candidate_id)->where('mat', 'CAD')->get();
+        return response()->json(["documents" => $document, "flag" => 2]);
+        
+    }
 }

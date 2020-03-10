@@ -79,7 +79,6 @@ class ClientsController extends Controller
                                     )
                             ->join('break_rules as brk', 'brk.id_client', '=', 'clients.id')
                             ->join('client_color as clc', 'clc.id', '=', 'clients.color')
-                            ->where('clients.status', '!=', 0)
                             ->where('clients.id', $client_id)->first();
         // ClientModel::whereNotIn('status',[0])->where('id', $client_id)->first();
         return $data;
@@ -106,7 +105,7 @@ class ClientsController extends Controller
 
         ]);
          $result = $this->getResult($id_client);
-        return response()->json($result);
+        return response()->json(['client' => $result, 'flag' => 1]);
 
     }
 
@@ -151,7 +150,7 @@ class ClientsController extends Controller
         $break->save();
 
         $result = $this->getResult($client->id);
-        return response()->json($result);
+        return response()->json(['client' => $result, 'flag' => 1]);
     }
 
     public function destroy($client_id)
@@ -190,7 +189,8 @@ class ClientsController extends Controller
             $client->status = 0;
             $client->save();
       
-        return response()->json($client);
+            $result = $this->getResult($client_id);
+        return response()->json(['client'=>$result, 'flag' => 1 ]);
     } 
 
      //Functions for Documents
@@ -272,9 +272,17 @@ class ClientsController extends Controller
         'phone'=>$data['phone_contact'],
         'email'=>$data['email_contact'],
         ]);
-
+        $id = $clients->id;
+       
+        $result = $this->getResultContacts($id);
+        return response()->json(["contact" => $result, "flag" => 2]);
     }
 
+    public function getResultContacts($id){
+        $data = ClientContactsModel::select('id','name', 'description', 'phone', 'email', 'status')->where('id', $id)->first();
+        // ClientModel::whereNotIn('status',[0])->where('id', $client_id)->first();
+        return $data;
+    }
     public function validateContact($request){
 
         $this->validate(request(), [
@@ -334,8 +342,8 @@ class ClientsController extends Controller
             $contact = ClientContactsModel::find($id);
             $contact->status = 0;
             $contact->save();
-      
-        return response()->json($contact);
+            $result = $this->getResultContacts($id);
+        return response()->json(['contact'=>$result, 'flag'=> 2]);
     } 
 
 
