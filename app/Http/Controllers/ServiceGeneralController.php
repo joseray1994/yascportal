@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\DocumentModel;
 use Carbon\Carbon; 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+
 class ServiceGeneralController extends Controller
 {
     public function generateNick(Request $request){
@@ -200,20 +203,5 @@ class ServiceGeneralController extends Controller
             $ope += User::where('id_type_user',$id)->get();
          }
         
-    }
-
-    public function SumTime(Request $request){    
-        $m=0;
-        $m+= $request->minutes;
-
-        $h=0;
-        $h+=$request->hours;
-        $now =Carbon::parse($request->time_start);
-        
-            
-            $now->addHours($h)->addMinutes($m);
-            $hora = date("H:i", strtotime($now));
-
-        return response()->json($hora);
     }
 }

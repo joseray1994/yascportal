@@ -13,17 +13,22 @@
                         @include('clients.form_contacts')
                         <!--Container de tabla clientes-->    
                         <div class="body tableClient"> 
-                                <div class="table-responsive">
-                                    <div class="input-group mb-3 input-group-sm">
-                                    <div class="input-group-prepend">
-                                        <select class="form-control" id="typesearch">
-                                            <option value="name">Name</option>
-                                        </select>
-                                    </div>
-                                    <input type="text" class="form-control" id="search">
-                                    <button type="button" class="btn btn-primary search-query"><i class="fa fa-search"></i></button>
+                            <div class="input-group mb-3 input-group-sm">
+                                <div class="input-group-prepend">
+                                    <select class="form-control" id="typesearch">
+                                        <option value="name">Name</option>
+    
+
+                                    </select>
                                 </div>
-                                @include('clients.table')
+                                <input type="text" class="form-control" id="search" autocomplete="off">
+                                <button type="button" class="btn btn-primary search-query">Search</button>
+                            </div>
+
+                            <div class="table-responsive">
+                            @include('clients.table')
+                            </div>
+                              
                             </div>
                         </div>
                     </div>
