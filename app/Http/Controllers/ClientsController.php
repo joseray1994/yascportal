@@ -226,19 +226,21 @@ class ClientsController extends Controller
         // dd($name);
         $document = DocumentModel::create([
             'id_dad'=> $id,
+            'mat' => 'CDO',
             'name'=> $name['name'],
             'path'=> $name['path']
             ]);
 
        }
     
-       return response()->json(["success" => "Data inserted correctly"]);
+       return response()->json(["doc_success" => "Data inserted correctly", "flag"=>3]);
 
     }
 
     public function showDocuments($id)
     {  
-        $document = DocumentModel::where('id_dad', $id)->where('mat', 'CLD')->where('status', 1)->get();
+        // dd($id);
+        $document = DocumentModel::where('id_dad', $id)->where('mat', 'CDO')->where('status', 1)->get();
         return response()->json(["document" => $document, "flag" => 3]);
         
     }
@@ -315,9 +317,9 @@ class ClientsController extends Controller
         $contact->phone = $request['phone_contact'];
         $contact->email = $request['email_contact'];
         $contact->save();
-
-        // $result = $this->getResult($contact->id);
-        // return response()->json($result);
+        $id = $contact->id;
+        $result = $this->getResultContacts($contact->id);
+        return response()->json(['contact'=>$result, 'flag' => 2]);
     }
 
     public function destroyContacts($id)
