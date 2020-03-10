@@ -6,12 +6,8 @@ $(document).ready(function(){
     // $('.selectpick').selectpicker({
     //     liveSearchPlaceholder: 'Search Client'
     // });
-
-
-    var nameDeli='<a href="/school">Escuelas</i></a>';
     var radioState;
-    $('.nameDeli').html(nameDeli);  
-    $('#sidebar11').addClass('active'); 
+    $('#sidebar2').addClass('active'); 
     $('.selectpick').selectpicker('refresh');
     $('#myTable').DataTable();
     $(".pass").hide();
