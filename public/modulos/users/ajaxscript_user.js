@@ -2,6 +2,7 @@
 var url = $('#url').val();
 var baseUrl = $('#baseUrl').val();
 $(document).ready(function(){
+    clearload();
     //get base URL *********************
     // $('.selectpick').selectpicker({
     //     liveSearchPlaceholder: 'Search Client'

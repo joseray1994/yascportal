@@ -13,7 +13,7 @@
         </tr>
     </thead>
     <tbody id="user-list">
-        @foreach ($data as $user)
+        @forelse ($data as $user)
         <tr id="user_id{{$user->id}}">
             <td>{{ $user->id }}</td>
             <td>{{ $user->User_info['name'] }}</td>
@@ -47,7 +47,13 @@
                 @break
             @endswitch
         </tr>
-        @endforeach
+        @empty
+            <tr id="table-row" class="text-center">
+                <th colspan="8" class="text-center">
+                    <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
+                </th>
+            </tr>
+        @endforelse
     </tbody>
 </table>
 {!! $data->render() !!}
