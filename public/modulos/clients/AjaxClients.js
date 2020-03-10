@@ -507,34 +507,38 @@ const documents ={
 }
 
 const success = {
-    response: function(data){
-        console.log(data.success)
-    },
-    
     new_update: function (data,state){
-        console.log(data);
-        var dato = data;
-        var clientname =$('#name').val();
-        var type =$('#type').val();
+        switch(data.flag){
+            case 1:
+                console.log(data);
+                var dato = data.client;
+                var clientname =$('#name').val();
+                var type =$('#type').val();
+                if(dato.description = ''){
+                    dato.description = '';
+                }
 
-            var client = `<tr id="client_id${dato.id}">
-                                <td><span class="badge badge-secondary" style = "background:${dato.color}">&nbsp;&nbsp;&nbsp;</span></td>
-                                <td>${dato.name}</td>
-                                <td>${dato.description}</td>
-                                <td>${dato.interval}</td>
-                                <td>${dato.duration}</td>
-                                <td class="hidden-xs">${clients.status(dato)}</td>
-                                <td>${clients.button(dato)}</td>
-                            </tr>`;
+                    var client = `<tr id="client_id${dato.id}">
+                                        <td><span class="badge badge-secondary" style = "background:${dato.color}">&nbsp;&nbsp;&nbsp;</span></td>
+                                        <td>${dato.name}</td>
+                                        <td>${dato.description}</td>
+                                        <td>${dato.interval}</td>
+                                        <td>${dato.duration}</td>
+                                        <td class="hidden-xs">${clients.status(dato)}</td>
+                                        <td>${clients.button(dato)}</td>
+                                    </tr>`;
+                
+                    if (state == "add"){ 
+                    $("#client-list").append(client);
+                    $("#client_id"+dato.id).css("background-color", "#c3e6cb");    
+                    }else{
+
+                    $("#client_id"+dato.id).replaceWith(client);
+                    $("#client_id"+dato.id).css("background-color", "#ffdf7e");  
+                    }
+        }
         
-            if (state == "add"){ 
-              $("#client-list").append(client);
-              $("#client_id"+dato.id).css("background-color", "#c3e6cb");    
-            }else{
-              $("#client_id"+dato.id).replaceWith(client);
-              $("#client_id"+dato.id).css("background-color", "#ffdf7e");  
-            }
-        
+
     },
 
     deactivated:function(data) {
@@ -543,9 +547,7 @@ const success = {
                 console.log(data.client);
                 var dato = data.client;
                 if(dato.status != 0){
-                    if(dato.description = ''){
-                        dato.description = '';
-                    }
+                   
                     var client = `<tr id="client_id${dato.id}">
                                         <td><span class="badge badge-secondary" style = "background:${dato.color}">&nbsp;&nbsp;&nbsp;</span></td>
                                         <td>${dato.name}</td>
@@ -572,7 +574,7 @@ const success = {
                
                 var dato = data.contact;
                 if(dato.status != 0){
-                    var contact = `<tr id="client_id${dato.id}">
+                    var contact = `<tr id="client_id_contacts${dato.id}">
                                         <td>${dato.name}</td>
                                         <td>${dato.description}</td>
                                         <td>${dato.phone}</td>
@@ -581,16 +583,16 @@ const success = {
                                         <td>${contacts.button(dato)}</td>
                                     </tr>`;
           
-                $("#client_id"+dato.id).replaceWith(contact);
+                $("#client_id_contacts"+dato.id).replaceWith(contact);
                 if(dato.status == 1){
                     color ="#c3e6cb";
                 }else if(dato.status == 2){
                     color ="#ed969e";
                 }
-                $("#client_id"+dato.id).css("background-color", color); 
+                $("#client_id_contacts"+dato.id).css("background-color", color); 
 
             }else if(dato.status == 0){
-                $("#client_id"+dato.id).remove();
+                $("#client_id_contacts"+dato.id).remove();
             }
 
 
@@ -612,21 +614,14 @@ const success = {
                 $('#myModal').modal('show');
              
             case 2:
-                var contact = "";
-                dato.contact.forEach(function(data){
-                    contact += `
-                   
-                        <tr id="client_id${data.id}">
-                            <td>${data.name}</td>
-                            <td>${data.description}</td>
-                            <td>${data.phone}</td>
-                            <td>${data.email}</td>
-                            <td class="hidden-xs">${contacts.status(data)}</td>
-                            <td>${contacts.button(data)}</td>
-                        </tr>
-                        `;
-                })
-                $('#contact-list').html(contact);
+                var data = dato.contact_edit;
+                console.log(data)   
+                    $('#client_id_contacts').val(data.id);
+                    $('#name_contact').val(data.name);
+                    $('#description_contact').val(data.description);
+                    $('#email_contact').val(data.email);
+                    $('#phone_contact').val(data.phone);
+                    $('#btn-save-contacts').val("update");
         
             case 3:
             
@@ -641,16 +636,6 @@ const success = {
                     `;
             })
             $('#document-list').html(document);
-
-            case 4:
-            var data = dato.contact_edit;
-            console.log(data)   
-                $('#client_id_contacts').val(data.id);
-                $('#name_contact').val(data.name);
-                $('#description_contact').val(data.description);
-                $('#email_contact').val(data.email);
-                $('#phone_contact').val(data.phone);
-                $('#btn-save-contacts').val("update");
               
           }
     
