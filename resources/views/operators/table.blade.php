@@ -28,7 +28,7 @@
                     <td>
                         <button type="button" class="btn btn-sm btn-outline-secondary btn-edit" data-toggle="tooltip" title="Edit" value="{{$op->id}}"  ><i class="fa fa-edit"></i></button>
                         <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert delete-op" data-toggle="tooltip" title="Desactivated" data-type="confirm" value="{{$op->id}}"><i class="fa fa-window-close"></i></button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary open-documents" data-toggle="tooltip" title="Documents" value="{{$op->id}}"><i class="fa  fa-folder-open"></i></button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument('{{$op->id}}')" data-toggle="tooltip" title="Documents" value="{{$op->id}}"><i class="fa  fa-folder-open"></i></button>
                     </td>
                 @break
                 @case(2)
@@ -38,7 +38,7 @@
                 <td>
                     <button type="button" class="btn btn-sm btn-outline-success delete-op" title="Activated" data-toggle="tooltip" data-type="confirm" value="{{$op->id}}" ><i class="fa fa-check-square-o"></i></button>
                     <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert destroy-op" data-toggle="tooltip" title="Delete" data-type="confirm" value="{{$op->id}}"><i class="fa fa-trash-o"></i></button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary open-documents" data-toggle="tooltip" title="Documents" value="{{$op->id}}"><i class="fa  fa-folder-open"></i></button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument('{{$op->id}}')" data-toggle="tooltip" title="Documents" value="{{$op->id}}"><i class="fa  fa-folder-open"></i></button>
                 </td>
                 @break
             @endswitch

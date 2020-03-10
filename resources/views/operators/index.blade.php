@@ -38,9 +38,11 @@
              <!-- Passing BASE URL to AJAX -->
         <input id="url" type="hidden" value="{{ \Request::url() }}">
         <input id="baseUrl" type="hidden" value="{{ \Request::root() }}">
-        @include('clients.documents')
+        <input type="hidden" id="mat" value="ODO">
+        @include('documents.modal')
 @endsection
 @section('script')
 <script src="{{asset('modulos/ajaxscript_actions.js')}}"></script>
+<script src="{{asset('modulos/documents/AjaxDocuments.js')}}"></script>
 <script src="{{asset('modulos/operators/AjaxOperators.js')}}"></script>
 @endsection

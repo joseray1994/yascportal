@@ -285,82 +285,6 @@ $(document).ready(function(){
 
     });
 
-    // LO KHE IZO OSHQUI
-     //Modal of Documents
-     $('.open-documents').click(function(){
-        $('#formContacts').trigger("reset");
-        $('#formClients').trigger("reset");
-
-        // $("#image").attr('src','');
-        $('#modalDocuments').modal('show');
-        var id = $(this).val();
-        $('#client_id_document').val(id);
-        var my_url = url + '/document/show/' + id;
-        actions.show(my_url)
-
-    });
-
-    $('.close-documents').click(function(){
-        $('#doc').trigger("reset");
-
-        $('#modalDocuments').modal('hide');
-
-    });
-
-    //Create documents
-    $("#formDocuments").on('submit',function (e) {
-        console.log('button');
-      
-        e.preventDefault(); 
-        // $('#btn-save-documents').attr('disabled', true);
-        
-        var formData = new FormData(this);
-        // var formData = $("#formOperators").serialize();
-        var state = $('#btn-save-documents').val();
-        var id = $('#client_id_document').val();
-        var type = "POST"; //for creating new resource
-        var my_url = url + '/document/' + id;
-        var file = "file";
-        if (state == "update"){
-            type = "POST"; //for updating existing resource
-            my_url += '/' + id;
-        }
-        actions.edit_create(type,my_url,state,formData, file);
-        $('#modalDocuments').modal('hide');
-    });
-
-    //Delete Document
- $(document).on('click','.deleteDocument',function(){
-    var url = $('#url').val();  
-    var document_id = $(this).val();
-    var my_url = url + '/documents/delete/' + document_id;
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-        }
-    })
-    swal({
-        title: "Are you sure you wish to delete this document?",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonClass: "btn btn-danger",
-        confirmButtonText: "Delete",
-        cancelButtonText: "Cancel",
-        closeOnConfirm: true,
-        closeOnCancel: false
-      },
-      function(isConfirm) {
-        if (isConfirm) {
-            actions.deactivated(my_url);
-            $('#modalDocuments').modal('hide');
-        }else {
-           swal("Cancelled", "Deletion Canceled", "error");
-        }
-      });
-    });
-
-
-    // aqui termina
 
  });      
 
@@ -371,11 +295,14 @@ const types ={
             if(dato.id_status== 1){
                buttons += ` <button type="button" class="btn btn-sm btn-outline-secondary btn-edit" data-toggle="tooltip" title="Edit" value="${dato.id}"  ><i class="fa fa-edit"></i></button>
                             <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert delete-op" data-toggle="tooltip" title="Desactivated" data-type="confirm" value="${dato.id}"><i class="fa fa-window-close"></i></button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument(${dato.id})" data-toggle="tooltip" title="Documents" value="${dato.id}"><i class="fa  fa-folder-open"></i></button>
                ` ;
           
            }else if(dato.id_status == 2){
                buttons  += `<button type="button" class="btn btn-sm btn-outline-success delete-op" title="Activated" data-toggle="tooltip" data-type="confirm" value="${dato.id}" ><i class="fa fa-check-square-o"></i></button>
-                            <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert destroy-op" data-toggle="tooltip" title="Delete" data-type="confirm" value="${dato.id}"><i class="fa fa-trash-o"></i></button>`
+                            <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert destroy-op" data-toggle="tooltip" title="Delete" data-type="confirm" value="${dato.id}"><i class="fa fa-trash-o"></i></button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument(${dato.id})" data-toggle="tooltip" title="Documents" value="${dato.id}"><i class="fa  fa-folder-open"></i></button>
+                            `
            }
            buttons+='</div>';
            return buttons;
@@ -389,6 +316,14 @@ const types ={
         }
        return status;
     },
+    nullo:function(dato){
+        if(dato.emergency_contact_phone != null){
+            emergency_contact_phone = dato.emergency_contact_phone;
+        }else{
+            emergency_contact_phone = "";
+        }
+        return emergency_contact_phone;
+    }
 }
  
 
@@ -411,6 +346,11 @@ const success = {
                     type: 'danger'
                 });
             break;
+            case 3:
+                $("#operator_id"+dato.id).css("background-color", "#ffdf7e");  
+                $('#modalDocuments').modal('hide');
+                swal("Saved!", data.msg, "success")
+            break;
         
             default:
 
@@ -425,7 +365,7 @@ const success = {
                     <td>${dato.email}</td>
                     <td>${dato.name}</td>
                     <td>${dato.phone}</td>
-                    <td>${emergency_contact_phone}</td>
+                    <td>${types.nullo(dato)}</td>
                     <td>${dato.birthdate}</td>
                     <td class="hidden-xs">${types.status(dato)}</td>
                     <td>${types.button(dato)}</td>
@@ -452,40 +392,62 @@ const success = {
                 
     },
     show: function(data){
-        console.log(data);
-        $('#tag_put').remove();
-        $form = $('#formOperators');
-        $form.append('<input type="hidden" id="tag_put" name="_method" value="PUT">');
-        var baseUrl = $('#baseUrl').val();
-        var rutaImage = baseUrl + '/images/operators/' + data.image;
-          
-        var drEvent = $('#dropify-event').dropify(
-            {
-                defaultFile: rutaImage
-            });
-            drEvent = drEvent.data('dropify');
-            drEvent.resetPreview();
-            drEvent.clearElement();
-            drEvent.settings.defaultFile = rutaImage;
-            drEvent.destroy();
-            drEvent.init();
-
-        $('#email').val(data.email);
-        $('#id_client').val(data.id_client);
-        $('#id_client').trigger('change');
-        $('#nickname').val(data.nickname);
-        $('#id_hidden').val(data.id);
-        $('#name').val(data.name);
-        $('#last_name').val(data.last_name);
-        $('#entrance_date').val(data.entrance_date);
-        $('#address').val(data.address);
-        $('#gender').val(data.gender);
-        $('#phone').val(data.phone);
-        $('#birthdate').val(data.birthdate);
-        $('#emergency_contact_name').val(data.emergency_contact_name);
-        $('#emergency_contact_phone').val(data.emergency_contact_phone);
-        $('#notes').val(data.notes);
-        $('#description').val(data.description);
+        switch (data.flag) {
+            case 1:
+                console.log(data);
+                if(data.document.length === 0){
+                    $("#document-list").html(`<tr><td colspan="2">NO DATA</td></tr>`)
+                }else{
+                    var document = "";
+                    data.document.forEach(function(data){
+                        document += `
+                       
+                            <tr id="document_id${data.id}">
+                                <td>${data.name}</td>
+                                <td>${documents.button(data)}</td>
+                            </tr>
+                            `;
+                    })
+                    $('#document-list').html(document);
+                }
+            break;
+        
+            default:
+                $('#tag_put').remove();
+                $form = $('#formOperators');
+                $form.append('<input type="hidden" id="tag_put" name="_method" value="PUT">');
+                var baseUrl = $('#baseUrl').val();
+                var rutaImage = baseUrl + '/images/operators/' + data.image;
+                  
+                var drEvent = $('#dropify-event').dropify(
+                    {
+                        defaultFile: rutaImage
+                    });
+                    drEvent = drEvent.data('dropify');
+                    drEvent.resetPreview();
+                    drEvent.clearElement();
+                    drEvent.settings.defaultFile = rutaImage;
+                    drEvent.destroy();
+                    drEvent.init();
+        
+                $('#email').val(data.email);
+                $('#id_client').val(data.id_client);
+                $('#id_client').trigger('change');
+                $('#nickname').val(data.nickname);
+                $('#id_hidden').val(data.id);
+                $('#name').val(data.name);
+                $('#last_name').val(data.last_name);
+                $('#entrance_date').val(data.entrance_date);
+                $('#address').val(data.address);
+                $('#gender').val(data.gender);
+                $('#phone').val(data.phone);
+                $('#birthdate').val(data.birthdate);
+                $('#emergency_contact_name').val(data.emergency_contact_name);
+                $('#emergency_contact_phone').val(data.emergency_contact_phone);
+                $('#notes').val(data.notes);
+                $('#description').val(data.description);
+                break;
+        }
 
        
     
@@ -493,40 +455,49 @@ const success = {
     deactivated:  function(data){
         console.log(data);
         var dato = data;
-        if(dato.id_status != 0){
+        switch (dato.flag) {
+            case 4:
+                swal("Deleted!", data.name, "success")
+                break;
+        
+            default:
+                if(dato.id_status != 0){
 
-            var operator = `<tr id="operator_id${dato.id}">
-                <td>${dato.id}</td>
-                <td>${dato.email}</td>
-                <td>${dato.name}</td>
-                <td>${dato.phone}</td>
-                <td>${emergency_contact_phone}</td>
-                <td>${dato.birthdate}</td>
-                <td class="hidden-xs">${types.status(dato)}</td>
-                <td>${types.button(dato)}</td>
-            </tr>`;
-          
-            $("#operator_id"+dato.id).replaceWith(operator);
-            if(dato.id_status == 1){
-                color ="#c3e6cb";
-            }else if(dato.id_status == 2){
-                color ="#ed969e";
-            }
-            $("#operator_id"+dato.id).css("background-color", color);  
-            
-        }else if(dato.id_status == 0){
-            
-            $("#operator_id"+dato.id).remove();
-            if($("#tag_container tr").length == 1){
-                $("#tag_container").append(` <tr id="table-row" class="text-center">
-                                                    <th colspan="8" class="text-center">
-                                                        <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
-                                                    </th>
-                                                </tr>`);
-
-            }
+        
+                    var operator = `<tr id="operator_id${dato.id}">
+                        <td>${dato.id}</td>
+                        <td>${dato.email}</td>
+                        <td>${dato.name}</td>
+                        <td>${dato.phone}</td>
+                        <td>${types.nullo(dato)}</td>
+                        <td>${dato.birthdate}</td>
+                        <td class="hidden-xs">${types.status(dato)}</td>
+                        <td>${types.button(dato)}</td>
+                    </tr>`;
+                  
+                    $("#operator_id"+dato.id).replaceWith(operator);
+                    if(dato.id_status == 1){
+                        color ="#c3e6cb";
+                    }else if(dato.id_status == 2){
+                        color ="#ed969e";
+                    }
+                    $("#operator_id"+dato.id).css("background-color", color);  
+                    
+                }else if(dato.id_status == 0){
+                    
+                    $("#operator_id"+dato.id).remove();
+                    if($("#tag_container tr").length == 1){
+                        $("#tag_container").append(` <tr id="table-row" class="text-center">
+                                                            <th colspan="8" class="text-center">
+                                                                <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
+                                                            </th>
+                                                        </tr>`);
+        
+                    }
+                }
+               
+                break;
         }
-       
             
     },
         msj: function(data){

@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\DocumentModel;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+
 class ServiceGeneralController extends Controller
 {
     public function generateNick(Request $request){
@@ -200,4 +203,64 @@ class ServiceGeneralController extends Controller
          }
         
     }
+
+    public function showDocument($id, $mat){
+        $document = DocumentModel::where('id_dad', $id)->where('mat', $mat)->where('status', 1)->get();
+        return response()->json(["document" => $document, "flag" => 1]);
+    }
+
+    public function storeDocument(Request $request, $id, $mat){
+        
+        $names = ServiceGeneralController::documents($request, $mat);
+        foreach($names as $name){
+         // dd($name);
+         $document = DocumentModel::create([
+             'id_dad'=> $id,
+             'mat' => $mat,
+             'name'=> $name['name'],
+             'path'=> $name['path']
+             ]);
+ 
+        }
+        $msg= 'Data inserted correctly';
+        $data=['No'=>3,'msg'=>$msg, 'id'=> $id];
+        return response()->json($data);
+ 
+    }
+
+    //Functions for Documents
+    public function documents($request, $folder){
+        if ($request->file('document')) {
+            $count = count($request->file('document'));
+            $documentName = '';
+            $document = $request->file('document');
+            $arrayNames = array();
+            for($i=0; $i<$count; $i++){
+              
+                $documentName = time().$document[$i]->getClientOriginalName();
+                $document[$i]->move(public_path().'/documents/'.$folder.'/',$documentName);
+                $path = '/documents/'.$folder.'/'.$documentName;
+                
+                $array = [
+                    'name' => $documentName,
+                    'path' => $path
+                ];
+                array_push($arrayNames,$array);
+
+                }
+            return $arrayNames;
+         }
+       
+    }
+
+    public function deleteDocuments($id)
+    { 
+        $document = DocumentModel::find($id);
+        $document->status = 0;
+        $document->save();
+  
+        return response()->json(['flag'=>4, 'data'=>$document]);
+        
+    }
+
 }
