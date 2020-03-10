@@ -285,6 +285,83 @@ $(document).ready(function(){
 
     });
 
+    // LO KHE IZO OSHQUI
+     //Modal of Documents
+     $('.open-documents').click(function(){
+        $('#formContacts').trigger("reset");
+        $('#formClients').trigger("reset");
+
+        // $("#image").attr('src','');
+        $('#modalDocuments').modal('show');
+        var id = $(this).val();
+        $('#client_id_document').val(id);
+        var my_url = url + '/document/show/' + id;
+        actions.show(my_url)
+
+    });
+
+    $('.close-documents').click(function(){
+        $('#doc').trigger("reset");
+
+        $('#modalDocuments').modal('hide');
+
+    });
+
+    //Create documents
+    $("#formDocuments").on('submit',function (e) {
+        console.log('button');
+      
+        e.preventDefault(); 
+        // $('#btn-save-documents').attr('disabled', true);
+        
+        var formData = new FormData(this);
+        // var formData = $("#formOperators").serialize();
+        var state = $('#btn-save-documents').val();
+        var id = $('#client_id_document').val();
+        var type = "POST"; //for creating new resource
+        var my_url = url + '/document/' + id;
+        var file = "file";
+        if (state == "update"){
+            type = "POST"; //for updating existing resource
+            my_url += '/' + id;
+        }
+        actions.edit_create(type,my_url,state,formData, file);
+        $('#modalDocuments').modal('hide');
+    });
+
+    //Delete Document
+ $(document).on('click','.deleteDocument',function(){
+    var url = $('#url').val();  
+    var document_id = $(this).val();
+    var my_url = url + '/documents/delete/' + document_id;
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+        }
+    })
+    swal({
+        title: "Are you sure you wish to delete this document?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn btn-danger",
+        confirmButtonText: "Delete",
+        cancelButtonText: "Cancel",
+        closeOnConfirm: true,
+        closeOnCancel: false
+      },
+      function(isConfirm) {
+        if (isConfirm) {
+            actions.deactivated(my_url);
+            $('#modalDocuments').modal('hide');
+        }else {
+           swal("Cancelled", "Deletion Canceled", "error");
+        }
+      });
+    });
+
+
+    // aqui termina
+
  });      
 
 

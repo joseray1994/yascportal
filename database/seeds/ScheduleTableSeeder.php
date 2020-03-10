@@ -18,9 +18,11 @@ class ScheduleTableSeeder extends Seeder
     public function run()
     {
 
-        $now = Carbon::now();
+        $now1 = Carbon::now();
         $now2 = Carbon::now();
         $now3 = Carbon::now();
+        $now4 = Carbon::now();
+        $now5 = Carbon::now();
 
         DB::table('schedule')->truncate();
         DB::table('detail_schedule_user')->truncate();
@@ -28,6 +30,7 @@ class ScheduleTableSeeder extends Seeder
         $operators = User_client::select('users_client.id', 'users_client.id_client')
             ->join('users', 'users_client.id_user', '=', 'users.id')
             ->where('users.id_type_user', 9)
+            ->where('users.id_status', 1)
             ->get();
 
         foreach ($operators as $operator) { 
@@ -37,12 +40,12 @@ class ScheduleTableSeeder extends Seeder
                     'id_trainer' => 1, 
                     'id_operator' => $operator['id'], 
                     'id_client' => $operator['id_client'], 
-                    'date_start' => $now->startOfWeek(Carbon::SUNDAY), 
+                    'date_start' => $now1->startOfWeek(Carbon::SUNDAY), 
                     'date_end' => $now2->endOfWeek(Carbon::SATURDAY), 
                     'type_schedule' => '1', 
                     'week' => $now3->weekOfYear, 
-                    'month' => $now->month, 
-                    'year' => $now->year, 
+                    'month' => $now4->month, 
+                    'year' => $now5->year, 
                     'status' => '1'
                 ]
             ];
@@ -72,5 +75,50 @@ class ScheduleTableSeeder extends Seeder
                 DB::table('detail_schedule_user')->insert($detail);
             }
         }
+
+        //CLONAR EL SCHEDULE ANTERIOR 
+        //OBTENER SCHEDULE ANTERIOR DE USUARIO ACTIVOS
+        $schedules = ScheduleModel::where('status', 1)->get();
+
+  
+        foreach($schedules as $schedule){
+            $nextStartWeek = Carbon::parse($schedule['date_start'])->addWeek();
+            $nextEndWeek = Carbon::parse($schedule['date_end'])->addWeek();
+            $next2StartWeek = Carbon::parse($schedule['date_start'])->addWeeks(2);
+            $next2EndWeek = Carbon::parse($schedule['date_end'])->addWeeks(2);
+
+            $schedules = [
+                [
+                    'id_trainer' => $schedule['id_trainer'], 
+                    'id_operator' => $schedule['id_operator'], 
+                    'id_client' => $schedule['id_client'], 
+                    'date_start' => $nextStartWeek, 
+                    'date_end' =>  $nextEndWeek, 
+                    'type_schedule' => $schedule['type_schedule'], 
+                    'week' => $nextEndWeek->weekOfYear, 
+                    'month' => $nextEndWeek->month, 
+                    'year' => $nextEndWeek->year, 
+                    'status' =>1
+                ]
+            ];
+            DB::table('schedule')->insert($schedules);
+            $schedules = [
+                [
+                    'id_trainer' => $schedule['id_trainer'], 
+                    'id_operator' => $schedule['id_operator'], 
+                    'id_client' => $schedule['id_client'], 
+                    'date_start' => $next2StartWeek, 
+                    'date_end' =>  $next2EndWeek, 
+                    'type_schedule' => $schedule['type_schedule'], 
+                    'week' => $next2EndWeek->weekOfYear, 
+                    'month' => $next2EndWeek->month, 
+                    'year' => $next2EndWeek->year, 
+                    'status' =>1
+                ]
+            ];
+            DB::table('schedule')->insert($schedules);
+        }
+
+
     }
 }
