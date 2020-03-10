@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use Carbon\Carbon; 
 use Illuminate\Support\Facades\Auth;
 class ServiceGeneralController extends Controller
 {
@@ -199,5 +200,20 @@ class ServiceGeneralController extends Controller
             $ope += User::where('id_type_user',$id)->get();
          }
         
+    }
+
+    public function SumTime(Request $request){    
+        $m=0;
+        $m+= $request->minutes;
+
+        $h=0;
+        $h+=$request->hours;
+        $now =Carbon::parse($request->time_start);
+        
+            
+            $now->addHours($h)->addMinutes($m);
+            $hora = date("H:i", strtotime($now));
+
+        return response()->json($hora);
     }
 }

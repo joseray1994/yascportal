@@ -1,13 +1,13 @@
 
 $(document).ready(function(){
-     
-    schedule.get_data(1);
+    clearload();
     var nameDeli='<a href="/weekly">Schedule Weekly</i></a>';
     $('.nameDeli').html(nameDeli);
     $('#sidebar5').addClass('active') 
 
     //get base URL *********************
     var url = $('#url').val();
+    var baseUrl = $('#baseUrl').val();
     $('.js-example-basic-single').select2();
     $('.js-example-basic-multiple').select2();
 
@@ -33,6 +33,9 @@ $(document).ready(function(){
         schedule.get_data(1);
     });
 
+    $('.timeinputsdata').change(function(){
+        schedule.calculateEnd_time(baseUrl);
+    });
 
 
     //display modal form for product EDIT ***************************
@@ -50,6 +53,27 @@ $(document).ready(function(){
     $("#typeUserForm").on('submit',function (e) {
         e.preventDefault(); 
         var formData =  schedule.dataSend();
+        
+        //used to determine the http verb to use [add=POST], [update=PUT]
+        var state = $('#btn-save').val();
+        var type = "POST"; //for creating new resource
+        var usertype_id = $('#usertype_id').val();;
+        var my_url = url;
+        if (state == "update"){
+            type = "PUT"; //for updating existing resource
+            my_url += '/' + usertype_id;
+        }
+        
+            console.log(formData);
+        
+            actions.edit_create(type,my_url,state,formData);
+    
+    });
+
+     //create new product / update existing product ***************************
+     $("#ExtraForm").on('submit',function (e) {
+        e.preventDefault(); 
+        var formData = $("#ExtraForm").serialize();
         
         //used to determine the http verb to use [add=POST], [update=PUT]
         var state = $('#btn-save').val();
@@ -244,8 +268,43 @@ const schedule ={
         $.each(data, function(idx, ope) {
             var select=`<option value="${ope.id}">${ope.name}</option>`;
         });
-    }
-    
+    }, 
+    calculateEnd_time: function(baseUrl){
+        var formData={
+            time_start: $('#time_startE').val(),
+            hours:$('#hours').val(),
+            minutes:$('#minutes').val(),
+            }
+        console.log(formData);
+        $.ajax({
+            type:"POST",
+            url: baseUrl+'/sumtime',
+            data: formData,
+            dataType: 'json',
+            success: function (data) {
+                switch(data.No) {
+                    case 1:
+                        $.notify({
+                            // options
+                            title: "Error!",
+                            message:data.msg,
+                        },{
+                            // settings
+                            type: 'danger'
+                        });
+                    break;
+                    default:
+                        $("#time_endE").val(data);
+                    break;
+                }
+            },
+            error: function (data) {
+                console.log('Error:', data);
+                
+            }
+        });
+
+    },
 }
 const success = {
 

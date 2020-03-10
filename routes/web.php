@@ -121,6 +121,7 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     
     //SERVICE GENERAL
     Route::post('/generate', 'ServiceGeneralController@generateNick');
+    Route::post('/sumtime', 'ServiceGeneralController@SumTime');
 
 
 });
