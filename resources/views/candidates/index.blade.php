@@ -9,6 +9,7 @@
                                 <li><a href="javascript:void(0);" class="btn btn-success" disabled id="btn_add" >New Candidate <i class="fa fa-plus"></i></a></li>
                             </ul>
                         </div>
+                        @include('candidates.form')
                         <div class="body">
                                 <div class="input-group mb-3 input-group-sm">
                                     <div class="input-group-prepend">
@@ -33,7 +34,9 @@
                     </div>
                 </div>
             </div>
-            @include('candidates.form')
+           
+@include('candidates.documents')
+
              <!-- Passing BASE URL to AJAX -->
         <input id="url" type="hidden" value="{{ \Request::url() }}">
 @endsection

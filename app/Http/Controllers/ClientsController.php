@@ -51,7 +51,7 @@ class ClientsController extends Controller
                 return view('clients.table', ["data"=>$data]);
             }
        
-             return view('clients.index',["data"=>$data,"menu"=>$menu, "color" => $color, "flag" =>1]);
+             return view('clients.index',["data"=>$data,"menu"=>$menu, "color" => $color]);
             
      
         }else{
@@ -226,19 +226,21 @@ class ClientsController extends Controller
         // dd($name);
         $document = DocumentModel::create([
             'id_dad'=> $id,
+            'mat' => 'CDO',
             'name'=> $name['name'],
             'path'=> $name['path']
             ]);
 
        }
     
-       return response()->json(["success" => "Data inserted correctly"]);
+       return response()->json(["doc_success" => "Data inserted correctly", "flag"=>3]);
 
     }
 
     public function showDocuments($id)
     {  
-        $document = DocumentModel::where('id_dad', $id)->where('mat', 'CLD')->where('status', 1)->get();
+        // dd($id);
+        $document = DocumentModel::where('id_dad', $id)->where('mat', 'CDO')->where('status', 1)->get();
         return response()->json(["document" => $document, "flag" => 3]);
         
     }
@@ -272,11 +274,14 @@ class ClientsController extends Controller
         'phone'=>$data['phone_contact'],
         'email'=>$data['email_contact'],
         ]);
-
+        $id = $clients->id;
+       
+        $result = $this->getResultContacts($id);
+        return response()->json(["contact" => $result, "flag" => 2]);
     }
 
     public function getResultContacts($id){
-        $data = ClientContactsModel::select('name', 'description', 'phone', 'email', 'status')->where('id', $id)->first();
+        $data = ClientContactsModel::select('id','name', 'description', 'phone', 'email', 'status')->where('id', $id)->first();
         // ClientModel::whereNotIn('status',[0])->where('id', $client_id)->first();
         return $data;
     }
@@ -291,14 +296,14 @@ class ClientsController extends Controller
     public function showContacts($id)
     {  
         $contact = ClientContactsModel::where('id_client', $id)->whereNotIn('status',[0])->get();
-        // return response()->json(["contact" => $contact, "flag" => 2]);
+        return response()->json(["contact" => $contact, "flag" => 2]);
         
     }
 
     public function editContacts($id)
     {
         $contact_edit = ClientContactsModel::where('id', $id)->first();
-        return response()->json(["contact_edit" => $contact_edit, "flag" => 2]);
+        return response()->json(["contact_edit" => $contact_edit, "flag" => 4]);
         
     }
 
@@ -312,9 +317,9 @@ class ClientsController extends Controller
         $contact->phone = $request['phone_contact'];
         $contact->email = $request['email_contact'];
         $contact->save();
-
-        // $result = $this->getResult($contact->id);
-        // return response()->json($result);
+        $id = $contact->id;
+        $result = $this->getResultContacts($contact->id);
+        return response()->json(['contact'=>$result, 'flag' => 2]);
     }
 
     public function destroyContacts($id)
