@@ -439,14 +439,14 @@ const clients ={
                buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary btn-edit" data-toggle="tooltip" title="Edit" value="'+dato.id+'"> <i class="fa fa-edit"></i></li></button>';
                buttons += '	<button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-type" data-toggle="tooltip" title="Deactivated" data-type="confirm" value="'+dato.id+'" ><i class="fa fa-window-close"></i></button>';
                buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary btn_add_contacts" data-toggle="tooltip" title="Contacts" value="'+dato.id+'"> <i class="fa fa-users"></i> </button>';
-               buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" title="Documents" value="'+dato.id+'"> <i class="fa fa-folder-open"></i> </button>';
+               buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary open-documents" data-toggle="tooltip" title="Documents" value="'+dato.id+'"> <i class="fa fa-folder-open"></i> </button>';
           
            }else if(dato.status == 2){
              
                buttons += ' <button type="button" class="btn btn-sm btn-outline-success off-type" data-toggle="tooltip" title="Activated" data-type="confirm" value="'+dato.id+'" > <i class="fa fa-check-square-o"></i></button>'
                buttons += ' <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert deleteClient" data-toggle="tooltip" title="Delete" data-type="confirm" value="'+dato.id+'"> <i class="fa fa-trash-o"></i> </button>';
                buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary btn_add_contacts" data-toggle="tooltip" title="Contacts" value="'+dato.id+'"> <i class="fa fa-users"></i> </button>';
-               buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" title="Documents" value="'+dato.id+'"> <i class="fa fa-folder-open"></i> </button>';
+               buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary open-documents" data-toggle="tooltip" title="Documents" value="'+dato.id+'"> <i class="fa fa-folder-open"></i> </button>';
            }
            return buttons;
     },
@@ -532,6 +532,7 @@ const success = {
                     $("#client_id"+dato.id).replaceWith(client);
                     $("#client_id"+dato.id).css("background-color", "#ffdf7e");  
                     }
+                break    
                 case 2:
                     console.log(data);
                     var dato = data.contact;
@@ -554,6 +555,9 @@ const success = {
                         $("#client_id"+dato.id).replaceWith(contact);
                         $("#client_id"+dato.id).css("background-color", "#ffdf7e");  
                         }
+                break        
+                case 3:
+                    swal("Saved!", data.doc_success, "success")
 
         }
     },
@@ -588,7 +592,7 @@ const success = {
             }else if(dato.status == 0){
                 $("#client_id"+dato.id).remove();
             }
-
+            break
             case 2:
                
                 var dato = data.contact;
@@ -613,7 +617,7 @@ const success = {
             }else if(dato.status == 0){
                 $("#client_id"+dato.id).remove();
             }
-
+            break
 
         }   
     },
@@ -631,7 +635,7 @@ const success = {
                 $('#duration').val(data.duration);
                 $('#btn-save').val("update");
                 $('#myModal').modal('show');
-             
+            break
             case 2:
                 var contact = "";
                 dato.contact.forEach(function(data){
@@ -648,7 +652,7 @@ const success = {
                         `;
                 })
                 $('#contact-list').html(contact);
-        
+            break
             case 3:
             
             var document = "";
@@ -662,7 +666,7 @@ const success = {
                     `;
             })
             $('#document-list').html(document);
-
+            break
             case 4:
             var data = dato.contact_edit;
             console.log(data)   
@@ -672,7 +676,7 @@ const success = {
                 $('#email_contact').val(data.email);
                 $('#phone_contact').val(data.phone);
                 $('#btn-save-contacts').val("update");
-              
+            break
           }
     
     },
