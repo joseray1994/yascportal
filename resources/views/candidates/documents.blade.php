@@ -25,7 +25,7 @@
                        </div>
                       <hr>
                   </form>
-                  <input type="hidden" id="client_id_document" name="client_id_document">
+                  <input type="hidden" id="candidate_id_document" name="candidate_id_document">
 
               </div>
 
@@ -35,7 +35,7 @@
                           <thead class="text-white thead-yasc">
                               <tr>
                                   <th>Document</th>
-                                  <th>Options</th>
+                              
                               </tr>
                           </thead>
                           <tbody id = 'document-list'>

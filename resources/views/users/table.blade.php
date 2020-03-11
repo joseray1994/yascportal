@@ -13,7 +13,7 @@
         </tr>
     </thead>
     <tbody id="user-list">
-        @foreach ($data as $user)
+        @forelse ($data as $user)
         <tr id="user_id{{$user->id}}">
             <td>{{ $user->id }}</td>
             <td>{{ $user->User_info['name'] }}</td>
@@ -29,6 +29,7 @@
                     </td>
                     <td class="text-center">
                         @if($user->id != 1)
+                        <button type="button" class="btn btn-sm btn-outline-secondary open-documents" title="Documents" data-toggle="tooltip" value="{{$user->id}}"><i class="fa  fa-folder-open"></i></button>
                             <button type="button" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="{{$user->id}}"  ><i class="fa fa-edit"></i></button>
                             <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert delete-op" data-toggle="tooltip" title="Desactivated" data-type="confirm" value="{{$user->id}}"><i class="fa fa-window-close"></i></button>
                         @endif
@@ -47,7 +48,13 @@
                 @break
             @endswitch
         </tr>
-        @endforeach
+        @empty
+            <tr id="table-row" class="text-center">
+                <th colspan="8" class="text-center">
+                    <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
+                </th>
+            </tr>
+        @endforelse
     </tbody>
 </table>
 {!! $data->render() !!}

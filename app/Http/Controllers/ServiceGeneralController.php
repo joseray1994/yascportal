@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\DocumentModel;
+use Carbon\Carbon; 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 
 class ServiceGeneralController extends Controller
 {
@@ -178,5 +182,26 @@ class ServiceGeneralController extends Controller
         ->whereIn('id_status', [1,2])
         ->exists();
         return $validaNick;
+    }
+
+    public function selectOperatorRefresh($id){
+        if($id > 0){
+            $ope += User::select('users.id as id', 'ui.name as name', 'ui.last_name as lname')
+            ->join('users_info as ui', 'ui.id_user', '=','users.id')
+            ->join('users_client as uc','uc.id_user', '=','users.id')
+            ->where('users.id_type_user','=',9)
+            ->where('uc.id_client',$id)
+            ->get();
+
+         }else if($id == "all"){
+           $ope += User::select('users.id as id', 'ui.name as name', 'ui.last_name as lname')
+            ->join('users_info as ui', 'ui.id_user', '=','users.id')
+            ->join('users_client as uc','uc.id_user', '=','users.id')
+            ->where('users.id_type_user','=',9)
+            ->get();
+         }else{
+            $ope += User::where('id_type_user',$id)->get();
+         }
+        
     }
 }

@@ -41,7 +41,7 @@
 									<div class="input-group-prepend">
 										<button class="btn modaldelichef" disabled><i class="fa fa-phone"></i></button>
 									</div>
-									<input type="number" class="form-control has-error" id="phone" name="phone" placeholder="Phone" value="" maxlength ="15">
+									<input type="number" class="form-control has-error" id="phone" name="phone" placeholder="Phone" value="" >
 								</div> 
 							</div>
 							<div class="col-md-4 mb-3">
@@ -96,50 +96,33 @@
 							<div class="col-md-3 mb-3">
 								<label>Typing Test</label>
 								<div class="input-group">
-									<input type="number" class="form-control has-error" id="typing_test" name="typing_test" placeholder="" value="" maxlength ="15">
+									<input type="number" class="form-control has-error" id="typing_test" name="typing_test" placeholder="" value="" >
 								</div> 
 							</div>
-							<div class="col-md-3 mb-3">
-								<label>&nbsp</label>
-								<div class="input-group">
-									<input type="number" class="form-control has-error" id="" name="" placeholder="" value="" maxlength ="15">
-								</div> 
-							</div>
-							<div class="col-md-3 mb-3">
-								<label>&nbsp</label>
-								<div class="input-group">
-									<input type="number" class="form-control has-error" id="" name="" placeholder="" value="" maxlength ="15">
-								</div> 
-							</div>
-							<div class="col-md-3 mb-3">
-								<label>&nbsp</label>
-								<div class="input-group">
-									<input type="number" class="form-control has-error" id="" name="" placeholder="" value="" maxlength ="15">
-								</div> 
-							</div>
+						
                    		</div>
 
-						<div class="form-row">
+						<!-- <div class="form-row">
 							<div class="col-md-6 mb-3">
 								<label>Recording</label>
 								<div class="input-group">
-									<input type="number" class="form-control has-error" id="recording" name="recording" placeholder="" value="" maxlength ="15">
+									<input type="file" class="form-control has-error" id="recording" name="recording" placeholder="" value="" >
 								</div> 
 							</div>
 							<div class="col-md-6 mb-3">
 								<label>CV</label>
 								<div class="input-group">
-									<input type="number" class="form-control has-error" id="cv" name="cv" placeholder="" value="" maxlength ="15">
+									<input type="file" class="form-control has-error" id="cv" name="cv" placeholder="" value="" >
 								</div> 
 							</div>
-                   		</div>
+                   		</div> -->
 
-						<div class="form-row">
+						<!-- <div class="form-row">
 							<div class="col-md-6 mb-3">
 								<label>Personality Test</label>
-								<input type="number" id="personality_test" name="personality_test"><br><br>
+								<input type="file" id="personality_test" name="personality_test"><br><br>
 							</div>
-                   		</div>
+                   		</div> -->
 						  
 					</div>
 

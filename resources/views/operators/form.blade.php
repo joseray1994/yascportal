@@ -77,7 +77,7 @@
                 <div class="col-sm-12 form-group">
                     <h6>Email:</h6>
                     <div class="input-group">
-                        <input type="text" class="form-control" name="email" id="email" aria-label="Input group example" aria-describedby="btnGroupAddon" disabled>
+                        <input type="text" class="form-control text-lowercase" name="email" id="email" aria-label="Input group example" aria-describedby="btnGroupAddon" onKeyUp="document.getElementById(this.id).value=document.getElementById(this.id).value.toLowerCase()" disabled>
                         <!-- <div class="input-group-prepend">
                             <div class="input-group-text" id="btnGroupAddon">@yascemail.com</div>
                         </div> -->

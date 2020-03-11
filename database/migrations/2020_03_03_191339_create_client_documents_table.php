@@ -13,10 +13,10 @@ class CreateClientDocumentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('client_documents', function (Blueprint $table) {
+        Schema::create('documents', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('mat', 3)->default('CLD');
-            $table->integer('id_client');
+            $table->string('mat');
+            $table->integer('id_dad');
             $table->string('name');
             $table->string('path');
             $table->integer('status')->default(1);
@@ -31,6 +31,6 @@ class CreateClientDocumentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('client_documents');
+        Schema::dropIfExists('documents');
     }
 }

@@ -1,13 +1,13 @@
-getData(1);
+
 $(document).ready(function(){
-     
-    
+    clearload();
     var nameDeli='<a href="/weekly">Schedule Weekly</i></a>';
     $('.nameDeli').html(nameDeli);
     $('#sidebar5').addClass('active') 
 
     //get base URL *********************
     var url = $('#url').val();
+    var baseUrl = $('#baseUrl').val();
     $('.js-example-basic-single').select2();
     $('.js-example-basic-multiple').select2();
 
@@ -17,7 +17,7 @@ $(document).ready(function(){
         $('#days').val(null).trigger('change');
         $('#typeUserForm').trigger("reset");
         $("#image").attr('src','');
-        $('#myModal').modal('show');
+        $('#myModal2').modal('show');
     });
 
     $('.cancel_data').click(function(){
@@ -25,13 +25,17 @@ $(document).ready(function(){
         $('#days').val(null).trigger('change');
         $('#typeUserForm').trigger("reset");
         $("#image").attr('src','');
-        $('#myModal').modal('show');
+        $('#myModal2').modal('hide');
+        $('#myModal').modal('hide');
     });
 
     $('.scheduleWeeklySearch').change(function(){
         schedule.get_data(1);
     });
 
+    $('.timeinputsdata').change(function(){
+        schedule.calculateEnd_time(baseUrl);
+    });
 
 
     //display modal form for product EDIT ***************************
@@ -43,7 +47,6 @@ $(document).ready(function(){
             actions.show(my_url);
        
     });
-
 
 
     //create new product / update existing product ***************************
@@ -67,7 +70,28 @@ $(document).ready(function(){
     
     });
 
-        $(document).on('click','.off-type',function(){
+     //create new product / update existing product ***************************
+     $("#ExtraForm").on('submit',function (e) {
+        e.preventDefault(); 
+        var formData = $("#ExtraForm").serialize();
+        
+        //used to determine the http verb to use [add=POST], [update=PUT]
+        var state = $('#btn-save').val();
+        var type = "POST"; //for creating new resource
+        var usertype_id = $('#usertype_id').val();;
+        var my_url = url;
+        if (state == "update"){
+            type = "PUT"; //for updating existing resource
+            my_url += '/' + usertype_id;
+        }
+        
+            console.log(formData);
+        
+            actions.edit_create(type,my_url,state,formData);
+    
+    });
+
+ $(document).on('click','.off-type',function(){
             var id = $(this).val();
             var my_url =url + '/' + id;
                 $.ajaxSetup({
@@ -231,14 +255,56 @@ const schedule ={
                 time_end:$('#time_end').val(),
                 days:$("#days").val(),
                 time_extra:$('#time_extra').val(),
-                duration:$("#duration").val(),
+                durationH:$("#durationH").val(),
+                durationM:$("#durationM").val(),
                 now:n,
                 today:t,
         }
      
         return data;
     },
-    
+    selectClient: function(){
+        select="";
+        $.each(data, function(idx, ope) {
+            var select=`<option value="${ope.id}">${ope.name}</option>`;
+        });
+    }, 
+    calculateEnd_time: function(baseUrl){
+        var formData={
+            time_start: $('#time_startE').val(),
+            hours:$('#hours').val(),
+            minutes:$('#minutes').val(),
+            }
+        console.log(formData);
+        $.ajax({
+            type:"POST",
+            url: baseUrl+'/sumtime',
+            data: formData,
+            dataType: 'json',
+            success: function (data) {
+                switch(data.No) {
+                    case 1:
+                        $.notify({
+                            // options
+                            title: "Error!",
+                            message:data.msg,
+                        },{
+                            // settings
+                            type: 'danger'
+                        });
+                    break;
+                    default:
+                        $("#time_endE").val(data);
+                    break;
+                }
+            },
+            error: function (data) {
+                console.log('Error:', data);
+                
+            }
+        });
+
+    },
 }
 const success = {
 
@@ -303,24 +369,34 @@ const success = {
 
     show: function(data){
         console.log(data);
-        $('#usertype_id').val(data.id);
-        $('#time_start').val(data.time_s);
-        $('#time_end').val(data.time_e);
-
-        if(data.days == 0){
-            $('#days').val(null);
-            $('#days').trigger('change');
+    
+      
+        if(data.detail.type == 2){
+            $('#btn-saveE').val("update");
+            $('#usertype_idE').val(data.detail.id);
+            $('#time_startE').val(data.detail.time_s);
+            $('#time_endE').val(data.detail.time_e);
+            $('#myModal2').modal('show');
+            
         }else{
-            $('#days').val(data.days)
-            $('#days').trigger({
-                type: 'select2:select',
-                params: {
-                    data: data.days
-                }
-            });
+            $('#btn-save').val("update");
+            $('#usertype_id').val(data.detail.id);
+            $('#time_start').val(data.detail.time_s);
+            $('#time_end').val(data.detail.time_e);
+    
+            if(data.days.length == 0){
+                $('#days').val(null);
+                $('#days').trigger('change');
+            }else{
+    
+                var select="";
+                $('#days').val(data.days)
+                $('#days').trigger('change');
+            }
+            $('#myModal').modal('show');
         }
-        $('#btn-save').val("update");
-        $('#myModal').modal('show');
+        
+        
     },
 
     msj: function(data){
