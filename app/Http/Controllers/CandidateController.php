@@ -126,7 +126,7 @@ class CandidateController extends Controller
 
         $candidate = CandidateModel::find($candidate_id);
         $candidate->status=1;
-        return response()->json(["candidates" => $candidate, "flag" => 1]);
+        return response()->json(["candidates" => $candidate, "flag" => 2]);
     }
 
 
@@ -197,55 +197,4 @@ class CandidateController extends Controller
 
     } 
 
-       //Functions for Documents
-       public function documents($request, $folder){
-        if ($request->file('document')) {
-            $count = count($request->file('document'));
-            $documentName = '';
-            $document = $request->file('document');
-            $arrayNames = array();
-            for($i=0; $i<$count; $i++){
-              
-                $documentName = time().$document[$i]->getVacancyOriginalName();
-                $document[$i]->move(public_path().'/documents/'.$folder.'/',$documentName);
-                $path = '/documents/'.$folder.'/'.$documentName;
-                
-                $array = [
-                    'name' => $documentName,
-                    'path' => $path
-                ];
-                array_push($arrayNames,$array);
-
-                }
-            return $arrayNames;
-         }
-       
-    }
-
-    public function storeDocuments(Request $request, $id, $candidate_id){
-     dd($candidate_id);
-
-       $names = CandidateController::documents($request, "candidates");
-       foreach($names as $name){
-        dd($name);
-        $document = DocumentModel::create([
-            'id_dad'=> $candidate_id,
-            'mat'=> 'CAD',
-            'name'=> $name['name'],
-            'path'=> $name['path']
-            ]);
-
-       }
-    
-       return response()->json(["success" => "Data inserted correctly"]);
-
-    }
-    
-    public function showDocuments($id, $candidate_id)
-    {  
-        dd($candidate_id);
-        $document = DocumentModel::where('id_dad', $candidate_id)->where('mat', 'CAD')->get();
-        return response()->json(["documents" => $document, "flag" => 2]);
-        
-    }
 }
