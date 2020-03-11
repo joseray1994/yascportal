@@ -80,12 +80,11 @@ const documents ={
 function openDocument(id){
     var baseUrl = $("#baseUrl").val();
 
-    $('#modalDocuments').modal('show');
     $('#formDocuments').trigger('reset');
     var mat = $("#mat").val();
-    $('#client_id_document').val(id);
     var my_url = baseUrl + '/document/show/' + id + '/' + mat;
     actions.show(my_url)
+    $('#client_id_document').val(id);
 
     var drEvent = $('#dropify-event').dropify();
     drEvent = drEvent.data('dropify');
@@ -94,8 +93,9 @@ function openDocument(id){
     drEvent.settings.defaultFile = "";
     drEvent.destroy();
     drEvent.init();
+    $('#modalDocuments').modal('show');
 
-    $(".dropify-preview").css('display', 'none');
+    $(".dropify-preview"). css('display', 'none');
 
 }
 

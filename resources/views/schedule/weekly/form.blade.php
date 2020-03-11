@@ -94,7 +94,7 @@
                   </div>
                 </div>
             </form> 
-            <input type="hidden" id="usertype_id" name="usertype_id" value="0"> 
+            <input type="hidden" id="shcedule_id" name="shcedule_id" value="0"> 
             </div>
           </div>
         </div>
@@ -142,7 +142,7 @@
                   </div>
                 </div>
             </form> 
-            <input type="hidden" id="usertype_id" name="usertype_idE" value="0"> 
+            <input type="hidden" id="shcedule_idE" name="shcedule_idE" value="0"> 
             </div>
           </div>
         </div>

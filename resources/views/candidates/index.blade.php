@@ -35,12 +35,14 @@
                 </div>
             </div>
            
-@include('candidates.documents')
-
              <!-- Passing BASE URL to AJAX -->
         <input id="url" type="hidden" value="{{ \Request::url() }}">
+        <input id="baseUrl" type="hidden" value="{{ \Request::root() }}">
+        <input type="hidden" id="mat" value="CAD">
+        @include('documents.modal')
 @endsection
 @section('script')
 <script src="{{asset('modulos/ajaxscript_actions.js')}}"></script>
 <script src="{{asset('modulos/candidates/AjaxCandidate.js')}}"></script>
+<script src="{{asset('modulos/documents/AjaxDocuments.js')}}"></script>
 @endsection
