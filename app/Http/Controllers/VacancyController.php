@@ -37,18 +37,14 @@ class VacancyController extends Controller
             
     }
 
-    
+
     public function validateVacancy($request,$vacancy_id){
-        if($vacancy_id==""){
+        
         $this->validate(request(), [
-            'name' => 'required|unique:vacancies|max:60',
+            'name' => 'required|max:60',
         ]); 
-        }else{
-            $this->validate(request(), [
-                'name' => 'required|max:60',
-            ]);   
-        }
     }
+
 
     public function ValidateUpdateVacancy($request,$vacancy_id){
         $ExtraVacancyValidation=[]; 
@@ -63,7 +59,7 @@ class VacancyController extends Controller
         }
             
         $nameV = $name->count();
-
+ 
         if($nameV > 0){      
             $n = 'Another user type already has that Name';
             

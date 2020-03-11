@@ -405,6 +405,7 @@ const success = {
     
     msj: function(data){
         console.log(data);
+        $('#btn-save-documents').attr('disabled', false);        
         $.notifyClose();
         $.each(data.responseJSON.errors,function (k,message) {
             $.notify({
