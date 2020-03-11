@@ -34,12 +34,14 @@
                     </div>
                 </div>
             </div>
-            @include('users.documents')
+            @include('documents.modal')
              <!-- Passing BASE URL to AJAX -->
         <input id="url" type="hidden" value="{{ \Request::url() }}">
         <input id="baseUrl" type="hidden" value="{{ \Request::root() }}">
+        <input type="hidden" id="mat" value="USR">
 @endsection
 @section('script')
 <script src="{{asset('modulos/ajaxscript_actions.js')}}"></script>
 <script src="{{asset('modulos/users/ajaxscript_user.js')}}"></script>
+<script src="{{asset('modulos/documents/AjaxDocuments.js')}}"></script>
 @endsection
