@@ -148,7 +148,7 @@ class ClientsController extends Controller
         ]);
          $result = $this->getResult($id_client);
          $name = $clients->name;
-        return response()->json(['client' => $result, 'flag' => 1, 'client_success' =>"The client $name has been saved successfully"]);
+        return response()->json(['client' => $result, 'No' => 1, 'client_success' =>"The client $name has been saved successfully"]);
 
     }
 
@@ -171,7 +171,7 @@ class ClientsController extends Controller
 
 
        
-        return response()->json(["client" => $client, "flag" => 1]);
+        return response()->json(["client" => $client, "flag" => 5]);
         
     }
 
@@ -194,7 +194,7 @@ class ClientsController extends Controller
         $break->save();
         $name = $client->name;
         $result = $this->getResult($client->id);
-        return response()->json(['client' => $result, 'flag' => 1, 'client_update' => "The client $name has been updated successfully"]);
+        return response()->json(['client' => $result, 'No' => 1, 'client_update' => "The client $name has been updated successfully"]);
     }
 
     public function destroy($client_id)
@@ -324,7 +324,7 @@ class ClientsController extends Controller
         $id = $clients->id;
         $name = $clients->name;
         $result = $this->getResultContacts($id);
-        return response()->json(["contact" => $result, "flag" => 2, 'contact_success' => "The contact $name has been saved successfully"]);
+        return response()->json(["contact" => $result, "No" => 2, 'contact_success' => "The contact $name has been saved successfully"]);
     }
 
     public function getResultContacts($id){
@@ -368,7 +368,7 @@ class ClientsController extends Controller
         
         $result = $this->getResultContacts($contact->id);
         $name = $contact->name;
-        return response()->json(['contact'=>$result, 'flag' => 2, 'contact_updated' => "The contact $name has been updated successfully"]);
+        return response()->json(['contact'=>$result, 'No' => 2, 'contact_updated' => "The contact $name has been updated successfully"]);
     }
 
     public function destroyContacts($id)

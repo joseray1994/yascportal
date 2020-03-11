@@ -385,12 +385,6 @@ const success = {
         
             default:
 
-                if(dato.emergency_contact_phone != null){
-                    emergency_contact_phone = dato.emergency_contact_phone;
-                }else{
-                    emergency_contact_phone = "";
-                }
-
                 var operator = `<tr id="operator_id${dato.id}" class="rowType">
                     <td>${dato.id}</td>
                     <td>${dato.email}</td>

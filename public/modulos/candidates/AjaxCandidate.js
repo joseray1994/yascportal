@@ -1,7 +1,7 @@
 
 $(document).ready(function(){
      
-    
+    clearload();
     var can0 = $('#id_candidate').val();
     var nameDeli='<a href="/vacancies">Vacantes</i></a> / <a href="/candidates/'+can0+'">Candidates</i></a>';
 
@@ -10,6 +10,18 @@ $(document).ready(function(){
 
   //get base URL *********************
   var url = $('#url').val();
+
+  
+  $(window).on('hashchange', function() {
+    if (window.location.hash) {
+        var page = window.location.hash.replace('#', '');
+        if (page == Number.NaN || page <= 0) {
+            return false;
+        }else{
+            getData(page);
+        }
+    }
+});
 
 
   //display modal form for creating new product *********************
@@ -156,87 +168,6 @@ $(document).ready(function(){
               });
             });
 
- 
-
-
-
- 
-   
-  
-
-
-    //Modal of Documents
-    $('.open-documents').click(function(){
-        $('#formContacts').trigger("reset");
-        $('#formClients').trigger("reset");
-
-        // $("#image").attr('src','');
-        $('#modalDocuments').modal('show');
-        var id = $(this).val();
-        $('#client_id_document').val(id);
-        var my_url = url + '/document/show/' + id;
-        actions.show(my_url)
-
-    });
-
-    $('.close-documents').click(function(){
-        $('#doc').trigger("reset");
-
-        $('#modalDocuments').modal('hide');
-
-    });
-
-    //Create documents
-    $("#formDocuments").on('submit',function (e) {
-        console.log('button');
-      
-        e.preventDefault(); 
-        // $('#btn-save-documents').attr('disabled', true);
-        
-        var formData = new FormData(this);
-        // var formData = $("#formOperators").serialize();
-        var state = $('#btn-save-documents').val();
-        var id = $('#client_id_document').val();
-        var type = "POST"; //for creating new resource
-        var my_url = url + '/document/' + id;
-        var file = "file";
-        if (state == "update"){
-            type = "POST"; //for updating existing resource
-            my_url += '/' + id;
-        }
-        actions.edit_create(type,my_url,state,formData, file);
-        $('#modalDocuments').modal('hide');
-    });
-
-    //Delete Document
- $(document).on('click','.deleteDocument',function(){
-    var url = $('#url').val();  
-    var document_id = $(this).val();
-    var my_url = url + '/documents/delete/' + document_id;
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-        }
-    })
-    swal({
-        title: "Are you sure you wish to delete this document?",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonClass: "btn btn-danger",
-        confirmButtonText: "Delete",
-        cancelButtonText: "Cancel",
-        closeOnConfirm: true,
-        closeOnCancel: false
-      },
-      function(isConfirm) {
-        if (isConfirm) {
-            actions.deactivated(my_url);
-            $('#modalDocuments').modal('hide');
-        }else {
-           swal("Cancelled", "Deletion Canceled", "error");
-        }
-      });
-    });
     
 });
 
@@ -252,11 +183,15 @@ const candidates ={
                
                 buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="'+dato.id+'"  ><i class="fa fa-edit"></i></button>';
                 buttons += ' <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-candidate" title="Deactivated" data-type="confirm" value="'+dato.id+'"><i class="fa fa-window-close"></i></button>';
+                buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument(${dato.id})" data-toggle="tooltip" title="Documents" value="${dato.id}"><i class="fa  fa-folder-open"></i></button>';
+
           
            }else if(dato.status == 2){
        
                buttons += '<button type="button" class="btn btn-sm btn-outline-success off-candidate" title="Activated" data-type="confirm" value="'+dato.id+'" ><i class="fa fa-check-square-o"></i></button> ';
                buttons += '  <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert delete-candidate" title="Delete" data-type="confirm" value="'+dato.id+'"><i class="fa fa-trash-o"></i></button>';
+               buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument(${dato.id})" data-toggle="tooltip" title="Documents" value="${dato.id}"><i class="fa  fa-folder-open"></i></button>';
+
            }
            buttons+='</div>';
            return buttons;
@@ -273,59 +208,100 @@ const candidates ={
 }
 
 
-const documents ={
-    button: function(dato){
-           var buttons='';
-            if(dato.status== 1){
-              
-               buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary download" data-toggle="tooltip" title="Download" value="'+dato.id+'"> <i class="fa fa-download"></i></li></button>';
-               buttons += ' <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert deleteDocument" data-toggle="tooltip" title="Delete" data-type="confirm" value="'+dato.id+'"> <i class="fa fa-trash-o"></i> </button>';
-          
-           }
-           return buttons;
-    },
-    
-}
-
 const success = {
     new_update: function (data,state){
+        $('#btn-save-documents').attr('disabled', false);
         console.log(data);
+        $('#btn-save').attr('disabled', false);
+        $("#table-row").remove();
+        $("#no-data-doc").hide();
         var dato = data;
-        var candidatename =$('#name').val();
-        
-        if(dato =='error en agregar datos.'){
-            swal({
-                title: "Datos Existentes",
-                text: "El candidate: "+candidatename+" ya existe",
-                type: "warning",
-              });
-        }
-        else{
-            var candidate = `<tr id="candidate_id${dato.id}">
-                                <td>${dato.id}</td>
-                                <td>${dato.name_vacancy}</td>
-                                <td>${dato.name}</td>
-                                <td>${dato.last_name}</td>
-                                <td>${dato.phone}</td>
-                                <td>${dato.mail}</td>
-                                <td>${dato.channel}</td>
-                                <td>${dato.listening_test}</td>
-                                <td>${dato.grammar_test}</td>
-                                <td>${dato.typing_test}</td>
-                                <td class="hidden-xs">${candidates.status(dato)}</td>
-                                <td>${candidates.button(dato)}</td>
-                            </tr>`;
-        
-            if (state == "add"){ 
-              $("#candidate-list").append(candidate);
-              $("#candidate_id"+dato.id).css("background-color", "#c3e6cb");    
-            }else{
-              $("#candidate_id"+dato.id).replaceWith(candidate);
-              $("#candidate_id"+dato.id).css("background-color", "#ffdf7e");  
-            }
+        $.notifyClose();
+        switch(dato.No) {
+            case 2:
+                $.notify({
+                    // options
+                    title: "Error!",
+                    message:data.msg,
+                },{
+                    // settings
+                    type: 'danger'
+                });
+            break;
+            case 3:
+                $.notify({
+                    // options
+                    title: "Saved!",
+                    message:data.msg,
+                },{
+                    // settings
+                    type: 'success'
+                });
 
-            $('#myModal').modal('hide')
+                data.documents.forEach(function(data){
+
+                    var docs = `
+                        <tr id="document_id${data.id}">
+                            <td>${data.name}</td>
+                            <td>${documents.button(data)}</td>
+                        </tr>
+                    `;
+                    $('#document-list').append(docs);
+                    $("#document_id"+data.id).css("background-color", "#c3e6cb");    
+                });
+                $("#candidate_id"+dato.id).css("background-color", "#ffdf7e");  
+                var drEvent = $('#dropify-event').dropify();
+                drEvent = drEvent.data('dropify');
+                drEvent.resetPreview();
+                drEvent.clearElement();
+                drEvent.settings.defaultFile = "";
+                drEvent.destroy();
+                drEvent.init();
+
+                $('#formDocuments').trigger('reset');
+
+                $(".dropify-preview").css('display', 'none');
+            break;
+        
+            default:
+                if(dato =='error en agregar datos.'){
+                    swal({
+                        title: "Datos Existentes",
+                        text: "El candidate: "+candidatename+" ya existe",
+                        type: "warning",
+                      });
+                }
+                else{
+                    var candidate = `<tr id="candidate_id${dato.id}">
+                                        <td>${dato.id}</td>
+                                        <td>${dato.name_vacancy}</td>
+                                        <td>${dato.name}</td>
+                                        <td>${dato.last_name}</td>
+                                        <td>${dato.phone}</td>
+                                        <td>${dato.mail}</td>
+                                        <td>${dato.channel}</td>
+                                        <td>${dato.listening_test}</td>
+                                        <td>${dato.grammar_test}</td>
+                                        <td>${dato.typing_test}</td>
+                                        <td class="hidden-xs">${candidates.status(dato)}</td>
+                                        <td>${candidates.button(dato)}</td>
+                                    </tr>`;
+                
+                    if (state == "add"){ 
+                      $("#candidate-list").append(candidate);
+                      $("#candidate_id"+dato.id).css("background-color", "#c3e6cb");    
+                    }else{
+                      $("#candidate_id"+dato.id).replaceWith(candidate);
+                      $("#candidate_id"+dato.id).css("background-color", "#ffdf7e");  
+                    }
+        
+                    $('#myModal').modal('hide')
+                }  
+              
+            break;
         }
+        
+       
         
     },
 
@@ -333,7 +309,29 @@ const success = {
         console.log(data);
         switch (data.flag) {
             case 1:
-              
+                $('#document-list').html("");
+                $(".dropify-preview").css('display', 'none');
+                       
+                if(data.document.length === 0){
+                    $("#no-data-doc").show();
+                }else{
+                    $("#no-data-doc").hide();
+
+                    var document = "";
+                    data.document.forEach(function(data){
+                        document += `
+                       
+                            <tr id="document_id${data.id}">
+                                <td>${data.name}</td>
+                                <td>${documents.button(data)}</td>
+                            </tr>
+                            `;
+                    })
+                    $('#document-list').html(document);
+                }
+            break;
+
+            case 2:
                 $('#candidate_id').val(data.candidates.id);
                 $('#id_vacancy').val(data.candidates.id_vacancy);
                 $('#name').val(data.candidates.name);
@@ -346,49 +344,60 @@ const success = {
                 $('#typing_test').val(data.candidates.typing_test);
                 $('#btn-save').val("update");
                 $('#myModal').modal('show');
-            break;  
-            case 2:
-            
-                    var document = "";
-                    data.document.forEach(function(data){
-                        document += `
-                       
-                            <tr id="client_id${data.id}">
-                                <td>${data.name}</td>
-                                <td>${documents.button(data)}</td>
-                            </tr>
-                            `;
-                    })
-                    $('#document-list').html(document);
             break;
+        
         }
+
     },
 
     
     deactivated:function(data) {
         console.log(data);
         var dato = data;
-        if(dato.status != 0){
 
-            var candidate = `<tr id="candidate_id${dato.id}">
-                                <td>${dato.id}</td>
-                                <td>${dato.name_vacancy}</td>
-                                <td>${dato.name}</td>
-                                <td>${dato.last_name}</td>
-                                <td>${dato.phone}</td>
-                                <td>${dato.mail}</td>
-                                <td>${dato.channel}</td>
-                                <td>${dato.listening_test}</td>
-                                <td>${dato.grammar_test}</td>
-                                <td>${dato.typing_test}</td>
-                                <td class="hidden-xs">${candidates.status(dato)}</td>
-                                <td>${candidates.button(dato)}</td>
-                            </tr>`;
-          
-            $("#candidate_id"+dato.id).replaceWith(candidate);
+        $.notifyClose();
+        switch (dato.flag) {
+            case 4:
+                $.notify({
+                    // options
+                    title: "Deleted!",
+                    message:dato.data.name,
+                },{
+                    // settings
+                    type: 'danger'
+                });
+                $("#document_id"+dato.data.id).remove();
+                var numtr = $("#table-documents tr").length;
+                if(numtr ==  2){
+                    $("#no-data-doc").show();
+                }
+            break;
+        
+            default:
+                if(dato.status != 0){
 
-        }else if(dato.status == 0){
-            $("#candidate_id"+dato.id).remove();
+                    var candidate = `<tr id="candidate_id${dato.id}">
+                                        <td>${dato.id}</td>
+                                        <td>${dato.name_vacancy}</td>
+                                        <td>${dato.name}</td>
+                                        <td>${dato.last_name}</td>
+                                        <td>${dato.phone}</td>
+                                        <td>${dato.mail}</td>
+                                        <td>${dato.channel}</td>
+                                        <td>${dato.listening_test}</td>
+                                        <td>${dato.grammar_test}</td>
+                                        <td>${dato.typing_test}</td>
+                                        <td class="hidden-xs">${candidates.status(dato)}</td>
+                                        <td>${candidates.button(dato)}</td>
+                                    </tr>`;
+                  
+                    $("#candidate_id"+dato.id).replaceWith(candidate);
+        
+                }else if(dato.status == 0){
+                    $("#candidate_id"+dato.id).remove();
+                }
+               
+                break;
         }
        
     },

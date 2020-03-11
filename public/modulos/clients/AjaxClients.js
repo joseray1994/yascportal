@@ -144,80 +144,6 @@ $(document).ready(function(){
 
 
 
-    //Modal of Documents
-    $('.open-documents').click(function(){
-        $('#formContacts').trigger("reset");
-        $('#formClients').trigger("reset");
-
-        // $("#image").attr('src','');
-        $('#modalDocuments').modal('show');
-        var id = $(this).val();
-        $('#client_id_document').val(id);
-        var my_url = url + '/document/show/' + id;
-        actions.show(my_url)
-
-    });
-
-    $('.close-documents').click(function(){
-        $('#doc').trigger("reset");
-
-        $('#modalDocuments').modal('hide');
-
-    });
-
-    //Create documents
-    $("#formDocuments").on('submit',function (e) {
-        console.log('button');
-      
-        e.preventDefault(); 
-        // $('#btn-save-documents').attr('disabled', true);
-        
-        var formData = new FormData(this);
-        // var formData = $("#formOperators").serialize();
-        var state = $('#btn-save-documents').val();
-        var id = $('#client_id_document').val();
-        var type = "POST"; //for creating new resource
-        var my_url = url + '/document/' + id;
-        var file = "file";
-        if (state == "update"){
-            type = "POST"; //for updating existing resource
-            my_url += '/' + id;
-        }
-        actions.edit_create(type,my_url,state,formData, file);
-        $('#modalDocuments').modal('hide');
-    });
-
-    //Delete Document
- $(document).on('click','.deleteDocument',function(){
-    var url = $('#url').val();  
-    var document_id = $(this).val();
-    var my_url = url + '/documents/delete/' + document_id;
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-        }
-    })
-    swal({
-        title: "Are you sure you wish to delete this document?",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonClass: "btn btn-danger",
-        confirmButtonText: "Delete",
-        cancelButtonText: "Cancel",
-        closeOnConfirm: true,
-        closeOnCancel: false
-      },
-      function(isConfirm) {
-        if (isConfirm) {
-            actions.deactivated(my_url);
-            $('#modalDocuments').modal('hide');
-        }else {
-           swal("Cancelled", "Deletion Canceled", "error");
-        }
-      });
-    });
-
-
       //Edit Client
     $(document).on('click','.btn-edit',function(){
         $('#labelTitle').html("Edit Client  <i class='fa fa-briefcase'></i>");
@@ -236,22 +162,6 @@ $(document).ready(function(){
        
     });
     
-
-
-    //Download
-     $(document).on('click','.download',function(){
-       
-        // $('#btn-save-documents').attr('disabled', true);
-        
-      
-        // var formData = $("#formOperators").serialize();
-        var id = $(this).val();
-        var my_url = url + '/download/' + id;
-       
-        actions.show(my_url);
-        window.location.replace(my_url);
-       
-    });
 
     //Activate or Deactivated Clients
         $(document).on('click','.off-type',function(){
@@ -486,19 +396,6 @@ const contacts ={
     },
 }
 
-const documents ={
-    button: function(dato){
-           var buttons='';
-            if(dato.status== 1){
-              
-               buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary download" data-toggle="tooltip" title="Download" value="'+dato.id+'"> <i class="fa fa-download"></i></li></button>';
-               buttons += ' <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert deleteDocument" data-toggle="tooltip" title="Delete" data-type="confirm" value="'+dato.id+'"> <i class="fa fa-trash-o"></i> </button>';
-          
-           }
-           return buttons;
-    },
-    
-}
 
 const success = {
     response: function(data){
@@ -506,7 +403,10 @@ const success = {
     },
     
     new_update: function (data,state){
-        switch (data.flag){
+        $('#btn-save-documents').attr('disabled', false);
+        $("#no-data-doc").hide();
+        $.notifyClose();
+        switch (data.No){
             case 1:
                 console.log(data);
                 var dato = data.client;
@@ -561,7 +461,40 @@ const success = {
                         }
                 break        
                 case 3:
-                    swal("Saved!", data.doc_success, "success")
+                    var dato = data;
+                    $.notify({
+                        // options
+                        title: "Saved!",
+                        message:data.msg,
+                    },{
+                        // settings
+                        type: 'success'
+                    });
+
+                    data.documents.forEach(function(data){
+
+                        var docs = `
+                            <tr id="document_id${data.id}">
+                                <td>${data.name}</td>
+                                <td>${documents.button(data)}</td>
+                            </tr>
+                        `;
+                        $('#document-list').append(docs);
+                        $("#document_id"+data.id).css("background-color", "#c3e6cb");    
+                    });
+                    $("#client_id"+dato.id).css("background-color", "#ffdf7e");  
+                    var drEvent = $('#dropify-event').dropify();
+                    drEvent = drEvent.data('dropify');
+                    drEvent.resetPreview();
+                    drEvent.clearElement();
+                    drEvent.settings.defaultFile = "";
+                    drEvent.destroy();
+                    drEvent.init();
+
+                    $('#formDocuments').trigger('reset');
+
+                    $(".dropify-preview").css('display', 'none');
+                break;   
 
         }
     },
@@ -597,7 +530,7 @@ const success = {
                 $("#client_id"+dato.id).remove();
                 swal("Deleted!", data.client_deleted, "success")
             }
-            break
+            break;
             case 2:
                
                 var dato = data.contact;
@@ -623,28 +556,54 @@ const success = {
                 $("#client_id"+dato.id).remove();
                 swal("Deleted!", data.contact_deleted, "success")
             }
-            break
+            break;
+            case 4:
+                dato = data;
+                $.notify({
+                    // options
+                    title: "Deleted!",
+                    message:dato.data.name,
+                },{
+                    // settings
+                    type: 'danger'
+                });
+                $("#document_id"+dato.data.id).remove();
+                var numtr = $("#table-documents tr").length;
+                if(numtr ==  2){
+                    $("#no-data-doc").show();
+                }
+            break;
 
         }   
     },
 
-    show: function(dato){
-        switch (dato.flag) {
+    show: function(data){
+        switch (data.flag) {
             case 1:
-                 var data = dato.client;
-                console.log(data);
-                $('#client_id').val(data.id_client);
-                $('#name').val(data.name);
-                $('#description').val(data.description);
-                $('#color').val(data.color);
-                $('#interval').val(data.interval);
-                $('#duration').val(data.duration);
-                $('#btn-save').val("update");
-                $('#myModal').modal('show');
-            break
+                $('#document-list').html("");
+                $(".dropify-preview").css('display', 'none');
+                       
+                if(data.document.length === 0){
+                    $("#no-data-doc").show();
+                }else{
+                    $("#no-data-doc").hide();
+
+                    var document = "";
+                    data.document.forEach(function(data){
+                        document += `
+                       
+                            <tr id="document_id${data.id}">
+                                <td>${data.name}</td>
+                                <td>${documents.button(data)}</td>
+                            </tr>
+                            `;
+                    })
+                    $('#document-list').html(document);
+                }
+            break;
             case 2:
                 var contact = "";
-                dato.contact.forEach(function(data){
+                data.contact.forEach(function(data){
                     contact += `
                    
                         <tr id="client_id${data.id}">
@@ -658,11 +617,11 @@ const success = {
                         `;
                 })
                 $('#contact-list').html(contact);
-            break
+            break;
             case 3:
             
             var document = "";
-            dato.document.forEach(function(data){
+            data.document.forEach(function(data){
                 document += `
                
                     <tr id="client_id${data.id}">
@@ -672,9 +631,9 @@ const success = {
                     `;
             })
             $('#document-list').html(document);
-            break
+            break;
             case 4:
-            var data = dato.contact_edit;
+            var data = data.contact_edit;
             console.log(data)   
                 $('#client_id_contacts').val(data.id);
                 $('#name_contact').val(data.name);
@@ -682,13 +641,27 @@ const success = {
                 $('#email_contact').val(data.email);
                 $('#phone_contact').val(data.phone);
                 $('#btn-save-contacts').val("update");
+            break;
+            case 5:
+                 var data = data.client;
+                console.log(data);
+                $('#client_id').val(data.id_client);
+                $('#name').val(data.name);
+                $('#description').val(data.description);
+                $('#color').val(data.color);
+                $('#interval').val(data.interval);
+                $('#duration').val(data.duration);
+                $('#btn-save').val("update");
+                $('#myModal').modal('show');
             break
+
           }
     
     },
 
     msj: function(data){
         console.log(data);
+        $('#btn-save-documents').attr('disabled', false);
         $.notifyClose();
         $.each(data.responseJSON.errors,function (k,message) {
             $.notify({
