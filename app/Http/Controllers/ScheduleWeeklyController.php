@@ -74,7 +74,7 @@ class ScheduleWeeklyController extends Controller
                     ->where('detail_schedule_user.status',1);
                     
                 } 
-                $data=$data2->paginate(100);
+                $data=$data2->paginate(10);
                 if ($request->ajax()) {
                     return view('schedule.weekly.table', ["data"=>$data]);
                 }

@@ -62,8 +62,17 @@ $(document).ready(function(){
             actions.show(my_url);
        
     });
-
-
+    
+    $(window).on('hashchange', function() {
+        if (window.location.hash) {
+            var page = window.location.hash.replace('#', '');
+            if (page == Number.NaN || page <= 0) {
+                return false;
+            }else{
+                schedule.get_data(page);
+            }
+        }
+    });
     //create new product / update existing product ***************************
     $("#typeUserForm").on('submit',function (e) {
         e.preventDefault(); 
@@ -346,18 +355,18 @@ const success = {
         var dato = data;    
         switch(dato.No) {
             case 1:
-                    var profile = `<tr id="shcedule_id${dato.ed.detail.id}">
-                                    <td>${dato.ed.detail.name} ${dato.ed.detail.lastname}</td>
-                                    <td style ="background:${dato.ed.detail.color}">${dato.ed.detail.client}</td>
-                                    <td>${dato.ed.detail.day}</td>
-                                    <td>${dato.ed.detail.time_s}</td>
-                                    <td>${dato.ed.detail.time_e}</td>
-                                    <td class="hidden-xs">${schedule.type(dato.ed.detail)}</td>
-                                    <td class="hidden-xs">${schedule.status(dato.ed.detail)}</td>
-                                    <td>${schedule.button(dato.ed.detail)}</td>
+                    var profile = `<tr id="shcedule_id${dato.wd.detail.id}">
+                                    <td>${dato.wd.detail.name} ${dato.wd.detail.lastname}</td>
+                                    <td style ="background:${dato.wd.detail.color}">${dato.wd.detail.client}</td>
+                                    <td>${dato.wd.detail.day}</td>
+                                    <td>${dato.wd.detail.time_s}</td>
+                                    <td>${dato.wd.detail.time_e}</td>
+                                    <td class="hidden-xs">${schedule.type(dato.wd.detail)}</td>
+                                    <td class="hidden-xs">${schedule.status(dato.wd.detail)}</td>
+                                    <td>${schedule.button(dato.wd.detail)}</td>
                                 </tr>`;
-                    $("#shcedule_id"+dato.ed.detail.id).replaceWith(profile);
-                    $("#shcedule_id"+dato.ed.detail.id).css("background-color", "#ffdf7e");
+                    $("#shcedule_id"+dato.wd.detail.id).replaceWith(profile);
+                    $("#shcedule_id"+dato.wd.detail.id).css("background-color", "#ffdf7e");
                     $('#myModal2').modal('hide')
             break;
             case 2:
