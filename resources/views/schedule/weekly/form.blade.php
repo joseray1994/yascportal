@@ -68,14 +68,19 @@
                         <br/>
                         <div class="col-sm-6">
                           <label for="sel1">Time Start:</label>
-                          <input type="time" class="form-control has-error" id="time_extra" name="time_extra" value="" maxlength ="15">
+                          <input type="time" class="form-control has-error timeinputsdata" id="time_startEx" name="time_start" value="" maxlength ="15">
                         </div>
                         <div class="col-sm-6">
+                          <label for="sel1">Time End:</label>
+                          <input type="time" class="form-control has-error" id="time_endEx" name="time_end" value="" maxlength ="15" disabled>
+                      </div>
+                      </br>
+                      <div class="col-sm-12 text-center">
                           <label for="sel1">Duration (HH:mm):</label>
 
                           <div class="btn-group col-sm-12">
-                          <input type="number" class="form-control has-error col-sm-4" id="durationH" pattern="[0-9]{2}" max="24" min="0" name="durationH" value="0"  requiered>:
-                          <input type="number" class="form-control has-error col-sm-4" id="durationM" pattern="[0-9]{2}" max="59" min="0" name="durationM" value="0" requiered>
+                          <input type="number" class="form-control has-error col-sm-4 timeinputsdata" id="hoursEx" pattern="[0-9]{2}" max="24" min="0" name="durationH" value="0"  requiered>:
+                          <input type="number" class="form-control has-error col-sm-4 timeinputsdata" id="minutesEx" pattern="[0-9]{2}" max="59" min="0" name="durationM" value="0" requiered>
                           </div>
                       </div>
                     </div>
@@ -111,7 +116,7 @@
                         <br/>
                         <div class="col-sm-6">
                           <label for="sel1">Time Start:</label>
-                          <input type="time" class="form-control has-error timeinputsdata" id="time_startE" name="time_start" value="" maxlength ="15">
+                          <input type="time" class="form-control has-error timeinputsdataExtra" id="time_startE" name="time_start" value="" maxlength ="15">
                         </div>
                         <div class="col-sm-6">
                           <label for="sel1">Time End:</label>
@@ -122,8 +127,8 @@
                           <label for="sel1">Duration (HH:mm):</label>
 
                           <div class="btn-group col-sm-12">
-                          <input type="number" class="form-control has-error col-sm-4 timeinputsdata" id="hours" pattern="[0-9]{2}" max="24" min="0" name="durationH" value="0"  requiered>:
-                          <input type="number" class="form-control has-error col-sm-4 timeinputsdata" id="minutes" pattern="[0-9]{2}" max="59" min="0" name="durationM" value="0" requiered>
+                          <input type="number" class="form-control has-error col-sm-4 timeinputsdataExtra" id="hours" pattern="[0-9]{2}" max="24" min="0" name="durationH" value="0"  requiered>:
+                          <input type="number" class="form-control has-error col-sm-4 timeinputsdataExtra" id="minutes" pattern="[0-9]{2}" max="59" min="0" name="durationM" value="0" requiered>
                           </div>
                       </div>
                     </div>
