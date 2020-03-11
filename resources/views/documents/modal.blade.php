@@ -7,18 +7,21 @@
                 <span aria-hidden="true">&times;</span>
             </button>
             </div>
-            <div class="modal-content">
+            <div class="modal-content" style="max-height:75vh; overflow: scroll;">
                 <div class="container my-3">
                     <form id="formDocuments"  enctype="multipart/form-data">
                             {{ csrf_field() }}
                     <div class="form-row">
-                            <div class="col-sm-10 form-group">
-                                <h6>Document:</h6>
-                                <input type="file" name="document[]" id="doc" multiple>
-                            </div>
-                            <div class="col-sm-2 form-group">
-                            <br>
-                                <button type="submit" class="btn btn-success" id="btn-save-documents" value="add">Save</button>
+                            <div class="card">
+                                <div class="header">
+                                    <h2>Upload user files <small>(pdf/png/jpg/docx/xlsx/zip)</small></h2>
+                                </div>
+                                <div class="body">
+                                    <input type="file" name="document[]" class="dropify" multiple>
+                                </div> 
+                                <div class="col-sm-12 text-center">
+                                    <button type="submit" class="btn btn-success" id="btn-save-documents" value="add"><i class="fa  icon-cloud-upload"></i> Upload</button>
+                                </div>
                             </div>
                     </div>
                 
@@ -28,8 +31,8 @@
           
            
                 <div class="col-sm-12 table-documents">
-                    <div class="table-responsive" style="max-height:50vh; overflow: scroll;">
-                        <table class="table table-striped text-center" id="tag_container">
+                    <div class="table-responsive">
+                        <table class="table table-striped text-center" id="table-documents">
                             <thead class="text-white thead-yasc">
                                 <tr>
                                     <th>Document</th>
@@ -37,6 +40,7 @@
                                 </tr>
                             </thead>
                             <tbody id = 'document-list'></tbody>
+                            <tr id="no-data-doc" style="display:none"><td colspan="2">NO DATA</td></tr>
                         </table>
                     </div>
                 </div>

@@ -205,6 +205,98 @@ class ServiceGeneralController extends Controller
         
     }
 
+    public function showDocument($id, $mat){
+        $document = DocumentModel::where('id_dad', $id)->where('mat', $mat)->where('status', 1)->get();
+        return response()->json(["document" => $document, "flag" => 1]);
+    }
+
+    public function validateDoc($request){
+        
+        $this->validate(request(), [
+            'document' => 'required',
+            'document.*' => 'required|file|max:5000|mimetypes:application/pdf,application/msword,application/vnd.ms-powerpoint,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/doc,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/zip,image/jpeg,image/png',
+        ]);
+    }
+
+    public function storeDocument(Request $request, $id, $mat){
+        
+        $names = ServiceGeneralController::documents($request, $mat);
+        $arrayId = array();
+        $arrayDocuments = array();
+        foreach($names as $name){
+         // dd($name);
+            $document = DocumentModel::create([
+                'id_dad'=> $id,
+                'mat' => $mat,
+                'name'=> $name['name'],
+                'path'=> $name['path']
+            ]);
+            
+            array_push($arrayId, $document->id);
+        }
+
+        foreach($arrayId as $ids){
+            $doc = ServiceGeneralController::getRowDocs($ids);
+            array_push($arrayDocuments, $doc);
+        }
+        // dd($arrayDocuments);
+        $msg= 'Data inserted correctly';
+        $data=['No'=>3,'msg'=>$msg, 'id'=> $id, 'documents'=>$arrayDocuments];
+        return response()->json($data);
+ 
+    }
+
+    public function getRowDocs($id){
+        $document = DocumentModel::find($id);
+        return $document;
+    }
+    //Functions for Documents
+    public function documents($request, $folder){
+        // dd($request->file('document'));
+        ServiceGeneralController::validateDoc($request);
+        if ($request->file('document')) {
+            $count = count($request->file('document'));
+            $documentName = '';
+            $document = $request->file('document');
+            $arrayNames = array();
+            for($i=0; $i<$count; $i++){
+              
+                $documentName = time().$document[$i]->getClientOriginalName();
+                $document[$i]->move(public_path().'/documents/'.$folder.'/',$documentName);
+                $path = '/documents/'.$folder.'/'.$documentName;
+                
+                $array = [
+                    'name' => $documentName,
+                    'path' => $path
+                ];
+                array_push($arrayNames,$array);
+
+                }
+            return $arrayNames;
+         }
+       
+    }
+
+    public function deleteDocuments($id)
+    { 
+        $document = DocumentModel::find($id);
+        $document->status = 0;
+        $document->save();
+  
+        return response()->json(['flag'=>4, 'data'=>$document]);
+        
+    }
+
+    
+    public function download($id, $mat) {
+        $name = DocumentModel::select('name')->where('id', $id)->first();
+        $file = public_path('documents'). '/' . $mat . '/' . $name->name;
+        return response()->download($file);
+        
+      }
+
+
+
     public function SumTime(Request $request){    
         $m=0;
         $m+= $request->minutes;

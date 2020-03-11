@@ -14,6 +14,7 @@ use App\DocumentModel;
 use App\BreakRulesModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class ClientsController extends Controller
 {
@@ -247,8 +248,8 @@ class ClientsController extends Controller
             for($i=0; $i<$count; $i++){
               
                 $documentName = $document[$i]->getClientOriginalName();
-                $document[$i]->move(public_path().'/documents/'.$folder.'/',$documentName);
-                $path = '/documents/'.$folder.'/'.$documentName;
+                $document[$i]->move(public_path().'/documents'.'/',$documentName);
+                $path = '/documents/'.$documentName;
                 
                 $array = [
                     'name' => $documentName,
@@ -302,9 +303,11 @@ class ClientsController extends Controller
     public function download($id) {
         // dd($id);
         $name = DocumentModel::select('name')->where('id', $id)->first();
-        $file_path = public_path('documents'). '\clients/' . $name->name;
+        // dd(public_path());
+        $file = public_path('documents'). '/' . $name->name;
         // dd($file_path);
-        return response()->download($file_path);
+        return response()->download($file);
+        
       }
 
     //Functions for contacts
