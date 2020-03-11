@@ -287,4 +287,13 @@ class ServiceGeneralController extends Controller
         
     }
 
+    
+    public function download($id, $mat) {
+        $name = DocumentModel::select('name')->where('id', $id)->first();
+        $file = public_path('documents'). '/' . $mat . '/' . $name->name;
+        return response()->download($file);
+        
+      }
+
+
 }
