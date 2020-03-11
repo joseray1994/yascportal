@@ -61,7 +61,7 @@ class ScheduleWeeklyController extends Controller
 
                 } else{
                     $now = Carbon::now();
-                    $data2 = ScheduleDetailModel::select( "detail_schedule_user.id as id", "inf.name as name", "inf.last_name as lastname","cli.name as client","ccl.hex as color",'day.Eng-name as day','detail_schedule_user.time_start as time_s','detail_schedule_user.time_end as time_e',"detail_schedule_user.status as status")
+                    $data2 = ScheduleDetailModel::select( "detail_schedule_user.id as id", "detail_schedule_user.type_daily as type", "inf.name as name", "inf.last_name as lastname","cli.name as client","ccl.hex as color",'day.Eng-name as day','detail_schedule_user.time_start as time_s','detail_schedule_user.time_end as time_e',"detail_schedule_user.status as status")
                     ->join('schedule as sch','sch.id', "=", 'detail_schedule_user.id_schedule')
                     ->join('clients as cli', 'cli.id',"=","sch.id_client")
                     ->join('client_color as ccl', 'ccl.id',"=","cli.color")
@@ -87,19 +87,21 @@ class ScheduleWeeklyController extends Controller
 
     public function data_weekly($id){
         $days=[];
-        $data = ScheduleDetailModel::select( "detail_schedule_user.id as id" ,"detail_schedule_user.type_daily as type","detail_schedule_user.id_schedule as id_schedule","detail_schedule_user.id_day as id_day","sch.dayoff as days","inf.name as name", "inf.last_name as lastname","cli.name as client",'detail_schedule_user.time_start as time_s','detail_schedule_user.time_end as time_e',"detail_schedule_user.status as status")
+        $data = ScheduleDetailModel::select( "detail_schedule_user.id as id","detail_schedule_user.id_schedule as id_schedule", "detail_schedule_user.type_daily as type", "inf.name as name", "inf.last_name as lastname","cli.name as client","ccl.hex as color",'day.Eng-name as day','detail_schedule_user.time_start as time_s','detail_schedule_user.time_end as time_e',"detail_schedule_user.status as status")
                     ->join('schedule as sch','sch.id', "=", 'detail_schedule_user.id_schedule')
                     ->join('clients as cli', 'cli.id',"=","sch.id_client")
+                    ->join('client_color as ccl', 'ccl.id',"=","cli.color")
                     ->join('users_info as inf','inf.id_user', "=", 'detail_schedule_user.id_operator')
+                    ->join('days as day','day.id', "=", 'detail_schedule_user.id_day')
                     ->where('detail_schedule_user.id',$id)
                     ->first();
 
-        $daysN = DayOffModel::select('id')
+        $daysN = DayOffModel::select('id_day')
         ->where("id_schedule",$data->id_schedule)
         ->get();
 
         foreach($daysN as $day){
-                array_push($days,$day->id);
+                array_push($days,$day->id_day);
             } 
 
         $data2=[ "detail"=>$data, "days"=>$days,];
@@ -146,35 +148,38 @@ class ScheduleWeeklyController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function CreateExtraShift($request,$weekly){
-        if($request->durationH >0){
-            $now =Carbon::parse($request->time_extra);
-            $now->addHours($request->durationH); 
-            $now->addMinutes($request->durationM);  
-
+        $w=0;
+        if($request->hours >0 || $request->minutes >0 ){
            
-        $extra=ScheduleDetailModel::Create([
+            $extra=ScheduleDetailModel::Create([
                     "id_schedule"=>$weekly->id_schedule,
                     "id_operator"=>$weekly->id_operator,
                     "id_day"=>$weekly->id_day,
                     "time_start"=>$request->time_extra,
-                    "time_end"=>$now,
+                    "time_end"=>$request->time_endEx,
                     "type_daily"=>2,
                     "option"=>1,
                     "status"=>1,
                 ]);
-            
-         return $extra;
+        $w = ScheduleWeeklyController::data_weekly($extra->id);   
         }
+        return $w;
    }
    
-    public function store(Request $request)
+    public function store(Request $request,$weekly_id)
     {      
 
   
-            ScheduleWeeklyController::CreateExtraShift($request,$weekly);
+                $weekly = ScheduleDetailModel::find($weekly_id);
+                $weekly->time_start = $request->time_start;
+                $weekly->time_end = $request->time_end;
+                $weekly->status=1;
+                $weekly->save();
 
-             $weekly2 = ScheduleDetailModel::find($user->id);
-             return response()->json($weekly2);
+                $weeklyData = ScheduleWeeklyController::data_weekly($weekly_id);
+                $data=['No'=>1,'ed'=>$weeklyData];
+                
+                return response()->json($data);
       
            
     }
@@ -189,8 +194,11 @@ class ScheduleWeeklyController extends Controller
     public function update(Request $request, $weekly_id)
     {
            function UpdateDayOff($weekly,$request){
+
                 DayOffModel::where("id_schedule",$weekly->id_schedule)->truncate();
 
+               if(!empty($request->days))
+               {
                 foreach($request->days as $days){
                     DayOffModel::Create([
                         "id_schedule"=>$weekly->id_schedule,
@@ -207,6 +215,8 @@ class ScheduleWeeklyController extends Controller
                         ->where('id_schedule',$weekly->id_schedule)
                         ->where('type_daily', 1)
                         ->update(['option' => 1]); 
+               }
+               
            }
            
            function UpdateAllWeekly($request){
@@ -229,12 +239,15 @@ class ScheduleWeeklyController extends Controller
             $weekly->status=1;
             $weekly->save();
 
-            ScheduleWeeklyController::CreateExtraShift($request,$weekly);
+            $extradata=ScheduleWeeklyController::CreateExtraShift($request,$weekly);
 
             UpdateDayoff($weekly,$request);   
             UpdateAllWeekly($weekly,$request);
-         
-            return response()->json($weekly);
+
+            $weeklyData = ScheduleWeeklyController::data_weekly($weekly_id);
+           
+            $data=['No'=>2,'wd'=>$weeklyData, 'ed'=>$extradata];
+            return response()->json($data);
     }
 
     public function delete($weekly_id)

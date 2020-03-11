@@ -56,8 +56,8 @@ $(document).ready(function(){
     //display modal form for product EDIT ***************************
     $(document).on('click','.open_modal',function(){
         $('#typeUserForm').trigger("reset");
-        var usertype_id = $(this).val();
-        var my_url = url + '/' + usertype_id;
+        var shcedule_id = $(this).val();
+        var my_url = url + '/' + shcedule_id;
 
             actions.show(my_url);
        
@@ -72,11 +72,11 @@ $(document).ready(function(){
         //used to determine the http verb to use [add=POST], [update=PUT]
         var state = $('#btn-save').val();
         var type = "POST"; //for creating new resource
-        var usertype_id = $('#usertype_id').val();;
+        var shcedule_id = $('#shcedule_id').val();
         var my_url = url;
         if (state == "update"){
             type = "PUT"; //for updating existing resource
-            my_url += '/' + usertype_id;
+            my_url += '/' + shcedule_id;
         }
         
             console.log(formData);
@@ -88,16 +88,16 @@ $(document).ready(function(){
      //create new product / update existing product ***************************
      $("#ExtraForm").on('submit',function (e) {
         e.preventDefault(); 
-        var formData = $("#ExtraForm").serialize();
+        var formData = schedule.dataSendEx();
         
         //used to determine the http verb to use [add=POST], [update=PUT]
-        var state = $('#btn-save').val();
+        var state = $('#btn-saveE').val();
         var type = "POST"; //for creating new resource
-        var usertype_id = $('#usertype_id').val();;
-        var my_url = url;
+        var shcedule_id = $('#shcedule_idE').val();;
+        var my_url = baseUrl+'/extra';
         if (state == "update"){
-            type = "PUT"; //for updating existing resource
-            my_url += '/' + usertype_id;
+            type = "POST"; //for updating existing resource
+            my_url += '/' + shcedule_id;
         }
         
             console.log(formData);
@@ -193,12 +193,12 @@ $(document).ready(function(){
 
     //display modal form for product DETAIL ***************************
     $(document).on('click','.open_detail',function(){
-        var usertype_id = $(this).val();
+        var shcedule_id = $(this).val();
        
         // Populate Data in Edit Modal Form
         $.ajax({
             type: "GET",
-            url: url + '/' + usertype_id,
+            url: url + '/' + shcedule_id,
             success: function (data) {
                 console.log(data);
                 $(".modal-body-detail").html(data);
@@ -231,6 +231,15 @@ const schedule ={
             status +="<span class='badge badge-success'>Activated</span>";
         }else if(dato.status == 2){
             status +="<span class='badge badge-secondary'>Deactivated</span>";
+        }
+       return status;
+    },
+    type:function(dato){
+        var status='';
+        if(dato.type== 1){
+            status +='<span class="badge badge-light">Workday</span>';
+        }else if(dato.type == 2){
+            status +='<span class="badge badge-dark">Extra</span>';
         }
        return status;
     },
@@ -269,11 +278,22 @@ const schedule ={
                 time_start:$('#time_start').val(),
                 time_end:$('#time_end').val(),
                 days:$("#days").val(),
-                time_extra:$('#time_extra').val(),
-                durationH:$("#durationH").val(),
-                durationM:$("#durationM").val(),
+                time_extra:$('#time_startEx').val(),
+                time_endEx:$("#time_endEx").val(),
+                hours:$("#hoursEx").val(),
+                minutes:$("#minutesEx").val(),
                 now:n,
                 today:t,
+        }
+     
+        return data;
+    },
+    dataSendEx: function(){
+        var data =  {
+                time_start:$('#time_startE').val(),
+                time_end:$('#time_endE').val(),
+                hours:$("#hours").val(),
+                minutes:$("#minutes").val(),
         }
      
         return data;
@@ -304,8 +324,10 @@ const schedule ={
                         });
                     break;
                     default:
-                        if($(this).attr('class') == 'form-control has-error col-sm-4 timeinputsdata')
-                        { $("#time_endEx").val(data);}else{$("#time_endE").val(data);}
+                      
+                        $("#time_endEx").val(data);
+
+                        $("#time_endE").val(data);
                     break;
                 }
             },
@@ -320,36 +342,58 @@ const schedule ={
 const success = {
 
     new_update: function (data,state){
-        console.log(data);
-        var dato = data;
-        var typename =$('#name').val();
-        
-        if(dato =='error en agregar datos.'){
-            swal({
-                title: "Datos Existentes",
-                text: "El perfil: "+typename+" ya existe",
-                type: "warning",
-
-              });
+        console.log(data.No);
+        var dato = data;    
+        switch(dato.No) {
+            case 1:
+                    var profile = `<tr id="shcedule_id${dato.ed.detail.id}">
+                                    <td>${dato.ed.detail.name} ${dato.ed.detail.lastname}</td>
+                                    <td style ="background:${dato.ed.detail.color}">${dato.ed.detail.client}</td>
+                                    <td>${dato.ed.detail.day}</td>
+                                    <td>${dato.ed.detail.time_s}</td>
+                                    <td>${dato.ed.detail.time_e}</td>
+                                    <td class="hidden-xs">${schedule.type(dato.ed.detail)}</td>
+                                    <td class="hidden-xs">${schedule.status(dato.ed.detail)}</td>
+                                    <td>${schedule.button(dato.ed.detail)}</td>
+                                </tr>`;
+                    $("#shcedule_id"+dato.ed.detail.id).replaceWith(profile);
+                    $("#shcedule_id"+dato.ed.detail.id).css("background-color", "#ffdf7e");
+                    $('#myModal2').modal('hide')
+            break;
+            case 2:
+                    var profile = `<tr id="shcedule_id${dato.wd.detail.id}">
+                                        <td>${dato.wd.detail.name} ${dato.wd.detail.lastname}</td>
+                                        <td style ="background:${dato.wd.detail.color}">${dato.wd.detail.client}</td>
+                                        <td>${dato.wd.detail.day}</td>
+                                        <td>${dato.wd.detail.time_s}</td>
+                                        <td>${dato.wd.detail.time_e}</td>
+                                        <td class="hidden-xs">${schedule.type(dato.wd.detail)}</td>
+                                        <td class="hidden-xs">${schedule.status(dato.wd.detail)}</td>
+                                        <td>${schedule.button(dato.wd.detail)}</td>
+                                    </tr>`;
+                    $("#shcedule_id"+dato.wd.detail.id).replaceWith(profile);
+                    $("#shcedule_id"+dato.wd.detail.id).css("background-color", "#ffdf7e");
+                    
+                    if(dato.ed != 0){
+                        var profile = `<tr id="shcedule_id${dato.ed.detail.id}">
+                                        <td>${dato.ed.detail.name} ${dato.ed.detail.lastname}</td>
+                                        <td style ="background:${dato.wd.detail.color}">${dato.ed.detail.client}</td>
+                                        <td>${dato.ed.detail.day}</td>
+                                        <td>${dato.ed.detail.time_s}</td>
+                                        <td>${dato.ed.detail.time_e}</td>
+                                        <td class="hidden-xs">${schedule.type(dato.ed.detail)}</td>
+                                        <td class="hidden-xs">${schedule.status(dato.ed.detail)}</td>
+                                        <td>${schedule.button(dato.ed.detail)}</td>
+                                        </tr>`;
+                            $("#shcedule-list").prepend(profile);
+                            $("#shcedule_id"+dato.ed.detail.id).css("background-color", "#c3e6cb");    
+                    }
+                    
+                
+                    $('#myModal').modal('hide')
+            break;
         }
-        else{
-            var profile = `<tr id="usertype_id${dato.id}">
-                                <td>${dato.id}</td>
-                                <td>${dato.name}</td>
-                                <td class="hidden-xs">${types.status(dato)}</td>
-                                <td>${types.button(dato)}</td>
-                            </tr>`;
         
-            if (state == "add"){ 
-              $("#usertype-list").append(profile);
-              $("#usertype_id"+dato.id).css("background-color", "#c3e6cb");    
-            }else{
-              $("#usertype_id"+dato.id).replaceWith(profile);
-              $("#usertype_id"+dato.id).css("background-color", "#ffdf7e");  
-            }
-
-            $('#myModal').modal('hide')
-        }
         
     },
 
@@ -357,23 +401,23 @@ const success = {
         console.log(data);
         var dato = data;
         if(dato.status != 0){
-            var profile = `<tr id="usertype_id${dato.id}">
+            var profile = `<tr id="shcedule_id${dato.id}">
                                 <td>${dato.id}</td>
                                 <td>${dato.name}</td>
                                 <td class="hidden-xs">${types.status(dato)}</td>
                                 <td>${types.button(dato)}</td>
                             </tr>`;
           
-            $("#usertype_id"+dato.id).replaceWith(profile);
+            $("#shcedule_id"+dato.id).replaceWith(profile);
             if(dato.status == 1){
                 color ="#c3e6cb";
             }else if(dato.status == 2){
                 color ="#ed969e";
             }
-            $("#usertype_id"+dato.id).css("background-color", color);  
+            $("#shcedule_id"+dato.id).css("background-color", color);  
             
         }else if(dato.status == 0){
-            $("#usertype_id"+dato.id).remove();
+            $("#shcedule_id"+dato.id).remove();
         }
        
     },
@@ -384,14 +428,14 @@ const success = {
       
         if(data.detail.type == 2){
             $('#btn-saveE').val("update");
-            $('#usertype_idE').val(data.detail.id);
+            $('#shcedule_idE').val(data.detail.id);
             $('#time_startE').val(data.detail.time_s);
             $('#time_endE').val(data.detail.time_e);
             $('#myModal2').modal('show');
             
         }else{
             $('#btn-save').val("update");
-            $('#usertype_id').val(data.detail.id);
+            $('#shcedule_id').val(data.detail.id);
             $('#time_start').val(data.detail.time_s);
             $('#time_end').val(data.detail.time_e);
     
@@ -400,7 +444,6 @@ const success = {
                 $('#days').trigger('change');
             }else{
     
-                var select="";
                 $('#days').val(data.days)
                 $('#days').trigger('change');
             }
