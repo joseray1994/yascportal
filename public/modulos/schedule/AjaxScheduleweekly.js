@@ -259,6 +259,7 @@ const schedule ={
                 date:$('#dateSearch').val(),
                 operator:$('#operatorSearch').val(),
             }
+            $('.loading-table').show();
             console.log(formData);
             $.ajax(
             {
@@ -268,8 +269,10 @@ const schedule ={
                 datatype: "html"
             }).done(function(data){
                 $('.pagination').remove();
+                $('.loading-table').hide();
                 $("#tag_container").empty().html(data);
                 location.hash = page;
+               
             }).fail(function(jqXHR, ajaxOptions, thrownError){
                   alert('No response from server');
             });
