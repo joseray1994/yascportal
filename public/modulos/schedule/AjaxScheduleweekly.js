@@ -33,9 +33,24 @@ $(document).ready(function(){
         schedule.get_data(1);
     });
 
-    $('.timeinputsdata').change(function(){
-        schedule.calculateEnd_time(baseUrl);
+    $('.timeinputsdataExtra').change(function(){
+        var formData={
+            time_start: $('#time_startE').val(),
+            hours:$('#hours').val(),
+            minutes:$('#minutes').val(),
+            }
+        schedule.calculateEnd_time(baseUrl,formData);
     });
+
+    $('.timeinputsdata').change(function(){
+        var formData={
+            time_start: $('#time_startEx').val(),
+            hours:$('#hoursEx').val(),
+            minutes:$('#minutesEx').val(),
+            }
+        schedule.calculateEnd_time(baseUrl,formData);
+    });
+
 
 
     //display modal form for product EDIT ***************************
@@ -269,12 +284,7 @@ const schedule ={
             var select=`<option value="${ope.id}">${ope.name}</option>`;
         });
     }, 
-    calculateEnd_time: function(baseUrl){
-        var formData={
-            time_start: $('#time_startE').val(),
-            hours:$('#hours').val(),
-            minutes:$('#minutes').val(),
-            }
+    calculateEnd_time: function(baseUrl,formData){
         console.log(formData);
         $.ajax({
             type:"POST",
@@ -294,7 +304,8 @@ const schedule ={
                         });
                     break;
                     default:
-                        $("#time_endE").val(data);
+                        if($(this).attr('class') == 'form-control has-error col-sm-4 timeinputsdata')
+                        { $("#time_endEx").val(data);}else{$("#time_endE").val(data);}
                     break;
                 }
             },

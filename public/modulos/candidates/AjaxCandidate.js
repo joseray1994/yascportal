@@ -8,9 +8,6 @@ $(document).ready(function(){
     $('.nameDeli').html(nameDeli);
     $('#sidebar10').addClass('active');  
 
-    //get base URL *********************
-    var url = $('#url').val();  
-
   //get base URL *********************
   var url = $('#url').val();
 
@@ -240,41 +237,6 @@ $(document).ready(function(){
         }
       });
     });
-
-
-
-
- 
-  
-    //Delete Client
-    $(document).on('click','.deleteClient',function(){
-        var privada_id = $(this).val();
-        var my_url = url + '/delete/' + privada_id;
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        })
-        swal({
-            title: "Are you sure you wish to delete this option?",
-            text: "All records with this option will be modified",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonClass: "btn btn-danger",
-            confirmButtonText: "Delete",
-            cancelButtonText: "Cancel",
-            closeOnConfirm: true,
-            closeOnCancel: false
-          },
-          function(isConfirm) {
-            if (isConfirm) {
-                actions.deactivated(my_url);
-            }else {
-               swal("Cancelled", "Deletion Canceled", "error");
-            }
-          });
-        });
-
     
 });
 
