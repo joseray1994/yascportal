@@ -47,7 +47,7 @@ class UserController extends Controller
                 with('User_info:id_user,name,last_name,phone,entrance_date,birthdate')
                 ->whereIn('id_status', [1,2]);
             } 
-            $data=$data2->paginate(2);
+            $data=$data2->paginate(10);
             if ($request->ajax()) {
                 return view('users.table', ["data"=>$data]);
             }

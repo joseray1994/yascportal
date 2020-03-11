@@ -388,12 +388,15 @@ $(document).ready(function(){
         if(dato.id_status== 1){
         buttons += ` <button type="button" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="${dato.id}"  ><i class="fa fa-edit"></i></button>
                         <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert delete-op" data-toggle="tooltip" title="Desactivated" data-type="confirm" value="${dato.id}"><i class="fa fa-window-close"></i></button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument('${dato.id}')" data-toggle="tooltip" title="Documents" value="${dato.id}"><i class="fa  fa-folder-open"></i></button>
         ` ;
 
         }else if(dato.id_status == 2){
         buttons  += `<button type="button" class="btn btn-sm btn-outline-success delete-op" title="Activated" data-toggle="tooltip" data-type="confirm" value="${dato.id}" ><i class="fa fa-check-square-o"></i></button>
-                        <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert destroy-op" data-toggle="tooltip" title="Delete" data-type="confirm" value="${dato.id}"><i class="fa fa-trash-o"></i></button>`
-        }
+                        <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert destroy-op" data-toggle="tooltip" title="Delete" data-type="confirm" value="${dato.id}"><i class="fa fa-trash-o"></i></button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument('${dato.id}')" data-toggle="tooltip" title="Documents" value="${dato.id}"><i class="fa  fa-folder-open"></i></button>`
+                    
+                    }
         buttons+='</div>';
         return buttons;
     }
@@ -406,11 +409,13 @@ const types ={
             if(dato.id_status== 1){
                 buttons += ` <button type="button" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="${dato.id}"  ><i class="fa fa-edit"></i></button>
                             <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert delete-op" data-toggle="tooltip" title="Desactivated" data-type="confirm" value="${dato.id}"><i class="fa fa-window-close"></i></button>
-               ` ;
+                            <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument('${dato.id}')" data-toggle="tooltip" title="Documents" value="${dato.id}"><i class="fa  fa-folder-open"></i></button>
+                           ` ;
           
            }else if(dato.id_status == 2){
             buttons  += `<button type="button" class="btn btn-sm btn-outline-success delete-op" title="Activated" data-toggle="tooltip" data-type="confirm" value="${dato.id}" ><i class="fa fa-check-square-o"></i></button>
-            <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert destroy-op" data-toggle="tooltip" title="Delete" data-type="confirm" value="${dato.id}"><i class="fa fa-trash-o"></i></button>`;
+            <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert destroy-op" data-toggle="tooltip" title="Delete" data-type="confirm" value="${dato.id}"><i class="fa fa-trash-o"></i></button>
+            <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument('${dato.id}')" data-toggle="tooltip" title="Documents" value="${dato.id}"><i class="fa  fa-folder-open"></i></button>`;
            }
            buttons+='</div>';
            return buttons;
