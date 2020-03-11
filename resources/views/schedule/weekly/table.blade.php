@@ -11,11 +11,11 @@
             <th>Options</th>
         </tr>
     </thead>
-    <tbody id="usertype-list" class="table-data" >
+    <tbody id="shcedule-list" class="table-data" >
         @forelse($data as $type)
-        <tr id="usertype_id{{$type->id}}" style ="background:{{$type->color}}">
+        <tr id="shcedule_id{{$type->id}}">
             <td>{{ $type->name }} {{ $type->lastname }}</td>
-            <td>{{ $type->client }}</td>
+            <td style ="background:{{$type->color}}" >{{ $type->client }}</td>
             <td>{{ $type->day }}</td>
             <td>{{ $type->time_s }}</td>
             <td>{{ $type->time_e }}</td>

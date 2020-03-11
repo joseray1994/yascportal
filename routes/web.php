@@ -104,9 +104,9 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
    
     //Schedule
     Route::get('/weekly', 'ScheduleWeeklyController@index');
-    Route::get('/weekly/{UserType_id?}', 'ScheduleWeeklyController@show');
-    Route::post('/weekly', 'ScheduleWeeklyController@store');
-    Route::put('/weekly/{UserType_id}', 'ScheduleWeeklyController@update');
+    Route::get('/weekly/{id?}', 'ScheduleWeeklyController@show');
+    Route::post('/extra/{id}', 'ScheduleWeeklyController@store');
+    Route::put('/weekly/{id}', 'ScheduleWeeklyController@update');
     Route::delete('/weekly/{UserType_id}', 'ScheduleWeeklyController@destroy');
     Route::delete('/weekly/delete/{id}', 'ScheduleWeeklyController@delete');
 

@@ -296,4 +296,20 @@ class ServiceGeneralController extends Controller
       }
 
 
+
+    public function SumTime(Request $request){    
+        $m=0;
+        $m+= $request->minutes;
+
+        $h=0;
+        $h+=$request->hours;
+        $now =Carbon::parse($request->time_start);
+        
+            
+            $now->addHours($h)->addMinutes($m);
+            $hora = date("H:i", strtotime($now));
+
+        return response()->json($hora);
+    }
+
 }

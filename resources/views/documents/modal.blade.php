@@ -14,7 +14,7 @@
                     <div class="form-row">
                             <div class="card">
                                 <div class="header">
-                                    <h2>Document <small>try to upload correct format</small></h2>
+                                    <h2>Upload user files <small>(pdf/png/jpg/docx/xlsx/zip)</small></h2>
                                 </div>
                                 <div class="body">
                                     <input type="file" name="document[]" class="dropify" multiple>
