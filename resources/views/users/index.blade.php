@@ -18,7 +18,7 @@
                                         <option value="id">id</option>
                                     </select>
                                 </div>
-                                <input type="text" class="form-control" id="search" value="admin">
+                                <input type="text" class="form-control" id="search">
                                 <button type="button" class="btn btn-primary search-query">Search</button>
                             </div>
                             <div class="table-responsive">
