@@ -17,7 +17,7 @@
                                     <h2>Upload user files <small>(pdf/png/jpg/docx/xlsx/zip)</small></h2>
                                 </div>
                                 <div class="body">
-                                    <input type="file" name="document[]" class="dropify" data-allowed-file-extensions="pdf png jpg docx xlsx" multiple>
+                                    <input type="file" name="document[]" class="dropify" multiple>
                                 </div> 
                                 <div class="col-sm-12 text-center">
                                     <button type="submit" class="btn btn-success" id="btn-save-documents" value="add"><i class="fa  icon-cloud-upload"></i> Upload</button>
