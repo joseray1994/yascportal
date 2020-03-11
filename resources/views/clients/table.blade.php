@@ -11,7 +11,7 @@
         </tr>
     </thead>
     <tbody id="client-list">
-        @foreach ($data as $client)
+        @forelse ($data as $client)
         <tr id="client_id{{$client->id}}" >
             <td><span class="badge badge-secondary" style = "background:{{$client->color}}">&nbsp;&nbsp;&nbsp;</span></td>
             <td>{{$client->name }}</td>
@@ -44,7 +44,13 @@
                 @endswitch 
         
         </tr>
-        @endforeach
+        @empty
+            <tr id="table-row" class="text-center">
+                <th colspan="8" class="text-center">
+                    <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
+                </th>
+            </tr>
+        @endforelse
     </tbody>
 </table>
 {!! $data->render() !!}

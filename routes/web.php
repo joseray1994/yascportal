@@ -121,6 +121,10 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     
     //SERVICE GENERAL
     Route::post('/generate', 'ServiceGeneralController@generateNick');
+    Route::get('/document/show/{id}/{mat}', 'ServiceGeneralController@showDocument');
+    Route::post('/document/{id}/{mat}', 'ServiceGeneralController@storeDocument');
+    Route::delete('/documents/delete/{id}', 'ServiceGeneralController@deleteDocuments');
+    Route::post('/sumtime', 'ServiceGeneralController@SumTime');
 
 
 });

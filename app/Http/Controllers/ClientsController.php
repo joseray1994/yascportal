@@ -13,9 +13,28 @@ use App\ClientContactsModel;
 use App\DocumentModel;
 use App\BreakRulesModel;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 
 class ClientsController extends Controller
 {
+    public function search_clients($type){
+        $result='';
+
+        switch ($type) {
+            case 'id':
+                $result='clients.id';
+                break;
+            case 'name':
+                $result='clients.name';
+                break;
+            
+            default:
+               $result='';
+                break;
+
+        }
+        return $result;
+    }
     
     public function index(Request $request)
     {
@@ -24,12 +43,12 @@ class ClientsController extends Controller
         $id_menu=4;
         $menu = menu($user,$id_menu);
         if($menu['validate']){    
-            $color = ClientColorModel::all();      
+                
             $search = trim($request->dato);
-
+            // dd($request);
             if(strlen($request->type) > 0 &&  strlen($search) > 0){
-                $data2 = ClientModel::whereNotIn('status',[0])->where($request->type,'LIKE','%'.$search.'%')->paginate(10);
-            } else{
+                $type= ClientsController::search_clients($request->type);
+
                 $data2 = ClientModel::select('clients.id as id', 
                                              'clients.name as name',
                                              'clients.description as description',
@@ -41,11 +60,32 @@ class ClientsController extends Controller
                                              )
                                         ->join('break_rules as brk', 'brk.id_client', '=', 'clients.id')
                                         ->join('client_color as clc', 'clc.id', '=', 'clients.color')
-                                        ->where('clients.status', 1)
-                                        ->paginate(8);
+                                        ->whereNotIn('clients.status',[0])
+                                        ->orderBy('clients.name')
+                                        ->where($type,'LIKE','%'.$search.'%')->paginate(5);
+                                  
+                                       
+                // dd($data2);                        
+            } 
+            else{
+                $data2 = ClientModel::select('clients.id as id', 
+                                             'clients.name as name',
+                                             'clients.description as description',
+                                             'clients.color as id_color',
+                                             'clients.status as status',
+                                             'brk.interval as interval',
+                                             'brk.duration as duration',
+                                             'clc.hex as color'
+                                             )
+                                        ->join('break_rules as brk', 'brk.id_client', '=', 'clients.id')
+                                        ->join('client_color as clc', 'clc.id', '=', 'clients.color')
+                                        ->whereNotIn('clients.status', [0])
+                                        ->orderBy('clients.name')
+                                        ->paginate(5);
             } 
            
             $data=$data2;
+            $color = ClientColorModel::all(); 
            
             if ($request->ajax()) {
                 return view('clients.table', ["data"=>$data]);
@@ -79,6 +119,7 @@ class ClientsController extends Controller
                                     )
                             ->join('break_rules as brk', 'brk.id_client', '=', 'clients.id')
                             ->join('client_color as clc', 'clc.id', '=', 'clients.color')
+                            ->orderBy('clients.name')
                             ->where('clients.id', $client_id)->first();
         // ClientModel::whereNotIn('status',[0])->where('id', $client_id)->first();
         return $data;
@@ -105,7 +146,8 @@ class ClientsController extends Controller
 
         ]);
          $result = $this->getResult($id_client);
-        return response()->json(['client' => $result, 'flag' => 1]);
+         $name = $clients->name;
+        return response()->json(['client' => $result, 'flag' => 1, 'client_success' =>"The client $name has been saved successfully"]);
 
     }
 
@@ -123,6 +165,7 @@ class ClientsController extends Controller
                               ->join('client_color as clc', 'clc.id', '=', 'clt.color')
                               ->where('clt.status', 1)
                               ->where('break_rules.id_client', $client_id)
+                              ->orderBy('clt.name')
                               ->first();
 
 
@@ -148,9 +191,9 @@ class ClientsController extends Controller
         $break->interval = $request['interval'];
         $break->duration = $request['duration'];
         $break->save();
-
+        $name = $client->name;
         $result = $this->getResult($client->id);
-        return response()->json(['client' => $result, 'flag' => 1]);
+        return response()->json(['client' => $result, 'flag' => 1, 'client_update' => "The client $name has been updated successfully"]);
     }
 
     public function destroy($client_id)
@@ -188,9 +231,10 @@ class ClientsController extends Controller
             $client = ClientModel::find($client_id);
             $client->status = 0;
             $client->save();
-      
+
             $result = $this->getResult($client_id);
-        return response()->json(['client'=>$result, 'flag' => 1 ]);
+            $name = $client->name;
+        return response()->json(['client'=>$result, 'flag' => 1, 'client_deleted' => "The cliente $name has been deleted" ]);
     } 
 
      //Functions for Documents
@@ -220,7 +264,7 @@ class ClientsController extends Controller
 
     public function storeDocuments(Request $request, $id){
         // dd($id);
-
+        $count = count($request->file('document'));
        $names = ClientsController::documents($request, "clients");
        foreach($names as $name){
         // dd($name);
@@ -233,7 +277,7 @@ class ClientsController extends Controller
 
        }
     
-       return response()->json(["doc_success" => "Data inserted correctly", "flag"=>3]);
+       return response()->json(["doc_success" => "$count files inserted correctly", "flag"=>3]);
 
     }
 
@@ -275,9 +319,9 @@ class ClientsController extends Controller
         'email'=>$data['email_contact'],
         ]);
         $id = $clients->id;
-       
+        $name = $clients->name;
         $result = $this->getResultContacts($id);
-        return response()->json(["contact" => $result, "flag" => 2]);
+        return response()->json(["contact" => $result, "flag" => 2, 'contact_success' => "The contact $name has been saved successfully"]);
     }
 
     public function getResultContacts($id){
@@ -318,8 +362,10 @@ class ClientsController extends Controller
         $contact->email = $request['email_contact'];
         $contact->save();
         $id = $contact->id;
+        
         $result = $this->getResultContacts($contact->id);
-        return response()->json(['contact'=>$result, 'flag' => 2]);
+        $name = $contact->name;
+        return response()->json(['contact'=>$result, 'flag' => 2, 'contact_updated' => "The contact $name has been updated successfully"]);
     }
 
     public function destroyContacts($id)
@@ -345,7 +391,8 @@ class ClientsController extends Controller
             $contact->status = 0;
             $contact->save();
             $result = $this->getResultContacts($id);
-        return response()->json(['contact'=>$result, 'flag'=> 2]);
+            $name = $contact->name;
+        return response()->json(['contact'=>$result, 'flag'=> 2, 'contact_deleted' => "The contact $name has been deleted"]);
     } 
 
 
