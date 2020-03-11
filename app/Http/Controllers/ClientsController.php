@@ -13,6 +13,7 @@ use App\ClientContactsModel;
 use App\DocumentModel;
 use App\BreakRulesModel;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 
 class ClientsController extends Controller
 {
@@ -60,6 +61,7 @@ class ClientsController extends Controller
                                         ->join('break_rules as brk', 'brk.id_client', '=', 'clients.id')
                                         ->join('client_color as clc', 'clc.id', '=', 'clients.color')
                                         ->whereNotIn('clients.status',[0])
+                                        ->orderBy('clients.name')
                                         ->where($type,'LIKE','%'.$search.'%')->paginate(5);
                                   
                                        
@@ -78,6 +80,7 @@ class ClientsController extends Controller
                                         ->join('break_rules as brk', 'brk.id_client', '=', 'clients.id')
                                         ->join('client_color as clc', 'clc.id', '=', 'clients.color')
                                         ->whereNotIn('clients.status', [0])
+                                        ->orderBy('clients.name')
                                         ->paginate(5);
             } 
            
@@ -116,6 +119,7 @@ class ClientsController extends Controller
                                     )
                             ->join('break_rules as brk', 'brk.id_client', '=', 'clients.id')
                             ->join('client_color as clc', 'clc.id', '=', 'clients.color')
+                            ->orderBy('clients.name')
                             ->where('clients.id', $client_id)->first();
         // ClientModel::whereNotIn('status',[0])->where('id', $client_id)->first();
         return $data;
@@ -161,6 +165,7 @@ class ClientsController extends Controller
                               ->join('client_color as clc', 'clc.id', '=', 'clt.color')
                               ->where('clt.status', 1)
                               ->where('break_rules.id_client', $client_id)
+                              ->orderBy('clt.name')
                               ->first();
 
 

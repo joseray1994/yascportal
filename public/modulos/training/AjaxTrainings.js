@@ -83,6 +83,31 @@ $(document).ready(function(){
         $('#end_saturday').trigger('change');
     });
 
+    //function to calculate the date with the number of weeks for training
+    $('.n_weeks_training').change(function(){
+        var numWeek = $('#numWeek').val();
+        var start_training=$('#start_training').val();
+        var end_training=$('#end_training').val();
+        
+        training.get_weeks(numWeek,start_training,end_training);
+    });
+
+    $('#numWeek').keyup(function(){
+        var numWeek = $('#numWeek').val();
+        var start_training=$('#start_training').val();
+        var end_training=$('#end_training').val();
+        if (numWeek>0) {
+            training.get_weeks(numWeek,start_training,end_training);
+            
+        }
+        $('#flag').val(0);
+
+
+
+
+    });
+
+
     //display modal form for product EDIT ***************************
     $(document).on('click','.open_modal',function(){
         $('#traineeNewForm').trigger("reset");
@@ -108,7 +133,7 @@ $(document).ready(function(){
         var training_id = $('#training_id').val();;
         var my_url = url;
         if (state == "update"){
-            type = "POST"; //for updating existing resource
+            type = "PUT"; //for updating existing resource
             my_url += '/' + training_id;
         }
         
@@ -223,6 +248,7 @@ $(document).ready(function(){
     });
     
 });
+
 const training ={
     button: function(dato){
            var buttons='';
@@ -265,6 +291,46 @@ const training ={
             location.hash = page;
         }).fail(function(jqXHR, ajaxOptions, thrownError){
               alert('No response from server');
+        });
+    },
+    get_weeks:function (numWeek,start_training,end_training) {
+        var url = $('#url').val();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        })
+        $.ajax({
+            type:"POST",
+            url:url+'/generate',
+            data:{numWeek:numWeek, start_training:start_training, end_training:end_training},
+            dataType:"json",
+            success: function(data){
+                console.log(data);
+
+                switch (data.num['flag']) {
+                    case 1:
+                        $('#numWeek').val(data.num['num']);
+                        break;
+                    case 2:
+                        $('#end_training').val(data.end_training);
+                        $('#end_training').trigger('change');
+                        break;
+                
+                    default:
+                        break;
+                }
+
+
+                // $('#flag').val(data.flag);
+
+                // $('#end_training').val(data.end_training);
+                // $('#end_training').trigger('change');
+                // $('#numWeek').val(data.num);
+            },
+            error: function(err){
+                console.log(err);
+            }
         });
     }
 }

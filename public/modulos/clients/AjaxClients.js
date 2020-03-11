@@ -1,6 +1,6 @@
 
 $(document).ready(function(){
-     
+    clearload();
     
     var nameDeli='<a href="/clients">Clients</i></a>';
     $('.nameDeli').html(nameDeli);
