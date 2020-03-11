@@ -11,6 +11,18 @@ $(document).ready(function(){
   //get base URL *********************
   var url = $('#url').val();
 
+  
+  $(window).on('hashchange', function() {
+    if (window.location.hash) {
+        var page = window.location.hash.replace('#', '');
+        if (page == Number.NaN || page <= 0) {
+            return false;
+        }else{
+            getData(page);
+        }
+    }
+});
+
 
   //display modal form for creating new product *********************
   $('#btn_add').click(function(){

@@ -30,8 +30,8 @@ class CandidateController extends Controller
                     ->join('vacancies as vac', 'vac.id', '=', 'candidates.id_vacancy')
                     ->where('candidates.id_vacancy',$id)
                     ->whereNotIn('candidates.status',[0])
-                    ->where($request->type,'LIKE','%'.$search.'%')
-                    ->paginate(5);
+                    ->where($request->type,'LIKE','%'.$search.'%');
+                
 
                   
                 } else{
@@ -41,11 +41,11 @@ class CandidateController extends Controller
                     'candidates.typing_test as typing_test', 'candidates.status as status')
                     ->join('vacancies as vac', 'vac.id', '=', 'candidates.id_vacancy')
                     ->where('candidates.id_vacancy',$id)
-                    ->whereNotIn('candidates.status',[0])
-                    ->paginate(5);
+                    ->whereNotIn('candidates.status',[0]);
+                  
                     
                 } 
-                $data=$data2;
+                $data=$data2->paginate(10);
                 if ($request->ajax()) {
                     return view('candidates.table', compact('data'));
                 }
