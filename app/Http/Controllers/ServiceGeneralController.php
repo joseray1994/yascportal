@@ -209,27 +209,50 @@ class ServiceGeneralController extends Controller
         return response()->json(["document" => $document, "flag" => 1]);
     }
 
+    public function validateDoc($request){
+        
+        $this->validate(request(), [
+            'document' => 'required',
+            'document.*' => 'required|file|max:5000|mimes:pdf,docx,doc,zip,jpg,png',
+        ]);
+    }
+
     public function storeDocument(Request $request, $id, $mat){
         
         $names = ServiceGeneralController::documents($request, $mat);
+        $arrayId = array();
+        $arrayDocuments = array();
         foreach($names as $name){
          // dd($name);
-         $document = DocumentModel::create([
-             'id_dad'=> $id,
-             'mat' => $mat,
-             'name'=> $name['name'],
-             'path'=> $name['path']
-             ]);
- 
+            $document = DocumentModel::create([
+                'id_dad'=> $id,
+                'mat' => $mat,
+                'name'=> $name['name'],
+                'path'=> $name['path']
+            ]);
+            
+            array_push($arrayId, $document->id);
         }
+
+        foreach($arrayId as $ids){
+            $doc = ServiceGeneralController::getRowDocs($ids);
+            array_push($arrayDocuments, $doc);
+        }
+        // dd($arrayDocuments);
         $msg= 'Data inserted correctly';
-        $data=['No'=>3,'msg'=>$msg, 'id'=> $id];
+        $data=['No'=>3,'msg'=>$msg, 'id'=> $id, 'documents'=>$arrayDocuments];
         return response()->json($data);
  
     }
 
+    public function getRowDocs($id){
+        $document = DocumentModel::find($id);
+        return $document;
+    }
     //Functions for Documents
     public function documents($request, $folder){
+        // dd($request->file('document'));
+        ServiceGeneralController::validateDoc($request);
         if ($request->file('document')) {
             $count = count($request->file('document'));
             $documentName = '';
