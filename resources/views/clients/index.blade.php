@@ -9,32 +9,38 @@
                                 <li><a href="javascript:void(0);" class="btn btn-success" disabled id="btn_add" >New Client <i class="fa fa-plus"></i></a></li>
                             </ul>
                         </div>
-                        @include('clients.form')
-                        @include('clients.form_contacts')
+                        
                         <!--Container de tabla clientes-->    
                         <div class="body tableClient"> 
-                            <div class="input-group mb-3 input-group-sm">
-                                <div class="input-group-prepend">
-                                    <select class="form-control" id="typesearch">
-                                        <option value="name">Name</option>
-    
-
-                                    </select>
+                        <div class="input-group mb-3 input-group-sm">
+                                    <div class="input-group-prepend">
+                                        <select class="form-control" id="typesearch">
+                                            <option value="name">Name</option>
+                                        </select>
+                                    </div>
+                                    <input type="text" class="form-control" id="search">
+                                    <button type="button" class="btn btn-primary search-query">Search</button>
                                 </div>
-                                <input type="text" class="form-control" id="search" autocomplete="off">
-                                <button type="button" class="btn btn-primary search-query">Search</button>
-                            </div>
+                                <div class="table-responsive">
+                                 @include('clients.table')
+                                </div>
+                                <div class="loading-table col-sm-12 text-center">
+                                        <div class="spinner-grow text-success"></div>
+                                        <div class="spinner-grow text-info"></div>
+                                        <div class="spinner-grow text-warning"></div>
+                                        <div class="spinner-grow text-danger"></div>
+                                </div>
 
-                            <div class="table-responsive">
-                            @include('clients.table')
+
                             </div>
-                              
-                            </div>
+                            @include('clients.form')
+                              @include('clients.form_contacts')
                         </div>
                     </div>
                 </div>
 </div>
 @include('clients.documents')
+
 
              <!-- Passing BASE URL to AJAX -->
         <input id="url" type="hidden" value="{{ \Request::url() }}">

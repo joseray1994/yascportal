@@ -1,6 +1,6 @@
 
 $(document).ready(function(){
-     
+    clearload();
     
     var nameDeli='<a href="/clients">Clients</i></a>';
     $('.nameDeli').html(nameDeli);
@@ -246,11 +246,10 @@ $(document).ready(function(){
       
         // var formData = $("#formOperators").serialize();
         var id = $(this).val();
-        var type = "POST"; //for creating new resource
         var my_url = url + '/download/' + id;
        
-        actions.edit_create(type,my_url);
-    
+        actions.show(my_url);
+        window.location.replace(my_url);
        
     });
 
@@ -320,8 +319,8 @@ $(document).ready(function(){
             }
         })
         swal({
-            title: "Are you sure you wish to delete this option?",
-            text: "All records with this option will be modified",
+            title: "Are you sure you wish to delete this client?",
+            text: "The client will be deleted",
             type: "warning",
             showCancelButton: true,
             confirmButtonClass: "btn btn-danger",
@@ -410,8 +409,8 @@ $(document).on('click','.off-type-contacts',function(){
         }
     })
     swal({
-        title: "Are you sure you wish to delete this option?",
-        text: "All records with this option will be modified",
+        title: "Are you sure you wish to delete this contact?",
+        text: "The contact will be deleted",
         type: "warning",
         showCancelButton: true,
         confirmButtonClass: "btn btn-danger",
@@ -436,17 +435,16 @@ const clients ={
            var buttons='';
             if(dato.status== 1){
               
-               buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary btn-edit" data-toggle="tooltip" title="Edit" value="'+dato.id+'"> <i class="fa fa-edit"></i></li></button>';
-               buttons += '	<button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-type" data-toggle="tooltip" title="Deactivated" data-type="confirm" value="'+dato.id+'" ><i class="fa fa-window-close"></i></button>';
-               buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary btn_add_contacts" data-toggle="tooltip" title="Contacts" value="'+dato.id+'"> <i class="fa fa-users"></i> </button>';
-               buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary open-documents" data-toggle="tooltip" title="Documents" value="'+dato.id+'"> <i class="fa fa-folder-open"></i> </button>';
-          
+               buttons += ` <button type="button" class="btn btn-sm btn-outline-secondary btn-edit" data-toggle="tooltip" title="Edit"  value="${dato.id}"> <i class="fa fa-edit"></i></li></button>
+                        	<button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-type" data-toggle="tooltip" title="Deactivated" data-type="confirm"  value="${dato.id}" ><i class="fa fa-window-close"></i></button>
+                             <button type="button" class="btn btn-sm btn-outline-secondary btn_add_contacts" data-toggle="tooltip" title="Contacts"  value="${dato.id}"> <i class="fa fa-users"></i> </button>
+                             <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument(${dato.id})" data-toggle="tooltip" title="Documents" value="${dato.id}"> <i class="fa fa-folder-open"></i> </button>`;
            }else if(dato.status == 2){
              
-               buttons += ' <button type="button" class="btn btn-sm btn-outline-success off-type" data-toggle="tooltip" title="Activated" data-type="confirm" value="'+dato.id+'" > <i class="fa fa-check-square-o"></i></button>'
-               buttons += ' <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert deleteClient" data-toggle="tooltip" title="Delete" data-type="confirm" value="'+dato.id+'"> <i class="fa fa-trash-o"></i> </button>';
-               buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary btn_add_contacts" data-toggle="tooltip" title="Contacts" value="'+dato.id+'"> <i class="fa fa-users"></i> </button>';
-               buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary open-documents" data-toggle="tooltip" title="Documents" value="'+dato.id+'"> <i class="fa fa-folder-open"></i> </button>';
+               buttons += ` <button type="button" class="btn btn-sm btn-outline-success off-type" data-toggle="tooltip" title="Activated" data-type="confirm"  value="${dato.id}" > <i class="fa fa-check-square-o"></i></button>
+                             <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert deleteClient" data-toggle="tooltip" title="Delete" data-type="confirm"  value="${dato.id}"> <i class="fa fa-trash-o"></i> </button>
+                             <button type="button" class="btn btn-sm btn-outline-secondary btn_add_contacts" data-toggle="tooltip" title="Contacts"  value="${dato.id}"> <i class="fa fa-users"></i> </button>
+                             <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument(${dato.id})" data-toggle="tooltip" title="Documents" value="${dato.id}"> <i class="fa fa-folder-open"></i> </button>`;
            }
            return buttons;
     },

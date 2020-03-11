@@ -13,6 +13,8 @@ use App\ClientContactsModel;
 use App\DocumentModel;
 use App\BreakRulesModel;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class ClientsController extends Controller
 {
@@ -60,6 +62,7 @@ class ClientsController extends Controller
                                         ->join('break_rules as brk', 'brk.id_client', '=', 'clients.id')
                                         ->join('client_color as clc', 'clc.id', '=', 'clients.color')
                                         ->whereNotIn('clients.status',[0])
+                                        ->orderBy('clients.name')
                                         ->where($type,'LIKE','%'.$search.'%')->paginate(5);
                                   
                                        
@@ -78,6 +81,7 @@ class ClientsController extends Controller
                                         ->join('break_rules as brk', 'brk.id_client', '=', 'clients.id')
                                         ->join('client_color as clc', 'clc.id', '=', 'clients.color')
                                         ->whereNotIn('clients.status', [0])
+                                        ->orderBy('clients.name')
                                         ->paginate(5);
             } 
            
@@ -116,6 +120,7 @@ class ClientsController extends Controller
                                     )
                             ->join('break_rules as brk', 'brk.id_client', '=', 'clients.id')
                             ->join('client_color as clc', 'clc.id', '=', 'clients.color')
+                            ->orderBy('clients.name')
                             ->where('clients.id', $client_id)->first();
         // ClientModel::whereNotIn('status',[0])->where('id', $client_id)->first();
         return $data;
@@ -161,6 +166,7 @@ class ClientsController extends Controller
                               ->join('client_color as clc', 'clc.id', '=', 'clt.color')
                               ->where('clt.status', 1)
                               ->where('break_rules.id_client', $client_id)
+                              ->orderBy('clt.name')
                               ->first();
 
 
@@ -242,8 +248,8 @@ class ClientsController extends Controller
             for($i=0; $i<$count; $i++){
               
                 $documentName = $document[$i]->getClientOriginalName();
-                $document[$i]->move(public_path().'/documents/'.$folder.'/',$documentName);
-                $path = '/documents/'.$folder.'/'.$documentName;
+                $document[$i]->move(public_path().'/documents'.'/',$documentName);
+                $path = '/documents/'.$documentName;
                 
                 $array = [
                     'name' => $documentName,
@@ -297,9 +303,11 @@ class ClientsController extends Controller
     public function download($id) {
         // dd($id);
         $name = DocumentModel::select('name')->where('id', $id)->first();
-        $file_path = public_path('documents'). '\clients/' . $name->name;
+        // dd(public_path());
+        $file = public_path('documents'). '/' . $name->name;
         // dd($file_path);
-        return response()->download($file_path);
+        return response()->download($file);
+        
       }
 
     //Functions for contacts

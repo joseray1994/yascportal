@@ -102,20 +102,33 @@
                   </div>
                   <div class="col-xl-2 col-xs-12 col-md-2 col-sm-12 form-group">
                       <h6>End Training:</h6>
-                      <input type="date" name="end_training" id="end_training" class="form-control" title="Este campo solo admite letras" maxlength="60">
-                  </div>
+                      <input type="date" name="end_training" id="end_training" class="form-control n_weeks_training" title="Este campo solo admite letras" maxlength="60">
+                      <input type="hidden" id="flag" name="flag" value="0"> 
+
+                    </div>
                   <div class="col-xl-2 col-xs-12 col-md-2 col-sm-12">
-                      <h6>Day Off:</h6>
-                      <select class="form-control js-example-basic-single" name="id_dayOff_T[]" multiple="multiple" data-placeholder="Select Days">
-                          @foreach($days as $day)
-                              <option value="{{ $day['id'] }}" >{{$day['Eng-name']}}</option>
-                          @endforeach
-                      </select>
+                      <h6>Number of Training Weeks:</h6>
+                      <input type="text" name="numWeek" id="numWeek" class="form-control">
                  </div>
-                 <div class="col-xl-2 col-xs-12 col-md-2 col-sm-12 form-group">
-                      <h6>End Coaching (Optional):</h6>
-                      <input type="date" name="end_coaching" id="end_coaching" class="form-control">
+                 <div class="col-xl-2 col-xs-12 col-md-2 col-sm-12">
+                    <h6>Day Off:</h6>
+                    <select class="form-control js-example-basic-single" name="id_dayOff_T[]" multiple="multiple" data-placeholder="Select Days">
+                        @foreach($days as $day)
+                            <option value="{{ $day['id'] }}" >{{$day['Eng-name']}}</option>
+                        @endforeach
+                    </select>
                   </div>
+                </div>
+                <div class="col-xl-12 col-xs-12 col-md-12 col-sm-12">
+                  <div class="row">
+                    <div class="col-xl-2 col-xs-12 col-md-2 col-sm-12 form-group">
+                        <h6>End Coaching (Optional):</h6>
+                        <input type="date" name="end_coaching" id="end_coaching" class="form-control">
+                    </div>
+                    <div class="col-xl-2 col-xs-12 col-md-2 col-sm-12">
+                      <h6>Number of Coaching Weeks:</h6>
+                      <input type="number" name="n_weeks_coaching" id="n_weeks_coaching" class="form-control">
+                    </div>
                 </div>
                 <hr/>
                 <div class="col-xl-12 col-xs-12 col-md-12 col-sm-12">

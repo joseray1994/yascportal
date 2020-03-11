@@ -102,7 +102,7 @@
 						
                    		</div>
 
-						<div class="form-row">
+						<!-- <div class="form-row">
 							<div class="col-md-6 mb-3">
 								<label>Recording</label>
 								<div class="input-group">
@@ -115,14 +115,14 @@
 									<input type="file" class="form-control has-error" id="cv" name="cv" placeholder="" value="" >
 								</div> 
 							</div>
-                   		</div>
+                   		</div> -->
 
-						<div class="form-row">
+						<!-- <div class="form-row">
 							<div class="col-md-6 mb-3">
 								<label>Personality Test</label>
 								<input type="file" id="personality_test" name="personality_test"><br><br>
 							</div>
-                   		</div>
+                   		</div> -->
 						  
 					</div>
 
