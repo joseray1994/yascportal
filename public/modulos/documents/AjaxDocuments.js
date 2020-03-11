@@ -47,6 +47,19 @@ $(document).ready(function(){
             }
         });
     });
+
+    //Download
+    $(document).on('click','.download',function(){
+        
+        var id = $(this).val();
+        var mat = $("#mat").val();
+        var my_url = baseUrl + '/download/' + id + '/' + mat;
+       
+        actions.show(my_url);
+        window.location.replace(my_url);
+       
+    });
+
 });
 
 
