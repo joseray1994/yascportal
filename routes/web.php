@@ -82,7 +82,7 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::delete('/clients/delete/{id}', 'ClientsController@delete');
     Route::post('/clients/document/{id}', 'ClientsController@storeDocuments');
     Route::get('/clients/document/show/{id}', 'ClientsController@showDocuments');
-    Route::post('/clients/download/{id}', 'ClientsController@download');
+    Route::get('/clients/download/{id}', 'ClientsController@download');
     Route::delete('/clients/documents/delete/{id}', 'ClientsController@deleteDocuments');
 
 
