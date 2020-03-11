@@ -106,15 +106,13 @@ class ScheduleWeeklyController extends Controller
 
         return $data2;
     }
-
     public function validateType($request,$weekly_id =""){
         
             $this->validate(request(), [
                 'name' => 'required|max:30',
             ]); 
-        }
-    
-
+    }
+  
     public function ValidateExtraType($request,$weekly_id =""){
         $ExtraTypeValidation=[]; 
         $n ="";
@@ -153,6 +151,7 @@ class ScheduleWeeklyController extends Controller
             $now->addHours($request->durationH); 
             $now->addMinutes($request->durationM);  
 
+           
         $extra=ScheduleDetailModel::Create([
                     "id_schedule"=>$weekly->id_schedule,
                     "id_operator"=>$weekly->id_operator,
