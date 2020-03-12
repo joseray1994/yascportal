@@ -41,7 +41,7 @@ class VacancyController extends Controller
     public function validateVacancy($request,$vacancy_id){
         
         $this->validate(request(), [
-            'name' => 'required|max:60',
+            'name' => 'unique:vacancies|required|max:60',
         ]); 
     }
 
@@ -93,13 +93,13 @@ class VacancyController extends Controller
 
     public function update(Request $request, $vacancy_id)
     {
-        // $answer= VacancyController::ValidateUpdateVacancy($request, $vacancy_id);
+        $answer= VacancyController::ValidateUpdateVacancy($request, $vacancy_id);
       
-        // if($answer){
+        if($answer){
 
-        //       return response()->json($answer);
+              return response()->json($answer);
 
-        //   }else{
+          }else{
             VacancyController::validateVacancy($request,$vacancy_id);
             $vacancy = VacancyModel::find($vacancy_id);
             $vacancy->name = $request->name;
@@ -107,7 +107,7 @@ class VacancyController extends Controller
             $vacancy->status=1;
             $vacancy->save();
             return response()->json($vacancy);
-        //   }
+          }
     }
 
    
