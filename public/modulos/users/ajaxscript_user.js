@@ -7,6 +7,16 @@ $(document).ready(function(){
     // $('.selectpick').selectpicker({
     //     liveSearchPlaceholder: 'Search Client'
     // });
+    $(window).on('hashchange', function() {
+        if (window.location.hash) {
+            var page = window.location.hash.replace('#', '');
+            if (page == Number.NaN || page <= 0) {
+                return false;
+            }else{
+                get_data(page);
+            }
+        }
+    });
     var radioState;
     $('#sidebar2').addClass('active'); 
     $('.selectpick').selectpicker('refresh');
@@ -378,12 +388,15 @@ $(document).ready(function(){
         if(dato.id_status== 1){
         buttons += ` <button type="button" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="${dato.id}"  ><i class="fa fa-edit"></i></button>
                         <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert delete-op" data-toggle="tooltip" title="Desactivated" data-type="confirm" value="${dato.id}"><i class="fa fa-window-close"></i></button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument('${dato.id}')" data-toggle="tooltip" title="Documents" value="${dato.id}"><i class="fa  fa-folder-open"></i></button>
         ` ;
 
         }else if(dato.id_status == 2){
         buttons  += `<button type="button" class="btn btn-sm btn-outline-success delete-op" title="Activated" data-toggle="tooltip" data-type="confirm" value="${dato.id}" ><i class="fa fa-check-square-o"></i></button>
-                        <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert destroy-op" data-toggle="tooltip" title="Delete" data-type="confirm" value="${dato.id}"><i class="fa fa-trash-o"></i></button>`
-        }
+                        <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert destroy-op" data-toggle="tooltip" title="Delete" data-type="confirm" value="${dato.id}"><i class="fa fa-trash-o"></i></button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument('${dato.id}')" data-toggle="tooltip" title="Documents" value="${dato.id}"><i class="fa  fa-folder-open"></i></button>`
+                    
+                    }
         buttons+='</div>';
         return buttons;
     }
@@ -396,11 +409,13 @@ const types ={
             if(dato.id_status== 1){
                 buttons += ` <button type="button" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="${dato.id}"  ><i class="fa fa-edit"></i></button>
                             <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert delete-op" data-toggle="tooltip" title="Desactivated" data-type="confirm" value="${dato.id}"><i class="fa fa-window-close"></i></button>
-               ` ;
+                            <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument('${dato.id}')" data-toggle="tooltip" title="Documents" value="${dato.id}"><i class="fa  fa-folder-open"></i></button>
+                           ` ;
           
            }else if(dato.id_status == 2){
             buttons  += `<button type="button" class="btn btn-sm btn-outline-success delete-op" title="Activated" data-toggle="tooltip" data-type="confirm" value="${dato.id}" ><i class="fa fa-check-square-o"></i></button>
-            <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert destroy-op" data-toggle="tooltip" title="Delete" data-type="confirm" value="${dato.id}"><i class="fa fa-trash-o"></i></button>`;
+            <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert destroy-op" data-toggle="tooltip" title="Delete" data-type="confirm" value="${dato.id}"><i class="fa fa-trash-o"></i></button>
+            <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument('${dato.id}')" data-toggle="tooltip" title="Documents" value="${dato.id}"><i class="fa  fa-folder-open"></i></button>`;
            }
            buttons+='</div>';
            return buttons;
@@ -421,139 +436,241 @@ const types ={
 const success = { 
     new_update: function (data,state){
             console.log(data);
-          
+            $('#btn-save-documents').attr('disabled', false);
+            $("#no-data-doc").hide();
             var dato = data;
-            if (state == "add")
-            { //if user added a new record
-                swal({
-                    title: dato.user_info.name,
-                    text: "Usuario añadido",
-                    type: "success",
-                    button: "OK",
-                });
-            
-                var user = `<tr id="user_id${dato.id}">
-                                <td>${dato.id}</td>
-                                <td>${dato.user_info.name}</td>
-                                <td>${dato.user_info.last_name}</td>
-                                <td>${dato.email}</td>
-                                <td>${dato.user_info.phone}</td>
-                                <td>${dato.user_info.entrance_date}</td>
-                                <td>${dato.user_info.birthdate}</td>
-                                <td class="hidden-xs">${types.status(dato)}</td>
-                                <td>${types.button(dato)}</td>
-                            </tr>`;
-        
-    
-                $('.formulario').hide();
-                $('.tableUser').show(); 
-                $("#user-list").append(user);
-                $('#btn_add').show();
-                $("#user_id"+dato.id).css("background-color", "#c3e6cb");    
-
-            
-            }
-            else
-            { //if user updated an existing record
-                swal({
-                    title: dato.user_info.name,
-                    text: "Usuario modificado",
-                    type: "success",
-                    button: "OK",
+            $.notifyClose();
+            var dato = data;
+            switch(dato.No) {
+                case 2:
+                    $.notify({
+                        // options
+                        title: "Error!",
+                        message:data.msg,
+                    },{
+                        // settings
+                        type: 'danger'
+                    });
+                break;
+                case 3:
+                $.notify({
+                    // options
+                    title: "Saved!",
+                    message:data.msg,
+                },{
+                    // settings
+                    type: 'success'
                 });
 
-                var user = `<tr id="user_id${dato.id}">
-                                <td>${dato.id}</td>
-                                <td>${dato.user_info.name}</td>
-                                <td>${dato.user_info.last_name}</td>
-                                <td>${dato.email}</td>
-                                <td>${dato.user_info.phone}</td>
-                                <td>${dato.user_info.entrance_date}</td>
-                                <td>${dato.user_info.birthdate}</td>
-                                <td class="hidden-xs">${types.status(dato)}</td>
-                                <td>${types.button(dato)}</td>
-                            </tr>`;
+                data.documents.forEach(function(data){
+
+                    var docs = `
+                        <tr id="document_id${data.id}">
+                            <td>${data.name}</td>
+                            <td>${documents.button(data)}</td>
+                        </tr>
+                    `;
+                    $('#document-list').append(docs);
+                    $("#document_id"+data.id).css("background-color", "#c3e6cb");    
+                });
+                $("#user_id"+dato.id).css("background-color", "#ffdf7e");  
+                var drEvent = $('#dropify-event').dropify();
+                drEvent = drEvent.data('dropify');
+                drEvent.resetPreview();
+                drEvent.clearElement();
+                drEvent.settings.defaultFile = "";
+                drEvent.destroy();
+                drEvent.init();
+
+                $('#formDocuments').trigger('reset');
+
+                $(".dropify-preview").css('display', 'none');
+            break;
+            default:
+                if (state == "add")
+                { //if user added a new record
+                    swal({
+                        title: dato.user_info.name,
+                        text: "Usuario añadido",
+                        type: "success",
+                        button: "OK",
+                    });
                 
-                $('.formulario').hide();
-                $('.tableUser').show(); 
-                $("#user_id"+dato.id).replaceWith(user);
-                $('#btn_add').show();
-                $("#user_id"+dato.id).css("background-color", "#ffdf7e"); 
+                    var user = `<tr id="user_id${dato.id}">
+                                    <td>${dato.id}</td>
+                                    <td>${dato.user_info.name}</td>
+                                    <td>${dato.user_info.last_name}</td>
+                                    <td>${dato.email}</td>
+                                    <td>${dato.user_info.phone}</td>
+                                    <td>${dato.user_info.entrance_date}</td>
+                                    <td>${dato.user_info.birthdate}</td>
+                                    <td class="hidden-xs">${types.status(dato)}</td>
+                                    <td>${types.button(dato)}</td>
+                                </tr>`;
+            
+        
+                    $('.formulario').hide();
+                    $('.tableUser').show(); 
+                    $("#user-list").append(user);
+                    $('#btn_add').show();
+                    $("#user_id"+dato.id).css("background-color", "#c3e6cb");    
+
+                
+                }
+                else
+                { //if user updated an existing record
+                    swal({
+                        title: dato.user_info.name,
+                        text: "Usuario modificado",
+                        type: "success",
+                        button: "OK",
+                    });
+
+                    var user = `<tr id="user_id${dato.id}">
+                                    <td>${dato.id}</td>
+                                    <td>${dato.user_info.name}</td>
+                                    <td>${dato.user_info.last_name}</td>
+                                    <td>${dato.email}</td>
+                                    <td>${dato.user_info.phone}</td>
+                                    <td>${dato.user_info.entrance_date}</td>
+                                    <td>${dato.user_info.birthdate}</td>
+                                    <td class="hidden-xs">${types.status(dato)}</td>
+                                    <td>${types.button(dato)}</td>
+                                </tr>`;
+                    
+                    $('.formulario').hide();
+                    $('.tableUser').show(); 
+                    $("#user_id"+dato.id).replaceWith(user);
+                    $('#btn_add').show();
+                    $("#user_id"+dato.id).css("background-color", "#ffdf7e"); 
+                }
+                $('#userForm').trigger("reset");
+                $('#myModal').modal('hide');
+
+                break;
+        
+
             }
-            $('#userForm').trigger("reset");
-            $('#myModal').modal('hide');
+            
                 
         },
     show: function(data){
+        switch (data.flag) {
+            case 1:
+                $('#document-list').html("");
+                $(".dropify-preview").css('display', 'none');
+                       
+                if(data.document.length === 0){
+                    $("#no-data-doc").show();
+                }else{
+                    $("#no-data-doc").hide();
+
+                    var document = "";
+                    data.document.forEach(function(data){
+                        document += `
+                       
+                            <tr id="document_id${data.id}">
+                                <td>${data.name}</td>
+                                <td>${documents.button(data)}</td>
+                            </tr>
+                            `;
+                    })
+                    $('#document-list').html(document);
+                }
+            break;
+        
+            default:
+                if(data.id_type_user == 2) $(".clients").show();
+                $.each(data.clients, function (key, val) {
+                    $('.selectpick option[value=' + val.id_client + ']').attr('selected', true);
+                });
+                $('.selectpick').selectpicker('refresh'); 
+                var rutaImage = baseUrl + '/images/users/' + data.user_info.profile_picture;
+                  
+                var drEvent = $('#dropify-event').dropify(
+                    {
+                        defaultFile: rutaImage
+                    });
+                    drEvent = drEvent.data('dropify');
+                    drEvent.resetPreview();
+                    drEvent.clearElement();
+                    drEvent.settings.defaultFile = rutaImage;
+                    drEvent.destroy();
+                    drEvent.init();
+                $('#name').val(data.user_info.name);
+                $('#last_name').val(data.user_info.last_name);
+                $('#address').val(data.user_info.address);
+                $('#phone').val(data.user_info.phone);
+                $('#emergency_contact_name').val(data.user_info.emergency_contact_name);
+                $('#emergency_contact_phone').val(data.user_info.emergency_contact_phone);
+                $('#id_type_user').val(data.id_type_user);
+                $('#notes').val(data.user_info.notes);
+                $('#entrance_date').val(data.user_info.entrance_date);
+                $('#birthdate').val(data.user_info.birthdate);
+                $('#gender').val(data.user_info.gender);
+                $('#description').val(data.user_info.description);
+                $('#email').val(data.email);
+                $('#btn-save').val("update");
+                $('#myModal').modal('show');
+                break;
+        }
+
         console.log(data)
-        if(data.id_type_user == 2) $(".clients").show();
-        $.each(data.clients, function (key, val) {
-            $('.selectpick option[value=' + val.id_client + ']').attr('selected', true);
-        });
-        $('.selectpick').selectpicker('refresh'); 
-        var rutaImage = baseUrl + '/images/users/' + data.user_info.profile_picture;
-          
-        var drEvent = $('#dropify-event').dropify(
-            {
-                defaultFile: rutaImage
-            });
-            drEvent = drEvent.data('dropify');
-            drEvent.resetPreview();
-            drEvent.clearElement();
-            drEvent.settings.defaultFile = rutaImage;
-            drEvent.destroy();
-            drEvent.init();
-        $('#name').val(data.user_info.name);
-        $('#last_name').val(data.user_info.last_name);
-        $('#address').val(data.user_info.address);
-        $('#phone').val(data.user_info.phone);
-        $('#emergency_contact_name').val(data.user_info.emergency_contact_name);
-        $('#emergency_contact_phone').val(data.user_info.emergency_contact_phone);
-        $('#id_type_user').val(data.id_type_user);
-        $('#notes').val(data.user_info.notes);
-        $('#entrance_date').val(data.user_info.entrance_date);
-        $('#birthdate').val(data.user_info.birthdate);
-        $('#gender').val(data.user_info.gender);
-        $('#description').val(data.user_info.description);
-        $('#email').val(data.email);
-        $('#btn-save').val("update");
-        $('#myModal').modal('show');
+        
     },
     deactivated:  function(data){
         console.log(data)
         var dato = data;
-        if(dato.id_status != 0){
-
-            var user = `<tr id="user_id${dato.id}">
-            <td>${dato.id}</td>
-            <td>${dato.user_info.name}</td>
-            <td>${dato.user_info.last_name}</td>
-            <td>${dato.email}</td>
-            <td>${dato.user_info.phone}</td>
-            <td>${dato.user_info.entrance_date}</td>
-            <td>${dato.user_info.birthdate}</td>
-            <td class="hidden-xs">${types.status(dato)}</td>
-            <td>${types.button(dato)}</td>
-        </tr>`;
-          
-            $("#user_id"+dato.id).replaceWith(user);
-            if(dato.id_status == 1){
-                color ="#c3e6cb";
-            }else if(dato.id_status == 2){
-                color ="#ed969e";
-            }
-            $("#user_id"+dato.id).css("background-color", color);  
-            
-        }else if(dato.id_status == 0){
-            
-            $("#user_id"+dato.id).remove();
-            if ($('.rowType').length == 0) {
-                $('#table-row').show();
-              }
-        }
+        switch (dato.flag) {
+            case 4:
+                $.notify({
+                    // options
+                    title: "Deleted!",
+                    message:dato.data.name,
+                },{
+                    // settings
+                    type: 'danger'
+                });
+                $("#document_id"+dato.data.id).remove();
+                var numtr = $("#table-documents tr").length;
+                if(numtr ==  2){
+                    $("#no-data-doc").show();
+                }
+            break;
         
-       
-            
+            default:
+                if(dato.id_status != 0){
+
+                    var user = `<tr id="user_id${dato.id}">
+                    <td>${dato.id}</td>
+                    <td>${dato.user_info.name}</td>
+                    <td>${dato.user_info.last_name}</td>
+                    <td>${dato.email}</td>
+                    <td>${dato.user_info.phone}</td>
+                    <td>${dato.user_info.entrance_date}</td>
+                    <td>${dato.user_info.birthdate}</td>
+                    <td class="hidden-xs">${types.status(dato)}</td>
+                    <td>${types.button(dato)}</td>
+                </tr>`;
+                  
+                    $("#user_id"+dato.id).replaceWith(user);
+                    if(dato.id_status == 1){
+                        color ="#c3e6cb";
+                    }else if(dato.id_status == 2){
+                        color ="#ed969e";
+                    }
+                    $("#user_id"+dato.id).css("background-color", color);  
+                    
+                }else if(dato.id_status == 0){
+                    
+                    $("#user_id"+dato.id).remove();
+                    if ($('.rowType').length == 0) {
+                        $('#table-row').show();
+                      }
+                }
+               
+                break;
+        }      
         },
         msj: function(data){
             $.notifyClose();

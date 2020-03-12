@@ -14,6 +14,7 @@ use App\DocumentModel;
 use App\BreakRulesModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class ClientsController extends Controller
 {
@@ -62,7 +63,7 @@ class ClientsController extends Controller
                                         ->join('client_color as clc', 'clc.id', '=', 'clients.color')
                                         ->whereNotIn('clients.status',[0])
                                         ->orderBy('clients.name')
-                                        ->where($type,'LIKE','%'.$search.'%')->paginate(5);
+                                        ->where($type,'LIKE','%'.$search.'%');
                                   
                                        
                 // dd($data2);                        
@@ -80,11 +81,11 @@ class ClientsController extends Controller
                                         ->join('break_rules as brk', 'brk.id_client', '=', 'clients.id')
                                         ->join('client_color as clc', 'clc.id', '=', 'clients.color')
                                         ->whereNotIn('clients.status', [0])
-                                        ->orderBy('clients.name')
-                                        ->paginate(5);
+                                        ->orderBy('clients.name');
+                                        
             } 
            
-            $data=$data2;
+            $data=$data2->paginate(5);
             $color = ClientColorModel::all(); 
            
             if ($request->ajax()) {
@@ -147,7 +148,7 @@ class ClientsController extends Controller
         ]);
          $result = $this->getResult($id_client);
          $name = $clients->name;
-        return response()->json(['client' => $result, 'flag' => 1, 'client_success' =>"The client $name has been saved successfully"]);
+        return response()->json(['client' => $result, 'No' => 1, 'client_success' =>"The client $name has been saved successfully"]);
 
     }
 
@@ -170,7 +171,7 @@ class ClientsController extends Controller
 
 
        
-        return response()->json(["client" => $client, "flag" => 1]);
+        return response()->json(["client" => $client, "flag" => 5]);
         
     }
 
@@ -193,7 +194,7 @@ class ClientsController extends Controller
         $break->save();
         $name = $client->name;
         $result = $this->getResult($client->id);
-        return response()->json(['client' => $result, 'flag' => 1, 'client_update' => "The client $name has been updated successfully"]);
+        return response()->json(['client' => $result, 'No' => 1, 'client_update' => "The client $name has been updated successfully"]);
     }
 
     public function destroy($client_id)
@@ -247,8 +248,8 @@ class ClientsController extends Controller
             for($i=0; $i<$count; $i++){
               
                 $documentName = $document[$i]->getClientOriginalName();
-                $document[$i]->move(public_path().'/documents/'.$folder.'/',$documentName);
-                $path = '/documents/'.$folder.'/'.$documentName;
+                $document[$i]->move(public_path().'/documents'.'/',$documentName);
+                $path = '/documents/'.$documentName;
                 
                 $array = [
                     'name' => $documentName,
@@ -302,9 +303,11 @@ class ClientsController extends Controller
     public function download($id) {
         // dd($id);
         $name = DocumentModel::select('name')->where('id', $id)->first();
-        $file_path = public_path('documents'). '\clients/' . $name->name;
+        // dd(public_path());
+        $file = public_path('documents'). '/' . $name->name;
         // dd($file_path);
-        return response()->download($file_path);
+        return response()->download($file);
+        
       }
 
     //Functions for contacts
@@ -321,7 +324,7 @@ class ClientsController extends Controller
         $id = $clients->id;
         $name = $clients->name;
         $result = $this->getResultContacts($id);
-        return response()->json(["contact" => $result, "flag" => 2, 'contact_success' => "The contact $name has been saved successfully"]);
+        return response()->json(["contact" => $result, "No" => 2, 'contact_success' => "The contact $name has been saved successfully"]);
     }
 
     public function getResultContacts($id){
@@ -365,7 +368,7 @@ class ClientsController extends Controller
         
         $result = $this->getResultContacts($contact->id);
         $name = $contact->name;
-        return response()->json(['contact'=>$result, 'flag' => 2, 'contact_updated' => "The contact $name has been updated successfully"]);
+        return response()->json(['contact'=>$result, 'No' => 2, 'contact_updated' => "The contact $name has been updated successfully"]);
     }
 
     public function destroyContacts($id)

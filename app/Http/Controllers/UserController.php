@@ -26,7 +26,6 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        
         $id_menu=5;
         $menu = menu($user,$id_menu);
         $types = TypeUserModel::whereNotIn('id',[9])->get(); 
@@ -41,15 +40,13 @@ class UserController extends Controller
                     $q->where($type,'LIKE','%'.$search.'%');
                 })
                 ->with('User_info:id_user,name,last_name,phone,entrance_date,birthdate')
-                ->whereIn('id_status', [1,2])
-                ->paginate(10);
+                ->whereNotIn('id_type_user',[9])->whereIn('id_status', [1,2]);
             } else{
                 $data2 = User::select('id','email','id_status')->
                 with('User_info:id_user,name,last_name,phone,entrance_date,birthdate')
-                ->whereIn('id_status', [1,2])
-                ->paginate(10);
+                ->whereNotIn('id_type_user',[9])->whereIn('id_status', [1,2]);
             } 
-            $data=$data2;
+            $data=$data2->paginate(10);
             if ($request->ajax()) {
                 return view('users.table', ["data"=>$data]);
             }
@@ -82,6 +79,14 @@ class UserController extends Controller
         ]);
     }
 
+    public function validateNickname($nickname, $user=""){
+        $validaNick = User::where('nickname',$nickname)
+        ->whereNotIn('id', [$user])
+        ->whereIn('id_status', [1,2])
+        ->exists();
+        return $validaNick;
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -104,12 +109,13 @@ class UserController extends Controller
 
         //VALIDAR NICK NAME
         $validaNick = UserController::validateNickname($request->nickname);
-        
+
         if($validaNick){
             $msg= 'Another user already has that Nickname';
             $data=['No'=>2,'msg'=>$msg];
             return response()->json($data);
         }
+        
         try {
             DB::beginTransaction();
                 $input = $request->input();
@@ -174,6 +180,15 @@ class UserController extends Controller
     {
         // dd($request);
         $this->validateUser($request,$user->id);
+
+        //VALIDAR NICK NAME
+        $validaNick = UserController::validateNickname($request->nickname);
+
+        if($validaNick){
+            $msg= 'Another user already has that Nickname';
+            $data=['No'=>2,'msg'=>$msg];
+            return response()->json($data);
+        }
         $user->email == $request->email ? $user->email = $request->email : '';
         $user->id_type_user = $request->id_type_user;
         if($request->password != null)
@@ -240,13 +255,6 @@ class UserController extends Controller
             return $imageName;
 
          }
-    }
-
-    public function validateNickname($nickname){
-        $validaNick = User::where('nickname',$nickname)
-        ->whereIn('id_status', [1,2])
-        ->exists();
-        return $validaNick;
     }
 
     public function destroy($id)

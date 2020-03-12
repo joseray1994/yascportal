@@ -4,7 +4,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="header">
-                            <h1>Vacancies <i class="fa fa-tasks"></i></h1>
+                            <h1>Vacancies <i class="fa fa-id-badge"></i></h1>
                             <ul class="header-dropdown">
                                 <li><a href="javascript:void(0);" class="btn btn-success" disabled id="btn_add" >New Vacancy <i class="fa fa-plus"></i></a></li>
                             </ul>
