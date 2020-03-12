@@ -330,11 +330,13 @@ const types ={
 
 const success = { 
     new_update: function (data,state){
+        $('#btn-save-documents').attr('disabled', false);
         console.log(data);
         $('#btn-save').attr('disabled', false);
         $("#table-row").remove();
+        $("#no-data-doc").hide();
         var dato = data;
-       
+        $.notifyClose();
         switch(dato.No) {
             case 2:
                 $.notify({
@@ -347,18 +349,41 @@ const success = {
                 });
             break;
             case 3:
+                $.notify({
+                    // options
+                    title: "Saved!",
+                    message:data.msg,
+                },{
+                    // settings
+                    type: 'success'
+                });
+
+                data.documents.forEach(function(data){
+
+                    var docs = `
+                        <tr id="document_id${data.id}">
+                            <td>${data.name}</td>
+                            <td>${documents.button(data)}</td>
+                        </tr>
+                    `;
+                    $('#document-list').append(docs);
+                    $("#document_id"+data.id).css("background-color", "#c3e6cb");    
+                });
                 $("#operator_id"+dato.id).css("background-color", "#ffdf7e");  
-                $('#modalDocuments').modal('hide');
-                swal("Saved!", data.msg, "success")
+                var drEvent = $('#dropify-event').dropify();
+                drEvent = drEvent.data('dropify');
+                drEvent.resetPreview();
+                drEvent.clearElement();
+                drEvent.settings.defaultFile = "";
+                drEvent.destroy();
+                drEvent.init();
+
+                $('#formDocuments').trigger('reset');
+
+                $(".dropify-preview").css('display', 'none');
             break;
         
             default:
-
-                if(dato.emergency_contact_phone != null){
-                    emergency_contact_phone = dato.emergency_contact_phone;
-                }else{
-                    emergency_contact_phone = "";
-                }
 
                 var operator = `<tr id="operator_id${dato.id}" class="rowType">
                     <td>${dato.id}</td>
@@ -394,10 +419,14 @@ const success = {
     show: function(data){
         switch (data.flag) {
             case 1:
-                console.log(data);
+                $('#document-list').html("");
+                $(".dropify-preview").css('display', 'none');
+                       
                 if(data.document.length === 0){
-                    $("#document-list").html(`<tr><td colspan="2">NO DATA</td></tr>`)
+                    $("#no-data-doc").show();
                 }else{
+                    $("#no-data-doc").hide();
+
                     var document = "";
                     data.document.forEach(function(data){
                         document += `
@@ -455,10 +484,23 @@ const success = {
     deactivated:  function(data){
         console.log(data);
         var dato = data;
+        $.notifyClose();
         switch (dato.flag) {
             case 4:
-                swal("Deleted!", data.name, "success")
-                break;
+                $.notify({
+                    // options
+                    title: "Deleted!",
+                    message:dato.data.name,
+                },{
+                    // settings
+                    type: 'danger'
+                });
+                $("#document_id"+dato.data.id).remove();
+                var numtr = $("#table-documents tr").length;
+                if(numtr ==  2){
+                    $("#no-data-doc").show();
+                }
+            break;
         
             default:
                 if(dato.id_status != 0){
@@ -502,6 +544,7 @@ const success = {
     },
         msj: function(data){
             $('#btn-save').attr('disabled', false);
+            $('#btn-save-documents').attr('disabled', false);
             $.notifyClose();
             $.each(data.responseJSON.errors,function (k,message) {
                 $.notify({

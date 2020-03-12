@@ -6,7 +6,7 @@ $(document).ready(function(){
         console.log('button');
       
         e.preventDefault(); 
-        // $('#btn-save-documents').attr('disabled', true);
+        $('#btn-save-documents').attr('disabled', true);
         
         var formData = new FormData(this);
         var state = $('#btn-save-documents').val();
@@ -42,12 +42,24 @@ $(document).ready(function(){
         function(isConfirm) {
             if (isConfirm) {
                 actions.deactivated(my_url);
-                $('#modalDocuments').modal('hide');
             }else {
             swal("Cancelled", "Deletion Canceled", "error");
             }
         });
     });
+
+    //Download
+    $(document).on('click','.download',function(){
+        
+        var id = $(this).val();
+        var mat = $("#mat").val();
+        var my_url = baseUrl + '/download/' + id + '/' + mat;
+       
+        actions.show(my_url);
+        window.location.replace(my_url);
+       
+    });
+
 });
 
 
@@ -68,11 +80,26 @@ const documents ={
 function openDocument(id){
     var baseUrl = $("#baseUrl").val();
 
-    $('#modalDocuments').modal('show');
     $('#formDocuments').trigger('reset');
     var mat = $("#mat").val();
-    $('#client_id_document').val(id);
     var my_url = baseUrl + '/document/show/' + id + '/' + mat;
     actions.show(my_url)
+    $('#client_id_document').val(id);
+
+    var drEvent = $('#dropify-event').dropify();
+    drEvent = drEvent.data('dropify');
+    drEvent.resetPreview();
+    drEvent.clearElement();
+    drEvent.settings.defaultFile = "";
+    drEvent.destroy();
+    drEvent.init();
+    $('#modalDocuments').modal('show');
+
+    $(".dropify-preview"). css('display', 'none');
 
 }
+
+$(function() {
+    $('.dropify').dropify();
+
+});

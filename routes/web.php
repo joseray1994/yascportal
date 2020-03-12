@@ -55,8 +55,6 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::post('/candidates/{id}/{vacancy_id?}', 'CandidateController@update');
     Route::delete('/candidates/{id}/delete/{candidate_id?}', 'CandidateController@delete');
     Route::delete('/candidates/{id}/{candidate_id?}', 'CandidateController@destroy');
-    Route::get('/candidates/document/show/{id}/{candidate_id?}', 'CandidateController@showDocuments');
-    Route::post('/candidates/document/{id}/{candidate_id?}', 'CandidateController@storeDocuments');
 
     //Training
     Route::get('/training', 'TrainingController@index');
@@ -106,9 +104,9 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
    
     //Schedule
     Route::get('/weekly', 'ScheduleWeeklyController@index');
-    Route::get('/weekly/{UserType_id?}', 'ScheduleWeeklyController@show');
-    Route::post('/weekly', 'ScheduleWeeklyController@store');
-    Route::put('/weekly/{UserType_id}', 'ScheduleWeeklyController@update');
+    Route::get('/weekly/{id?}', 'ScheduleWeeklyController@show');
+    Route::post('/extra/{id}', 'ScheduleWeeklyController@store');
+    Route::put('/weekly/{id}', 'ScheduleWeeklyController@update');
     Route::delete('/weekly/{UserType_id}', 'ScheduleWeeklyController@destroy');
     Route::delete('/weekly/delete/{id}', 'ScheduleWeeklyController@delete');
 
@@ -126,6 +124,8 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::post('/document/{id}/{mat}', 'ServiceGeneralController@storeDocument');
     Route::delete('/documents/delete/{id}', 'ServiceGeneralController@deleteDocuments');
     Route::post('/sumtime', 'ServiceGeneralController@SumTime');
+    Route::get('/download/{id}/{mat}', 'ServiceGeneralController@download');
+
 
     //Incident Reports
     Route::get('/incidents', 'IncidentReportsController@index');
