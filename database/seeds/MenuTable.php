@@ -21,6 +21,7 @@ class MenuTable extends Seeder
             ['name'=> 'Schedule Weekly','icon'=> 'fa fa-calendar','link'=>'/weekly','prioridad'=> '1','status'=> 1,],
             ['name'=> 'Settings','icon'=> 'fa fa-wrench','link'=>'/settings','prioridad'=> '1','status'=> 1,],
             ['name'=> 'Schedule Daily','icon'=> 'fa fa-calendar-o','link'=>'/daily','prioridad'=> '1','status'=> 1,],
+            ['name'=> 'Incident Reports','icon'=> 'fa fa-file-excel-o','link'=>'/incidents','prioridad'=> '1','status'=> 1,],
 
         ];
       
