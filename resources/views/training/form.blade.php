@@ -123,11 +123,11 @@
                   <div class="row">
                     <div class="col-xl-2 col-xs-12 col-md-2 col-sm-12 form-group">
                         <h6>End Coaching (Optional):</h6>
-                        <input type="date" name="end_coaching" id="end_coaching" class="form-control">
+                        <input type="date" name="end_coaching" id="end_coaching" class="form-control n_weeks_coaching">
                     </div>
                     <div class="col-xl-2 col-xs-12 col-md-2 col-sm-12">
                       <h6>Number of Coaching Weeks:</h6>
-                      <input type="number" name="n_weeks_coaching" id="n_weeks_coaching" class="form-control">
+                      <input type="text" name="numWeek_C" id="numWeek_C" class="form-control">
                     </div>
                 </div>
                 <hr/>

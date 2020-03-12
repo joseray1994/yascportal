@@ -178,19 +178,19 @@ $(document).ready(function(){
 
 const candidates ={
     button: function(dato){
-           var buttons='<div class="btn-group">';
+           var buttons='<div class="">';
             if(dato.status== 1){
                
                 buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="'+dato.id+'"  ><i class="fa fa-edit"></i></button>';
                 buttons += ' <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-candidate" title="Deactivated" data-type="confirm" value="'+dato.id+'"><i class="fa fa-window-close"></i></button>';
-                buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument(${dato.id})" data-toggle="tooltip" title="Documents" value="${dato.id}"><i class="fa  fa-folder-open"></i></button>';
+                buttons += '  <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument('+dato.id+')" data-toggle="tooltip" title="Documents" value="'+dato.id+'"><i class="fa  fa-folder-open"></i></button>';
 
           
            }else if(dato.status == 2){
        
                buttons += '<button type="button" class="btn btn-sm btn-outline-success off-candidate" title="Activated" data-type="confirm" value="'+dato.id+'" ><i class="fa fa-check-square-o"></i></button> ';
                buttons += '  <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert delete-candidate" title="Delete" data-type="confirm" value="'+dato.id+'"><i class="fa fa-trash-o"></i></button>';
-               buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument(${dato.id})" data-toggle="tooltip" title="Documents" value="${dato.id}"><i class="fa  fa-folder-open"></i></button>';
+               buttons += '  <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument('+dato.id+')" data-toggle="tooltip" title="Documents" value="'+dato.id+'"><i class="fa  fa-folder-open"></i></button>';
 
            }
            buttons+='</div>';
@@ -210,8 +210,8 @@ const candidates ={
 
 const success = {
     new_update: function (data,state){
-        $('#btn-save-documents').attr('disabled', false);
         console.log(data);
+        $('#btn-save-documents').attr('disabled', false);
         $('#btn-save').attr('disabled', false);
         $("#table-row").remove();
         $("#no-data-doc").hide();
@@ -219,14 +219,27 @@ const success = {
         $.notifyClose();
         switch(dato.No) {
             case 2:
-                $.notify({
-                    // options
-                    title: "Error!",
-                    message:data.msg,
-                },{
-                    // settings
-                    type: 'danger'
-                });
+                if(data.msg[0].phone != ''){
+                    $.notify({
+                        // options
+                        title: "Error!",
+                        message:data.msg[0].phone,
+                    },{
+                        // settings
+                        type: 'danger'
+                    });
+                }
+
+                if(data.msg[0].email != ''){
+                    $.notify({
+                        // options
+                        title: "Error!",
+                        message:data.msg[0].email,
+                    },{
+                        // settings
+                        type: 'danger'
+                    });
+                }
             break;
             case 3:
                 $.notify({
@@ -273,10 +286,8 @@ const success = {
                 }
                 else{
                     var candidate = `<tr id="candidate_id${dato.id}">
-                                        <td>${dato.id}</td>
                                         <td>${dato.name_vacancy}</td>
-                                        <td>${dato.name}</td>
-                                        <td>${dato.last_name}</td>
+                                        <td>${dato.name} ${dato.last_name}</td>
                                         <td>${dato.phone}</td>
                                         <td>${dato.mail}</td>
                                         <td>${dato.channel}</td>
@@ -377,10 +388,8 @@ const success = {
                 if(dato.status != 0){
 
                     var candidate = `<tr id="candidate_id${dato.id}">
-                                        <td>${dato.id}</td>
                                         <td>${dato.name_vacancy}</td>
-                                        <td>${dato.name}</td>
-                                        <td>${dato.last_name}</td>
+                                        <td>${dato.name} ${dato.last_name}</td>
                                         <td>${dato.phone}</td>
                                         <td>${dato.mail}</td>
                                         <td>${dato.channel}</td>
@@ -392,6 +401,13 @@ const success = {
                                     </tr>`;
                   
                     $("#candidate_id"+dato.id).replaceWith(candidate);
+
+                    if(dato.status == 1){
+                        color ="#c3e6cb";
+                    }else if(dato.status == 2){
+                        color ="#ed969e";
+                    }
+                    $("#candidate_id"+dato.id).css("background-color", color); 
         
                 }else if(dato.status == 0){
                     $("#candidate_id"+dato.id).remove();
@@ -405,6 +421,7 @@ const success = {
     
     msj: function(data){
         console.log(data);
+        $('#btn-save-documents').attr('disabled', false);        
         $.notifyClose();
         $.each(data.responseJSON.errors,function (k,message) {
             $.notify({

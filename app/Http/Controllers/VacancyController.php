@@ -37,49 +37,12 @@ class VacancyController extends Controller
             
     }
 
-    
+
     public function validateVacancy($request,$vacancy_id){
-        if($vacancy_id==""){
+        
         $this->validate(request(), [
-            'name' => 'required|unique:vacancies|max:60',
+            'name' => 'required|unique:vacancies,name,'.$vacancy_id,
         ]); 
-        }else{
-            $this->validate(request(), [
-                'name' => 'required|max:60',
-            ]);   
-        }
-    }
-
-    public function ValidateUpdateVacancy($request,$vacancy_id){
-        $ExtraVacancyValidation=[]; 
-        $n ="";
-        $data = [];
-
-        $name = VacancyModel::where('name', $request->name)
-        ->whereIn('status', [1,2]);
-
-        if($vacancy_id > 0){
-            $name->where('id','!=',$vacancy_id);
-        }
-            
-        $nameV = $name->count();
-
-        if($nameV > 0){      
-            $n = 'Another user type already has that Name';
-            
-        }
-        if($n==''){
-            $data=[];
-
-          }else{
-              $data=[
-                  'No' =>2,
-                  'name'=>$n,
-                ];
-
-              array_push($ExtraVacancyValidation,$data);
-          }
-        return $ExtraVacancyValidation;
     }
   
     public function store(Request $request)
@@ -96,13 +59,6 @@ class VacancyController extends Controller
 
     public function update(Request $request, $vacancy_id)
     {
-
-        $answer=   VacancyController::ValidateUpdateVacancy($request,0);
-        if($answer){
-
-            return response()->json($answer);
-
-        }else{
             VacancyController::validateVacancy($request,$vacancy_id);
             $vacancy = VacancyModel::find($vacancy_id);
             $vacancy->name = $request->name;
@@ -110,8 +66,6 @@ class VacancyController extends Controller
             $vacancy->status=1;
             $vacancy->save();
             return response()->json($vacancy);
-        
-        }
     }
 
    

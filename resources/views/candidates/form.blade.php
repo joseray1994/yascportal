@@ -25,12 +25,12 @@
 									<div class="input-group-prepend">
 										<button class="btn modaldelichef" disabled><i class="fa fa-user-plus"></i></button>
 									</div>
-									<input type="text" class="form-control has-error" id="name" name="name" placeholder="Name" value="" maxlength ="15">
+									<input type="text" class="form-control has-error" id="name" name="name" placeholder="Name" value="" maxlength ="60">
 								</div> 
 							</div>
 							<div class="col-md-6 mb-3">
 								<div class="input-group">
-									<input type="text" class="form-control has-error" id="last_name" name="last_name" placeholder="Last Name" value="" maxlength ="15">
+									<input type="text" class="form-control has-error" id="last_name" name="last_name" placeholder="Last Name" value="" maxlength ="60">
 								</div> 
 							</div>
                    		</div>
@@ -41,7 +41,7 @@
 									<div class="input-group-prepend">
 										<button class="btn modaldelichef" disabled><i class="fa fa-phone"></i></button>
 									</div>
-									<input type="number" class="form-control has-error" id="phone" name="phone" placeholder="Phone" value="" >
+									<input type="tel" class="form-control has-error" id="phone" name="phone" placeholder="Phone" value="" >
 								</div> 
 							</div>
 							<div class="col-md-4 mb-3">
@@ -49,7 +49,7 @@
 									<div class="input-group-prepend">
 										<button class="btn modaldelichef" disabled><i class="fa fa-envelope"></i></button>
 									</div>
-									<input type="text" class="form-control has-error" id="mail" name="mail" placeholder="Email" value="" maxlength ="15">
+									<input type="text" class="form-control has-error" id="mail" name="mail" placeholder="Email" value="">
 								</div> 
 							</div>
 
@@ -58,7 +58,7 @@
 									<div class="input-group-prepend">
 										<button class="btn modaldelichef" disabled><i class="fa fa-id-badge"></i></button>
 									</div>
-									<input type="text" class="form-control has-error" id="channel" name="channel" placeholder="Channel" value="" maxlength ="15">
+									<input type="text" class="form-control has-error" id="channel" name="channel" placeholder="Channel" value="">
 								</div> 
 							</div>
                    		</div>

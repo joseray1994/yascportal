@@ -52,7 +52,7 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::get('/candidates/{id}', 'CandidateController@index');
     Route::get('/candidates/{id}/{candidate_id?}', 'CandidateController@show');
     Route::post('/candidates/{id}', 'CandidateController@store');
-    Route::post('/candidates/{id}/{vacancy_id?}', 'CandidateController@update');
+    Route::post('/candidates/{id}/{candidate_id?}', 'CandidateController@update');
     Route::delete('/candidates/{id}/delete/{candidate_id?}', 'CandidateController@delete');
     Route::delete('/candidates/{id}/{candidate_id?}', 'CandidateController@destroy');
 
@@ -62,7 +62,8 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::put('/training/{trainee_id}', 'TrainingController@update');
     Route::delete('/training/{trainee_id}', 'TrainingController@destroy');
     Route::delete('/training/delete/{id}', 'TrainingController@delete');
-    Route::post('/training/generate', 'TrainingController@generateEnd_training');
+    Route::post('/training/generateWeekTraining', 'TrainingController@generateEnd_training');
+    Route::post('/training/generateWeekCoaching', 'TrainingController@generateEnd_coaching');
 
     //Settings
     Route::get('/settings', 'SettingsController@index');
@@ -132,9 +133,14 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::delete('/documents/delete/{id}', 'ServiceGeneralController@deleteDocuments');
     Route::post('/sumtime', 'ServiceGeneralController@SumTime');
     Route::get('/download/{id}/{mat}', 'ServiceGeneralController@download');
+    
+    //PROFILE
+    Route::get('/profile', 'ProfileController@index');
+    Route::put('/profile', 'ProfileController@update');
 
 
-
+    //Incident Reports
+    Route::get('/reports', 'ReportsController@index');
 
 });
 

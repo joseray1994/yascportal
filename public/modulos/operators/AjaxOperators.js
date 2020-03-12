@@ -4,6 +4,17 @@ $(document).ready(function(){
     var baseUrl = $('#baseUrl').val();
     var radioState;
 
+    $(window).on('hashchange', function() {
+        if (window.location.hash) {
+        var page = window.location.hash.replace('#', '');
+        if (page == Number.NaN || page <= 0) {
+        return false;
+        }else{
+        getData(page);
+        }
+        }
+        });
+
     $('#sidebar3').addClass('active'); 
     $('#myTable').DataTable();
     $('.js-example-basic-single').select2();
@@ -440,7 +451,6 @@ const success = {
                     $('#document-list').html(document);
                 }
             break;
-        
             default:
                 $('#tag_put').remove();
                 $form = $('#formOperators');

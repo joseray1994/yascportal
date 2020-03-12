@@ -152,10 +152,10 @@ $(document).ready(function(){
 
 const vacancies ={
     button: function(dato){
-           var buttons='<div class="btn-group">';
+           var buttons='<div class="">';
             if(dato.status== 1){
                 buttons += '<a class="btn btn-sm btn-outline-primary" data-toggle="tooltip" title="Ver Candidatos" href="/candidates/'+dato.id+'"><i class="fa fa-users"></i></a>';
-               buttons += '<button type="button" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="'+dato.id+'"  ><i class="fa fa-edit"></i></button>';
+               buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="'+dato.id+'"  ><i class="fa fa-edit"></i></button>';
                buttons += '	<button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-vacancy" title="Deactivated" data-type="confirm" value="'+dato.id+'"><i class="fa fa-window-close"></i></button>';
           
            }else if(dato.status == 2){
@@ -253,6 +253,14 @@ const success = {
                             </tr>`;
           
             $("#vacancy_id"+dato.id).replaceWith(vacancy);
+
+            if(dato.status == 1){
+                color ="#c3e6cb";
+            }else if(dato.status == 2){
+                color ="#ed969e";
+            }
+            $("#vacancy_id"+dato.id).css("background-color", color); 
+
 
         }else if(dato.status == 0){
             $("#vacancy_id"+dato.id).remove();
