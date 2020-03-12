@@ -49,7 +49,6 @@
       <option value="0" selected>Select Gender</option>
       <option value="F">FEMALE</option>
       <option value="M">MALE</option>
-      <option value="O">OTRO</option>
     </select>
   </div>
 
@@ -82,7 +81,7 @@
   </div>
   <div class="col-sm-3 form-group">
     <h6>Nickname:</h6>
-    <input type="text" name="nickname" id="nickname" class="form-control text-lowercase" maxlength="150" onKeyUp="document.getElementById(this.id).value=document.getElementById(this.id).value.toLowerCase()" disabled>
+    <input type="text" name="nickname" id="nickname" class="form-control text-lowercase" maxlength="150" onkeypress="return RestrictSpace()" onKeyUp="document.getElementById(this.id).value=document.getElementById(this.id).value.toLowerCase()" disabled>
     <div class="my-2 seccion-sugerencia" style="display:none">
         <span class="badge badge-success my-2">available</span>
         <select name="sugerencias" id="sugerencias" class="form-control"></select>
@@ -110,11 +109,11 @@
       </div>
       <div class="col-sm-6 form-group pass">
         <h6>Password:</h6>
-        <input type="password" name="password" id="password" class="form-control" title="Este campo solo admite letras" maxlength="60">
+        <input type="password" name="password" id="password" onkeypress="return RestrictSpace()" class="form-control" title="Este campo solo admite letras" maxlength="60">
       </div>
       <div class="col-sm-6 form-group pass">
         <h6>Confirm Password:</h6>
-        <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" title="Este campo solo admite letras" maxlength="60">
+        <input type="password" name="password_confirmation" onkeypress="return RestrictSpace()" id="password_confirmation" class="form-control" title="Este campo solo admite letras" maxlength="60">
       </div>  
     </div>
   </div>
