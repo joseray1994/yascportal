@@ -1,10 +1,8 @@
 <table class="table table-striped text-center" id="tag_container">
     <thead class="text-white thead-yasc">
         <tr>
-            <th width="100px">ID</th>
             <th>Vacante</th>
             <th>Name</th>
-            <th>Last Name</th>
             <th>Phone</th>
             <th>Mail</th>
             <th>Channel</th>
@@ -18,10 +16,8 @@
     <tbody id="candidate-list">
         @foreach ($data as $candidate)
         <tr id="candidate_id{{$candidate->id}}">
-            <td>{{ $candidate->id }}</td>
             <td>{{ $candidate->name_vacancy }}</td>
-            <td>{{ $candidate->name}}</td>
-            <td>{{ $candidate->last_name}}</td>
+            <td>{{ $candidate->name}} {{ $candidate->last_name}}</td>
             <td>{{ $candidate->phone }}</td>
             <td>{{ $candidate->mail }}</td>
             <td>{{ $candidate->channel }}</td>

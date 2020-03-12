@@ -21,7 +21,7 @@
                                     <input type="text" class="form-control" id="search">
                                     <button type="button" class="btn btn-primary search-query">Search</button>
                                 </div>
-                                <div class="table-responsive">
+                                <div class="table-responsive"  >
                                  @include('clients.table')
                                 </div>
                                 <div class="loading-table col-sm-12 text-center">
