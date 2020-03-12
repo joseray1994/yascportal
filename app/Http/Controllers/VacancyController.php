@@ -45,7 +45,6 @@ class VacancyController extends Controller
         ]); 
     }
 
-
     public function ValidateUpdateVacancy($request,$vacancy_id){
         $ExtraVacancyValidation=[]; 
         $n ="";
@@ -59,7 +58,7 @@ class VacancyController extends Controller
         }
             
         $nameV = $name->count();
- 
+
         if($nameV > 0){      
             $n = 'Another user type already has that Name';
             
@@ -75,13 +74,15 @@ class VacancyController extends Controller
 
               array_push($ExtraVacancyValidation,$data);
           }
-        return $ExtraVacancyValidation;
+        return  $ExtraVacancyValidation;
     }
+
+    
   
     public function store(Request $request)
     {      
             $vacancy_id="";
-            VacancyController::validateVacancy($request,$vacancy_id);
+            VacancyController::ValidateUpdateVacancy($request,$vacancy_id);
             $vacancy = VacancyModel::firstOrCreate(['name'=>$request->name,
             'description'=>$request->description,
             'status'=>1,]);
@@ -92,13 +93,13 @@ class VacancyController extends Controller
 
     public function update(Request $request, $vacancy_id)
     {
-
-        $answer=   VacancyController::ValidateUpdateVacancy($request,0);
+        $answer= VacancyController::ValidateExtraVacancy($request, $vacancy_id);
+      
         if($answer){
 
-            return response()->json($answer);
+              return response()->json($answer);
 
-        }else{
+          }else{
             VacancyController::validateVacancy($request,$vacancy_id);
             $vacancy = VacancyModel::find($vacancy_id);
             $vacancy->name = $request->name;
@@ -106,8 +107,7 @@ class VacancyController extends Controller
             $vacancy->status=1;
             $vacancy->save();
             return response()->json($vacancy);
-        
-        }
+          }
     }
 
    
