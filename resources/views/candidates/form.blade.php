@@ -41,7 +41,7 @@
 									<div class="input-group-prepend">
 										<button class="btn modaldelichef" disabled><i class="fa fa-phone"></i></button>
 									</div>
-									<input type="number" class="form-control has-error" id="phone" name="phone" placeholder="Phone" value="" >
+									<input type="tel" class="form-control has-error" id="phone" name="phone" placeholder="Phone" value="" >
 								</div> 
 							</div>
 							<div class="col-md-4 mb-3">
