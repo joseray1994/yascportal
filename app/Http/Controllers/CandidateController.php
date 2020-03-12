@@ -86,48 +86,6 @@ class CandidateController extends Controller
        
     }
 
-    public function ValidateUpdateCandidate($request,$candidate_id){
-        $ExtraCandidateValidation=[]; 
-        $p ="";
-        $e ="";
-        $data = [];
-
-        $phone = CandidateModel::where('id','!=',$candidate_id)
-        ->where('phone',$request->phone)
-        ->where('status', [1,2])
-        ->count();
-
-        $email = CandidateModel::where('id','!=',$candidate_id)
-        ->where('mail',$request->mail)
-        ->where('status', [1,2])
-        ->count();
-
-            if($phone > 0){      
-                $p = 'Another user type already has that Phone';
-                
-            }
-            if($email > 0){      
-                $e = 'Another user type already has that Email';
-                
-            }
-           
-            if($p=='' && $e==''){
-              $data=[];
-
-            }else{
-                $data=[
-                    'phone'=>$p,
-                    'mail'=>$e,
-                ];
-
-                array_push($ExtraCandidateValidation,$data);
-            }
-
-           
-        return $ExtraCandidateValidation;
-    } 
-
-
     public function store(Request $request)
     {      
             $candidate_id="";
@@ -160,19 +118,11 @@ class CandidateController extends Controller
         return response()->json(["candidates" => $candidate, "flag" => 2]);
     }
 
-    public function update(Request $request, $vacancy,$candidate)
+    public function update(Request $request, $id,$candidate_id)
     {
-        // dd($vacancy);
-    //     $answer= CandidateController::ValidateUpdateCandidate($request,$candidate_id);
-    //   //dd($answer);
-    //     if($answer){
-
-    //           return response()->json($answer);
-
-    //       }
-        //   else{
-            CandidateController::validateCandidate($request,$candidate);
-            $candidate = CandidateModel::find($candidate);
+       
+            CandidateController::validateCandidate($request,$candidate_id);
+            $candidate = CandidateModel::find($candidate_id);
             $candidate->id_vacancy = $request->id_vacancy;
             $candidate->name = $request->name;
             $candidate->last_name = $request->last_name;
@@ -190,7 +140,7 @@ class CandidateController extends Controller
             $candidate2 = CandidateController::resultdata($id);
 
             return response()->json($candidate2);
-        //   }
+        
     }
     
     public function destroy($id, $candidate_id)
