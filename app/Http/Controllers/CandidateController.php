@@ -72,13 +72,13 @@ class CandidateController extends Controller
 
 
     public function validateCandidate($request,$candidate_id){
-        //dd($request);
+        // dd($candidate_id);
         $this->validate(request(), [
            'id_vacancy' => 'required',
             'name' => 'required|max:30',
             'last_name' => 'required|max:30',
-            'phone' => 'required|unique:candidates|max:12',
-            'mail' => 'required|unique:candidates',
+            'phone' => 'required|unique:candidates,phone,'.$candidate_id,
+            'mail' => 'required|unique:candidates,mail,'.$candidate_id,
             'channel' => 'required',
             'listening_test' => 'required',
             'grammar_test' => 'required',
@@ -160,8 +160,9 @@ class CandidateController extends Controller
         return response()->json(["candidates" => $candidate, "flag" => 2]);
     }
 
-    public function update(Request $request, $candidate_id)
+    public function update(Request $request, $vacancy,$candidate)
     {
+        // dd($vacancy);
     //     $answer= CandidateController::ValidateUpdateCandidate($request,$candidate_id);
     //   //dd($answer);
     //     if($answer){
@@ -170,8 +171,8 @@ class CandidateController extends Controller
 
     //       }
         //   else{
-            CandidateController::validateCandidate($request,$candidate_id);
-            $candidate = CandidateModel::find($candidate_id);
+            CandidateController::validateCandidate($request,$candidate);
+            $candidate = CandidateModel::find($candidate);
             $candidate->id_vacancy = $request->id_vacancy;
             $candidate->name = $request->name;
             $candidate->last_name = $request->last_name;
