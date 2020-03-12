@@ -72,29 +72,18 @@ class CandidateController extends Controller
 
 
     public function validateCandidate($request,$candidate_id){
-        if($candidate_id==""){
+        // dd($candidate_id);
         $this->validate(request(), [
            'id_vacancy' => 'required',
-            'name' => 'required|unique:candidates|max:30',
+            'name' => 'required|max:30',
             'last_name' => 'required|max:30',
-            'phone' => 'required|unique:candidates|max:12',
-            'mail' => 'required|unique:candidates',
+            'phone' => 'required|unique:candidates,phone,'.$candidate_id,
+            'mail' => 'required|unique:candidates,mail,'.$candidate_id,
             'channel' => 'required',
             'listening_test' => 'required',
             'grammar_test' => 'required',
         ]); 
-        }else{
-            $this->validate(request(), [
-               'id_vacancy' => 'required',
-                'name' => 'required|max:30',
-                'last_name' => 'required|max:30',
-                'mail' => 'required',
-                'channel' => 'required',
-                'listening_test' => 'required',
-                'grammar_test' => 'required',
-                
-            ]);   
-        }
+       
     }
 
     public function store(Request $request)
@@ -129,17 +118,9 @@ class CandidateController extends Controller
         return response()->json(["candidates" => $candidate, "flag" => 2]);
     }
 
-
-    
-    public function update(Request $request, $id, $candidate_id)
+    public function update(Request $request, $id,$candidate_id)
     {
-
-        $candidateValidation = CandidateModel::where('name', $request->name)
-        ->whereIn('status', [1,2])
-        ->first(); 
-    
-
-        if($candidateValidation == null){
+       
             CandidateController::validateCandidate($request,$candidate_id);
             $candidate = CandidateModel::find($candidate_id);
             $candidate->id_vacancy = $request->id_vacancy;
@@ -159,12 +140,7 @@ class CandidateController extends Controller
             $candidate2 = CandidateController::resultdata($id);
 
             return response()->json($candidate2);
-        }
-        else{
-            $candidate2='Otra Vacante ya cuenta con ese Nombre.';
-            return response()->json($candidate2);
-        }
-       
+        
     }
     
     public function destroy($id, $candidate_id)

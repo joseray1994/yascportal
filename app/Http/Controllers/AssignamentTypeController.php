@@ -36,6 +36,7 @@ class AssignamentTypeController extends Controller
                            
                            
     }
+    
       public function show($id,$detailtype_id)
     {
         $optionsmenu =  AssignamentTypeModel::where('id',$detailtype_id)->first();
@@ -51,14 +52,7 @@ class AssignamentTypeController extends Controller
 
         return response()->json($data);
     }
-
-/**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+ 
     public function update(Request $request,$id,$detailtype_id)
     {
         $data=json_decode($request->data);
@@ -82,12 +76,7 @@ class AssignamentTypeController extends Controller
       
         return response()->json($usertype);
     }
- /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($id,$detailtype_id)
     {
          $detailtype =AssignamentTypeModel::find($detailtype_id);
