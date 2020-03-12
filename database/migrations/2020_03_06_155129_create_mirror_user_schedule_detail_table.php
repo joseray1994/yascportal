@@ -21,8 +21,8 @@ class CreateMirrorUserScheduleDetailTable extends Migration
             $table->string('mat', 3)->default('MSD');
             $table->time('time_start');
             $table->time('time_end');
-            $table->integer('type_daily');
-            $table->integer('option');
+            $table->integer('type');
+            $table->string('option');
             $table->integer('status')->nullable();
             $table->timestamps();
         });

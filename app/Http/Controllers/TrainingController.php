@@ -14,6 +14,8 @@ use App\ClientModel;
 use App\TorCDuration;
 use App\ScheduleTrainingModel;
 use App\TrainingDetailModel;
+use App\MirrorUserScheduleDetailModel;
+use App\DayOffModel;
 use Illuminate\Support\Facades\Hash;
 
 
@@ -206,33 +208,62 @@ class TrainingController extends Controller
     //in ScheduleModel
         //status=1 horario habilitado, status=2 el horario todavia no se usa porque está en coaching
     //--------------------------//
-        
         $correo=$request->email.'@yasemail.com';
-        // $user =  User::Create([
-        //     'id_type_user'=>11,
-        //     'id_status'=>1,
-        //     'nickname'=>"",
-        //     'email'=>$correo,
-        //     'password'=>Hash::make('123'),
-        // ]);
+        $user =  User::Create([
+            'id_type_user'=>11,
+            'id_status'=>1,
+            'nickname'=>"",
+            'email'=>$correo,
+            'password'=>Hash::make('123'),
+        ]);
 
-        // $User_info =  User_info::Create([
-        //     'id_user'=>$user->id,
-        //     'name'=>$request->name,
-        //     'last_name'=>$request->last_name,
-        //     'address'=>'',
-        //     'phone'=>$request->phone,
-        //     'emergency_contact_name'=>$request->emergency_contact_name,
-        //     'emergency_contact_phone'=>$request->emergency_contact_phone,
-        //     'notes'=>$request->notes,
-        //     'description'=>$request->description,
-        //     'gender'=>$request->gender,
-        //     'birthdate'=>$request->birthdate,
-        //     'profile_picture'=>"",
-        //     'biotime_status'=>"",
-        //     'access_code'=>"",
-        //     'entrance_date'=>"2020-01-01",
-        // ]);
+        $User_info =  User_info::Create([
+            'id_user'=>$user->id,
+            'name'=>$request->name,
+            'last_name'=>$request->last_name,
+            'address'=>'',
+            'phone'=>$request->phone,
+            'emergency_contact_name'=>$request->emergency_contact_name,
+            'emergency_contact_phone'=>$request->emergency_contact_phone,
+            'notes'=>$request->notes,
+            'description'=>$request->description,
+            'gender'=>$request->gender,
+            'birthdate'=>$request->birthdate,
+            'profile_picture'=>"",
+            'biotime_status'=>"",
+            'access_code'=>"",
+            'entrance_date'=>"2020-01-01",
+        ]);
+        $horario=[];
+        array_push($horario, array('start'=>$request->start_monday,'end'=>$request->end_monday));
+        array_push($horario, array('start'=>$request->start_tuesday,'end'=>$request->end_tuesday));
+        array_push($horario, array('start'=>$request->start_wednesday,'end'=>$request->end_wednesday));
+        array_push($horario, array('start'=>$request->start_thursday,'end'=>$request->end_thursday));
+        array_push($horario, array('start'=>$request->start_friday,'end'=>$request->end_friday));
+        array_push($horario, array('start'=>$request->start_saturday,'end'=>$request->end_saturday));
+        array_push($horario, array('start'=>$request->start_sunday,'end'=>$request->end_sunday));
+        $days=DaysModel::all();
+            for ($i=0 ; $i < count($horario); $i++ ) { 
+                $daysOff=$request->id_dayOff_O;
+                $option='';
+                foreach ($daysOff as $dayOff) {
+                    if ($i==$dayOff) {
+                        $option='Day Off';
+                    }
+                    
+                }
+                $mirror_userScheduleDetail =  MirrorUserScheduleDetailModel::Create([
+                    'id_schedule'=>0,
+                    'id_operator'=>$user->id,
+                    'id_day'=> $i,
+                    'mat'=>'MSD' ,
+                    'time_start'=>$horario[$i]['start'] ,
+                    'time_end'=>$horario[$i]['end'] ,
+                    'type'=> 0,
+                    'option'=> $option,
+                    'status'=> 1,
+                ]);
+            }
             $schedulearray=[];
         if ($request->end_coaching!= null) {
             $start_coaching=Carbon::parse($request->end_training)->addDay(1);
@@ -279,8 +310,6 @@ class TrainingController extends Controller
                 $end_week=Carbon::parse($request->start_training)->endOfWeek(Carbon::SATURDAY);
 
             for ($j=0; $j < $request->numWeek; $j++) { 
-            
-
                 $weekYears=$end_week->weekOfYear;
 
                 $month_I=Carbon::parse($start_week)->month;
@@ -294,9 +323,8 @@ class TrainingController extends Controller
                     $type=3;
                 }
                 $schedule =  ScheduleTrainingModel::Create([
-                    'id_operator'=>3,
+                    'id_operator'=>$user->id,
                     'id_torcduration'=> $schedulearray[$i]['id'] ,
-                    // 'id_operator'=>$user->id,
                     'id_client'=>$request->id_client ,
                     'mat'=>'SCH',
                     'date_start'=>$start_week ,
@@ -309,20 +337,35 @@ class TrainingController extends Controller
             
                 ]);
                 for ($k=0; $k <7 ; $k++) { 
+                    $daysOff=$request->id_dayOff_T;
+                    $option='';
+                    foreach ($daysOff as $dayOff) {
+                        if ($k==$dayOff) {
+                            $option='Day Off';
+                        }
+                        
+                    }
                     $training_detail =  TrainingDetailModel::Create([
-                    'mat'=>'TSD' ,
-                    'id_user'=> 3,
-                    'id_schedule'=>$schedule->id,
-                    'id_day'=>$k ,
-                    'start_time'=>$request->start ,
-                    'end_time'=>$request->end ,
-                    'options'=>0 ,
-                    'status'=>1 ,
+                        'id_schedule'=>$schedule->id,
+                        'id_operator'=> $user->id,
+                        'id_day'=>$k ,
+                        'mat'=>'TSD' ,
+                        'time_start'=>$request->start ,
+                        'time_end'=>$request->end ,
+                        'type_daily'=>3,
+                        'options'=>$option ,
+                        'status'=>1 ,
                         ]);
                 }
-               
                 $start_week->addWeek();
                 $end_week->addWeek();
+                foreach ($daysOff as $dayOff) {
+                    $day_offTable =  DayOffModel::Create([
+                        'mat'=>'DOF' ,
+                        'id_schedule'=>$schedule->id,
+                        'id_day'=>$dayOff ,
+                            ]);
+                }
             }
                 $Schedule_id_start=ScheduleTrainingModel::where('date_start','<=',$request->start_training)
                 ->where('date_end','>=',$request->start_training)
@@ -332,27 +375,9 @@ class TrainingController extends Controller
                 $Schedule_id_end=ScheduleTrainingModel::where('date_end','>=',$request->end_training)->where('id_torcduration', $schedulearray[$i]['id'] )
                 ->first();
                 $NDay_end=TrainingDetailModel::where('id_schedule',$Schedule_id_end->id)->where('id_day','>',$day_end)->delete();
-
-            
-            
         }
 
-        // $daysOFF =  DayOffModel::Create([
-        //     'id_schedule'=>$schedule->id,
-        //     // 'id_day'=>,
-        // ]);
-
-        // $mirror_userScheduleDetail =  MirrorUserScheduleDetailModel::Create([
-        //     'id_schedule'=>$schedule->id,
-        //     'id_operator'=> $user->id,
-        //     // 'id_day'=> ,
-        //     // 'mat'=> ,
-        //     // 'time_start'=> ,
-        //     // 'time_end'=> ,
-        //     // 'type_daily'=> ,
-        //     // 'option'=> ,
-        //     // 'status'=> ,
-        // ]);
+        
 
         // $result = TrainingController::getResult($user->id);
 
