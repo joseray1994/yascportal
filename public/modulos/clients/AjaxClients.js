@@ -1,6 +1,17 @@
 
 $(document).ready(function(){
     clearload();
+
+    $(window).on('hashchange', function() {
+        if (window.location.hash) {
+        var page = window.location.hash.replace('#', '');
+        if (page == Number.NaN || page <= 0) {
+        return false;
+        }else{
+        getData(page);
+        }
+        }
+        });
     
     var nameDeli='<a href="/clients">Clients</i></a>';
     $('.nameDeli').html(nameDeli);
