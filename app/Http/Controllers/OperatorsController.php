@@ -27,16 +27,14 @@ class OperatorsController extends Controller
                 ->join('users as usr', 'users_info.id_user', '=', 'usr.id')
                 ->where('usr.id_type_user', 9)
                 ->whereIn('usr.id_status', [1,2])
-                ->where($request->type,'LIKE','%'.$search.'%')
-                ->paginate(10);
+                ->where($request->type,'LIKE','%'.$search.'%');
             } else{
                 $data2 = User_info::select('users_info.name', 'users_info.phone', 'users_info.emergency_contact_phone', 'users_info.birthdate', 'usr.email', 'usr.id', 'usr.id_status')
                 ->join('users as usr', 'users_info.id_user', '=', 'usr.id')
                 ->where('usr.id_type_user', 9)
-                ->whereIn('usr.id_status', [1,2])
-                ->paginate(10);
+                ->whereIn('usr.id_status', [1,2]);
             } 
-            $data=$data2;
+            $data=$data2->paginate(10);;
             if ($request->ajax()) {
                 return view('operators.table', ["data"=>$data]);
             }

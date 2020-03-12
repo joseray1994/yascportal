@@ -442,6 +442,16 @@ const success = {
             $.notifyClose();
             var dato = data;
             switch(dato.No) {
+                case 2:
+                    $.notify({
+                        // options
+                        title: "Error!",
+                        message:data.msg,
+                    },{
+                        // settings
+                        type: 'danger'
+                    });
+                break;
                 case 3:
                 $.notify({
                     // options

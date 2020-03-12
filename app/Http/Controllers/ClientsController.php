@@ -63,7 +63,7 @@ class ClientsController extends Controller
                                         ->join('client_color as clc', 'clc.id', '=', 'clients.color')
                                         ->whereNotIn('clients.status',[0])
                                         ->orderBy('clients.name')
-                                        ->where($type,'LIKE','%'.$search.'%')->paginate(5);
+                                        ->where($type,'LIKE','%'.$search.'%');
                                   
                                        
                 // dd($data2);                        
@@ -81,11 +81,11 @@ class ClientsController extends Controller
                                         ->join('break_rules as brk', 'brk.id_client', '=', 'clients.id')
                                         ->join('client_color as clc', 'clc.id', '=', 'clients.color')
                                         ->whereNotIn('clients.status', [0])
-                                        ->orderBy('clients.name')
-                                        ->paginate(5);
+                                        ->orderBy('clients.name');
+                                        
             } 
            
-            $data=$data2;
+            $data=$data2->paginate(5);
             $color = ClientColorModel::all(); 
            
             if ($request->ajax()) {
