@@ -254,6 +254,14 @@ const success = {
           
             $("#vacancy_id"+dato.id).replaceWith(vacancy);
 
+            if(dato.status == 1){
+                color ="#c3e6cb";
+            }else if(dato.status == 2){
+                color ="#ed969e";
+            }
+            $("#vacancy_id"+dato.id).css("background-color", color); 
+
+
         }else if(dato.status == 0){
             $("#vacancy_id"+dato.id).remove();
         }
