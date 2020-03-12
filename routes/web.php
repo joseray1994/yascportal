@@ -127,7 +127,8 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::get('/download/{id}/{mat}', 'ServiceGeneralController@download');
 
 
-
+    //Incident Reports
+    Route::get('/incidents', 'IncidentReportsController@index');
 
 });
 

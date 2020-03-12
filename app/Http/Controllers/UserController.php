@@ -41,15 +41,13 @@ class UserController extends Controller
                     $q->where($type,'LIKE','%'.$search.'%');
                 })
                 ->with('User_info:id_user,name,last_name,phone,entrance_date,birthdate')
-                ->whereIn('id_status', [1,2])
-                ->paginate(10);
+                ->whereIn('id_status', [1,2]);
             } else{
                 $data2 = User::select('id','email','id_status')->
                 with('User_info:id_user,name,last_name,phone,entrance_date,birthdate')
-                ->whereIn('id_status', [1,2])
-                ->paginate(10);
+                ->whereIn('id_status', [1,2]);
             } 
-            $data=$data2;
+            $data=$data2->paginate(10);
             if ($request->ajax()) {
                 return view('users.table', ["data"=>$data]);
             }
