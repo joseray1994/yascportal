@@ -23,6 +23,7 @@ class MenuTable extends Seeder
             ['name'=> 'Schedule Daily','icon'=> 'fa fa-calendar-o','link'=>'/daily','prioridad'=> '1','status'=> 1,],
             ['name'=> 'Incident Reports','icon'=> 'fa fa-file-excel-o','link'=>'/incidents','prioridad'=> '1','status'=> 1,],
             ['name'=> 'Vacancies','icon'=> 'fa fa-id-badge','link'=>'/vacancies','prioridad'=> '1','status'=> 1,],
+            ['name'=> 'Training','icon'=> 'fa  fa-book','link'=>'/training','prioridad'=> '1','status'=> 1,],
 
         ];
       

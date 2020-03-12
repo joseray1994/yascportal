@@ -89,7 +89,7 @@ $(document).ready(function(){
         var start_training=$('#start_training').val();
         var end_training=$('#end_training').val();
         
-        training.get_weeks(numWeek,start_training,end_training);
+        training.get_weeks_T(numWeek,start_training,end_training);
     });
 
     $('#numWeek').keyup(function(){
@@ -97,14 +97,18 @@ $(document).ready(function(){
         var start_training=$('#start_training').val();
         var end_training=$('#end_training').val();
         if (numWeek>0) {
-            training.get_weeks(numWeek,start_training,end_training);
+            training.get_weeks_T(numWeek,start_training,end_training);
             
         }
         $('#flag').val(0);
+    });
 
-
-
-
+    $('.n_weeks_coaching').change(function(){
+        var numWeek_C = $('#numWeek_C').val();
+        var end_training=$('#end_training').val();
+        var end_coaching=$('#end_coaching').val();
+        
+        training.get_weeks_C(numWeek_C,end_training,end_coaching);
     });
 
 
@@ -293,7 +297,7 @@ const training ={
               alert('No response from server');
         });
     },
-    get_weeks:function (numWeek,start_training,end_training) {
+    get_weeks_T:function (numWeek,start_training,end_training) {
         var url = $('#url').val();
         $.ajaxSetup({
             headers: {
@@ -302,7 +306,7 @@ const training ={
         })
         $.ajax({
             type:"POST",
-            url:url+'/generate',
+            url:url+'/generateWeekTraining',
             data:{numWeek:numWeek, start_training:start_training, end_training:end_training},
             dataType:"json",
             success: function(data){
@@ -327,6 +331,40 @@ const training ={
                 // $('#end_training').val(data.end_training);
                 // $('#end_training').trigger('change');
                 // $('#numWeek').val(data.num);
+            },
+            error: function(err){
+                console.log(err);
+            }
+        });
+    },
+
+    get_weeks_C:function (numWeek_C,end_training,end_coaching) {
+        var url = $('#url').val();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        })
+        $.ajax({
+            type:"POST",
+            url:url+'/generateWeekCoaching',
+            data:{numWeek_C:numWeek_C, end_training:end_training, end_coaching:end_coaching},
+            dataType:"json",
+            success: function(data){
+                console.log(data);
+
+                switch (data.num['flag']) {
+                    case 1:
+                        $('#numWeek_C').val(data.num['num']);
+                        break;
+                    case 2:
+                        $('#end_coaching').val(data.end_coaching);
+                        $('#end_coaching').trigger('change');
+                        break;
+                
+                    default:
+                        break;
+                }
             },
             error: function(err){
                 console.log(err);

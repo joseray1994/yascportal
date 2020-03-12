@@ -62,7 +62,8 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::put('/training/{trainee_id}', 'TrainingController@update');
     Route::delete('/training/{trainee_id}', 'TrainingController@destroy');
     Route::delete('/training/delete/{id}', 'TrainingController@delete');
-    Route::post('/training/generate', 'TrainingController@generateEnd_training');
+    Route::post('/training/generateWeekTraining', 'TrainingController@generateEnd_training');
+    Route::post('/training/generateWeekCoaching', 'TrainingController@generateEnd_coaching');
 
     //Settings
     Route::get('/settings', 'SettingsController@index');
