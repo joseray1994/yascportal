@@ -74,7 +74,7 @@ class ScheduleWeeklyController extends Controller
                     ->where('detail_schedule_user.status',1);
                     
                 } 
-                $data=$data2->paginate(25);
+                $data=$data2->paginate(10);
                 if ($request->ajax()) {
                     return view('schedule.weekly.table', ["data"=>$data]);
                 }
@@ -87,12 +87,13 @@ class ScheduleWeeklyController extends Controller
 
     public function data_weekly($id){
         $days=[];
-        $data = ScheduleDetailModel::select( "detail_schedule_user.id as id","detail_schedule_user.id_schedule as id_schedule", "detail_schedule_user.type_daily as type", "inf.name as name", "inf.last_name as lastname","cli.name as client","ccl.hex as color",'day.Eng-name as day','detail_schedule_user.time_start as time_s','detail_schedule_user.time_end as time_e',"detail_schedule_user.status as status")
+        $data = ScheduleDetailModel::select( "detail_schedule_user.id as id",'set.name as setting',"detail_schedule_user.id_schedule as id_schedule", "detail_schedule_user.type_daily as type", "inf.name as name", "inf.last_name as lastname","cli.name as client","ccl.hex as color",'day.Eng-name as day','detail_schedule_user.time_start as time_s','detail_schedule_user.time_end as time_e',"detail_schedule_user.status as status")
                     ->join('schedule as sch','sch.id', "=", 'detail_schedule_user.id_schedule')
                     ->join('clients as cli', 'cli.id',"=","sch.id_client")
                     ->join('client_color as ccl', 'ccl.id',"=","cli.color")
                     ->join('users_info as inf','inf.id_user', "=", 'detail_schedule_user.id_operator')
                     ->join('days as day','day.id', "=", 'detail_schedule_user.id_day')
+                    ->join('settings as set','set.id','=','detail_schedule_user.option')
                     ->where('detail_schedule_user.id',$id)
                     ->first();
 
@@ -188,7 +189,8 @@ class ScheduleWeeklyController extends Controller
     {
 
         $weekly = ScheduleWeeklyController::data_weekly($weekly_id);
-        return response()->json($weekly);
+        $data=['No'=>1,'wd'=>$weekly];
+        return response()->json($data);
     }
 
     public function update(Request $request, $weekly_id)

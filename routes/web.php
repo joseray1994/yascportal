@@ -102,13 +102,20 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::delete('/users/{id}', 'UserController@destroy');
     Route::delete('/users/delete/{id}', 'UserController@delete');
    
-    //Schedule
+    //Schedule weekly
     Route::get('/weekly', 'ScheduleWeeklyController@index');
     Route::get('/weekly/{id?}', 'ScheduleWeeklyController@show');
     Route::post('/extra/{id}', 'ScheduleWeeklyController@store');
     Route::put('/weekly/{id}', 'ScheduleWeeklyController@update');
-    Route::delete('/weekly/{UserType_id}', 'ScheduleWeeklyController@destroy');
-    Route::delete('/weekly/delete/{id}', 'ScheduleWeeklyController@delete');
+    Route::delete('/weekly/{id}', 'ScheduleWeeklyController@delete');
+    //Schedule daily
+    Route::get('/daily', 'ScheduleDailyController@index');
+    Route::get('/daily/{id?}', 'ScheduleDailyController@show');
+    Route::put('/daily/{id}', 'ScheduleDailyController@update');
+
+    Route::get('/dayoff', 'ScheduleDailyController@data_dayoff');
+    Route::get('/break', 'ScheduleDailyController@data_break');
+    
 
     //Operators
     Route::get('/operators', 'OperatorsController@index');

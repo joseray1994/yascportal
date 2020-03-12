@@ -35,11 +35,13 @@ if (!function_exists('menu')) {
 
             $bas = BaDetailModel::where('id_tu_detail',$tu_detail->id)->get();
 
+            $type = TypeUserModel::where('id',$user->id_type_user)->where('status',1)->first();
+            
             $menu=[
               'menuUser'=>$menuUser,
               'validate'=>$valaccess,
               'menuNum'=>$menuNum,
-              'typeuser'=>$user->user_type_id,
+              'typeuser'=>$type,
               'actions'=>$bas,
             ];
         }else{
