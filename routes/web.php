@@ -128,7 +128,7 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
 
 
     //Incident Reports
-    Route::get('/incidents', 'IncidentReportsController@index');
+    Route::get('/reports', 'ReportsController@index');
 
 });
 

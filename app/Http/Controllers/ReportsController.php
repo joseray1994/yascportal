@@ -5,14 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
+use App\DaysModel;
 
-class IncidentReportsController extends Controller
+class ReportsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+   
     public function index()
     {
         $user = Auth::user();
@@ -20,9 +17,9 @@ class IncidentReportsController extends Controller
         $menu = menu($user,$id_menu);
         if($menu['validate']){          
         
-          
-            
-        return view('incident_reports.index');
+          $days = DaysModel::all();
+         
+        return view('reports.index', ["menu"=>$menu, "days"=>$days]);
         }else{
             return redirect('/');
         }
