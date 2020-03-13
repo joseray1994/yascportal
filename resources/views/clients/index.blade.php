@@ -19,7 +19,7 @@
                                         </select>
                                     </div>
                                     <input type="text" class="form-control" id="search">
-                                    <button type="button" class="btn btn-primary search-query">Search</button>
+                                    <button type="button" class="btn btn-primary search-query"><i class="fa fa-search"></i></button>
                                 </div>
                                 <div class="table-responsive"  >
                                  @include('clients.table')

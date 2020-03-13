@@ -17,6 +17,18 @@ $(document).ready(function(){
             }
         }
     });
+
+    $("#name, #last_name").keyup(function(){
+        flag = $("#flag").val();
+        if(flag === "false"){
+
+            $("#nickname").val("");
+            $(".seccion-sugerencia").hide();
+            $(".segunda-seccion").hide();
+            $("#nickname").attr('disabled', true);
+        }
+    });
+
     var radioState;
     $('#sidebar2').addClass('active'); 
     $('.selectpick').selectpicker('refresh');
@@ -125,6 +137,7 @@ $(document).ready(function(){
         $(".seccion-sugerencia").hide();
         $(".segunda-seccion").hide();
         $("#nickname").attr('disabled', true);
+        $('.btnGenerate').show();
         $("#flag").val(false);
         // $('#myModal').modal('show');
     
@@ -155,6 +168,7 @@ $(document).ready(function(){
         $('.tableUser').hide();
         disablePassInput()
         $('#tag_put').remove();
+        $('.btnGenerate').hide();
         $form = $('#userForm');
         $form.append('<input type="hidden" id="tag_put" name="_method" value="PUT">');
         // $('#myModal').modal('show');
@@ -173,7 +187,7 @@ $(document).ready(function(){
 
         //create new product / update existing product ***************************
     $("#userForm").on('submit',function (e) {
-        
+        $('#btn-save').attr('disabled', true);
         e.preventDefault(); 
         var stageArray=[];
         var formData = new FormData(this);
@@ -437,6 +451,7 @@ const success = {
     new_update: function (data,state){
             console.log(data);
             $('#btn-save-documents').attr('disabled', false);
+            $('#btn-save').attr('disabled', false);
             $("#no-data-doc").hide();
             var dato = data;
             $.notifyClose();
@@ -599,6 +614,7 @@ const success = {
                     drEvent.init();
                 $('#name').val(data.user_info.name);
                 $('#last_name').val(data.user_info.last_name);
+                $('#nickname').val(data.nickname);
                 $('#address').val(data.user_info.address);
                 $('#phone').val(data.user_info.phone);
                 $('#emergency_contact_name').val(data.user_info.emergency_contact_name);
@@ -673,6 +689,7 @@ const success = {
         }      
         },
         msj: function(data){
+            $('#btn-save').attr('disabled', false);
             $.notifyClose();
             $.each(data.responseJSON.errors,function (k,message) {
                 $.notify({

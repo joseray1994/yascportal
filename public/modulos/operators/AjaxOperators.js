@@ -3,6 +3,8 @@ $(document).ready(function(){
     var url = $('#url').val();
     var baseUrl = $('#baseUrl').val();
     var radioState;
+    var nameDeli='<a href="/operators">Operators</i></a>';
+    $('.nameDeli').html(nameDeli);
 
     $(window).on('hashchange', function() {
         if (window.location.hash) {
@@ -64,6 +66,7 @@ $(document).ready(function(){
         $(".segunda-seccion").hide();
         $("#nickname").attr('disabled', true);
         $("#flag").val(false);
+        $(".btnGenerate").show();
 
 
         var drEvent = $('#dropify-event').dropify();
@@ -126,6 +129,7 @@ $(document).ready(function(){
         $("#nickname").attr('disabled', false);
         $("#email").attr('disabled', true);
         $("#flag").val(true);
+        $(".btnGenerate").hide();
 
         actions.show(my_url);
     });
@@ -254,17 +258,22 @@ $(document).ready(function(){
 
     $("#sugerencias").change(function(){
         valor = $(this).val();
+        flag = $("#flag").val();
         if(valor != 0 || valor != ""){
-            if(valor == 0){
-                valor = "";
+
+            if(flag === "false"){
+
+                if(valor == 0){
+                    valor = "";
+                }
+                $("#nickname").val(valor);
+                $("#nickname").attr('disabled', false);
+                $("#email").val(valor+'@yascemail.com');
+                $("#email").attr('disabled', false);
+                $("#password").val(valor + "*2020");
+                $("#password_confirmation").val(valor + "*2020");
+                $(".segunda-seccion").show();
             }
-            $("#nickname").val(valor);
-            $("#nickname").attr('disabled', false);
-            $("#email").val(valor+'@yascemail.com');
-            $("#email").attr('disabled', false);
-            $("#password").val(valor + "*2020");
-            $("#password_confirmation").val(valor + "*2020");
-            $(".segunda-seccion").show();
         }else{
             $(".segunda-seccion").hide();
             $("#nickname").val("");
@@ -294,6 +303,18 @@ $(document).ready(function(){
             }
         }
 
+    });
+
+
+    $("#name, #last_name").keyup(function(){
+        flag = $("#flag").val();
+        if(flag === "false"){
+
+            $("#nickname").val("");
+            $(".seccion-sugerencia").hide();
+            $(".segunda-seccion").hide();
+            $("#nickname").attr('disabled', true);
+        }
     });
 
 

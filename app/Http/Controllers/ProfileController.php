@@ -7,8 +7,11 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon; 
 use App\User_info;
 use App\User;
+use App\DocumentModel;
 use App\User_client;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\File;
+
 
 
 class ProfileController extends Controller
@@ -24,8 +27,32 @@ class ProfileController extends Controller
             ->join('users as usr', 'users_info.id_user', '=', 'usr.id')
             ->where('usr.id', $user->id)
             ->first();
+
+            switch ($menu['typeuser']->id) {
+                case 3:
+                    $mat = "TDO";
+                break;
+                case 5:
+                    $mat = "IDO";
+                break;
+                case 7:
+                    $mat = "HDO";
+                break;
+                case 9:
+                    $mat = "ODO";
+                break;
+                case 1:
+                    $mat = "ADM";
+                break;
+                
+                default:
+                    $mat = "USR";
+                break;
+            }
+
+            $docs = ProfileController::showDocument($user->id, $mat);
          
-        return view('profile.index',["menu"=>$menu, "data"=>$profile]);
+        return view('profile.index',["menu"=>$menu, "data"=>$profile, "docs"=>$docs, "mat"=>$mat]);
         }else{
             return redirect('/');
         }
@@ -93,9 +120,12 @@ class ProfileController extends Controller
             $image = $request->file('image');
             $name = time().$image->getClientOriginalName();
             $image->move(public_path().'/images'.$folder,$name);
+            $path = '/images'.$folder.$name;
+            $user_info->path_image = $path;
             $user_info->profile_picture = $name;
         }else
         {
+            $user_info->path_image = $user_info->path_image;
             $user_info->profile_picture = $user_info->profile_picture;
         }
 
@@ -116,12 +146,17 @@ class ProfileController extends Controller
     }
 
     public function getResult($id){
-        $profile = User_info::select('users_info.name', 'users_info.last_name', 'users_info.address', 'users_info.phone', 'users_info.emergency_contact_phone', 'users_info.emergency_contact_name', 'users_info.notes', 'users_info.description', 'users_info.profile_picture', 'users_info.birthdate', 'usr.email', 'usr.id', 'usr.id_status', 'usr.nickname')
+        $profile = User_info::select('users_info.name', 'users_info.last_name', 'users_info.address', 'users_info.phone', 'users_info.emergency_contact_phone', 'users_info.emergency_contact_name', 'users_info.notes', 'users_info.description', 'users_info.profile_picture', 'users_info.path_image', 'users_info.birthdate', 'usr.email', 'usr.id', 'usr.id_status', 'usr.nickname')
         ->join('users as usr', 'users_info.id_user', '=', 'usr.id')
         ->where('usr.id', $id)
         ->first();
 
         return $profile;
+    }
+
+    public function showDocument($id, $mat){
+        $document = DocumentModel::where('id_dad', $id)->where('mat', $mat)->where('status', 1)->get();
+       return $document;
     }
 
 }
