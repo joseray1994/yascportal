@@ -30,118 +30,86 @@ class TrainingController extends Controller
         $user = Auth::user();
         $id_menu=5;
         $menu = menu($user,$id_menu);
-        
         if($menu['validate']){  
             $days= DaysModel::all();
-
+            $operators=User::select('users.id as id', 'ui.name as name', 'ui.last_name as lname')
+            ->join('users_info as ui', 'ui.id_user', '=', 'users.id')
+            ->where('users.id_type_user','=',11)
+            ->get();
+            $days= DaysModel::all();
+            $settings= SettingsModel::all();
+            $clients=ClientModel::all();
+            $options= OptionsSettingModel::all();
+            $trainers = User::where('id_type_user', 3)->with('User_info')->get();
+            
             if($request->date !=""){
-                if(strlen($request->type) > 0 &&  strlen($search) > 0){
-                    $now =Carbon::parse($request->date);
-                   
-
-                     $type= SettingsController::search_settings($request->type);
-
-                    $data2 =  SettingsModel::select('settings.id as id','op.option as option','settings.name as name', 'settings.status as status')
-                            ->join('options_settings as op', 'op.id', '=', 'settings.id_option')
-                            ->whereNotIn('settings.status',[0])->where($type,'LIKE','%'.$search.'%')->paginate(5);
-                    // $data2 = SettingsModel::whereNotIn('status',[0])->where($request->type,'LIKE','%'.$search.'%')->paginate(5);
-                } else{
-                    $now = Carbon::now();
-                    $data2 =  SettingsModel::select('settings.id as id','op.option as option','settings.name as name', 'settings.status as status')
-                    ->join('options_settings as op', 'op.id', '=', 'settings.id_option')
-                    ->whereNotIn('settings.status',[0])->paginate(5);
-                } 
-
-                // return view('training.index',["data"=>$data,"menu"=>$menu,"options_settings"=>$options,"days"=>$days,"today"=>$now->toDateString(),"NoD"=>$now->dayOfWeek,]);
-
-
+                $now = Carbon::now();
+                $data2 = TrainingDetailModel::select( "detail_schedule_user.id as id", "detail_schedule_user.type_daily as type", "inf.name as name", "inf.last_name as lastname","cli.name as client","ccl.hex as color",'set.name as setting','detail_schedule_user.time_start as time_s','detail_schedule_user.time_end as time_e',"detail_schedule_user.status as status")
+                ->join('schedule as sch','sch.id', "=", 'detail_schedule_user.id_schedule')
+                ->join('clients as cli', 'cli.id',"=","sch.id_client")
+                ->join('client_color as ccl', 'ccl.id',"=","cli.color")
+                ->join('users_info as inf','inf.id_user', "=", 'detail_schedule_user.id_operator')
+                ->join('settings as set','set.id','=','detail_schedule_user.option')
+                ->where('detail_schedule_user.id_day',"=", $now->dayOfWeek)
+                ->where('sch.week',"=", $now->weekOfYear)
+                ->where('sch.month',"=", $now->month)
+                ->where('sch.year',"=", $now->year)
+                ->where('detail_schedule_user.status',1)
+                ->where('detail_schedule_user.status',2);
+                
+                // dd($data2);
+                
+                $day = DaysModel::where('id',$now->dayOfWeek)->first();
+                
+                
             }else{
-                if(strlen($request->type) > 0 &&  strlen($search) > 0){
-                    $now = Carbon::now();
-                     $type= SettingsController::search_settings($request->type);
+                $now = Carbon::now();
+                
+                $data2=TrainingDetailModel::select("detail_schedule_user.id as id", "detail_schedule_user.type_daily as type","inf.name as name", "inf.last_name as lastname","detail_schedule_user.time_start as time_s","detail_schedule_user.time_end as time_e","detail_schedule_user.status as status","cli.name as client","ccl.hex as color","info.name as name_trainer", "info.last_name as lastname_trainer", "tcd.date_end as end_training")
+                ->join('schedule as sch','sch.id', "=", 'detail_schedule_user.id_schedule')
+                ->join('clients as cli', 'cli.id',"=","sch.id_client")
+                ->join('client_color as ccl', 'ccl.id',"=","cli.color")
+                ->join('t_or_c_duration as tcd', 'tcd.id',"=","sch.id_torcduration")
+                ->join('users_info as inf','inf.id_user', "=", 'detail_schedule_user.id_operator')
+                ->join('users_info as info','info.id_user', "=", 'tcd.id_trainer')
+                ->join('settings as set','set.id','=','detail_schedule_user.option')
+                ->where('detail_schedule_user.id_day',"=", $now->dayOfWeek)
+                ->where('sch.week',"=", $now->weekOfYear)
+                ->where('sch.month',"=", $now->month)
+                ->where('sch.year',"=", $now->year);
+            // $data = $data2->get();
 
-                    $data2 =  SettingsModel::select('settings.id as id','op.option as option','settings.name as name', 'settings.status as status')
-                            ->join('options_settings as op', 'op.id', '=', 'settings.id_option')
-                            ->whereNotIn('settings.status',[0])->where($type,'LIKE','%'.$search.'%')->paginate(5);
-                    // $data2 = SettingsModel::whereNotIn('status',[0])->where($request->type,'LIKE','%'.$search.'%')->paginate(5);
-                } else{
-                    $now = Carbon::now();
-                    $data2 =  SettingsModel::select('settings.id as id','op.option as option','settings.name as name', 'settings.status as status')
-                    ->join('options_settings as op', 'op.id', '=', 'settings.id_option')
-                    ->whereNotIn('settings.status',[0])->paginate(5);
-                } 
+            //     dd($data); 
 
+
+
+                // $data2 = TrainingDetailModel::select( "detail_schedule_user.id as id", "detail_schedule_user.type_daily as type", "inf.name as name", "inf.last_name as lastname","cli.name as client","ccl.hex as color",'set.name as setting','detail_schedule_user.time_start as time_s','detail_schedule_user.time_end as time_e',"detail_schedule_user.status as status")
+                // ->join('schedule as sch','sch.id', "=", 'detail_schedule_user.id_schedule')
+                // ->join('clients as cli', 'cli.id',"=","sch.id_client")
+                // ->join('client_color as ccl', 'ccl.id',"=","cli.color")
+                // ->join('users_info as inf','inf.id_user', "=", 'detail_schedule_user.id_operator')
+                // ->join('settings as set','set.id','=','detail_schedule_user.option')
+                // ->where('detail_schedule_user.id_day',"=", $now->dayOfWeek)
+                // ->where('sch.week',"=", $now->weekOfYear)
+                // ->where('sch.month',"=", $now->month)
+                // ->where('sch.year',"=", $now->year)
+                // ->where('detail_schedule_user.status',1)
+                // ->where('detail_schedule_user.status',2);
+
+
+                
+                // 
+                // dd($data2);
+
+                $day = DaysModel::where('id',$now->dayOfWeek)->first();
             }
-            // $data=$data2;
-            // if ($request->ajax()) {
-            //     return view('training.table', ["data"=>$data]);
-            // }
-            // $options= OptionsSettingModel::all();
-            //     // return view('training.index',["data"=>$data,"menu"=>$menu,"options_settings"=>$options,"days"=>$days,"today"=>$now->toDateString(),"NoD"=>$now->dayOfWeek,]);
-
-                if($request->date !=""){
-                    $now =Carbon::parse($request->date);
-                    $fecha= $now->dayOfWeek;
-                    print_r($fecha);
-                    $data=$data2;
-                    if ($request->ajax()) {
-                        return view('training.table', ["data"=>$data]);
-                    }
-                    $options= OptionsSettingModel::all();
-                    $trainers = User::where('id_type_user', 3)->with('User_info')->get();
-                    $clients = ClientModel::all();
-
-
-                        return view('training.index',["data"=>$data,"menu"=>$menu,"options_settings"=>$options,"days"=>$days,"today"=>$now->toDateString(),"NoD"=>$fecha,'trainers'=>$trainers, 'clients'=>$clients]);
+            $data = $data2->get();
+            if ($request->ajax()) {
+                return view('training.table', ["data"=>$data]);
+            }
         
-                }else{
-                    $now =Carbon::now();
-                    $fecha= $now->dayOfWeek;
-                    print_r($fecha);
-                    $data=$data2;
-                    if ($request->ajax()) {
-                        return view('training.table', ["data"=>$data]);
-                    }
-                    $options= OptionsSettingModel::all();
-                    $trainers = User::where('id_type_user', 3)->with('User_info')->get();
-                    $clients = ClientModel::all();
-
-                        return view('training.index',["data"=>$data,"menu"=>$menu,"options_settings"=>$options,"days"=>$days,"today"=>$now->toDateString(),"NoD"=>$fecha,'trainers'=>$trainers, 'clients'=>$clients]);
-        
-                }
-
-
-
-
-
-
-
-
-
-        //     $search = trim($request->dato);
-
-        //         if(strlen($request->type) > 0 &&  strlen($search) > 0){
-        //             $now = Carbon::now();
-        //              $type= SettingsController::search_settings($request->type);
-
-        //             $data2 =  SettingsModel::select('settings.id as id','op.option as option','settings.name as name', 'settings.status as status')
-        //                     ->join('options_settings as op', 'op.id', '=', 'settings.id_option')
-        //                     ->whereNotIn('settings.status',[0])->where($type,'LIKE','%'.$search.'%')->paginate(5);
-        //             // $data2 = SettingsModel::whereNotIn('status',[0])->where($request->type,'LIKE','%'.$search.'%')->paginate(5);
-        //         } else{
-        //             $now = Carbon::now();
-        //             $data2 =  SettingsModel::select('settings.id as id','op.option as option','settings.name as name', 'settings.status as status')
-        //             ->join('options_settings as op', 'op.id', '=', 'settings.id_option')
-        //             ->whereNotIn('settings.status',[0])->paginate(5);
-        //         } 
-        //         $data=$data2;
-        //         if ($request->ajax()) {
-        //             return view('training.table', ["data"=>$data]);
-        //         }
-        //         $options= OptionsSettingModel::all();
-        //         print_r($request->date);
-        // return view('training.index',["data"=>$data,"menu"=>$menu,"options_settings"=>$options,"days"=>$days,"today"=>$now->toDateString(),"NoD"=>$now->dayOfWeek,]);
-         }else{
+    return view('training.index',["data"=>$data,'day'=>$day,'date'=>$now,"days"=>$days,"settings"=>$settings ,"today"=>$now->toDateString(),"NoD"=>$now->dayOfWeek, "clients"=>$clients,"operators"=>$operators,"menu"=>$menu,"trainers"=>$trainers, "options"=>$options]);
+        }else{
             return redirect('/');
          }
             
@@ -233,11 +201,7 @@ class TrainingController extends Controller
 
     public function store(Request $request)
     {     
-        //in TorCDuration
-        //type=1 está en training , type=2 está en coaching
-    //--------------------------//
-    //in ScheduleModel
-        //status=1 horario habilitado, status=2 el horario todavia no se usa porque está en coaching
+        //in TorCDuration //type=1 está en training , type=2 está en coaching  //in ScheduleTrainingModel  //type=1 habilitado, type=2 tarining, type=3 coaching //in ScheduleTrainingModel  //type=1 habilitado, type=2 tarining, type=3 coaching //in training detail //type=1 workday, type=2 training, type=3 coaching, type=4 extra
     //--------------------------//
         $correo=$request->email.'@yasemail.com';
         //crea usuario
@@ -433,7 +397,7 @@ class TrainingController extends Controller
                         'time_start'=>$request->start ,
                         'time_end'=>$request->end ,
                         'type_daily'=>$type,
-                        'option'=>0 ,
+                        'option'=>1,
                         'status'=>$status_dayoff ,
                         ]);
                 }
