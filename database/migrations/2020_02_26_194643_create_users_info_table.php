@@ -28,6 +28,7 @@ class CreateUsersInfoTable extends Migration
             $table->string('gender');
             $table->string('birthdate');
             $table->string('profile_picture')->nullable();
+            $table->string('path_image')->nullable();
             $table->date('entrance_date')->nullable();
             $table->string('biotime_status')->nullable();
             $table->string('access_code')->nullable();

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\User;
+use App\Audit;
 use Illuminate\Http\Request;
 use App\ScheduleDetailModel;
 use App\DaysModel;
@@ -49,14 +50,17 @@ class ScheduleWeeklyController extends Controller
                     ->where('sch.year',"=", $now->year)
                     ->where('detail_schedule_user.status',1);
 
-                    if($request->day != "all"){
+                    if($request->day != "allDays"){
                         $data2->where('detail_schedule_user.id_day',"=", $request->day);
                     }
-                    if($request->operator != "all"){
+                    if($request->operator != "allOperators"){
                         $data2->where('detail_schedule_user.id_operator',"=", $request->operator);
                     }
-                    if($request->client != "all"){
+                    if($request->client != "allClients"){
                         $data2->where('sch.id_client',"=", $request->client);
+                    }
+                    if($request->work != "allWorks"){
+                        $data2->where('detail_schedule_user.type_daily',"=", $request->work);
                     }
 
                 } else{
@@ -74,7 +78,7 @@ class ScheduleWeeklyController extends Controller
                     ->where('detail_schedule_user.status',1);
                     
                 } 
-                $data=$data2->paginate(25);
+                $data=$data2->paginate(100);
                 if ($request->ajax()) {
                     return view('schedule.weekly.table', ["data"=>$data]);
                 }
@@ -87,12 +91,13 @@ class ScheduleWeeklyController extends Controller
 
     public function data_weekly($id){
         $days=[];
-        $data = ScheduleDetailModel::select( "detail_schedule_user.id as id","detail_schedule_user.id_schedule as id_schedule", "detail_schedule_user.type_daily as type", "inf.name as name", "inf.last_name as lastname","cli.name as client","ccl.hex as color",'day.Eng-name as day','detail_schedule_user.time_start as time_s','detail_schedule_user.time_end as time_e',"detail_schedule_user.status as status")
+        $data = ScheduleDetailModel::select( "detail_schedule_user.id as id",'set.name as setting',"detail_schedule_user.id_schedule as id_schedule", "detail_schedule_user.type_daily as type", "inf.name as name", "inf.last_name as lastname","cli.name as client","ccl.hex as color",'day.Eng-name as day','detail_schedule_user.time_start as time_s','detail_schedule_user.time_end as time_e',"detail_schedule_user.status as status")
                     ->join('schedule as sch','sch.id', "=", 'detail_schedule_user.id_schedule')
                     ->join('clients as cli', 'cli.id',"=","sch.id_client")
                     ->join('client_color as ccl', 'ccl.id',"=","cli.color")
                     ->join('users_info as inf','inf.id_user', "=", 'detail_schedule_user.id_operator')
                     ->join('days as day','day.id', "=", 'detail_schedule_user.id_day')
+                    ->join('settings as set','set.id','=','detail_schedule_user.option')
                     ->where('detail_schedule_user.id',$id)
                     ->first();
 
@@ -188,7 +193,17 @@ class ScheduleWeeklyController extends Controller
     {
 
         $weekly = ScheduleWeeklyController::data_weekly($weekly_id);
-        return response()->json($weekly);
+        $data=['No'=>1,'wd'=>$weekly];
+        return response()->json($data);
+    }
+
+    public function detail($weekly_id)
+    {   
+        
+        $weekly = ScheduleDetailModel::find($weekly_id);
+        $audit = Audit::where('user_id',$weekly->id_operator)->get();
+        $data=['No'=>1,'audit'=>$audit];
+        return response()->json($data);
     }
 
     public function update(Request $request, $weekly_id)
@@ -258,4 +273,7 @@ class ScheduleWeeklyController extends Controller
       
         return response()->json($type);
     } 
+
+
+
 }

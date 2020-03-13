@@ -11,6 +11,14 @@ $(document).ready(function(){
     $('.js-example-basic-single').select2();
     $('.js-example-basic-multiple').select2();
 
+    //export csv
+    $('#csv').on('click',function(){
+        date = $('#dateSearch').val();
+        client=$('#clientSearch').val();
+        operator=$('#operatorSearch').val();
+        name =`${date}-${client}-${operator}`
+        $("#tag_container").tableHTMLExport({type:'csv',filename:`Weekly${name}.csv`});
+      })
     //display modal form for creating new product *********************
     $('#btn_add').click(function(){
         $('#btn-save').val("add");
@@ -29,7 +37,19 @@ $(document).ready(function(){
         $('#myModal').modal('hide');
     });
 
+    $('#dateSearch').change(function(){
+        //  $('#daySearch').val(),
+        var date = $('#dateSearch').val();
+         date = moment(date).format('YYYY/MM/DD');
+        var fecha = new Date(date);
+        fecha = new Date(fecha.setHours(0,0,0,0));
+        var weekday = fecha.getDay();
+         $('#daySearch').val(weekday);
+         $('#daySearch').trigger('change');
+    });
+
     $('.scheduleWeeklySearch').change(function(){
+       
         schedule.get_data(1);
     });
 
@@ -115,65 +135,10 @@ $(document).ready(function(){
     
     });
 
- $(document).on('click','.off-type',function(){
-            var id = $(this).val();
-            var my_url =url + '/' + id;
-                $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                }
-            })
-                if($(this).attr('class') == 'btn btn-sm btn-outline-success off-type')
-                {
-                    title= "¿Deseas activar este Usuario?";
-                    text="El Usuario se activara";
-                    confirmButtonText="Activar";
-
-                    datatitle="Activado";
-                    datatext="activado";
-                    datatext2="Activacion";
-                }
-                else 
-                {
-                    title= "¿Desea desactivar este Usuario?";
-                    text= "El Usuario se desactivara";
-                    confirmButtonText="Desactivar";
-
-                    datatitle="Desactivado";
-                    datatext="desactivado";
-                    datatext2="Desactivacion";
-
-                }
-    
-
-                swal({
-                    title: title,
-                    text: text,
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonClass: "btn btn-danger",
-                    confirmButtonText: confirmButtonText,
-                    cancelButtonText: "Cancelar",
-                    closeOnConfirm: false,
-                    closeOnCancel: false
-                },
-                function(isConfirm) {
-                    if (isConfirm) {
-                    swal(datatitle, "Usuario "+datatext, "success");
-                    actions.deactivated(my_url);
-                    } 
-                    else {
-                    
-                    swal("Cancelado", datatext2+" cancelada", "error");
-                
-                    }
-            });
-        });
-
     //delete product and remove it from TABLE list ***************************
-    $(document).on('click','.delete-profile',function(){
+    $(document).on('click','.deleteschedule',function(){
         var privada_id = $(this).val();
-        var my_url = url + '/delete/' + privada_id;
+        var my_url = url + '/' + privada_id;
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -223,14 +188,13 @@ $(document).ready(function(){
 const schedule ={
     button: function(dato){
            var buttons='';
-            if(dato.status== 1){
+            if(dato.type== 1){
                buttons +='<a class="btn btn-sm btn-outline-primary" title="Assignament Type" id="btn-edit" href="/assignmenttype/'+dato.id+'"  ><i class="fa fa-info-circle"></i></a>'
-               buttons += ' <button class="btn btn-sm btn-secondary btn-detail open_modal"  data-toggle="tooltip" title="Editar nombre del Perfil"  value="'+dato.id+'"> <i class="fa fa-edit"></i></li></button>';
-               buttons += '	<button type="button" class="btn btn-sm btn-outline-danger off-type" title="Desactivar Usuario" data-type="confirm" value="'+dato.id+'" ><i class="fa fa-window-close"></i></button>';
-          
-           }else if(dato.status == 2){
-               buttons+='<button type="button" class="btn btn-sm btn-outline-success off-type" title="Activar Usuario" data-type="confirm" value="'+dato.id+'" ><i class="fa fa-check-square-o"></i></button>'
-               buttons += '<button class="btn btn-danger btn-sm btn-delete delete-profile" data-toggle="tooltip" title="Desactivar Perfil" value="'+dato.id+'"><i class="fa fa-trash-o"></i> </button>';
+               buttons += ' <button class="btn btn-sm btn-secondary btn-detail open_modal"  data-toggle="tooltip" title="Editar nombre del Perfil"  value="'+dato.id+'"> <i class="fa fa-edit"></i></li></button>'
+           }else if(dato.type == 2){
+                buttons +='<a class="btn btn-sm btn-outline-primary" title="Assignament Type" id="btn-edit" href="/assignmenttype/'+dato.id+'"  ><i class="fa fa-info-circle"></i></a>'
+                buttons += ' <button class="btn btn-sm btn-secondary btn-detail open_modal"  data-toggle="tooltip" title="Editar nombre del Perfil"  value="'+dato.id+'"> <i class="fa fa-edit"></i></li></button>';
+                buttons += '<button class="btn btn-danger btn-sm btn-delete delete-profile" data-toggle="tooltip" title="Desactivar Perfil" value="'+dato.id+'"><i class="fa fa-trash-o"></i> </button>';
            }
            return buttons;
     },
@@ -258,6 +222,7 @@ const schedule ={
                 client:$('#clientSearch').val(),
                 date:$('#dateSearch').val(),
                 operator:$('#operatorSearch').val(),
+                work:$('#worktypesearch').val(),
             }
             $('.loading-table').show();
             console.log(formData);
@@ -365,7 +330,6 @@ const success = {
                                     <td>${dato.wd.detail.time_s}</td>
                                     <td>${dato.wd.detail.time_e}</td>
                                     <td class="hidden-xs">${schedule.type(dato.wd.detail)}</td>
-                                    <td class="hidden-xs">${schedule.status(dato.wd.detail)}</td>
                                     <td>${schedule.button(dato.wd.detail)}</td>
                                 </tr>`;
                     $("#shcedule_id"+dato.wd.detail.id).replaceWith(profile);
@@ -380,7 +344,6 @@ const success = {
                                         <td>${dato.wd.detail.time_s}</td>
                                         <td>${dato.wd.detail.time_e}</td>
                                         <td class="hidden-xs">${schedule.type(dato.wd.detail)}</td>
-                                        <td class="hidden-xs">${schedule.status(dato.wd.detail)}</td>
                                         <td>${schedule.button(dato.wd.detail)}</td>
                                     </tr>`;
                     $("#shcedule_id"+dato.wd.detail.id).replaceWith(profile);
@@ -394,7 +357,6 @@ const success = {
                                         <td>${dato.ed.detail.time_s}</td>
                                         <td>${dato.ed.detail.time_e}</td>
                                         <td class="hidden-xs">${schedule.type(dato.ed.detail)}</td>
-                                        <td class="hidden-xs">${schedule.status(dato.ed.detail)}</td>
                                         <td>${schedule.button(dato.ed.detail)}</td>
                                         </tr>`;
                             $("#shcedule-list").prepend(profile);
@@ -438,25 +400,25 @@ const success = {
         console.log(data);
     
       
-        if(data.detail.type == 2){
+        if(data.wd.detail.type == 2){
             $('#btn-saveE').val("update");
-            $('#shcedule_idE').val(data.detail.id);
-            $('#time_startE').val(data.detail.time_s);
-            $('#time_endE').val(data.detail.time_e);
+            $('#shcedule_idE').val(data.wd.detail.id);
+            $('#time_startE').val(data.wd.detail.time_s);
+            $('#time_endE').val(data.wd.detail.time_e);
             $('#myModal2').modal('show');
             
         }else{
             $('#btn-save').val("update");
-            $('#shcedule_id').val(data.detail.id);
-            $('#time_start').val(data.detail.time_s);
-            $('#time_end').val(data.detail.time_e);
+            $('#shcedule_id').val(data.wd.detail.id);
+            $('#time_start').val(data.wd.detail.time_s);
+            $('#time_end').val(data.wd.detail.time_e);
     
-            if(data.days.length == 0){
+            if(data.wd.days.length == 0){
                 $('#days').val(null);
                 $('#days').trigger('change');
             }else{
     
-                $('#days').val(data.days)
+                $('#days').val(data.wd.days)
                 $('#days').trigger('change');
             }
             $('#myModal').modal('show');

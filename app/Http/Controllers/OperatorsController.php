@@ -17,7 +17,7 @@ class OperatorsController extends Controller
         $user = Auth::user();
         $id_menu=3;
         $menu = menu($user,$id_menu);
-        if($menu['validate']){          
+        if($menu['validate']){  
         
             $search = trim($request->dato);
 
@@ -34,7 +34,7 @@ class OperatorsController extends Controller
                 ->where('usr.id_type_user', 9)
                 ->whereIn('usr.id_status', [1,2]);
             } 
-            $data=$data2->paginate(10);;
+            $data=$data2->paginate(10);
             if ($request->ajax()) {
                 return view('operators.table', ["data"=>$data]);
             }
@@ -96,6 +96,9 @@ class OperatorsController extends Controller
 
         // SUBIR IMAGE
         $imageName = OperatorsController::documents($request, "operators");
+        if($imageName == null){
+            $imageName = ['name'=>"", 'path'=>""];
+        }
         // GUARDAR INFO DE USUARIO
         $User_info =  User_info::Create([
             'id_user'=>$user->id,
@@ -109,7 +112,8 @@ class OperatorsController extends Controller
             'description'=>$request->description,
             'gender'=>$request->gender,
             'birthdate'=>$request->birthdate,
-            'profile_picture'=>$imageName,
+            'profile_picture'=>$imageName['name'],
+            'path_image'=>$imageName['path'],
             'biotime_status'=>"",
             'access_code'=>"",
             'entrance_date'=>$request->entrance_date,
@@ -170,9 +174,12 @@ class OperatorsController extends Controller
             $image = $request->file('image');
             $name = time().$image->getClientOriginalName();
             $image->move(public_path().'/images/operators/',$name);
+            $path = '/images/operators/'.$name;
+            $user_info->path_image = $path;
             $user_info->profile_picture = $name;
         }else
         {
+            $user_info->path_image = $user_info->path_image;
             $user_info->profile_picture = $user_info->profile_picture;
         }
 
@@ -220,7 +227,9 @@ class OperatorsController extends Controller
             $image = $request->file('image');
             $imageName = time().$image->getClientOriginalName();
             $image->move(public_path().'/images/'.$folder.'/',$imageName);
-            return $imageName;
+            $path = '/images/'.$folder.'/'.$imageName;
+            $data =  ["name"=>$imageName, "path"=>$path];
+            return $data;
 
          }
     }

@@ -243,3 +243,15 @@ hr.hrblue {
 	background-color: #9bcb5b;
 	color:#ffffff;
 }
+
+.badge-training
+{
+		background-color: rgb(116, 82, 180); 
+		color: white;
+}
+
+.badge-coaching
+{
+	background-color: rgb(0, 0, 128); 
+	color: white;
+}

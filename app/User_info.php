@@ -13,7 +13,7 @@ class User_info extends Model implements Auditable
     protected $primaryKey = 'id';
     protected $fillable = [
         'id_user','mat', 'name', 'last_name', 'address','phone', 'emergency_contact_name', 'emergency_contact_phone', 'notes', 
-        'description', 'gender', 'birthdate', 'profile_picture', 'entrance_date', 'biotime_status', 'access_code',
+        'description', 'gender', 'birthdate', 'profile_picture', 'path_image', 'entrance_date', 'biotime_status', 'access_code',
     ];
 
     public function type_membership(){
