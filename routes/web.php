@@ -116,6 +116,7 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
 
     Route::get('/dayoff', 'ScheduleDailyController@data_dayoff');
     Route::get('/break', 'ScheduleDailyController@data_break');
+    Route::get('/detail/{id?}', 'ScheduleWeeklyController@detail');
     
 
     //Operators

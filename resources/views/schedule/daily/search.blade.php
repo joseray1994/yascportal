@@ -18,9 +18,12 @@
                                     @endforeach
                                 </select>
             </div>
-            <div class="form-group col-sm-4">
+            <div class="form-group col-sm-2">
                                 <label for="sel1">Select Date:</label>
                                 <input type="date" value="{{$today}}" id="dateSearch" name="dateSearch" class="form-control scheduleWeeklySearch">
+            </div>
+            <div class="form-group col-sm-2">
+                                <button id="csv" class="btn btn-info">TO CSV</button>
             </div>
     </div>                           
 </div>

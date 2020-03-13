@@ -134,6 +134,9 @@
                         cursor: default;">MÉRIDA Clima</a> --}}
                         @yield('content')
                     </div>
+                        <div class="card" id="incidentReport" style="display:none;">
+                       
+                    </div>
                 </div>
             </div>
  
