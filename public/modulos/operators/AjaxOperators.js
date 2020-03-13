@@ -451,7 +451,6 @@ const success = {
                     $('#document-list').html(document);
                 }
             break;
-        
             default:
                 $('#tag_put').remove();
                 $form = $('#formOperators');

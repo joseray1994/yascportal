@@ -17,7 +17,7 @@ class OperatorsController extends Controller
         $user = Auth::user();
         $id_menu=3;
         $menu = menu($user,$id_menu);
-        if($menu['validate']){          
+        if($menu['validate']){  
         
             $search = trim($request->dato);
 
