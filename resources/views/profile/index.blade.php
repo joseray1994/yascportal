@@ -9,11 +9,11 @@
         <div class="card profile-header">
             <div class="header">
             <input type="hidden" id="imagen" value="{{$data->profile_picture}}">
-            <div class="profile-image"> <img src="" id="image-profile" class="img-thumbnail" alt=""> </div>
+            <div class="profile-image"> <img src="{{asset($menu['dataUser']->path_image)}}" id="image-profile" class="img-thumbnail" alt=""> </div>
             </div>
             <div class="body">
                 <div>
-                    <h4 class="m-b-0"><strong>{{$user->nickname}}</strong></h4>
+                    <h4 class="m-b-0"><strong id="label_nickname">{{$user->nickname}}</strong></h4>
                     <span></span>
                 </div>                          
             </div>
@@ -22,7 +22,7 @@
         
         <div class="card">
             <div class="header">
-                <h2>Info</h2>
+                <legend>Info</legend>
             </div>
             <div class="body">
                 <small class="text-muted">Name: </small>
@@ -48,6 +48,7 @@
                 <ul class="nav nav-tabs-new">
                     <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#Overview" id="btnOverview">Overview</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Settings" id="btnSettings">Settings</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Documents" id="btnDocuments">Documents</a></li>
                 </ul>
             </div>
         </div>
@@ -159,7 +160,7 @@
                                     <div class="col-sm-12 form-group">
                                         <div class="card">
                                             <div class="body">
-                                                <input type="file" class="dropify" id="dropify-event" name="image" data-default-file="" data-show-remove="false">
+                                                <input type="file" class="dropify" id="dropify-event" name="image" data-default-file="{{asset($menu['dataUser']->path_image)}}" data-show-remove="false">
                                             </div>
                                         </div>  
                                     </div>          
@@ -176,6 +177,35 @@
                 </div>
             </div>
 
+            <div class="tab-pane animated fadeIn" id="Documents">
+                <div class="card">
+                    <div class="header">
+                        <legend>Documents</legend>
+                    </div>
+                    <div class="body">
+                        <div class="table-responsive">
+                            <table class="table table-striped text-center" id="table-documents">
+                                <thead class="text-white thead-yasc">
+                                    <tr>
+                                        <th>Document</th>
+                                        <th>Options</th>
+                                    </tr>
+                                </thead>
+                                <tbody id = 'document-list'></tbody>
+                                @forelse($docs as $doc)
+                                <tr>
+                                    <td>{{$doc->name}}</td>
+                                    <td><button type="button" class="btn btn-sm btn-outline-secondary download" data-toggle="tooltip" title="Download" value="{{$doc->id}}"> <i class="fa fa-download"></i></li></button></td>
+                                </tr>
+                                @empty
+                                <tr id="no-data-doc"><td colspan="2">NO DATA</td></tr>
+                                @endforelse
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
         
     </div>
@@ -185,6 +215,7 @@
              <!-- Passing BASE URL to AJAX -->
         <input id="url" type="hidden" value="{{ \Request::url() }}">
         <input id="baseUrl" type="hidden" value="{{ \Request::root() }}">
+        <input type="hidden" id="mat" value="{{$mat}}">
 @endsection
 @section('script')
 <script src="{{asset('modulos/ajaxscript_actions.js')}}"></script>

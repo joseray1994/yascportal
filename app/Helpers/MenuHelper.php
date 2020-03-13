@@ -2,6 +2,7 @@
 
 use App\BasicMenuModel;
 use App\User;
+use App\User_info;
 use App\AssignamentTypeModel;
 use App\ActionModel;
 use App\BaDetailModel;
@@ -36,12 +37,15 @@ if (!function_exists('menu')) {
             $bas = BaDetailModel::where('id_tu_detail',$tu_detail->id)->get();
 
             $type = TypeUserModel::where('id',$user->id_type_user)->where('status',1)->first();
+
+            $dataUser = User_info::select('path_image')->where('id',$user->id)->first();
             
             $menu=[
               'menuUser'=>$menuUser,
               'validate'=>$valaccess,
               'menuNum'=>$menuNum,
               'typeuser'=>$type,
+              'dataUser'=>$dataUser,
               'actions'=>$bas,
             ];
         }else{

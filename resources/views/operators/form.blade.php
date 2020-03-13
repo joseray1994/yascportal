@@ -5,6 +5,8 @@
 <div class="col-sm-12 formulario" style="display:none">
     <form id="formOperators" class="form-horizontal" enctype="multipart/form-data" autocomplete="off">
         {{ csrf_field() }}
+        <h4>Personal Information</h4>
+        <hr>
         <div class="row">
             <div class="col-sm-3 form-group">
                 <h6>First Name:</h6>
@@ -63,7 +65,7 @@
                     <select name="sugerencias" id="sugerencias" class="form-control"></select>
                 </div>
             </div>
-            <div class="col-sm-3 form-group">
+            <div class="col-sm-3 form-group btnGenerate" style="display:none">
                 <h6>&nbsp;</h6>
                 <button type="button" class="btn btn-info" id="btn-nick-generate">Generate</button>
             </div>
@@ -108,7 +110,7 @@
                 <div class="col-sm-12 form-group">
                     <div class="card">
                         <div class="body">
-                            <input type="file" class="dropify" name="image" data-default-file="" data-show-remove="false">
+                            <input type="file" class="dropify" id="dropify-event" name="image" data-default-file="" data-show-remove="false">
                         </div>
                     </div>  
                 </div>          
