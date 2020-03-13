@@ -35,18 +35,21 @@ class UserController extends Controller
             $type = $request->type;
             if(strlen($request->type) > 0 &&  strlen($search) > 0){
 
-                $data2 = User::select('id','email','id_status')
+                $data2 = User::select('id','id_type_user','email','id_status')
                 ->whereHas("User_info",function($q) use ($type,$search){
                     $q->where($type,'LIKE','%'.$search.'%');
                 })
                 ->with('User_info:id_user,name,last_name,phone,entrance_date,birthdate')
+                ->with('type_user')
                 ->whereNotIn('id_type_user',[9])->whereIn('id_status', [1,2]);
             } else{
                 $data2 = User::select('id','email','id_status')->
                 with('User_info:id_user,name,last_name,phone,entrance_date,birthdate')
+                ->with('type_user')
                 ->whereNotIn('id_type_user',[9])->whereIn('id_status', [1,2]);
             } 
             $data=$data2->paginate(10);
+            // dd($data);
             if ($request->ajax()) {
                 return view('users.table', ["data"=>$data]);
             }

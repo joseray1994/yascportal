@@ -11,6 +11,14 @@ $(document).ready(function(){
     $('.js-example-basic-single').select2();
     $('.js-example-basic-multiple').select2();
 
+    //export csv
+    $('#csv').on('click',function(){
+        date = $('#dateSearch').val();
+        client=$('#clientSearch').val();
+        operator=$('#operatorSearch').val();
+        name =`${date}-${client}-${operator}`
+        $("#tag_container").tableHTMLExport({type:'csv',filename:`Weekly${name}.csv`});
+      })
     //display modal form for creating new product *********************
     $('#btn_add').click(function(){
         $('#btn-save').val("add");
@@ -29,7 +37,19 @@ $(document).ready(function(){
         $('#myModal').modal('hide');
     });
 
+    $('#dateSearch').change(function(){
+        //  $('#daySearch').val(),
+        var date = $('#dateSearch').val();
+         date = moment(date).format('YYYY/MM/DD');
+        var fecha = new Date(date);
+        fecha = new Date(fecha.setHours(0,0,0,0));
+        var weekday = fecha.getDay();
+         $('#daySearch').val(weekday);
+         $('#daySearch').trigger('change');
+    });
+
     $('.scheduleWeeklySearch').change(function(){
+       
         schedule.get_data(1);
     });
 
@@ -168,10 +188,13 @@ $(document).ready(function(){
 const schedule ={
     button: function(dato){
            var buttons='';
-            if(dato.status== 1){
+            if(dato.type== 1){
                buttons +='<a class="btn btn-sm btn-outline-primary" title="Assignament Type" id="btn-edit" href="/assignmenttype/'+dato.id+'"  ><i class="fa fa-info-circle"></i></a>'
-               buttons += ' <button class="btn btn-sm btn-secondary btn-detail open_modal"  data-toggle="tooltip" title="Editar nombre del Perfil"  value="'+dato.id+'"> <i class="fa fa-edit"></i></li></button>';
-               buttons += '<button class="btn btn-danger btn-sm btn-delete delete-profile" data-toggle="tooltip" title="Desactivar Perfil" value="'+dato.id+'"><i class="fa fa-trash-o"></i> </button>';
+               buttons += ' <button class="btn btn-sm btn-secondary btn-detail open_modal"  data-toggle="tooltip" title="Editar nombre del Perfil"  value="'+dato.id+'"> <i class="fa fa-edit"></i></li></button>'
+           }else if(dato.type == 2){
+                buttons +='<a class="btn btn-sm btn-outline-primary" title="Assignament Type" id="btn-edit" href="/assignmenttype/'+dato.id+'"  ><i class="fa fa-info-circle"></i></a>'
+                buttons += ' <button class="btn btn-sm btn-secondary btn-detail open_modal"  data-toggle="tooltip" title="Editar nombre del Perfil"  value="'+dato.id+'"> <i class="fa fa-edit"></i></li></button>';
+                buttons += '<button class="btn btn-danger btn-sm btn-delete delete-profile" data-toggle="tooltip" title="Desactivar Perfil" value="'+dato.id+'"><i class="fa fa-trash-o"></i> </button>';
            }
            return buttons;
     },
@@ -199,6 +222,7 @@ const schedule ={
                 client:$('#clientSearch').val(),
                 date:$('#dateSearch').val(),
                 operator:$('#operatorSearch').val(),
+                work:$('#worktypesearch').val(),
             }
             $('.loading-table').show();
             console.log(formData);
@@ -306,7 +330,6 @@ const success = {
                                     <td>${dato.wd.detail.time_s}</td>
                                     <td>${dato.wd.detail.time_e}</td>
                                     <td class="hidden-xs">${schedule.type(dato.wd.detail)}</td>
-                                    <td class="hidden-xs">${schedule.status(dato.wd.detail)}</td>
                                     <td>${schedule.button(dato.wd.detail)}</td>
                                 </tr>`;
                     $("#shcedule_id"+dato.wd.detail.id).replaceWith(profile);
@@ -321,7 +344,6 @@ const success = {
                                         <td>${dato.wd.detail.time_s}</td>
                                         <td>${dato.wd.detail.time_e}</td>
                                         <td class="hidden-xs">${schedule.type(dato.wd.detail)}</td>
-                                        <td class="hidden-xs">${schedule.status(dato.wd.detail)}</td>
                                         <td>${schedule.button(dato.wd.detail)}</td>
                                     </tr>`;
                     $("#shcedule_id"+dato.wd.detail.id).replaceWith(profile);
@@ -335,7 +357,6 @@ const success = {
                                         <td>${dato.ed.detail.time_s}</td>
                                         <td>${dato.ed.detail.time_e}</td>
                                         <td class="hidden-xs">${schedule.type(dato.ed.detail)}</td>
-                                        <td class="hidden-xs">${schedule.status(dato.ed.detail)}</td>
                                         <td>${schedule.button(dato.ed.detail)}</td>
                                         </tr>`;
                             $("#shcedule-list").prepend(profile);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\User;
+use App\Audit;
 use Illuminate\Http\Request;
 use App\ScheduleDetailModel;
 use App\DaysModel;
@@ -49,14 +50,17 @@ class ScheduleWeeklyController extends Controller
                     ->where('sch.year',"=", $now->year)
                     ->where('detail_schedule_user.status',1);
 
-                    if($request->day != "all"){
+                    if($request->day != "allDays"){
                         $data2->where('detail_schedule_user.id_day',"=", $request->day);
                     }
-                    if($request->operator != "all"){
+                    if($request->operator != "allOperators"){
                         $data2->where('detail_schedule_user.id_operator',"=", $request->operator);
                     }
-                    if($request->client != "all"){
+                    if($request->client != "allClients"){
                         $data2->where('sch.id_client',"=", $request->client);
+                    }
+                    if($request->work != "allWorks"){
+                        $data2->where('detail_schedule_user.type_daily',"=", $request->work);
                     }
 
                 } else{
@@ -74,7 +78,7 @@ class ScheduleWeeklyController extends Controller
                     ->where('detail_schedule_user.status',1);
                     
                 } 
-                $data=$data2->paginate(10);
+                $data=$data2->paginate(100);
                 if ($request->ajax()) {
                     return view('schedule.weekly.table', ["data"=>$data]);
                 }
@@ -193,6 +197,15 @@ class ScheduleWeeklyController extends Controller
         return response()->json($data);
     }
 
+    public function detail($weekly_id)
+    {   
+        
+        $weekly = ScheduleDetailModel::find($weekly_id);
+        $audit = Audit::where('user_id',$weekly->id_operator)->get();
+        $data=['No'=>1,'audit'=>$audit];
+        return response()->json($data);
+    }
+
     public function update(Request $request, $weekly_id)
     {
            function UpdateDayOff($weekly,$request){
@@ -260,4 +273,7 @@ class ScheduleWeeklyController extends Controller
       
         return response()->json($type);
     } 
+
+
+
 }
