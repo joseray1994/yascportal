@@ -6,6 +6,7 @@
             <th>Last Name</th>
             <th>Email</th>
             <th>Phone</th>
+            <th>User Type</th>
             <th>Entrance Date</th>
             <th>Birthday</th>
             <th class="hidden-xs" >Status</th>
@@ -20,6 +21,7 @@
             <td>{{ $user->User_info['last_name'] }}</td>
             <td>{{ $user->email}}</td>
             <td>{{ $user->User_info['phone'] }}</td>
+            <td>{{ $user->type_user['name'] }}</td>
             <td>{{ $user->User_info['entrance_date'] }}</td>
             <td>{{ $user->User_info['birthdate'] }}</td>
             @switch($user->id_status)

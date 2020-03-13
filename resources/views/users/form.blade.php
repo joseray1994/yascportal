@@ -87,7 +87,7 @@
         <select name="sugerencias" id="sugerencias" class="form-control"></select>
     </div>
   </div>
-  <div class="col-sm-3 form-group">
+  <div class="col-sm-3 form-group btnGenerate" style="display:none">
       <h6>&nbsp;</h6>
       <button type="button" class="btn btn-info" id="btn-nick-generate">Generate</button>
   </div>

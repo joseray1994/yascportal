@@ -14,8 +14,10 @@
                             <div class="input-group mb-3 input-group-sm">
                                 <div class="input-group-prepend">
                                     <select class="form-control" id="typesearch">
-                                        <option value="name">name</option>
                                         <option value="id">id</option>
+                                        <option value="name">name</option>
+                                        {{-- <option value="name">name</option> --}}
+                                        {{-- <option value="id_user_type">User Type</option> --}}
                                     </select>
                                 </div>
                                 <input type="text" class="form-control" id="search">
@@ -24,12 +26,12 @@
                             <div class="table-responsive">
                               @include('users.table')
                             </div>
-                            <div class="loading-table col-sm-12 text-center">
+                            {{-- <div class="loading-table col-sm-12 text-center">
                                 <div class="spinner-grow text-success"></div>
                                 <div class="spinner-grow text-info"></div>
                                 <div class="spinner-grow text-warning"></div>
                                 <div class="spinner-grow text-danger"></div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
