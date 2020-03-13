@@ -164,7 +164,7 @@
 <script src="{{asset('js/bootstrap-notify.js')}}"></script>
 <script src="{{asset('bundles/mainscripts.bundle.js')}}"></script>
 <script src="{{asset('vendor/dropify/js/dropify.min.js')}}"></script>
-
+<script src="{{asset('modulos/auth/auth_javascript.js')}}"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 <script>
