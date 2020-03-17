@@ -15,6 +15,7 @@ class SettingsTableSeeder extends Seeder
         DB::table('settings')->truncate();
 
         $settings = [
+            ['mat'=> 'STT','id_option'=>1,'name'=> 'No Option','status'=> 1,],
             ['mat'=> 'STT','id_option'=>1,'name'=> 'Start','status'=> 1,],
             ['mat'=> 'STT','id_option'=>1,'name'=> 'Late','status'=> 1,],    
             ['mat'=> 'STT','id_option'=>1,'name'=> 'Call out','status'=> 1,],    

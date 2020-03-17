@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\User_info;
 use App\DocumentModel;
 use Carbon\Carbon; 
 use Illuminate\Support\Facades\Auth;
@@ -59,8 +60,6 @@ class ServiceGeneralController extends Controller
                 array_push($result, $nickname4);
             }
             
-            return response()->json($result);
-            
         }
         elseif(count($name) > 1 && count($lastname) < 2){
             $nickname1 = $name[0].$lastname[0];
@@ -93,7 +92,6 @@ class ServiceGeneralController extends Controller
                 array_push($result, $nickname4);
             }
             
-            return response()->json($result);
         }
         elseif(count($name) < 2 && count($lastname) > 1){
             $nickname1 = $name[0].$lastname[0];
@@ -126,7 +124,6 @@ class ServiceGeneralController extends Controller
                 array_push($result, $nickname4);
             }
             
-            return response()->json($result);
         }
         elseif(count($name) < 2 && count($lastname) < 2){
             $nickname1 = $name[0].$lastname[0];
@@ -147,8 +144,8 @@ class ServiceGeneralController extends Controller
                 array_push($result, $nickname2);
             }
             
-            return response()->json($result);
-        } else{
+        } 
+        if(!$result){
             //SINO ESTA DISPONIBLE 
             $first_name = str_split($request->name);
             $first_last_name = str_split($request->last_name);
@@ -169,10 +166,8 @@ class ServiceGeneralController extends Controller
             if(!$validaNick2){
                 array_push($result, $nickname2);
             }
-            
-            return response()->json($result);
-            
         }  
+        return response()->json($result);
 
 
     }

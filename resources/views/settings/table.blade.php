@@ -9,8 +9,8 @@
         </tr>
     </thead>
     <tbody id="settings-list">
-        @foreach ($data as $setting)
-        <tr id="settings_id{{$setting->id}}">
+        @forelse ($data as $setting)
+        <tr id="settings_id{{$setting->id}}" class="rowSettings">
             <td>{{ $setting->id }}</td>
             <td>{{ $setting->name }}</td>              
             <td class="hidden-xs">{{ $setting->option }}</td>
@@ -35,7 +35,13 @@
                 @break
             @endswitch
         </tr>
-        @endforeach
+        @empty
+            <tr id="table-row" class="text-center">
+                <th colspan="5" class="text-center">
+                    <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
+                </th>
+            </tr>
+        @endforelse
     </tbody>
 </table>
 {!! $data->render() !!}

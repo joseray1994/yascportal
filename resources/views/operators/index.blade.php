@@ -1,7 +1,7 @@
 @extends ('welcome')
 @section ('content')
 <div class="row clearfix">
-    <div class="col-lg-12">
+    <div class="col-lg-12" >
         <div class="card">
             <div class="header">
                 <h1 id="labelTitle">Operators <i class="fa fa-tasks"></i></h1>
@@ -34,6 +34,7 @@
             </div>
         </div>
     </div>
+
 </div>
              <!-- Passing BASE URL to AJAX -->
         <input id="url" type="hidden" value="{{ \Request::url() }}">

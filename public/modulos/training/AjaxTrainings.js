@@ -8,6 +8,7 @@ $(document).ready(function(){
 
     //get base URL *********************
     var url = $('#url').val();
+    var baseUrl = $('#baseUrl').val();
      $('.js-example-basic-single').select2();
     $('.js-example-basic-multiple').select2();
 
@@ -20,6 +21,8 @@ $(document).ready(function(){
         // $("#image").attr('src','');
         $(".bodyIndex").hide();
         $('#formCU').show();
+        $("#flag").val(false);
+
         
     });
        //display modal form for creating new product *********************
@@ -89,7 +92,7 @@ $(document).ready(function(){
         var start_training=$('#start_training').val();
         var end_training=$('#end_training').val();
         
-        training.get_weeks(numWeek,start_training,end_training);
+        training.get_weeks_T(numWeek,start_training,end_training);
     });
 
     $('#numWeek').keyup(function(){
@@ -97,14 +100,18 @@ $(document).ready(function(){
         var start_training=$('#start_training').val();
         var end_training=$('#end_training').val();
         if (numWeek>0) {
-            training.get_weeks(numWeek,start_training,end_training);
+            training.get_weeks_T(numWeek,start_training,end_training);
             
         }
         $('#flag').val(0);
+    });
 
-
-
-
+    $('.n_weeks_coaching').change(function(){
+        var numWeek_C = $('#numWeek_C').val();
+        var end_training=$('#end_training').val();
+        var end_coaching=$('#end_coaching').val();
+        
+        training.get_weeks_C(numWeek_C,end_training,end_coaching);
     });
 
 
@@ -125,6 +132,7 @@ $(document).ready(function(){
         console.log('button');
       
         e.preventDefault(); 
+        $('#btn-save').attr('disabled', true);
         var formData =  $("#traineeNewForm").serialize();
 
         //used to determine the http verb to use [add=POST], [update=PUT]
@@ -246,6 +254,111 @@ $(document).ready(function(){
             }
         });
     });
+
+    $("#btn-nick-generate").click(function(e){
+        e.preventDefault();
+
+        var name = $("#name").val();
+        var last_name = $("#last_name").val();
+        
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        })
+        $.ajax({
+            type:"POST",
+            url:baseUrl+'/generate',
+            data:{name:name, last_name:last_name},
+            dataType:"json",
+            success: function(data){
+                var html = "";
+                $.notifyClose();
+                if(data.No){
+                    $.notify({
+                        // options
+                        title: "Error!",
+                        message:data.msg,
+                    },{
+                        // settings
+                        type: 'danger'
+                    });
+                }else{
+                    html += `<option value="">Seleccionar</option> `;
+                    html += `<option value="0">None</option> `;
+                    data.forEach(function(data){
+                        html += `<option value="${data}">${data}</option> `;
+                    });
+                    $("#sugerencias").html(html);
+                    $(".seccion-sugerencia").show();
+                }
+            },
+            error: function(err){
+                $(".seccion-sugerencia").hide();
+                console.log(err);
+            }
+        });
+    });
+
+    $("#sugerencias").change(function(){
+        valor = $(this).val();
+        flag = $("#flag").val();
+        if(valor != 0 || valor != ""){
+
+            if(flag === "false"){
+
+                if(valor == 0){
+                    valor = "";
+                }
+                $("#nickname").val(valor);
+                $("#nickname").attr('disabled', false);
+                $("#email").val(valor+'@yascemail.com');
+                $("#email").attr('disabled', false);
+                $("#password").val(valor + "*2020");
+                $("#password_confirmation").val(valor + "*2020");
+                $(".segunda-seccion").show();
+            }
+        }else{
+            $(".segunda-seccion").hide();
+            $("#nickname").val("");
+            $("#email").val("");
+            $("#password").val("");
+            $("#password_confirmation").val("");
+            
+        }
+    });
+
+    $("#nickname").keyup(function(){
+
+        flag = $("#flag").val();
+
+        if(flag === "false"){
+            nickname = $(this).val();
+            nickname = nickname.toLowerCase();
+            if(nickname != ""){
+                $("#email").val(nickname+'@yascemail.com');
+                $("#password").val(nickname + "*2020");
+                $("#password_confirmation").val(nickname + "*2020");
+            }else{
+                $("#nickname").val("");
+                $("#email").val('@yascemail.com');
+                $("#password").val("*2020");
+                $("#password_confirmation").val("*2020");
+            }
+        }
+
+    });
+
+    $("#name, #last_name").keyup(function(){
+        flag = $("#flag").val();
+        if(flag === "false"){
+
+            $("#nickname").val("");
+            $(".seccion-sugerencia").hide();
+            $(".segunda-seccion").hide();
+            $("#nickname").attr('disabled', true);
+        }
+    });
     
 });
 
@@ -293,7 +406,7 @@ const training ={
               alert('No response from server');
         });
     },
-    get_weeks:function (numWeek,start_training,end_training) {
+    get_weeks_T:function (numWeek,start_training,end_training) {
         var url = $('#url').val();
         $.ajaxSetup({
             headers: {
@@ -302,7 +415,7 @@ const training ={
         })
         $.ajax({
             type:"POST",
-            url:url+'/generate',
+            url:url+'/generateWeekTraining',
             data:{numWeek:numWeek, start_training:start_training, end_training:end_training},
             dataType:"json",
             success: function(data){
@@ -332,6 +445,40 @@ const training ={
                 console.log(err);
             }
         });
+    },
+
+    get_weeks_C:function (numWeek_C,end_training,end_coaching) {
+        var url = $('#url').val();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        })
+        $.ajax({
+            type:"POST",
+            url:url+'/generateWeekCoaching',
+            data:{numWeek_C:numWeek_C, end_training:end_training, end_coaching:end_coaching},
+            dataType:"json",
+            success: function(data){
+                console.log(data);
+
+                switch (data.num['flag']) {
+                    case 1:
+                        $('#numWeek_C').val(data.num['num']);
+                        break;
+                    case 2:
+                        $('#end_coaching').val(data.end_coaching);
+                        $('#end_coaching').trigger('change');
+                        break;
+                
+                    default:
+                        break;
+                }
+            },
+            error: function(err){
+                console.log(err);
+            }
+        });
     }
 }
 const success = {
@@ -341,6 +488,8 @@ const success = {
         var dato = data;
         var typename =$('#name').val();
         var type =$('#id_option').val();
+        $('#btn-save').attr('disabled', false);
+
 
         switch (dato.No) {
             case 1:
@@ -400,6 +549,15 @@ const success = {
 
         }else if(dato.status == 0){
             $("#training_id"+dato.id).remove();
+            if ($('.rowTraining').length == 0) {
+                var training = `<tr id="table-row" class="text-center">
+                                    <th colspan="7" class="text-center">
+                                    <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
+                                     </th>
+                                </tr>`;
+
+                $("#training-list").append(training);
+              }
         }
        
     },

@@ -6,19 +6,13 @@
                         <div class="header">
                             <h1 id="labelTitle">Reports <i class="fa fa-file-excel-o"></i></h1>
                         </div>
-                        <div class="col-sm-12 view-search" style = "display:none">
-                            <div class="form-group">
-                                <label for="sel1 col-sm-2">Select Day:</label>
-                                <select class="form-control col-sm-2 scheduleWeeklySearch" id="daySearch">
-                                    <option value="all">All days</option>
-                                    @foreach($days as $day)
-                                        <option value = "{{$day->id}}"> {{$day->name}}</option>
-                                   @endforeach
-                                </select>
+
+                        <div class="body">
+                            <div class="table-responsive table-incident" style="display:none">
+                                 @include('reports.search')
+                                @include('reports.incidents')
                             </div>
-                        </div>
-                        <div class="table-responsive table-incident" style="display:none">
-                            @include('reports.incidents')
+                                
                         </div>
                         
                     </div>

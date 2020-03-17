@@ -69,6 +69,9 @@
             <div id="navbar-menu">
                 <ul class="nav navbar-nav">
                     <li>
+                        <button class="icon-menu d-none d-sm-block d-md-none d-lg-block btn btn-danger" type="button" id="btn-incident">Incident Report</button>
+                    </li>
+                    <li>
                         <a href="/schedule" class="icon-menu d-none d-sm-block d-md-none d-lg-block"><i class="icon-calendar"></i></a>
                     </li>
                     <li>
@@ -134,6 +137,26 @@
                         cursor: default;">MÉRIDA Clima</a> --}}
                         @yield('content')
                     </div>
+                    <div class="card" id="incidentReport" style="display:none;">
+                       <div class="row">
+                            <div class="col-sm-6">
+                                <form action="" class="form-row">
+                                
+                                    <div class="form-group col-sm-6">
+                                        <label>Date</label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label>Date</label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-sm-6">
+                                
+                            </div>
+                       </div>
+                    </div>
                 </div>
             </div>
  
@@ -161,7 +184,7 @@
 <script src="{{asset('js/bootstrap-notify.js')}}"></script>
 <script src="{{asset('bundles/mainscripts.bundle.js')}}"></script>
 <script src="{{asset('vendor/dropify/js/dropify.min.js')}}"></script>
-
+<script src="{{asset('modulos/auth/auth_javascript.js')}}"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 <script>
@@ -195,5 +218,6 @@
     
 </script>
 @yield('script')
+<script src="{{asset('modulos/incident/AjaxIncident.js')}}"></script>
 </body>
 </html>

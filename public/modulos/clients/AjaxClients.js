@@ -100,17 +100,11 @@ $(document).ready(function(){
         if (state == "update"){
             type = "PUT"; //for updating existing resource
             my_url += '/' + client_id;
-            $('#myModal').modal('hide');
+           
         }
             console.log(formData);
             actions.edit_create(type,my_url,state,formData);   
-            $('#labelTitle').html("Client  <i class='fa fa-briefcase'></i>");
-            $(".formulario").hide();
-            $(".tableClient").show();
-            $('#btn_add').show();
-            $(".formulario_contacts").hide();
-            $('#formClients').trigger("reset");
-            $('#tag_put').remove();
+          
     
     });
 
@@ -424,8 +418,7 @@ const success = {
                 var clientname =$('#name').val();
                 var type =$('#type').val();
 
-                    var client = `<tr id="client_id${dato.id}">
-                                        <td><span class="badge badge-secondary" style = "background:${dato.color}">&nbsp;&nbsp;&nbsp;</span></td>
+                    var client = `<tr id="client_id${dato.id}" style = "background:${dato.color}">
                                         <td>${dato.name}</td>
                                         <td>${dato.description}</td>
                                         <td>${dato.interval}</td>
@@ -438,10 +431,26 @@ const success = {
                     $("#client-list").append(client);
                     $("#client_id"+dato.id).css("background-color", "#c3e6cb");  
                     swal("Saved!", data.client_success, "success")  
-                    }else{
+                    $('#labelTitle').html("Client  <i class='fa fa-briefcase'></i>");
+                    $(".formulario").hide();
+                    $(".tableClient").show();
+                    $('#btn_add').show();
+                    $(".formulario_contacts").hide();
+                    $('#formClients').trigger("reset");
+                    $('#tag_put').remove();
+                    }
+                    else
+                    {
                     $("#client_id"+dato.id).replaceWith(client);
                     $("#client_id"+dato.id).css("background-color", "#ffdf7e");  
                     swal("Updated!", data.client_update, "success")
+                    $('#labelTitle').html("Client  <i class='fa fa-briefcase'></i>");
+                    $(".formulario").hide();
+                    $(".tableClient").show();
+                    $('#btn_add').show();
+                    $(".formulario_contacts").hide();
+                    $('#formClients').trigger("reset");
+                    $('#tag_put').remove();
                     }
 
                     
@@ -519,8 +528,7 @@ const success = {
                     if(dato.description = ''){
                         dato.description = '';
                     }
-                    var client = `<tr id="client_id${dato.id}">
-                                        <td><span class="badge badge-secondary" style = "background:${dato.color}">&nbsp;&nbsp;&nbsp;</span></td>
+                    var client = `<tr id="client_id${dato.id}" style = "background:${dato.color}">
                                         <td>${dato.name}</td>
                                         <td>${dato.description}</td>
                                         <td>${dato.interval}</td>

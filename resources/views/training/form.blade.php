@@ -35,40 +35,43 @@
                   <div class="row">
                     <div class="col-xl-2 col-xs-12 col-md-2 col-sm-12 form-group">
                         <h6>First Name:</h6>
-                        <input type="text" name="name" id="name" class="form-control" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$" title="Este campo solo admite letras" maxlength="60">
+                        <input type="text" name="name" id="name" class="form-control" maxlength="150">
                     </div>
                     <div class="col-xl-2 col-xs-12 col-md-2 col-sm-12 form-group">
                       <h6>Last  Name:</h6>
-                      <input type="text" name="last_name" id="last_name" class="form-control" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$" title="Este campo solo admite letras" maxlength="60">
-                  </div>
-                  <div class="col-xl-2 col-xs-12 col-md-2 col-sm-12 form-group">
-                      <h6>Birthday (YYYY-MM-DD):</h6>
-                      <input type="date" name="birthdate" id="birthdate" class="form-control" title="Este campo solo admite letras" maxlength="60">
-                  </div>
-                  <div class="col-xl-2 col-xs-12 col-md-2 col-sm-12 form-group">
-                      <h6>Phone:</h6>
-                      <input type="text" name="phone" id="phone" class="form-control" title="Este campo solo admite letras" maxlength="60">
-                  </div>
-                  <div class="col-xl-2 col-xs-12 col-md-2 col-sm-12 form-group">
-                      <h6>Emergency Contact Name:</h6>
-                      <input type="text" name="emergency_contact_name" id="emergency_contact_name" class="form-control" title="Este campo solo admite letras" maxlength="60">
-                  </div>
-                  <div class="col-xl-2 col-xs-12 col-md-2 col-sm-12 form-group">
-                      <h6>Emergency Contact Phone:</h6>
-                      <input type="text" name="emergency_contact_phone" id="emergency_contact_phone" class="form-control" title="Este campo solo admite letras" maxlength="60">
-                  </div>
-                  <div class="col-xl-4 col-xs-6 col-md-4 col-sm-6 form-group">
-                    <h6>Email:</h6>
-                    <div class='row'>
-                      <div class="col-xl-6 col-xs-6 col-md-6 col-sm-6">
-                            <input type="text" name="email" id="email" class="form-control" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$" title="Este campo solo admite letras" maxlength="60">
-                      </div>
-                      <label>@</label>
-                      <div class="col-xl-4 col-xs-4 col-md-4 col-sm-4">
-                          <input type="text"  class="form-control" disabled value="yascemail.com"></input>
-                      </div>
+                      <input type="text" name="last_name" id="last_name" class="form-control"  maxlength="150">
                     </div>
+                    <div class="col-xl-2 col-xs-12 col-md-2 col-sm-12 form-group">
+                        <h6>Birthday (YYYY-MM-DD):</h6>
+                        <input type="date" name="birthdate" id="birthdate" class="form-control">
+                    </div>
+                    <div class="col-xl-2 col-xs-12 col-md-2 col-sm-12 form-group">
+                        <h6>Phone:</h6>
+                        <input type="tel" name="phone" id="phone" class="form-control" maxlength="20">
+                    </div>
+                    <div class="col-xl-2 col-xs-12 col-md-2 col-sm-12 form-group">
+                        <h6>Emergency Contact Name:</h6>
+                        <input type="text" name="emergency_contact_name" id="emergency_contact_name" class="form-control" maxlength="150">
+                    </div>
+                    <div class="col-xl-2 col-xs-12 col-md-2 col-sm-12 form-group">
+                        <h6>Emergency Contact Phone:</h6>
+                        <input type="tel" name="emergency_contact_phone" id="emergency_contact_phone" class="form-control"  maxlength="20">
+                    </div>
+                  <div class="col-xl-3 col-xs-4 col-md-3 col-sm-4 form-group">
+                    {{-- <div class="col-sm-3 form-group"> --}}
+                      <h6>Nickname:</h6>
+                      <input type="text" name="nickname" id="nickname" onkeypress="return RestrictSpace()" class="form-control text-lowercase" maxlength="150" onKeyUp="document.getElementById(this.id).value=document.getElementById(this.id).value.toLowerCase()" disabled>
+                      <div class="my-2 seccion-sugerencia" style="display:none">
+                          <span class="badge badge-success my-2">available</span>
+                          <select name="sugerencias" id="sugerencias" class="form-control"></select>
+                      </div>
                   </div>
+                  <div class="col-xl-2 col-xs-2 col-md-2 col-sm-2 form-group btnGenerate">
+                    <h6>&nbsp;</h6>
+                    <button type="button" class="btn btn-info" id="btn-nick-generate">Generate</button>
+                  </div>
+                  <input type="hidden" id="flag">
+
                   <div class="col-xl-4 col-xs-6 col-md-4 col-sm-6 form-group">
                     <h6>Gender:</h6>
                     <div class='row'>
@@ -123,11 +126,11 @@
                   <div class="row">
                     <div class="col-xl-2 col-xs-12 col-md-2 col-sm-12 form-group">
                         <h6>End Coaching (Optional):</h6>
-                        <input type="date" name="end_coaching" id="end_coaching" class="form-control">
+                        <input type="date" name="end_coaching" id="end_coaching" class="form-control n_weeks_coaching">
                     </div>
                     <div class="col-xl-2 col-xs-12 col-md-2 col-sm-12">
                       <h6>Number of Coaching Weeks:</h6>
-                      <input type="number" name="n_weeks_coaching" id="n_weeks_coaching" class="form-control">
+                      <input type="text" name="numWeek_C" id="numWeek_C" class="form-control">
                     </div>
                 </div>
                 <hr/>
@@ -252,7 +255,7 @@
                   <div class="row">
                       <div class="col-sm-12 form-group">
                         <h6>Notes:</h6>
-                        <input type="text" name="notes" id="notes" class="form-control" title="Este campo solo admite letras" maxlength="60">
+                        <input type="text" name="notes" id="notes" class="form-control" maxlength="300">
                       </div>
                       <div class="col-sm-12 form-group">
                         <h6>Information:</h6>

@@ -40,6 +40,7 @@ $(document).ready(function(){
         console.log('button');
       
         e.preventDefault(); 
+        $('#btn-save').attr('disabled', true);
         var formData =  $("#settingsForm").serialize();
 
         //used to determine the http verb to use [add=POST], [update=PUT]
@@ -193,6 +194,8 @@ const success = {
         var dato = data;
         var typename =$('#name').val();
         var type =$('#id_option').val();
+        $('#btn-save').attr('disabled', false);
+
 
         switch (dato.No) {
             case 1:
@@ -251,6 +254,15 @@ const success = {
 
         }else if(dato.status == 0){
             $("#settings_id"+dato.id).remove();
+            if ($('.rowSettings').length == 0) {
+                var setting = `<tr id="table-row" class="text-center">
+                                    <th colspan="7" class="text-center">
+                                    <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
+                                     </th>
+                                </tr>`;
+
+                $("#settings-list").append(setting);
+              }
         }
        
     },

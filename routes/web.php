@@ -62,7 +62,8 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::put('/training/{trainee_id}', 'TrainingController@update');
     Route::delete('/training/{trainee_id}', 'TrainingController@destroy');
     Route::delete('/training/delete/{id}', 'TrainingController@delete');
-    Route::post('/training/generate', 'TrainingController@generateEnd_training');
+    Route::post('/training/generateWeekTraining', 'TrainingController@generateEnd_training');
+    Route::post('/training/generateWeekCoaching', 'TrainingController@generateEnd_coaching');
 
     //Settings
     Route::get('/settings', 'SettingsController@index');
@@ -102,13 +103,21 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::delete('/users/{id}', 'UserController@destroy');
     Route::delete('/users/delete/{id}', 'UserController@delete');
    
-    //Schedule
+    //Schedule weekly
     Route::get('/weekly', 'ScheduleWeeklyController@index');
     Route::get('/weekly/{id?}', 'ScheduleWeeklyController@show');
     Route::post('/extra/{id}', 'ScheduleWeeklyController@store');
     Route::put('/weekly/{id}', 'ScheduleWeeklyController@update');
-    Route::delete('/weekly/{UserType_id}', 'ScheduleWeeklyController@destroy');
-    Route::delete('/weekly/delete/{id}', 'ScheduleWeeklyController@delete');
+    Route::delete('/weekly/{id}', 'ScheduleWeeklyController@delete');
+    //Schedule daily
+    Route::get('/daily', 'ScheduleDailyController@index');
+    Route::get('/daily/{id?}', 'ScheduleDailyController@show');
+    Route::put('/daily/{id}', 'ScheduleDailyController@update');
+
+    Route::get('/dayoff', 'ScheduleDailyController@data_dayoff');
+    Route::get('/break', 'ScheduleDailyController@data_break');
+    Route::get('/detail/{id?}', 'ScheduleWeeklyController@detail');
+    
 
     //Operators
     Route::get('/operators', 'OperatorsController@index');
@@ -125,10 +134,16 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::delete('/documents/delete/{id}', 'ServiceGeneralController@deleteDocuments');
     Route::post('/sumtime', 'ServiceGeneralController@SumTime');
     Route::get('/download/{id}/{mat}', 'ServiceGeneralController@download');
+    
+    //PROFILE
+    Route::get('/profile', 'ProfileController@index');
+    Route::put('/profile', 'ProfileController@update');
 
 
     //Incident Reports
     Route::get('/reports', 'ReportsController@index');
+    Route::get('/reports/show', 'ReportsController@show');
+
 
 });
 
