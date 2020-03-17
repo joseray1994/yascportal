@@ -1,8 +1,7 @@
 <table class="table table-striped text-center" id="tag_container">
     <thead class="text-white thead-yasc">
         <tr>
-            <th width="100px"></th>
-            <th>Client</th>
+            <th  width="100px">Client</th>
             <th>Description</th>
             <th>Interval</th>
             <th>Minutes</th>
@@ -12,8 +11,7 @@
     </thead>
     <tbody id="client-list">
         @forelse ($data as $client)
-        <tr id="client_id{{$client->id}}" >
-            <td><span class="badge badge-secondary" style = "background:{{$client->color}}">&nbsp;&nbsp;&nbsp;</span></td>
+        <tr id="client_id{{$client->id}}" style = "background:{{$client->color}}" >
             <td>{{$client->name }}</td>
             <td>{{$client->description}}</td>
             <td>{{$client->interval}}</td>
