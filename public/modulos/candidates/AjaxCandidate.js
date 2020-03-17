@@ -294,6 +294,9 @@ const success = {
                                         <td>${dato.listening_test}</td>
                                         <td>${dato.grammar_test}</td>
                                         <td>${dato.typing_test}</td>
+                                        <td>${dato.typing_test2}</td>
+                                        <td>${dato.typing_test3}</td>
+                                        <td>${dato.typing_test4}</td>
                                         <td class="hidden-xs">${candidates.status(dato)}</td>
                                         <td>${candidates.button(dato)}</td>
                                     </tr>`;
@@ -353,6 +356,9 @@ const success = {
                 $('#listening_test').val(data.candidates.listening_test);
                 $('#grammar_test').val(data.candidates.grammar_test);
                 $('#typing_test').val(data.candidates.typing_test);
+                $('#typing_test2').val(data.candidates.typing_test2);
+                $('#typing_test3').val(data.candidates.typing_test3);
+                $('#typing_test4').val(data.candidates.typing_test4);
                 $('#btn-save').val("update");
                 $('#myModal').modal('show');
             break;
@@ -396,6 +402,9 @@ const success = {
                                         <td>${dato.listening_test}</td>
                                         <td>${dato.grammar_test}</td>
                                         <td>${dato.typing_test}</td>
+                                        <td>${dato.typing_test2}</td>
+                                        <td>${dato.typing_test3}</td>
+                                        <td>${dato.typing_test4}</td>
                                         <td class="hidden-xs">${candidates.status(dato)}</td>
                                         <td>${candidates.button(dato)}</td>
                                     </tr>`;

@@ -68,6 +68,9 @@
             <div id="navbar-menu">
                 <ul class="nav navbar-nav">
                     <li>
+                        <button class="icon-menu d-none d-sm-block d-md-none d-lg-block btn btn-danger" type="button" id="btn-incident">Incident Report</button>
+                    </li>
+                    <li>
                         <a href="/schedule" class="icon-menu d-none d-sm-block d-md-none d-lg-block"><i class="icon-calendar"></i></a>
                     </li>
                     {{-- <li>
@@ -142,8 +145,25 @@
                         cursor: default;">MÉRIDA Clima</a> --}}
                         @yield('content')
                     </div>
-                        <div class="card" id="incidentReport" style="display:none;">
-                       
+                    <div class="card" id="incidentReport" style="display:none;">
+                       <div class="row">
+                            <div class="col-sm-6">
+                                <form action="" class="form-row">
+                                
+                                    <div class="form-group col-sm-6">
+                                        <label>Date</label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label>Date</label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-sm-6">
+                                
+                            </div>
+                       </div>
                     </div>
                 </div>
             </div>
@@ -209,5 +229,6 @@
     
 </script>
 @yield('script')
+<script src="{{asset('modulos/incident/AjaxIncident.js')}}"></script>
 </body>
 </html>

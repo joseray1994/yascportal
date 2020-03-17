@@ -212,8 +212,8 @@ const success = {
            
             var vacancy = `<tr id="vacancy_id${dato.id}">
                                 <td>${dato.id}</td>
-                                <td>${dato.name}</td>
-                                <td>${vacancies.nullo(dato)}</td>
+                                <td style="white-space: normal !important; word-wrap: break-word;">${dato.name}</td>
+                                <td  style="white-space: normal !important; word-wrap: break-word;">${vacancies.nullo(dato)}</td>
                                 <td class="hidden-xs">${vacancies.status(dato)}</td>
                                 <td>${vacancies.button(dato)}</td>
                             </tr>`;

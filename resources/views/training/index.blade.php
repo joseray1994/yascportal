@@ -20,7 +20,7 @@
                                 <div class="form-group col-lg-2 col-xl-2 col-xs-4 col-md-2 col-sm-4">
                                     <label for="sel1">Select Day:</label>
                                     <select class="form-control trainingSearch" id="daySearch">
-                                        <option value="all">All days</option>
+                                        <option value="allDays">All days</option>
                                             @foreach ($days as $item)
                                                 <option value="{{ $item['id'] }}" {{ ( $item['id']== $NoD) ? 'selected' : '' }}> {{$item['Eng-name']}} </option>
                                             @endforeach
@@ -49,8 +49,12 @@
                 </div>
             </div>
             @include('training.form')
-             <!-- Passing BASE URL to AJAX -->
+
+        <!-- Passing BASE URL to AJAX -->
         <input id="url" type="hidden" value="{{ \Request::url() }}">
+        <input id="baseUrl" type="hidden" value="{{ \Request::root() }}">
+        {{-- <input type="hidden" id="mat" value="ODO">
+        @include('documents.modal') --}}
 @endsection
 @section('script')
 <script src="{{asset('modulos/ajaxscript_actions.js')}}"></script>
