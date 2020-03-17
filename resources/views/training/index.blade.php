@@ -20,7 +20,7 @@
                                 <div class="form-group col-lg-2 col-xl-2 col-xs-4 col-md-2 col-sm-4">
                                     <label for="sel1">Select Day:</label>
                                     <select class="form-control trainingSearch" id="daySearch">
-                                        <option value="all">All days</option>
+                                        <option value="allDays">All days</option>
                                             @foreach ($days as $item)
                                                 <option value="{{ $item['id'] }}" {{ ( $item['id']== $NoD) ? 'selected' : '' }}> {{$item['Eng-name']}} </option>
                                             @endforeach

@@ -48,25 +48,6 @@ $(document).ready(function(){
     
     });
 
-    //Add Contacts
-    $('.btn_add_contacts').click(function(){
-        $('#labelTitle').html(" <button type='button' class='btn btn-back'><i class='fa fa-arrow-left'></i></button> Add Contacts  <i class='fa fa-plus'></i>");
-        $(".formulario").hide();
-        $(".formulario_contacts").show();
-        $(".tableClient").hide();
-        $('#btn_add').hide();
-        $('#formContacts').trigger("reset");
-
-        var id = $(this).val();
-        $('#tag_put').remove();
-        $('#client_id_contacts').val(id);
-        //Show the contacts table
-        var my_url = url + '/contacts/show/' + id;
-        actions.show(my_url)
-
-
-    });
-
     $('.btn-back').click(function(){
         $('#labelTitle').html("Clients  <i class='fa fa-briefcase'></i>");
         $(".formulario").hide();
@@ -255,6 +236,23 @@ $(document).ready(function(){
 
     
 });
+
+   //Add Contacts
+    function add_contacs(id){
+        $('#labelTitle').html(" <button type='button' class='btn btn-back'><i class='fa fa-arrow-left'></i></button> Add Contacts  <i class='fa fa-plus'></i>");
+        $(".formulario").hide();
+        $(".formulario_contacts").show();
+        $(".tableClient").hide();
+        $('#btn_add').hide();
+        $('#formContacts').trigger("reset");
+        $('#tag_put').remove();
+        $('#client_id_contacts').val(id);
+        //Show the contacts table
+        var my_url = $('#url').val() + '/contacts/show/'+ id;
+        actions.show(my_url)
+
+
+    }
 
 //Activate or Deactivated Contacts
 $(document).on('click','.off-type-contacts',function(){
@@ -597,6 +595,7 @@ const success = {
     },
 
     show: function(data){
+        console.log(data);
         switch (data.flag) {
             case 1:
                 $('#document-list').html("");
