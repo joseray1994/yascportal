@@ -162,7 +162,7 @@ class ScheduleWeeklyController extends Controller
                     "id_day"=>$weekly->id_day,
                     "time_start"=>$request->time_extra,
                     "time_end"=>$request->time_endEx,
-                    "type_daily"=>2,
+                    "type_daily"=>4,
                     "option"=>1,
                     "status"=>1,
                 ]);

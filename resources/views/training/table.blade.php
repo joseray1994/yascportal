@@ -1,41 +1,46 @@
 <table class="table table-striped text-center" id="tag_container">
     <thead class="text-white thead-yasc">
         <tr>
-            <th width="100px">ID</th>
-            <th>Name</th>
-            <th class="hidden-xs" >Type</th>
-            <th class="hidden-xs" >Status</th>
-            <th>Options</th>
+            {{-- <th width="100px">ID</th> --}}
+            <th>Client</th>
+            <th>Trainee</th>
+            <th>Trainer</th>
+            <th>Schedule</th>
+            <th>At Woork</th>
+            <th class="hidden-xs" >Zoom Meting</th>
+            <th class="hidden-xs" >Activities</th>
+            <th >Ends Training</th>
+            {{-- <th>Option</th> --}}
         </tr>
     </thead>
-    <tbody id="settings-list">
-        @foreach ($data as $setting)
-        <tr id="settings_id{{$setting->id}}">
-            <td>{{ $setting->id }}</td>
-            <td>{{ $setting->name }}</td>              
-            <td class="hidden-xs">{{ $setting->option }}</td>
-            @switch($setting->status)
-                @case(1)
-                    <td class="hidden-xs">
-                        <span class='badge badge-success'>Activated</span>
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="{{$setting->id}}"  ><i class="fa fa-edit"></i></button>
-                        <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-type" title="Deactivated" data-type="confirm" value="{{$setting->id}}"><i class="fa fa-window-close"></i></button>
-                    </td>
-                @break
+    <tbody id="trainings-list">
+        {{-- @foreach ($data as $training) --}}
+        @forelse ($data as $training)
+        <tr id="trainings_id{{$training->id}}" class="rowTraining">
+            <td style ="background:{{$training->color}}" >{{ $training->client }}</td>
+           <td>{{ $training->name }} {{ $training->lastname }}</td>
+           <td>{{ $training->name_trainer }} {{ $training->lastname_trainer }}</td>
+           <td>{{ $training->time_s}} - {{ $training->time_e}}</td>
+           @switch($training->type)
                 @case(2)
-                <td class="hidden-xs">
-                    <span class='badge badge-secondary'>Deactivated</span>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-sm btn-outline-success off-type" title="Activated" data-type="confirm" value="{{$setting->id}}" ><i class="fa fa-check-square-o"></i></button>
-                    <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert deleteSettings" title="Delete" data-type="confirm" value="{{$setting->id}}"><i class="fa fa-trash-o"></i></button>
-                </td>
+                <td> <span class="badge badge-training">Training</span></td>
+                @break
+                @case(3)
+                <td> <span class="badge badge-coaching">Coaching</span></td>
                 @break
             @endswitch
+           <td>Zoom</td>
+           <td>Activities</td>
+           <td>{{ $training->end_training}}</td>
         </tr>
-        @endforeach
+        {{-- @endforeach --}}
+        @empty
+            <tr id="table-row" class="text-center">
+                <th colspan="8" class="text-center">
+                    <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
+                </th>
+            </tr>
+        @endforelse
     </tbody>
 </table>
-{!! $data->render() !!}
+{{-- {!! $data->render() !!} --}}
