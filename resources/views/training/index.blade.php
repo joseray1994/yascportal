@@ -49,8 +49,12 @@
                 </div>
             </div>
             @include('training.form')
-             <!-- Passing BASE URL to AJAX -->
+
+        <!-- Passing BASE URL to AJAX -->
         <input id="url" type="hidden" value="{{ \Request::url() }}">
+        <input id="baseUrl" type="hidden" value="{{ \Request::root() }}">
+        {{-- <input type="hidden" id="mat" value="ODO">
+        @include('documents.modal') --}}
 @endsection
 @section('script')
 <script src="{{asset('modulos/ajaxscript_actions.js')}}"></script>

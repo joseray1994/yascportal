@@ -8,6 +8,7 @@ $(document).ready(function(){
 
     //get base URL *********************
     var url = $('#url').val();
+    var baseUrl = $('#baseUrl').val();
      $('.js-example-basic-single').select2();
     $('.js-example-basic-multiple').select2();
 
@@ -20,6 +21,8 @@ $(document).ready(function(){
         // $("#image").attr('src','');
         $(".bodyIndex").hide();
         $('#formCU').show();
+        $("#flag").val(false);
+
         
     });
        //display modal form for creating new product *********************
@@ -129,6 +132,7 @@ $(document).ready(function(){
         console.log('button');
       
         e.preventDefault(); 
+        $('#btn-save').attr('disabled', true);
         var formData =  $("#traineeNewForm").serialize();
 
         //used to determine the http verb to use [add=POST], [update=PUT]
@@ -249,6 +253,111 @@ $(document).ready(function(){
                 console.log('Error:', data);
             }
         });
+    });
+
+    $("#btn-nick-generate").click(function(e){
+        e.preventDefault();
+
+        var name = $("#name").val();
+        var last_name = $("#last_name").val();
+        
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        })
+        $.ajax({
+            type:"POST",
+            url:baseUrl+'/generate',
+            data:{name:name, last_name:last_name},
+            dataType:"json",
+            success: function(data){
+                var html = "";
+                $.notifyClose();
+                if(data.No){
+                    $.notify({
+                        // options
+                        title: "Error!",
+                        message:data.msg,
+                    },{
+                        // settings
+                        type: 'danger'
+                    });
+                }else{
+                    html += `<option value="">Seleccionar</option> `;
+                    html += `<option value="0">None</option> `;
+                    data.forEach(function(data){
+                        html += `<option value="${data}">${data}</option> `;
+                    });
+                    $("#sugerencias").html(html);
+                    $(".seccion-sugerencia").show();
+                }
+            },
+            error: function(err){
+                $(".seccion-sugerencia").hide();
+                console.log(err);
+            }
+        });
+    });
+
+    $("#sugerencias").change(function(){
+        valor = $(this).val();
+        flag = $("#flag").val();
+        if(valor != 0 || valor != ""){
+
+            if(flag === "false"){
+
+                if(valor == 0){
+                    valor = "";
+                }
+                $("#nickname").val(valor);
+                $("#nickname").attr('disabled', false);
+                $("#email").val(valor+'@yascemail.com');
+                $("#email").attr('disabled', false);
+                $("#password").val(valor + "*2020");
+                $("#password_confirmation").val(valor + "*2020");
+                $(".segunda-seccion").show();
+            }
+        }else{
+            $(".segunda-seccion").hide();
+            $("#nickname").val("");
+            $("#email").val("");
+            $("#password").val("");
+            $("#password_confirmation").val("");
+            
+        }
+    });
+
+    $("#nickname").keyup(function(){
+
+        flag = $("#flag").val();
+
+        if(flag === "false"){
+            nickname = $(this).val();
+            nickname = nickname.toLowerCase();
+            if(nickname != ""){
+                $("#email").val(nickname+'@yascemail.com');
+                $("#password").val(nickname + "*2020");
+                $("#password_confirmation").val(nickname + "*2020");
+            }else{
+                $("#nickname").val("");
+                $("#email").val('@yascemail.com');
+                $("#password").val("*2020");
+                $("#password_confirmation").val("*2020");
+            }
+        }
+
+    });
+
+    $("#name, #last_name").keyup(function(){
+        flag = $("#flag").val();
+        if(flag === "false"){
+
+            $("#nickname").val("");
+            $(".seccion-sugerencia").hide();
+            $(".segunda-seccion").hide();
+            $("#nickname").attr('disabled', true);
+        }
     });
     
 });
@@ -379,6 +488,8 @@ const success = {
         var dato = data;
         var typename =$('#name').val();
         var type =$('#id_option').val();
+        $('#btn-save').attr('disabled', false);
+
 
         switch (dato.No) {
             case 1:
@@ -438,6 +549,15 @@ const success = {
 
         }else if(dato.status == 0){
             $("#training_id"+dato.id).remove();
+            if ($('.rowTraining').length == 0) {
+                var training = `<tr id="table-row" class="text-center">
+                                    <th colspan="7" class="text-center">
+                                    <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
+                                     </th>
+                                </tr>`;
+
+                $("#training-list").append(training);
+              }
         }
        
     },
