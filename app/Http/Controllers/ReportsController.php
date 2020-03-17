@@ -52,13 +52,14 @@ class ReportsController extends Controller
                                    ->join('users_info as userS', 'userS.id_user', '=', 'incident_reports.id_supervisor')
                                    ->join('users_client as uclt', 'uclt.id_user', '=', 'incident_reports.id_user')
                                    ->join('clients as clt', 'clt.id', '=', 'uclt.id_client')
-                                   ->join('settings as set', 'set.id', '=', 'id_setting')->get();
+                                   ->join('settings as set', 'set.id', '=', 'id_setting');
                                   
            
 
             if($request->client != "all"){
-                // dd($reports);
+             
                 $reports->where('uclt.id_client',"=", $request->client);
+               
             }
 
         } else{
@@ -89,6 +90,7 @@ class ReportsController extends Controller
 
 
         $data=$reports->paginate(5);
+        // dd($data);
         if ($request->ajax()) {
             return view('reports.incidents', ["data"=>$data]);
         }

@@ -8,12 +8,12 @@
             <th>Options</th>
         </tr>
     </thead>
-  <tbody id="vacancy-list">
+  <tbody id="vacancy-list" style="word-break: break-word; ">
         @foreach ($data as $vacancy)
         <tr id="vacancy_id{{$vacancy->id}}">
             <td>{{ $vacancy->id }}</td>
-            <td>{{ $vacancy->name }}</td>
-            <td>{{ $vacancy->description }}</td>
+            <td style=" white-space: normal !important; word-wrap: break-word;">{{ $vacancy->name }}</td>
+            <td style=" white-space: normal !important; word-wrap: break-word;" >{{ $vacancy->description }}</td>
             @switch($vacancy->status)
                 @case(1)
                     <td class="hidden-xs">
