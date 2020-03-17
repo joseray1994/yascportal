@@ -43,7 +43,6 @@
 </style>
 </head>
 <body class="theme-green">
-
 <!-- Page Loader -->
 <div class="page-loader-wrapper" style="background:white;">
     <div class="loader">
@@ -70,6 +69,15 @@
                 <ul class="nav navbar-nav">
                     <li>
                         <a href="/schedule" class="icon-menu d-none d-sm-block d-md-none d-lg-block"><i class="icon-calendar"></i></a>
+                    </li>
+                    {{-- <li>
+                        <a href="/schedule" class="icon-menu d-none d-sm-block d-md-none d-lg-block"><i class="icon-earphones-alt"></i></a>
+                    </li> --}}
+                    <li class='startShift'>
+                        <button class="icon-menu d-none d-sm-block d-md-none d-lg-block btn btn-success" id="startShift"><i class="icon-call-in text-white"></i></button>
+                    </li>
+                    <li class='endShift' style="display:none">
+                        <button class="icon-menu d-none d-sm-block d-md-none d-lg-block  btn btn-warning"  id="endShift"><i class="icon-call-out text-white"></i></button>
                     </li>
                     <li>
                         <a href="https://yascemail.com/" class="icon-menu d-none d-sm-block"><i class="icon-envelope"></i></a>
@@ -165,8 +173,11 @@
 <script src="{{asset('bundles/mainscripts.bundle.js')}}"></script>
 <script src="{{asset('vendor/dropify/js/dropify.min.js')}}"></script>
 <script src="{{asset('modulos/auth/auth_javascript.js')}}"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+<script src="{{asset('modulos/shift/AjaxShift.js')}}"></script>
+<link rel="stylesheet" href="{{asset('vendor/bootstrap/css/bootstrap-select.css')}}">
+<script src="{{asset('vendor/bootstrap/js/bootstrap-select.min.js')}}"></script>
+{{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css"/> --}}
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script> --}}
 <script>
     // Echo.channel('home')
     // .listen('NewMessage', (e) => {

@@ -76,7 +76,7 @@ class UserController extends Controller
             'email' => $email,
             'birthdate' => 'date|before:18 years ago',
             'phone' => 'max:20',
-            'gender' => 'not_in:0',
+            'gender' => 'not_in:0' ,
             'id_type_user' => 'gt:0',
             'password' => 'sometimes|required|confirmed|min:8',
         ]);
@@ -143,7 +143,7 @@ class UserController extends Controller
                 }
             DB::commit();
             // event(new NewMessage(User::where('id',$user->id)->with('User_info')->first()));
-            return response()->json(User::where('id',$user->id)->with('User_info')->first());
+            return response()->json(User::where('id',$user->id)->with('User_info')->with('type_user')->first());
         } catch (\Exception $e) {
             return response()->json($e);    
             DB::rollBack();
@@ -169,7 +169,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return response()->json(User::where('id',$user->id)->with('User_info')->with('clients')->first());
+        return response()->json(User::where('id',$user->id)->with('User_info')->with('clients')->with('type_user')->first());
     }
 
     /**
@@ -185,7 +185,7 @@ class UserController extends Controller
         $this->validateUser($request,$user->id);
 
         //VALIDAR NICK NAME
-        $validaNick = UserController::validateNickname($request->nickname);
+        $validaNick = UserController::validateNickname($request->nickname,$user->id);
 
         if($validaNick){
             $msg= 'Another user already has that Nickname';
@@ -235,7 +235,7 @@ class UserController extends Controller
             }
         }
 
-        return response()->json(User::where('id',$user->id)->with('User_info')->first());
+        return response()->json(User::where('id',$user->id)->with('User_info')->with('type_user')->first());
     }
 
     public function getResult($id){
@@ -273,7 +273,7 @@ class UserController extends Controller
         }
         $user->save();
 
-        $result = User::where('id',$id)->with('User_info')->first();
+        $result = User::where('id',$id)->with('User_info')->with('type_user')->first();
 
         return response()->json($result);
     } 
@@ -290,7 +290,7 @@ class UserController extends Controller
         $user->id_status = 0;
         $user->save();
     
-        $result = User::where('id',$id)->with('User_info')->first();
+        $result = User::where('id',$id)->with('User_info')->with('type_user')->first();
 
         return response()->json($result);
     }
