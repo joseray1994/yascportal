@@ -25,6 +25,9 @@ class CandidatesTable extends Migration
             $table->string('listening_test');
             $table->string('grammar_test');
             $table->string('typing_test');
+            $table->string('typing_test2');
+            $table->string('typing_test3');
+            $table->string('typing_test4');
             $table->boolean('status')->default(1);
             $table->timestamps();
         });

@@ -24,7 +24,7 @@
                             <td>
                                 <button type="button" class="btn btn-sm btn-outline-secondary btn-edit" data-toggle="tooltip" title="Edit"  value="{{$client->id}}"  ><i class="fa fa-edit"></i></button>
                                 <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-type" data-toggle="tooltip" title="Deactivated" data-type="confirm" value="{{$client->id}}"><i class="fa fa-window-close"></i></button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary btn_add_contacts"  data-toggle="tooltip" title="Contacts" value="{{$client->id}}"><i class="fa fa-users"></i></button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary btn_add_contacts"  data-toggle="tooltip" title="Contacts" onclick="add_contacs('{{$client->id}}')"><i class="fa fa-users"></i></button>
                                 <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument('{{$client->id}}')" data-toggle="tooltip" title="Documents" value="{{$client->id}}"><i class="fa  fa-folder-open"></i></button>
                             </td>
                     @break
@@ -35,7 +35,7 @@
                             <td>
                                 <button type="button" class="btn btn-sm btn-outline-success off-type" data-toggle="tooltip" title="Activated" data-type="confirm" value="{{$client->id}}" ><i class="fa fa-check-square-o"></i></button>
                                 <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert deleteClient" data-toggle="tooltip" title="Delete" data-type="confirm" value="{{$client->id}}"><i class="fa fa-trash-o"></i></button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary btn_add_contacts" data-toggle="tooltip" title="Contacts" value="{{$client->id}}"><i class="fa fa-users"></i></button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary btn_add_contacts" data-toggle="tooltip" title="Contacts" onclick="add_contacs('{{$client->id}}')" ><i class="fa fa-users"></i></button>
                                 <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument('{{$client->id}}')" data-toggle="tooltip" title="Documents" value="{{$client->id}}"><i class="fa  fa-folder-open"></i></button>
                             </td>
                     @break
