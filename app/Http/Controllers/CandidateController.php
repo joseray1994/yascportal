@@ -26,7 +26,7 @@ class CandidateController extends Controller
                     $data2 = CandidateModel::select('candidates.id as id',  'vac.name as name_vacancy', 'candidates.name as name', 'candidates.last_name as last_name', 'candidates.phone as phone', 
                     'candidates.mail as mail', 'candidates.channel as channel', 
                     'candidates.listening_test as listening_test', 'candidates.grammar_test as grammar_test', 
-                    'candidates.typing_test as typing_test', 'candidates.status as status')
+                    'candidates.typing_test as typing_test', 'candidates.typing_test2 as typing_test2',  'candidates.typing_test3 as typing_test3',  'candidates.typing_test4 as typing_test4','candidates.status as status')
                     ->join('vacancies as vac', 'vac.id', '=', 'candidates.id_vacancy')
                     ->where('candidates.id_vacancy',$id)
                     ->whereNotIn('candidates.status',[0])
@@ -38,7 +38,7 @@ class CandidateController extends Controller
                     $data2 = CandidateModel::select('candidates.id as id',  'vac.name as name_vacancy', 'candidates.name as name', 'candidates.last_name as last_name', 'candidates.phone as phone', 
                     'candidates.mail as mail', 'candidates.channel as channel', 
                     'candidates.listening_test as listening_test', 'candidates.grammar_test as grammar_test', 
-                    'candidates.typing_test as typing_test', 'candidates.status as status')
+                    'candidates.typing_test as typing_test', 'candidates.typing_test2 as typing_test2',  'candidates.typing_test3 as typing_test3',  'candidates.typing_test4 as typing_test4','candidates.status as status')
                     ->join('vacancies as vac', 'vac.id', '=', 'candidates.id_vacancy')
                     ->where('candidates.id_vacancy',$id)
                     ->whereNotIn('candidates.status',[0]);
@@ -62,7 +62,7 @@ class CandidateController extends Controller
         $candidate = CandidateModel::select('candidates.id as id',  'vac.name as name_vacancy', 'candidates.name as name', 'candidates.last_name as last_name', 'candidates.phone as phone', 
         'candidates.mail as mail', 'candidates.channel as channel', 
         'candidates.listening_test as listening_test', 'candidates.grammar_test as grammar_test', 
-        'candidates.typing_test as typing_test', 'candidates.status as status')
+        'candidates.typing_test as typing_test', 'candidates.typing_test2 as typing_test2',  'candidates.typing_test3 as typing_test3',  'candidates.typing_test4 as typing_test4','candidates.status as status')
         ->join('vacancies as vac', 'vac.id', '=', 'candidates.id_vacancy')
         ->where('candidates.id',$id)
         ->first();
@@ -71,8 +71,8 @@ class CandidateController extends Controller
     }
 
 
-    public function validateCandidate($request,$candidate_id){
-     
+    public function validateCandidate($request, $candidate_id){
+       // $user=='' ? $email = 'required|mail|unique:users,mail,NULL,id,id_status,1 | unique:users,mail,'.$user.',id,id_status,2' :  $email = 'sometimes|required|unique:users,mail,'.$user.',id,id_status,1 | unique:users,mail,'.$user.',id,id_status,2';
         $this->validate(request(), [
            'id_vacancy' => 'required',
             'name' => 'required|max:30',
@@ -82,6 +82,10 @@ class CandidateController extends Controller
             'channel' => 'required',
             'listening_test' => 'required',
             'grammar_test' => 'required',
+            'typing_test' => 'required',
+            'typing_test2' => 'required',
+            'typing_test3' => 'required',
+            'typing_test4' => 'required',
         ]); 
        
     }
@@ -100,6 +104,9 @@ class CandidateController extends Controller
             'listening_test'=>$request->listening_test,
             'grammar_test'=>$request->grammar_test,
             'typing_test'=>$request->typing_test,
+            'typing_test2'=>$request->typing_test2,
+            'typing_test3'=>$request->typing_test3,
+            'typing_test4'=>$request->typing_test4,
             'status'=>1,]);
 
             $id=$candidate->id;
@@ -132,6 +139,9 @@ class CandidateController extends Controller
             $candidate->listening_test = $request->listening_test;
             $candidate->grammar_test = $request->grammar_test;
             $candidate->typing_test = $request->typing_test;
+            $candidate->typing_test2 = $request->typing_test2;
+            $candidate->typing_test3 = $request->typing_test3;
+            $candidate->typing_test4 = $request->typing_test4;
             $candidate->status=1;
             $candidate->save();
 

@@ -9,6 +9,9 @@
             <th>Listening Test</th>
             <th>Grammar Test</th>
             <th>Typing Test</th>
+            <th>Typing Test2</th>
+            <th>Typing Test3</th>
+            <th>Typing Test4</th>
             <th class="hidden-xs" >Status</th>
             <th>Options</th>
         </tr>
@@ -24,6 +27,9 @@
             <td>{{ $candidate->listening_test }}</td>
             <td>{{ $candidate->grammar_test }}</td>
             <td>{{ $candidate->typing_test }}</td>
+            <td>{{ $candidate->typing_test2 }}</td>
+            <td>{{ $candidate->typing_test3 }}</td>
+            <td>{{ $candidate->typing_test4 }}</td>
             @switch($candidate->status)
                 @case(1)
                     <td class="hidden-xs">
