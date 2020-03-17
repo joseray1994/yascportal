@@ -14,8 +14,9 @@
         </tr>
     </thead>
     <tbody id="trainings-list">
-        @foreach ($data as $training)
-        <tr id="trainings_id{{$training->id}}">
+        {{-- @foreach ($data as $training) --}}
+        @forelse ($data as $training)
+        <tr id="trainings_id{{$training->id}}" class="rowTraining">
             <td style ="background:{{$training->color}}" >{{ $training->client }}</td>
            <td>{{ $training->name }} {{ $training->lastname }}</td>
            <td>{{ $training->name_trainer }} {{ $training->lastname_trainer }}</td>
@@ -32,7 +33,14 @@
            <td>Activities</td>
            <td>{{ $training->end_training}}</td>
         </tr>
-        @endforeach
+        {{-- @endforeach --}}
+        @empty
+            <tr id="table-row" class="text-center">
+                <th colspan="8" class="text-center">
+                    <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
+                </th>
+            </tr>
+        @endforelse
     </tbody>
 </table>
 {{-- {!! $data->render() !!} --}}
