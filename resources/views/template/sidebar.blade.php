@@ -15,7 +15,7 @@
                 <hr>
                 <div class="row">
                     <div class="col-12">
-                        <h6>{{$menu['typeuser']->name}}</h6>            
+                        <h6 class="text-center">{{$menu['typeuser']->name}}</h6>            
                     </div>
                 </div>
                 <hr>
