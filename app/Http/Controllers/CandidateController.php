@@ -72,7 +72,7 @@ class CandidateController extends Controller
 
 
     public function validateCandidate($request, $candidate_id){
-       
+        //$user=='' ? $email = 'required|email|unique:users,email,NULL,id,id_status,1 | unique:users,email,'.$user.',id,id_status,2' :  $email = 'sometimes|required|unique:users,email,'.$user.',id,id_status,1 | unique:users,email,'.$user.',id,id_status,2';
         $this->validate(request(), [
            'id_vacancy' => 'required',
             'name' => 'required|max:30',
@@ -82,10 +82,10 @@ class CandidateController extends Controller
             'channel' => 'required',
             'listening_test' => 'required',
             'grammar_test' => 'required',
-            'typing_test' => 'required',
-            'typing_test2' => 'required',
-            'typing_test3' => 'required',
-            'typing_test4' => 'required',
+            'typing_test' => 'required|max:3',
+            'typing_test2' => 'required|max:3',
+            'typing_test3' => 'required|max:3',
+            'typing_test4' => 'required|max:3',
         ]); 
        
     }

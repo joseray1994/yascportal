@@ -3,7 +3,7 @@
                 <div class="form-group col-sm-3">
                                    
                                     <select class="form-control js-example-basic-single incident_reportSearch" id="clientSearch">
-                                        <option value="all">All Clients</option>
+                                        <option value="AllClients">All Clients</option>
                                         @foreach($clients as $client)
                                             <option value="{{$client->id}}" >{{$client->name}}</option>
                                        @endforeach
@@ -12,7 +12,7 @@
                 <div class="form-group col-sm-3">
                                    
                                     <select class="form-control js-example-basic-single incident_reportSearch" id="operatorSearch">
-                                        <option value="all">All Operators</option>
+                                        <option value="AllOperators">All Operators</option>
                                         @foreach($operators as $op)
                                             <option value="{{$op->id_user}}" >{{$op->name}} {{$op->last_name}}</option>
                                         @endforeach

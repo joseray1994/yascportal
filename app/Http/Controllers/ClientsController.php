@@ -104,7 +104,9 @@ class ClientsController extends Controller
        
         $this->validate(request(), [
             'name' => 'unique:clients,name,'.$client_id.'|required|max:30|regex:/^([a-zA-Z]+)(\s[a-zA-Z]+)*$/',
-            'color' => 'unique:clients,color,'.$client_id
+            'color' => 'unique:clients,color,'.$client_id,
+            'interval' => 'required|max:2',
+            'duration' => 'required|max:3'
         ]); 
     }
 
@@ -261,11 +263,12 @@ class ClientsController extends Controller
         // ClientModel::whereNotIn('status',[0])->where('id', $client_id)->first();
         return $data;
     }
-    public function validateContact($request){
-
+    public function validateContact($request, $client = ''){
+        
         $this->validate(request(), [
             'name_contact' => 'unique:client_contacts|required|max:30|regex:/^([a-zA-Z]+)(\s[a-zA-Z]+)*$/',
             'phone' => 'required|max:20|regex:/^[0-9]{0,20}(\.?)[0-9]{0,2}$/',
+            
         ]); 
     }
 

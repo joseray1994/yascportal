@@ -32,13 +32,11 @@ class TrainingController extends Controller
         $menu = menu($user,$id_menu);
         if($menu['validate']){  
 
-        
             $days= DaysModel::all();
             $operators=User::select('users.id as id', 'ui.name as name', 'ui.last_name as lname')
             ->join('users_info as ui', 'ui.id_user', '=', 'users.id')
             ->where('users.id_type_user','=',11)
             ->get();
-
 
             $days= DaysModel::all();
             $settings= SettingsModel::all();
@@ -63,10 +61,6 @@ class TrainingController extends Controller
                 ->where('sch.year',"=", $now->year)
                 ->whereIn('detail_schedule_user.status',[1,2]);
 
-
-                
-                // dd($data2);
-                
                 $day = DaysModel::where('id',$now->dayOfWeek)->first();
 
                 if($request->day != "allDays"){
@@ -84,9 +78,6 @@ class TrainingController extends Controller
                 if($request->work != "allWorks"){
                     $data2->where('detail_schedule_user.type_daily',"=", $request->work);
                 }
-
-                
-                
             }else{
                 $now = Carbon::now();
                 
@@ -107,15 +98,13 @@ class TrainingController extends Controller
             }
             $data = $data2->paginate(10);
             if ($request->ajax()) {
-                
                 return view('training.table', ["data"=>$data]);
             }
         
-    return view('training.index',["data"=>$data,'day'=>$day,'date'=>$now,"days"=>$days,"settings"=>$settings ,"today"=>$now->toDateString(),"NoD"=>$now->dayOfWeek, "clients"=>$clients,"operators"=>$operators,"menu"=>$menu,"trainers"=>$trainers, "options"=>$options]);
+            return view('training.index',["data"=>$data,'day'=>$day,'date'=>$now,"days"=>$days,"settings"=>$settings ,"today"=>$now->toDateString(),"NoD"=>$now->dayOfWeek, "clients"=>$clients,"operators"=>$operators,"menu"=>$menu,"trainers"=>$trainers, "options"=>$options]);
         }else{
             return redirect('/');
          }
-            
     }
 
     public function data_settings($id){
@@ -126,19 +115,30 @@ class TrainingController extends Controller
         return $data2;
     }
 
-    public function validateSettings($request,$setting_id){
-        if($setting_id==""){
-        $this->validate(request(), [
-            'name' => 'required|max:30',
-            'id_option' => 'required',
-
-        ]); 
-        }else{
+    public function validateTraining($request,$user=''){
+        $user=='' ? $email = 'required|email|unique:users,email,NULL,id,id_status,1 | unique:users,email,'.$user.',id,id_status,2' :  $email = 'sometimes|required|unique:users,email,'.$user.',id,id_status,1 | unique:users,email,'.$user.',id,id_status,2';
             $this->validate(request(), [
-                'name' => 'required|max:30',
-                'id_option' => 'required',
-            ]);   
-        }
+                'name' => 'required|max:150|regex:/^([a-zA-Z]+)(\s[a-zA-Z]+)*$/',
+                'last_name' => 'required|max:150|regex:/^([a-zA-Z]+)(\s[a-zA-Z]+)*$/',
+                'phone' => 'required|max:20|regex:/^[0-9]{0,20}(\.?)[0-9]{0,2}$/',
+                'gender' => 'required',
+                'emergency_contact_name' => 'sometimes|max:150|nullable|regex:/^([a-zA-Z]+)(\s[a-zA-Z]+)*$/',
+                'emergency_contact_phone' => 'sometimes|nullable|regex:/^[0-9]{0,20}(\.?)[0-9]{0,2}$/',
+                'birthdate' => 'required|date|before:18 years ago',
+                'nickname' => 'required',
+                'email' => $email,
+                'password' => 'sometimes|required|confirmed|min:8',
+                // 'id_client' => 'required',
+                'id_trainer' => 'required',
+                'start' => 'required',
+                'end' => 'required',
+                'start_training' => 'required|date',
+                'end_training' => 'required|date|after_or_equal:start_training',
+                'end_coaching' => 'date|after_or_equal:start_training',
+            
+            ]);
+
+        
     }
 
     public function generateEnd_training(Request $request)
@@ -206,14 +206,24 @@ class TrainingController extends Controller
     {     
         //in TorCDuration //type=1 está en training , type=2 está en coaching  //in ScheduleTrainingModel  //type=1 habilitado, type=2 tarining, type=3 coaching //in ScheduleTrainingModel  //type=1 habilitado, type=2 tarining, type=3 coaching //in training detail //type=1 workday, type=2 training, type=3 coaching, type=4 extra
     //--------------------------//
-        $correo=$request->email.'@yasemail.com';
+
+      //VALIDADOR DE FORMULARIO
+      TrainingController::validateTraining($request);
+      //VALIDAR NICK NAME
+      $validaNick = TrainingController::validateNickname($request->nickname);
+      
+      if($validaNick){
+          $msg= 'Another user already has that Nickname';
+          $data=['No'=>2,'msg'=>$msg];
+          return response()->json($data);
+      }
         //crea usuario
         $user =  User::Create([
             'id_type_user'=>11,
             'id_status'=>1,
-            'nickname'=>"",
-            'email'=>$correo,
-            'password'=>Hash::make('123'),
+            'nickname'=>$request->nickname,
+            'email'=>$request->email,
+            'password'=>Hash::make($request->password),
         ]);
             //crea la informacion del usuario
         $User_info =  User_info::Create([
@@ -231,7 +241,7 @@ class TrainingController extends Controller
             'profile_picture'=>"",
             'biotime_status'=>"",
             'access_code'=>"",
-            'entrance_date'=>"2020-01-01",
+            'entrance_date'=>$request->start_training,
         ]);
     //inserta en la tabla espejo el horario que tendrá el trainee cuando sea el operador
         $horario=[];
@@ -417,15 +427,31 @@ class TrainingController extends Controller
                 }
             }
         }
-
-        
-
-        // $result = TrainingController::getResult($user->id);
-
-        // return response()->json($result);
+        $result = TrainingController::getResult($user->id);
+        return response()->json($result);
 
       
            
+    }
+
+    public function getResult($id){
+            $data=TrainingDetailModel::select("detail_schedule_user.id as id", "detail_schedule_user.type_daily as type","inf.name as name", "inf.last_name as lastname","detail_schedule_user.time_start as time_s","detail_schedule_user.time_end as time_e","detail_schedule_user.status as status","cli.name as client","ccl.hex as color","info.name as name_trainer", "info.last_name as lastname_trainer", "tcd.date_end as end_training")
+            ->join('schedule as sch','sch.id', "=", 'detail_schedule_user.id_schedule')
+            ->join('clients as cli', 'cli.id',"=","sch.id_client")
+            ->join('client_color as ccl', 'ccl.id',"=","cli.color")
+            ->join('t_or_c_duration as tcd', 'tcd.id',"=","sch.id_torcduration")
+            ->join('users_info as inf','inf.id_user', "=", 'detail_schedule_user.id_operator')
+            ->join('users_info as info','info.id_user', "=", 'tcd.id_trainer')
+            ->join('settings as set','set.id','=','detail_schedule_user.option')
+            ->join('users as usr', 'users_info.id_user', '=', 'usr.id')
+            ->where('detail_schedule_user.id_day',"=", $now->dayOfWeek)
+            ->where('sch.week',"=", $now->weekOfYear)
+            ->where('sch.month',"=", $now->month)
+            ->where('sch.year',"=", $now->year)
+            ->where('usr.id_type_user', 11)
+            ->where('usr.id', $id)
+            ->first();
+            return $data;
     }
 
     public function show($settings_id)
@@ -436,32 +462,11 @@ class TrainingController extends Controller
         return response()->json($dataSettings);
     }
 
-    public function validateSettingsExists($name, $id_option){
-        $settingValidation = SettingsModel::where('name',$name)
-        ->where('id_option', $id_option)
-        ->whereIn('status', [1,2])
-        ->exists();
-        return $settingValidation;
-    }
+    
 
     public function update(Request $request, $settings_id)
     {
-        // // $settingValidation = SettingsController::validateSettingsExists($request->name,$request->id_option);
-        // if(!$settingValidation){
-        //     // SettingsController::validateSettings($request,$settings_id);
-        //     $setting = SettingsModel::find($settings_id);
-        //     $setting->name = $request->name;
-        //     $setting->id_option = $request->id_option;
-        //     $setting->status=1;
-        //     $setting->save();
-        //     $dataSettings= SettingsController::data_settings($setting->id);
-
-        //     return response()->json($dataSettings);
-        // }else{
-        //     $msg='Another option already has that name and that type';
-        //     $data=['No'=>1,'msg'=>$msg];
-        //     return response()->json($data);
-        // }
+       
     }
 
     public function destroy($settings_id)

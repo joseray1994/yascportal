@@ -2,8 +2,10 @@
 $(document).ready(function(){
      
     clearload();
-    var can0 = $('#id_candidate').val();
-    var nameDeli='<a href="/vacancies">Vacantes</i></a> / <a href="/candidates/'+can0+'">Candidates</i></a>';
+   
+    var vac0 = $('#id_vacancy').val();
+
+    var nameDeli='<a href="/vacancies">Vacancies</i></a> / <a href="/candidates/'+vac0+'">Candidates</i></a>';
 
     $('.nameDeli').html(nameDeli);
     $('#sidebar10').addClass('active');  
@@ -38,6 +40,13 @@ $(document).ready(function(){
         $('#myModal').modal('hide');
     
     });
+
+  
+    $(document).on('click','.info_modal',function(){
+        var  candidate_id = $(this).val();
+        var my_url=url + '/' +  candidate_id;
+         actions.show(my_url);
+     });
 
         //display modal form for product EDIT ***************************
         $(document).on('click','.open_modal',function(){
@@ -362,7 +371,16 @@ const success = {
                 $('#btn-save').val("update");
                 $('#myModal').modal('show');
             break;
-        
+
+            case 3:
+                $('#listening_test').val(data.candidates.listening_test);
+                $('#grammar_test').val(data.candidates.grammar_test);
+                $('#typing_test').val(data.candidates.typing_test);
+                $('#typing_test2').val(data.candidates.typing_test2);
+                $('#typing_test3').val(data.candidates.typing_test3);
+                $('#typing_test4').val(data.candidates.typing_test4);
+                $('#myModal').modal('show');
+            break;
         }
 
     },
