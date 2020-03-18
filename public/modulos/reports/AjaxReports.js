@@ -23,19 +23,6 @@ $(document).ready(function(){
     
     });
 
-    $('#search-incidents').click(function(){
-        var formData = {
-            client:  $('#clientSearch').val(),
-            operator:  $('#operatorSearch').val(),
-            date: $('#dateSearch').val(),
-        }
-        var url = $('#url').val();  
-
-        var my_url = url + '/show';
-        actions.show(my_url, formData)
-
-    
-    });
 
     $(window).on('hashchange', function() {
         if (window.location.hash) {
@@ -59,9 +46,9 @@ const incident_report = {
     get_data: function(page){
         var formData={
             client: $('#clientSearch').val(),
-            // date_start: $('#startSearch').val(),
-            // date_end: $('#endSearch').val(),
-            // operator: $('#operatorSearch').val(),
+            date_start: $('#startSearch').val(),
+            date_end: $('#endSearch').val(),
+            operator: $('#operatorSearch').val(),
         }
         $('.loading-table').show();
         console.log(formData);
