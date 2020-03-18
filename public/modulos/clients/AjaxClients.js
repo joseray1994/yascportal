@@ -50,7 +50,9 @@ $(document).ready(function(){
 
     //Add Contacts
     $('.btn_add_contacts').click(function(){
-        $('#labelTitle').html(" <button type='button' class='btn btn-back'><i class='fa fa-arrow-left'></i></button> Add Contacts  <i class='fa fa-plus'></i>");
+        $('#labelTitle').html("Add Contacts  <i class='fa fa-plus'></i>");
+        $('.btn-back').show();
+        $('#btn_add').hide();
         $(".formulario").hide();
         $(".formulario_contacts").show();
         $(".tableClient").hide();
@@ -71,6 +73,7 @@ $(document).ready(function(){
         $('#labelTitle').html("Clients  <i class='fa fa-briefcase'></i>");
         $(".formulario").hide();
         $(".tableClient").show();
+        $('.btn-back').hide();
         $('#btn_add').show();
         $(".formulario_contacts").hide();
         $('#formContacts').trigger("reset");
@@ -417,7 +420,9 @@ const success = {
                 var dato = data.client;
                 var clientname =$('#name').val();
                 var type =$('#type').val();
-
+                    if (dato.description == null){
+                        dato.description = "";
+                    }
                     var client = `<tr id="client_id${dato.id}" style = "background:${dato.color}">
                                         <td>${dato.name}</td>
                                         <td>${dato.description}</td>
@@ -460,7 +465,9 @@ const success = {
                     var dato = data.contact;
                     var clientname =$('#name').val();
                     var type =$('#type').val();
-    
+                    if (dato.description == null){
+                        dato.description = "";
+                    }
                         var contact = `<tr id="client_id${dato.id}">
                                             <td>${dato.name}</td>
                                             <td>${dato.description}</td>
@@ -525,7 +532,7 @@ const success = {
                 console.log(data.client);
                 var dato = data.client;
                 if(dato.status != 0){
-                    if(dato.description = ''){
+                    if(dato.description == null){
                         dato.description = '';
                     }
                     var client = `<tr id="client_id${dato.id}" style = "background:${dato.color}">
@@ -623,6 +630,9 @@ const success = {
             case 2:
                 var contact = "";
                 data.contact.forEach(function(data){
+                    if(data.description == null){
+                        data.description = "";
+                    }
                     contact += `
                    
                         <tr id="client_id${data.id}">
