@@ -292,7 +292,14 @@ class ServiceGeneralController extends Controller
 
 
 
-    public function SumTime(Request $request){    
+    public function SumTime(Request $request){ 
+        
+        $this->validate(request(), [
+            'time_start' => 'required',
+            'hours' => 'required|numeric|max:24|min:0',
+            'minutes' => 'required|numeric|max:59|min:0',
+        ]); 
+      
         $m=0;
         $m+= $request->minutes;
 
@@ -304,7 +311,11 @@ class ServiceGeneralController extends Controller
             $now->addHours($h)->addMinutes($m);
             $hora = date("H:i", strtotime($now));
 
-        return response()->json($hora);
+      
+      return response()->json($hora); 
+
     }
 
+
 }
+
