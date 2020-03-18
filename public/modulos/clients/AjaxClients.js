@@ -48,29 +48,11 @@ $(document).ready(function(){
     
     });
 
-    //Add Contacts
-    $('.btn_add_contacts').click(function(){
-        $('#labelTitle').html(" <button type='button' class='btn btn-back'><i class='fa fa-arrow-left'></i></button> Add Contacts  <i class='fa fa-plus'></i>");
-        $(".formulario").hide();
-        $(".formulario_contacts").show();
-        $(".tableClient").hide();
-        $('#btn_add').hide();
-        $('#formContacts').trigger("reset");
-
-        var id = $(this).val();
-        $('#tag_put').remove();
-        $('#client_id_contacts').val(id);
-        //Show the contacts table
-        var my_url = url + '/contacts/show/' + id;
-        actions.show(my_url)
-
-
-    });
-
     $('.btn-back').click(function(){
         $('#labelTitle').html("Clients  <i class='fa fa-briefcase'></i>");
         $(".formulario").hide();
         $(".tableClient").show();
+        $('.btn-back').hide();
         $('#btn_add').show();
         $(".formulario_contacts").hide();
         $('#formContacts').trigger("reset");
@@ -256,6 +238,23 @@ $(document).ready(function(){
     
 });
 
+   //Add Contacts
+    function add_contacs(id){
+        $('#labelTitle').html(" <button type='button' class='btn btn-back'><i class='fa fa-arrow-left'></i></button> Add Contacts  <i class='fa fa-plus'></i>");
+        $(".formulario").hide();
+        $(".formulario_contacts").show();
+        $(".tableClient").hide();
+        $('#btn_add').hide();
+        $('#formContacts').trigger("reset");
+        $('#tag_put').remove();
+        $('#client_id_contacts').val(id);
+        //Show the contacts table
+        var my_url = $('#url').val() + '/contacts/show/'+ id;
+        actions.show(my_url)
+
+
+    }
+
 //Activate or Deactivated Contacts
 $(document).on('click','.off-type-contacts',function(){
     var url = $('#url').val(); 
@@ -417,7 +416,9 @@ const success = {
                 var dato = data.client;
                 var clientname =$('#name').val();
                 var type =$('#type').val();
-
+                    if (dato.description == null){
+                        dato.description = "";
+                    }
                     var client = `<tr id="client_id${dato.id}" style = "background:${dato.color}">
                                         <td>${dato.name}</td>
                                         <td>${dato.description}</td>
@@ -460,7 +461,9 @@ const success = {
                     var dato = data.contact;
                     var clientname =$('#name').val();
                     var type =$('#type').val();
-    
+                    if (dato.description == null){
+                        dato.description = "";
+                    }
                         var contact = `<tr id="client_id${dato.id}">
                                             <td>${dato.name}</td>
                                             <td>${dato.description}</td>
@@ -525,7 +528,7 @@ const success = {
                 console.log(data.client);
                 var dato = data.client;
                 if(dato.status != 0){
-                    if(dato.description = ''){
+                    if(dato.description == null){
                         dato.description = '';
                     }
                     var client = `<tr id="client_id${dato.id}" style = "background:${dato.color}">
@@ -597,6 +600,7 @@ const success = {
     },
 
     show: function(data){
+        console.log(data);
         switch (data.flag) {
             case 1:
                 $('#document-list').html("");
@@ -623,6 +627,9 @@ const success = {
             case 2:
                 var contact = "";
                 data.contact.forEach(function(data){
+                    if(data.description == null){
+                        data.description = "";
+                    }
                     contact += `
                    
                         <tr id="client_id${data.id}">
