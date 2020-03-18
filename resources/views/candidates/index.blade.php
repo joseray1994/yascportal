@@ -4,18 +4,19 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="header">
-                            <h1>Candidates <i class="fa fa-users"></i></h1>
+                            <h1><a href="javascript:window.history.back();" data-toggle="tooltip" title="Regresar a Vacancies"><i class="fa fa-arrow-left"></i></a><label style="padding-right:20px; padding-left:20px;">Candidates <i class="fa fa-users"></i></label></h1>
+
                             <ul class="header-dropdown">
                                 <li><a href="javascript:void(0);" class="btn btn-success" disabled id="btn_add" >New Candidate <i class="fa fa-plus"></i></a></li>
                             </ul>
                         </div>
                         @include('candidates.form')
+                        @include('candidates.detail')
                         <div class="body">
                                 <div class="input-group mb-3 input-group-sm">
                                     <div class="input-group-prepend">
                                         <select class="form-control" id="typesearch">
                                             <option value="name">name</option>
-                                            <option value="id">id</option>
                                         </select>
                                     </div>
                                     <input type="text" class="form-control" id="search">
