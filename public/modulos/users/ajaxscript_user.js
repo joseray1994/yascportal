@@ -517,6 +517,7 @@ const success = {
                                     <td>${dato.user_info.last_name}</td>
                                     <td>${dato.email}</td>
                                     <td>${dato.user_info.phone}</td>
+                                    <td>${dato.type_user.name}</td>
                                     <td>${dato.user_info.entrance_date}</td>
                                     <td>${dato.user_info.birthdate}</td>
                                     <td class="hidden-xs">${types.status(dato)}</td>
@@ -547,6 +548,7 @@ const success = {
                                     <td>${dato.user_info.last_name}</td>
                                     <td>${dato.email}</td>
                                     <td>${dato.user_info.phone}</td>
+                                    <td>${dato.type_user.name}</td>
                                     <td>${dato.user_info.entrance_date}</td>
                                     <td>${dato.user_info.birthdate}</td>
                                     <td class="hidden-xs">${types.status(dato)}</td>
@@ -663,6 +665,7 @@ const success = {
                     <td>${dato.user_info.last_name}</td>
                     <td>${dato.email}</td>
                     <td>${dato.user_info.phone}</td>
+                    <td>${dato.type_user.name}</td>
                     <td>${dato.user_info.entrance_date}</td>
                     <td>${dato.user_info.birthdate}</td>
                     <td class="hidden-xs">${types.status(dato)}</td>

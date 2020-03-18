@@ -144,6 +144,10 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::get('/reports', 'ReportsController@index');
     Route::get('/reports/show', 'ReportsController@show');
 
+    //Shift
+    Route::get('startShift/','shiftController@startShift');
+    Route::get('endShift/','shiftController@endShift');
+
 
 });
 

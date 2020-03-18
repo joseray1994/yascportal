@@ -37,7 +37,7 @@ class ScheduleTableSeeder extends Seeder
 
             $schedules = [
                 [
-                    'id_trainer' => 1, 
+                    // 'id_trainer' => 1, 
                     'id_operator' => $operator['id'], 
                     'id_client' => $operator['id_client'], 
                     'date_start' => $now1->startOfWeek(Carbon::SUNDAY), 
@@ -89,7 +89,7 @@ class ScheduleTableSeeder extends Seeder
 
             $schedules = [
                 [
-                    'id_trainer' => $schedule['id_trainer'], 
+                    // 'id_trainer' => $schedule['id_trainer'], 
                     'id_operator' => $schedule['id_operator'], 
                     'id_client' => $schedule['id_client'], 
                     'date_start' => $nextStartWeek, 
@@ -104,7 +104,7 @@ class ScheduleTableSeeder extends Seeder
             DB::table('schedule')->insert($schedules);
             $schedules = [
                 [
-                    'id_trainer' => $schedule['id_trainer'], 
+                    // 'id_trainer' => $schedule['id_trainer'], 
                     'id_operator' => $schedule['id_operator'], 
                     'id_client' => $schedule['id_client'], 
                     'date_start' => $next2StartWeek, 
