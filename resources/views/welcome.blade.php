@@ -149,28 +149,28 @@
                        <div class="card-body">
                             <div class="row">
                                 <div class="col-sm-4">
-                                    <form action="" class="form-row">
+                                    <form id="formIncident" class="form-row">
 
                                         <div class="form-group col-sm-6">
-                                            <h4>00:00:00</h4>
+                                            <h4 id="labelTimer">00:00:00</h4>
                                         </div>
                                         <div class="form-group col-sm-6">
-                                            <h4>2020-03-17</h4>
+                                            <h4 id="labelDate"></h4>
                                         </div>
                                         <div class="form-group col-sm-6">
                                             <label>Reason</label>
-                                            <select name="" id="" class="form-control"></select>
+                                            <select name="reason" id="reason" class="form-control"></select>
                                         </div>
                                         <div class="form-group col-sm-6">
                                             <label>Supervisor</label>
-                                            <select name="" id="" class="form-control"></select>
+                                            <select name="supervisor" id="supervisor" class="form-control"></select>
                                         </div>
                                         <div class="form-group col-sm-12">
                                             <label>Note</label>
-                                            <textarea name="" id="" rows="4" class="form-control"></textarea>
+                                            <textarea name="note" id="note" rows="4" class="form-control"></textarea>
                                         </div>
                                         <div class="form-group col-sm-12 text-center">
-                                            <button type="submit" class="btn btn-success segunda-seccion" id="btn-save" value="add">Save</button>
+                                            <button type="submit" class="btn btn-success segunda-seccion" id="btn-save-incident" value="add">Save</button>
                                         </div>
                                     </form>
                                 </div>
