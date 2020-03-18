@@ -36,9 +36,10 @@
                         <span class='badge badge-success'>Activated</span>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="{{$candidate->id}}"  ><i class="fa fa-edit"></i></button>
-                        <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-candidate" title="Deactivated" data-type="confirm" value="{{$candidate->id}}"><i class="fa fa-window-close"></i></button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument('{{$candidate->id}}')" data-toggle="tooltip" title="Documents" value="{{$candidate->id}}"><i class="fa  fa-folder-open"></i></button>
+                        <button type="button"  data-toggle="tooltip" class="btn btn-sm btn-outline-primary  info_modal" title="Information" id="btn-info" value="{{$candidate->id}}"  ><i class="fa fa-info-circle"></i></button>
+                        <button type="button"  data-toggle="tooltip" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="{{$candidate->id}}"  ><i class="fa fa-edit"></i></button>
+                        <button type="button"  data-toggle="tooltip" class="btn btn-sm btn-outline-danger js-sweetalert off-candidate" title="Deactivated" data-type="confirm" value="{{$candidate->id}}"><i class="fa fa-window-close"></i></button>
+                        <button type="button"  data-toggle="tooltip" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument('{{$candidate->id}}')" data-toggle="tooltip" title="Documents" value="{{$candidate->id}}"><i class="fa  fa-folder-open"></i></button>
 
                     </td>
                 @break
@@ -47,9 +48,9 @@
                     <span class='badge badge-secondary'>Deactivated</span>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-sm btn-outline-success off-candidate" title="Activated" data-type="confirm" value="{{$candidate->id}}" ><i class="fa fa-check-square-o"></i></button>
-                    <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert delete-candidate" title="Delete" data-type="confirm" value="{{$candidate->id}}"><i class="fa fa-trash-o"></i></button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument('{{$candidate->id}}')" data-toggle="tooltip" title="Documents" value="{{$candidate->id}}"><i class="fa  fa-folder-open"></i></button>
+                    <button type="button"  data-toggle="tooltip" class="btn btn-sm btn-outline-success off-candidate" title="Activated" data-type="confirm" value="{{$candidate->id}}" ><i class="fa fa-check-square-o"></i></button>
+                    <button type="button"  data-toggle="tooltip" class="btn btn-sm btn-outline-danger js-sweetalert delete-candidate" title="Delete" data-type="confirm" value="{{$candidate->id}}"><i class="fa fa-trash-o"></i></button>
+                    <button type="button"  data-toggle="tooltip" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument('{{$candidate->id}}')" data-toggle="tooltip" title="Documents" value="{{$candidate->id}}"><i class="fa  fa-folder-open"></i></button>
                 </td>
                 @break
             @endswitch

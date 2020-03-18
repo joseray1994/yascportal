@@ -7,9 +7,12 @@
 
     <div class="col-lg-4 col-sm-12">
         <div class="card profile-header">
-            <div class="header">
-            <input type="hidden" id="imagen" value="{{$data->profile_picture}}">
-            <div class="profile-image"> <img src="{{asset($menu['dataUser']->path_image)}}" id="image-profile" class="img-thumbnail" alt=""> </div>
+            <div class="header text-center">
+            @if($menu['dataUser']->path_image)
+            <img src="{{asset($menu['dataUser']->path_image)}}" id="image-profile" alt="profile image" class="img-thumbnail mx-auto" style="max-height:350px">
+            @else
+            <img src="{{asset('images/default.png')}}" id="image-profile" alt="profile image" class="img-thumbnail mx-auto" style="max-height:350px">
+            @endif
             </div>
             <div class="body">
                 <div>
@@ -20,7 +23,7 @@
         </div>
 
         
-        <div class="card">
+        <div class="card-body">
             <div class="header">
                 <legend>Info</legend>
             </div>
@@ -44,7 +47,7 @@
     <div class="col-lg-8 col-sm-12">
 
         <div class="card">
-            <div class="body">
+            <div class="card-body">
                 <ul class="nav nav-tabs-new">
                     <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#Overview" id="btnOverview">Overview</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Settings" id="btnSettings">Settings</a></li>

@@ -17,7 +17,7 @@ class VacanciesTable extends Migration
             $table->bigIncrements('id');
             $table->string('mat', 3)->default('VAC');
             $table->string('name');
-            $table->string('description')->nullable();
+            $table->string('description', 300)->nullable();
             $table->boolean('status')->default(1);
             $table->timestamps();
         });

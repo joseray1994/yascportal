@@ -44,6 +44,7 @@ $(document).ready(function(){
         var weekday = fecha.getDay();
          $('#daySearch').val(weekday);
          $('#daySearch').trigger('change');
+         
 
         training.get_data(1);
     });
@@ -313,8 +314,9 @@ $(document).ready(function(){
                 $("#nickname").val(valor);
                 $("#nickname").attr('disabled', false);
                 $("#email").val(valor+'@yascemail.com');
-                $("#email").attr('disabled', false);
+                $("#email2").val(valor+'@yascemail.com');
                 $("#password").val(valor + "*2020");
+                $("#password2").val(valor + "*2020");
                 $("#password_confirmation").val(valor + "*2020");
                 $(".segunda-seccion").show();
             }
@@ -322,9 +324,10 @@ $(document).ready(function(){
             $(".segunda-seccion").hide();
             $("#nickname").val("");
             $("#email").val("");
+            $("#email2").val("");
             $("#password").val("");
+            $("#password2").val("");
             $("#password_confirmation").val("");
-            
         }
     });
 
@@ -337,12 +340,16 @@ $(document).ready(function(){
             nickname = nickname.toLowerCase();
             if(nickname != ""){
                 $("#email").val(nickname+'@yascemail.com');
+                $("#email2").val(nickname+'@yascemail.com');
                 $("#password").val(nickname + "*2020");
+                $("#password2").val(nickname + "*2020");
                 $("#password_confirmation").val(nickname + "*2020");
             }else{
                 $("#nickname").val("");
                 $("#email").val('@yascemail.com');
+                $("#email2").val('@yascemail.com');
                 $("#password").val("*2020");
+                $("#password2").val("*2020");
                 $("#password_confirmation").val("*2020");
             }
         }
@@ -577,6 +584,7 @@ const success = {
 
     msj: function(data){
         console.log(data);
+        $('#btn-save').attr('disabled', false);
         $.notifyClose();
         $.each(data.responseJSON.errors,function (k,message) {
             $.notify({
