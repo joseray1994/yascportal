@@ -44,6 +44,7 @@ $(document).ready(function(){
         var weekday = fecha.getDay();
          $('#daySearch').val(weekday);
          $('#daySearch').trigger('change');
+         
 
         training.get_data(1);
     });
