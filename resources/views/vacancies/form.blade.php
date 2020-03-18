@@ -16,8 +16,8 @@
 							</div>
 							<div class="form-group error">
 								<div class="btn-group col-sm-12">
-									<button class="btn modaldelichef" disabled><i class="fa fa-user-plus"></i></button>
-									<textarea class="form-control has-error" id="description"  name="description" rows="3"></textarea>
+									<button class="btn modaldelichef" disabled><i class="fa fa-comments"></i></button>
+									<textarea class="form-control has-error" id="description"  name="description" rows="3" maxlength ="300"></textarea>
 								</div>
 							</div>
 					</div>

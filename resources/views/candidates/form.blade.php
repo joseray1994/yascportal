@@ -58,7 +58,7 @@
 									<div class="input-group-prepend">
 										<button class="btn modaldelichef" disabled><i class="fa fa-id-badge"></i></button>
 									</div>
-									<input type="text" class="form-control has-error" id="channel" name="channel" placeholder="Channel" value="">
+									<input type="text" class="form-control has-error" id="channel" name="channel" placeholder="Channel" value=""  maxlength ="100">
 								</div> 
 							</div>
                    		</div>
@@ -99,31 +99,30 @@
 									<input type="number" class="form-control has-error" id="typing_test" name="typing_test" placeholder="" value="" >
 								</div> 
 							</div>
-						
+
+							<div class="col-md-3 mb-3">
+							<label>2</label>
+								<div class="input-group">
+									<input type="number" class="form-control has-error" id="typing_test2" name="typing_test2" placeholder="" value="" >
+								</div> 
+							</div>
+
+							<div class="col-md-3 mb-3">
+							<label>3</label>
+								<div class="input-group">
+									<input type="number" class="form-control has-error" id="typing_test3" name="typing_test3" placeholder="" value="" >
+								</div> 
+							</div>
+
+							<div class="col-md-3 mb-3">
+							<label>4</label>
+								<div class="input-group">
+									<input type="number" class="form-control has-error" id="typing_test4" name="typing_test4" placeholder="" value="" >
+								</div> 
+							</div>
+							
                    		</div>
 
-						<!-- <div class="form-row">
-							<div class="col-md-6 mb-3">
-								<label>Recording</label>
-								<div class="input-group">
-									<input type="file" class="form-control has-error" id="recording" name="recording" placeholder="" value="" >
-								</div> 
-							</div>
-							<div class="col-md-6 mb-3">
-								<label>CV</label>
-								<div class="input-group">
-									<input type="file" class="form-control has-error" id="cv" name="cv" placeholder="" value="" >
-								</div> 
-							</div>
-                   		</div> -->
-
-						<!-- <div class="form-row">
-							<div class="col-md-6 mb-3">
-								<label>Personality Test</label>
-								<input type="file" id="personality_test" name="personality_test"><br><br>
-							</div>
-                   		</div> -->
-						  
 					</div>
 
 					<div class="modal-footer">

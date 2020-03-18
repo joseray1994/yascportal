@@ -35,7 +35,8 @@
             </div>
             @include('vacancies.form')
              <!-- Passing BASE URL to AJAX -->
-        <input id="url" type="hidden" value="{{ \Request::url() }}">
+             <input id="url" type="hidden" value="{{ \Request::url() }}">
+             <input id="baseUrl" type="hidden" value="{{ \Request::root() }}">
 @endsection
 @section('script')
 <script src="{{asset('modulos/ajaxscript_actions.js')}}"></script>

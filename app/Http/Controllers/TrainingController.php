@@ -31,11 +31,15 @@ class TrainingController extends Controller
         $id_menu=5;
         $menu = menu($user,$id_menu);
         if($menu['validate']){  
+
+        
             $days= DaysModel::all();
             $operators=User::select('users.id as id', 'ui.name as name', 'ui.last_name as lname')
             ->join('users_info as ui', 'ui.id_user', '=', 'users.id')
             ->where('users.id_type_user','=',11)
             ->get();
+
+
             $days= DaysModel::all();
             $settings= SettingsModel::all();
             $clients=ClientModel::all();
@@ -43,23 +47,44 @@ class TrainingController extends Controller
             $trainers = User::where('id_type_user', 3)->with('User_info')->get();
             
             if($request->date !=""){
-                $now = Carbon::now();
-                $data2 = TrainingDetailModel::select( "detail_schedule_user.id as id", "detail_schedule_user.type_daily as type", "inf.name as name", "inf.last_name as lastname","cli.name as client","ccl.hex as color",'set.name as setting','detail_schedule_user.time_start as time_s','detail_schedule_user.time_end as time_e',"detail_schedule_user.status as status")
+                $now =Carbon::parse($request->date);
+
+                $data2 = TrainingDetailModel::select("detail_schedule_user.id as id", "detail_schedule_user.type_daily as type","inf.name as name", "inf.last_name as lastname","detail_schedule_user.time_start as time_s","detail_schedule_user.time_end as time_e","detail_schedule_user.status as status","cli.name as client","ccl.hex as color","info.name as name_trainer", "info.last_name as lastname_trainer", "tcd.date_end as end_training")
                 ->join('schedule as sch','sch.id', "=", 'detail_schedule_user.id_schedule')
+                ->join('t_or_c_duration as tcd', 'tcd.id',"=","sch.id_torcduration")
                 ->join('clients as cli', 'cli.id',"=","sch.id_client")
                 ->join('client_color as ccl', 'ccl.id',"=","cli.color")
                 ->join('users_info as inf','inf.id_user', "=", 'detail_schedule_user.id_operator')
                 ->join('settings as set','set.id','=','detail_schedule_user.option')
-                ->where('detail_schedule_user.id_day',"=", $now->dayOfWeek)
+                ->join('users_info as info','info.id_user', "=", 'tcd.id_trainer')
+                ->join('days as day','day.id', "=", 'detail_schedule_user.id_day')
                 ->where('sch.week',"=", $now->weekOfYear)
                 ->where('sch.month',"=", $now->month)
                 ->where('sch.year',"=", $now->year)
-                ->where('detail_schedule_user.status',1)
-                ->where('detail_schedule_user.status',2);
+                ->whereIn('detail_schedule_user.status',[1,2]);
+
+
                 
                 // dd($data2);
                 
                 $day = DaysModel::where('id',$now->dayOfWeek)->first();
+
+                if($request->day != "allDays"){
+                    $data2->where('detail_schedule_user.id_day',"=", $request->day);
+                }
+                if($request->trainer != "allTrainers"){
+                    $data2->where('tcd.id_trainer',"=", $request->trainer);
+                }
+                if($request->operator != "allOperators"){
+                    $data2->where('detail_schedule_user.id_operator',"=", $request->operator);
+                }
+                if($request->client != "allClients"){
+                    $data2->where('sch.id_client',"=", $request->client);
+                }
+                if($request->work != "allWorks"){
+                    $data2->where('detail_schedule_user.type_daily',"=", $request->work);
+                }
+
                 
                 
             }else{
@@ -77,34 +102,12 @@ class TrainingController extends Controller
                 ->where('sch.week',"=", $now->weekOfYear)
                 ->where('sch.month',"=", $now->month)
                 ->where('sch.year',"=", $now->year);
-            // $data = $data2->get();
-
-            //     dd($data); 
-
-
-
-                // $data2 = TrainingDetailModel::select( "detail_schedule_user.id as id", "detail_schedule_user.type_daily as type", "inf.name as name", "inf.last_name as lastname","cli.name as client","ccl.hex as color",'set.name as setting','detail_schedule_user.time_start as time_s','detail_schedule_user.time_end as time_e',"detail_schedule_user.status as status")
-                // ->join('schedule as sch','sch.id', "=", 'detail_schedule_user.id_schedule')
-                // ->join('clients as cli', 'cli.id',"=","sch.id_client")
-                // ->join('client_color as ccl', 'ccl.id',"=","cli.color")
-                // ->join('users_info as inf','inf.id_user', "=", 'detail_schedule_user.id_operator')
-                // ->join('settings as set','set.id','=','detail_schedule_user.option')
-                // ->where('detail_schedule_user.id_day',"=", $now->dayOfWeek)
-                // ->where('sch.week',"=", $now->weekOfYear)
-                // ->where('sch.month',"=", $now->month)
-                // ->where('sch.year',"=", $now->year)
-                // ->where('detail_schedule_user.status',1)
-                // ->where('detail_schedule_user.status',2);
-
-
-                
-                // 
-                // dd($data2);
-
+           
                 $day = DaysModel::where('id',$now->dayOfWeek)->first();
             }
-            $data = $data2->get();
+            $data = $data2->paginate(10);
             if ($request->ajax()) {
+                
                 return view('training.table', ["data"=>$data]);
             }
         

@@ -385,11 +385,14 @@ const training ={
        return status;
     },
     get_data: function(page){
+   
         var formData={
             day: $('#daySearch').val(),
-            // client:$('#clientSearch').val(),
+            client:$('#clientSearch').val(),
             date:$('#dateSearch').val(),
-            // operator:$('#operatorSearch').val(),
+            operator:$('#operatorSearch').val(),
+            trainer:$('#trainerSearch').val(),
+            work:$('#worktypesearch').val(),
         }
         console.log(formData);
         $.ajax(

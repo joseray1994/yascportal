@@ -53,7 +53,7 @@
         </tr>
         @empty
             <tr id="table-row" class="text-center">
-                <th colspan="8" class="text-center">
+                <th colspan="10" class="text-center">
                     <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
                 </th>
             </tr>
