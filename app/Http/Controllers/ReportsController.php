@@ -14,7 +14,7 @@ use App\TimeClockModel;
 use Carbon\Carbon; 
 class ReportsController extends Controller
 {
-   //
+   //Incident Reports
     public function incident_report(Request $request)
     {
     //    dd($request);
@@ -36,10 +36,10 @@ class ReportsController extends Controller
           
           if($request->date_start && $request->date_end){
             $date_start =Carbon::parse($request->date_start);
-            $date_start = $date_start->format('Y-m-d');
-
+            $date_start = date($date_start);
+            dd($date_start);
             $date_end =Carbon::parse($request->date_end);
-            $date_end = $date_end->format('Y-m-d');
+            $date_end = date($date_end);
             // dd($date_end);
             $reports = ReportsModel::select('incident_reports.id as id',
                                               'incident_reports.id_user as id_user',
@@ -71,8 +71,7 @@ class ReportsController extends Controller
                                         $reports->where('uclt.id_client',"=", $request->client);
                                     }
 
-                                    
-                                   
+                                                           
           }
           else
           {
@@ -118,6 +117,7 @@ class ReportsController extends Controller
         }
     }
 
+    //Attendance Reports
     public function attendance_report(Request $request){
         $attendance = ScheduleModel::all();
     }

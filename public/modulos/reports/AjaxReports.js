@@ -8,6 +8,15 @@ $(document).ready(function(){
         $('#labelTitle').html("Incident Report  <i class='fa fa-file-excel-o'></i>");
         $("#incident").hide();
         $("#attendance").hide();
+        $("#focus").hide();
+        $("#medical_bureau").hide();
+        $("#tel_us").hide();
+        $("#speedez").hide();
+        $("#etzel").hide();
+        $("#call_experts").hide();
+        $("#edwards").hide();
+        $("#emerald").hide();
+        $("#global").hide();
         $('.table-incident').show();
         $('.view-search-incident').show();
     
