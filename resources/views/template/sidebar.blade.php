@@ -4,13 +4,14 @@
 <div id="left-sidebar"  class="sidebar table-success">
         <div class="sidebar-scroll" style="max-height: calc(100vh - 5rem);overflow-y: auto;">
             <div class="user-account">
-                <img src="{{asset($menu['dataUser']->path_image)}}" class="rounded-lg user-photo" id="user_photo" alt="User Profile Picture">
+                @if($menu['dataUser']->path_image)
+                    <img src="{{asset($menu['dataUser']->path_image)}}" class="rounded-lg user-photo" id="user_photo" alt="User Profile">
+                @else
+                    <img src="{{asset('images/default.png')}}" class="rounded-lg user-photo" id="user_photo" alt="User Profile">
+                @endif
                 <div class="dropdown">
                     <span>Welcome,</span>
-                    <a href="javascript:void(0);" class="dropdown-toggle user-name" data-toggle="dropdown"><strong id="nick_user">{{$user->nickname}}</strong></a>                    
-                    <ul class="dropdown-menu dropdown-menu-right account animated flipInY">
-                        <li><a href="/profile" id="btn-profile"><i class="icon-user"></i>My Profile</a></li>
-                    </ul>
+                    <a href="/profile" class="dropdown-toggle user-name"><strong id="nick_user">{{$user->nickname}}</strong></a>
                 </div>
                 <hr>
                 <div class="row">
