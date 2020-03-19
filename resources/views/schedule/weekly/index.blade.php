@@ -36,12 +36,7 @@
                 </div>
             </div>
             @include('schedule.weekly.form')
-            <div class="col-sm-12 text-center view-audit">
-                            <h2>Audit</h2>
-                            <div class="table-responsive tabletwo">
-                                @include('schedule.weekly.detail')
-                            </div>
-                        </div>
+            @include('schedule.weekly.detail')
             
           
 

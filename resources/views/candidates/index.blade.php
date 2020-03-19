@@ -16,8 +16,8 @@
                                 <div class="input-group mb-3 input-group-sm">
                                     <div class="input-group-prepend">
                                         <select class="form-control" id="typesearch">
-                                            <option value="name">name</option>
-                                            <option value="mail">Email</option>
+                                            <option value="last_name">last name</option>
+                                            <option value="mail">email</option>
                                         </select>
                                     </div>
                                     <input type="text" class="form-control" id="search">

@@ -16,8 +16,8 @@ class CandidateController extends Controller
 
         switch ($type) {
 
-            case 'name':
-                $result='candidates.name';
+            case 'last_name':
+                $result='candidates.last_name';
                 break;
             case 'mail':
                 $result='candidates.mail';

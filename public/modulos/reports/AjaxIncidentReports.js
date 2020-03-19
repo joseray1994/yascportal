@@ -1,26 +1,9 @@
 $(document).ready(function(){
+    clearload();
     var nameDeli='<a href="/reports">Reports</i></a>';
     $('.nameDeli').html(nameDeli);
     $('#sidebar10').addClass('active');  
 
-
-    $('#view-incident').click(function(){
-        $('#labelTitle').html("Incident Report  <i class='fa fa-file-excel-o'></i>");
-        $("#incident").hide();
-        $("#attendance").hide();
-        $("#focus").hide();
-        $("#medical_bureau").hide();
-        $("#tel_us").hide();
-        $("#speedez").hide();
-        $("#etzel").hide();
-        $("#call_experts").hide();
-        $("#edwards").hide();
-        $("#emerald").hide();
-        $("#global").hide();
-        $('.table-incident').show();
-        $('.view-search-incident').show();
-    
-    });
 
     $(window).on('hashchange', function() {
         if (window.location.hash) {
@@ -36,12 +19,14 @@ $(document).ready(function(){
     $('.incident_reportSearch').change(function(){
         incident_report.get_data(1);
     });
-});
-
-  //export csv
+    //export csv
   $('#csv').on('click',function(){
     $("#tag_container_incident").tableHTMLExport({type:'csv',filename:`incident.csv`});
   });
+});
+
+  
+
 
 const incident_report = {
     get_data: function(page){
@@ -62,7 +47,7 @@ const incident_report = {
         }).done(function(data){
             $('.pagination').remove();
             $('.loading-table').hide();
-            $("#tag_container").empty().html(data);
+            $("#tag_container_incident").empty().html(data);
             location.hash = page;
            
         }).fail(function(jqXHR, ajaxOptions, thrownError){
