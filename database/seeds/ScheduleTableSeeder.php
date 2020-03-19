@@ -67,7 +67,7 @@ class ScheduleTableSeeder extends Seeder
                     "id_day"=>$day['id'],
                     "time_start"=>'08:00:00',
                     "time_end"=>'16:30:00',
-                    "type_daily"=>2,
+                    "type_daily"=>1,
                     "option"=>1,
                     "status"=>1,
                     ]

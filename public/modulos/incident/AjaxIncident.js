@@ -4,8 +4,9 @@ $(document).ready(function(){
     var url = $('#url').val();
     var baseUrl = $('#baseUrl').val();
 
-    select(baseUrl + '/reason', "#reason");
-    select(baseUrl + '/supervisor', "#supervisor");
+    select(baseUrl + '/reason', "#id_setting");
+    select(baseUrl + '/reason', "#filter_setting");
+    select(baseUrl + '/supervisor', "#id_supervisor");
 
     $("#btn-incident").click(function(e){
         e.preventDefault();
@@ -27,8 +28,11 @@ $(document).ready(function(){
                 $('#tag_put').remove();
                 
                 var state = $('#btn-save-incident').val();
+                var type = "POST";
                 var my_url = baseUrl + '/incident';
-                incident.edit_create("POST",my_url,state,"");
+                incident.list(my_url);
+                incident.edit_create(type,my_url,state,"");
+                $('#btn-save-incident').attr('disabled', false);
             } 
             else {
                 swal("Cancelled", "error");
@@ -39,7 +43,7 @@ $(document).ready(function(){
 
     $("#btn-cancel-incident").click(function(e){
         e.preventDefault();
-        //borrar incidena
+        var my_url = baseUrl + '/incident';
         swal({
             title: "Warning",
             text: "Are you sure to cancel this incident?",
@@ -51,7 +55,8 @@ $(document).ready(function(){
             closeOnCancel: true
         },
         function(isConfirm) {
-            if (isConfirm) {                
+            if (isConfirm) {         
+                incident.delete(my_url);
                 location.href = url;
             } 
         });
@@ -66,8 +71,8 @@ $(document).ready(function(){
         $('#btn-save-incident').attr('disabled', true);
 
         var formData = {
-            reason: $("#reason").val(),
-            supervisor: $("#supervisor").val(),
+            id_setting: $("#id_setting").val(),
+            id_supervisor: $("#id_supervisor").val(),
             note: $("#note").val()
         }
 
@@ -77,6 +82,23 @@ $(document).ready(function(){
 
         incident.edit_create(type,my_url,state,formData);
     });
+
+    $("#filter_setting, #filter_start, #filter_end").change(function(){
+        
+        var filter_setting = $("#filter_setting").val();
+        var filter_start = $("#filter_start").val();
+        var filter_end = $("#filter_end").val();
+
+        var my_url = baseUrl + '/incident/getTable';
+
+        formData = {
+            filter_setting,
+            filter_start,
+            filter_end
+        }
+        incident.getTable(my_url, formData);
+    });
+
 
 }); 
 
@@ -141,6 +163,10 @@ function startTime(time_start){
     
 }
 
+function detail(id){
+    var my_url = baseUrl + '/incident/' + id;
+    incident.modal(my_url);
+}
 const incident = {
     
     edit_create: function (type,my_url,state,formData){
@@ -157,6 +183,67 @@ const incident = {
                 result.msj(data);
             }
         });
+    },
+    list: function (my_url){
+        $.ajax({
+            type: "GET",
+            url: my_url,
+            dataType: 'json',
+            success: function (data) {
+                result.list(data);
+            },
+            error: function (data) {
+                console.log('Error:', data);
+                result.msj(data);
+            }
+        });
+    },
+    getTable: function (my_url, formData){
+        $.ajax({
+            type: "POST",
+            url: my_url,
+            data: formData,
+            dataType: 'json',
+            success: function (data) {
+                result.list(data);
+            },
+            error: function (data) {
+                console.log('Error:', data);
+                result.msj(data);
+            }
+        });
+    },
+    modal: function (my_url){
+        $.ajax({
+            type: "GET",
+            url: my_url,
+            dataType: 'json',
+            success: function (data) {
+                result.modal(data);
+            },
+            error: function (data) {
+                console.log('Error:', data);
+                result.msj(data);
+            }
+        });
+    },
+    delete: function(my_url){
+        $.ajax({
+            type: "DELETE",
+            url: my_url,
+            dataType: 'json',
+            success: function (data) {
+                result.delete(data);
+            },
+            error: function (data) {
+                console.log('Error:', data);
+                result.msj(data);
+            }
+        });
+    },
+    buttons: function(data){
+        button = `<button type="button" class="btn btn-info" onclick="detail(${data.id})"><i class="fa fa-eye"></i></button>`;
+        return button;
     }
 }
 
@@ -176,7 +263,7 @@ const result = {
                 swal("Warning", data.msg, "warning");
             break;
             case 2:
-                var incident = `
+                var Rowincident = `
                     <tr>
                         <td>${data.result.created_at}</td>
                         <td>${data.result.name} ${data.result.last_name}</td>
@@ -185,10 +272,11 @@ const result = {
                         <td>${data.result.duration}</td>
                         <td>${data.result.start}</td>
                         <td>${data.result.end}</td>
+                        <td>${incident.buttons(data.result)}</td>
                     </tr>
                 `;
 
-                $("#incident-list").append(incident);
+                $("#incident-list").append(Rowincident);
                 $('#formIncident').trigger('reset');
 
                 $("#btn-incident").attr('disabled', false);
@@ -199,9 +287,9 @@ const result = {
                 $("#labelTimer").html("00:00:00");
                 fecha = new Date();
                 var fecha = moment(fecha).format('YYYY-MM-DD');
-
-
                 $("#labelDate").html(fecha);
+                $('#btn-save-incident').attr('disabled', true);
+
                 swal({
                     title: "Success",
                     text: "saved incidence",
@@ -224,8 +312,46 @@ const result = {
             break;
         }
     },
+    list: function(data){
+
+        var tableIncident = "";
+        data.forEach(function(data){
+
+            tableIncident += `
+                <tr>
+                    <td>${data.created_at}</td>
+                    <td>${data.name} ${data.last_name}</td>
+                    <td>${data.setting_name}</td>
+                    <td>${data.supervisor_name} ${data.supervisor_last_name}</td>
+                    <td>${data.duration}</td>
+                    <td>${data.start}</td>
+                    <td>${data.end}</td>
+                    <td>${incident.buttons(data)}</td>
+                </tr>
+            `;
+        });
+
+        $("#incident-list").html(tableIncident);
+    },
+    delete: function(data){
+        console.log(data);
+    },
+    modal: function(data){
+        console.log(data);
+        $("#detailModal").modal('show');
+        $("#labelDetailName").html(data.name + " " + data.last_name);
+        $("#labelDetailDate").html(data.created_at);
+        $("#labelDetailReason").html(data.setting_name);
+        $("#labelDetailSupervisor").html(data.supervisor_name + " " + data.supervisor_last_name);
+        $("#labelDetailDuration").html(data.duration);
+        $("#labelDetailStart").html(data.start);
+        $("#labelDetailEnd").html(data.end);
+        $("#labelDetailNote").html(data.note);
+    },
     msj: function(data){
        console.log(data);
+       $('#btn-save-incident').attr('disabled', false);
+
         $.notifyClose();
         $.each(data.responseJSON.errors,function (k,message) {
             $.notify({

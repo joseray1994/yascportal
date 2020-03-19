@@ -152,8 +152,12 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::get('endShift/','shiftController@endShift');
 
     //INCIDENT REPORT
+    Route::get('/incident', 'IncidentReportController@getIncidents');
+    Route::get('/incident/{id}', 'IncidentReportController@getResult');
     Route::post('/incident', 'IncidentReportController@store');
     Route::put('/incident', 'IncidentReportController@update');
+    Route::delete('/incident', 'IncidentReportController@delete');
+    Route::post('/incident/getTable', 'IncidentReportController@getTable');
 
 
 });

@@ -22,7 +22,7 @@ class CreateIncidentReportsTable extends Migration
             $table->string('start');
             $table->string('end');
             $table->string('duration');
-            $table->string('note')->nullable();
+            $table->longText('note')->nullable();
             $table->integer('status')->default(1);
             $table->timestamps();
         });
