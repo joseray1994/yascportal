@@ -135,7 +135,6 @@ class TypeUserController extends Controller
             $usertype->status=1;
             $usertype->save();
      
-        
                 return response()->json($usertype);
           }
     }
