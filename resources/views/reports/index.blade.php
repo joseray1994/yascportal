@@ -6,18 +6,6 @@
                         <div class="header">
                             <h1 id="labelTitle">Reports <i class="fa fa-file-excel-o"></i></h1>
                         </div>
-
-                        <div class="body">
-                            <div class="table-responsive table-incident" style="display:none">
-                                 @include('reports.search-incidents')
-                                @include('reports.incidents')
-                            </div>
-                            <div class="table-responsive table-attendance" style="display:none">
-                                
-                                @include('reports.attendance')
-                            </div>
-                                
-                        </div>
                         
                     </div>
                 </div>   
@@ -164,9 +152,7 @@
 @endsection
 @section('script')
 <script src="{{asset('modulos/ajaxscript_actions.js')}}"></script>
-<script src="{{asset('modulos/reports/AjaxIncidentReports.js')}}"></script>
-<script src="{{asset('modulos/reports/AjaxAttendanceReports.js')}}"></script>
-<script src="{{asset('modulos/documents/tableHTMLExport.js')}}"></script>
+<script src="{{asset('modulos/reports/AjaxReports.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.4.1/jspdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/2.3.5/jspdf.plugin.autotable.min.js"></script>
 @endsection

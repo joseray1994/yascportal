@@ -143,8 +143,10 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::put('/profile', 'ProfileController@update');
 
 
-    //Incident Reports
-    Route::get('/reports', 'ReportsController@incident_report');
+    //Reports
+    Route::get('/reports/incident', 'ReportsController@incident_report');
+    Route::get('/reports/attendance', 'ReportsController@attendance_report');
+    Route::get('/reports', 'ReportsController@index');
   
 
     //Shift

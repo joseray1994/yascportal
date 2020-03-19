@@ -13,13 +13,27 @@ use App\ScheduleModel;
 use App\TimeClockModel;
 use Carbon\Carbon; 
 class ReportsController extends Controller
-{
+{   
+    //index
+    public function index()
+    {
+        $user = Auth::user();
+        
+        $id_menu=8;
+        $menu = menu($user,$id_menu);
+        if($menu['validate']){   
+
+                return view('reports.index', ["menu"=>$menu]);
+        }else{
+            return redirect('/');
+        }
+    }
    //Incident Reports
     public function incident_report(Request $request)
     {
     //    dd($request);
         $user = Auth::user();
-        $id_menu=8;
+        $id_menu=12;
         $menu = menu($user,$id_menu);
         if($menu['validate']){          
         
@@ -34,13 +48,13 @@ class ReportsController extends Controller
                                   ->get();    
 
           
-          if($request->date_start && $request->date_end){
+          if($request->date_start != "" && $request->date_end != ""){
             $date_start =Carbon::parse($request->date_start);
-            $date_start = date($date_start);
+            $date_start = $date_start->format('Y-m-d H:m:s');
             // dd($date_start);
             $date_end =Carbon::parse($request->date_end);
-            $date_end = date($date_end);
-            // dd($date_end);
+            $date_end = $date_end->format('Y-m-d H:m:s');
+
             $reports = ReportsModel::select('incident_reports.id as id',
                                               'incident_reports.id_user as id_user',
                                               'user.name as name',
@@ -68,7 +82,7 @@ class ReportsController extends Controller
                                         $reports->where('user.id_user',"=", $request->operator);
                                     }
 
-                                    if($request->operator != "AllClients"){
+                                    if($request->client != "AllClients"){
                                         $reports->where('uclt.id_client',"=", $request->client);
                                     }
 
@@ -105,13 +119,13 @@ class ReportsController extends Controller
          
 
        
-        $data=$reports->paginate(5);
+        $data=$reports->paginate(10);
         // dd($data);
         if ($request->ajax()) {
-            return view('reports.incidents', ["reports"=>$data]);
+            return view('reports.incident.table', ["reports"=>$data]);
         }
 
-        return view('reports.index', ["menu"=>$menu, "days"=>$days, "reports" => $data, "clients" => $clients, "operators" => $operators]);
+        return view('reports.incident.incidents', ["menu"=>$menu, "days"=>$days, "reports" => $data, "clients" => $clients, "operators" => $operators]);
         }
         else
         {
