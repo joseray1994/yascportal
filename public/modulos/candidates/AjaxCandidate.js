@@ -33,7 +33,6 @@ $(document).ready(function(){
       $('#myModal').modal('show');
   });
 
-
     $('.btn-cancel').click(function(){
         $('#btn-save').val("add");
         $('#candidateForm').trigger("reset");
@@ -44,7 +43,7 @@ $(document).ready(function(){
   
     $(document).on('click','.info_modal',function(){
         var  candidate_id = $(this).val();
-        var my_url=url + '/' +  candidate_id;
+        var my_url=url + '/detail/' +  candidate_id;
          actions.show(my_url);
      });
 
@@ -189,14 +188,15 @@ const candidates ={
     button: function(dato){
            var buttons='<div class="">';
             if(dato.status== 1){
-               
+
+                buttons += '  <button type="button"  data-toggle="tooltip" class="btn btn-sm btn-outline-primary  info_modal" title="Information" id="btn-info" value="'+dato.id+'"  ><i class="fa fa-info-circle"></i></button>'
                 buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="'+dato.id+'"  ><i class="fa fa-edit"></i></button>';
                 buttons += ' <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-candidate" title="Deactivated" data-type="confirm" value="'+dato.id+'"><i class="fa fa-window-close"></i></button>';
                 buttons += '  <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument('+dato.id+')" data-toggle="tooltip" title="Documents" value="'+dato.id+'"><i class="fa  fa-folder-open"></i></button>';
 
           
            }else if(dato.status == 2){
-       
+               buttons += '  <button type="button"  data-toggle="tooltip" class="btn btn-sm btn-outline-primary  info_modal" title="Information" id="btn-info" value="'+dato.id+'"  ><i class="fa fa-info-circle"></i></button>'
                buttons += '<button type="button" class="btn btn-sm btn-outline-success off-candidate" title="Activated" data-type="confirm" value="'+dato.id+'" ><i class="fa fa-check-square-o"></i></button> ';
                buttons += '  <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert delete-candidate" title="Delete" data-type="confirm" value="'+dato.id+'"><i class="fa fa-trash-o"></i></button>';
                buttons += '  <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument('+dato.id+')" data-toggle="tooltip" title="Documents" value="'+dato.id+'"><i class="fa  fa-folder-open"></i></button>';
@@ -299,20 +299,15 @@ const success = {
                                         <td>${dato.name} ${dato.last_name}</td>
                                         <td>${dato.phone}</td>
                                         <td>${dato.mail}</td>
-                                        <td>${dato.channel}</td>
-                                        <td>${dato.listening_test}</td>
-                                        <td>${dato.grammar_test}</td>
-                                        <td>${dato.typing_test}</td>
-                                        <td>${dato.typing_test2}</td>
-                                        <td>${dato.typing_test3}</td>
-                                        <td>${dato.typing_test4}</td>
+                                        <td  style=" white-space: normal !important; word-wrap: break-word;">${dato.channel}</td>
                                         <td class="hidden-xs">${candidates.status(dato)}</td>
                                         <td>${candidates.button(dato)}</td>
                                     </tr>`;
                 
                     if (state == "add"){ 
                       $("#candidate-list").append(candidate);
-                      $("#candidate_id"+dato.id).css("background-color", "#c3e6cb");    
+                      $("#candidate_id"+dato.id).css("background-color", "#c3e6cb");   
+                      $('#table-row').remove(); 
                     }else{
                       $("#candidate_id"+dato.id).replaceWith(candidate);
                       $("#candidate_id"+dato.id).css("background-color", "#ffdf7e");  
@@ -373,19 +368,21 @@ const success = {
             break;
 
             case 3:
-                $('#listening_test').val(data.candidates.listening_test);
-                $('#grammar_test').val(data.candidates.grammar_test);
-                $('#typing_test').val(data.candidates.typing_test);
-                $('#typing_test2').val(data.candidates.typing_test2);
-                $('#typing_test3').val(data.candidates.typing_test3);
-                $('#typing_test4').val(data.candidates.typing_test4);
-                $('#myModal').modal('show');
+                $('#candidate_id').html(data.candidates.id);
+                $('#listening_test2').html(data.candidates.listening_test);
+                $('#grammar_test2').html(data.candidates.grammar_test);
+                $('#typing_test21').html(data.candidates.typing_test);
+                $('#typing_test22').html(data.candidates.typing_test2);
+                $('#typing_test23').html(data.candidates.typing_test3);
+                $('#typing_test24').html(data.candidates.typing_test4);
+
+                $('#modalDetail').modal('show');
             break;
+
         }
 
     },
 
-    
     deactivated:function(data) {
         console.log(data);
         var dato = data;
@@ -416,13 +413,7 @@ const success = {
                                         <td>${dato.name} ${dato.last_name}</td>
                                         <td>${dato.phone}</td>
                                         <td>${dato.mail}</td>
-                                        <td>${dato.channel}</td>
-                                        <td>${dato.listening_test}</td>
-                                        <td>${dato.grammar_test}</td>
-                                        <td>${dato.typing_test}</td>
-                                        <td>${dato.typing_test2}</td>
-                                        <td>${dato.typing_test3}</td>
-                                        <td>${dato.typing_test4}</td>
+                                        <td  style=" white-space: normal !important; word-wrap: break-word;">${dato.channel}</td>
                                         <td class="hidden-xs">${candidates.status(dato)}</td>
                                         <td>${candidates.button(dato)}</td>
                                     </tr>`;
@@ -438,6 +429,15 @@ const success = {
         
                 }else if(dato.status == 0){
                     $("#candidate_id"+dato.id).remove();
+
+                    if($("#tag_container tr").length == 1){
+                        $("#tag_container").append(` <tr id="table-row" class="text-center">
+                                                            <th colspan="8" class="text-center">
+                                                                <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
+                                                            </th>
+                                                        </tr>`);
+        
+                    }
                 }
                
                 break;

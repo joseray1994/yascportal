@@ -10,8 +10,7 @@ class VacancyController extends Controller
 {
 
     public function index(Request $request)
-    {          
-        
+    {       
         $user = Auth::user();
         
         $id_menu=5;
@@ -27,7 +26,8 @@ class VacancyController extends Controller
                 } 
                 $data=$data2;
                 if ($request->ajax()) {
-                    return view('vacancies.table', compact('data'));
+                    return view('vacancies.table', ["data"=>$data]);
+
                 }
 
                   return view('vacancies.index',["data"=>$data,"menu"=>$menu,]);

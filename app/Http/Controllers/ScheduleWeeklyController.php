@@ -215,16 +215,25 @@ class ScheduleWeeklyController extends Controller
         return response()->json($data);
     }
 
-    public function detail($weekly_id)
+    public function detail(Request $request, $weekly_id)
     {   
         
         $weekly = ScheduleDetailModel::find($weekly_id);
-        $audit = Audit::select('audits.old_values as old','audits.new_values as new','audits.created_at as created','audits.event as event','inf.name as name','inf.last_name as lname')
+        $audits = Audit::select('audits.auditable_id as id','audits.old_values as old','audits.new_values as new','audits.created_at as created','audits.event as event','inf.name as name','inf.last_name as lname')
         ->join('users_info as inf','inf.id_user', "=", 'audits.user_id')
-        ->where('user_id',$weekly->id_operator)
-        ->where('auditable_type','App\ScheduleDetailModel')
-        ->where('auditable_id',$weekly_id)
-        ->get();
+        ->where('audits.user_id',$weekly->id_operator)
+        ->where('audits.auditable_type','App\ScheduleDetailModel')
+        ->where('audits.auditable_id',$weekly_id);
+
+        if($request->date != ""){
+            $audits->whereDate('audits.created_at',$request->date);   
+            }
+        if($request->time != ""){
+            $audits->whereTime('audits.created_at', '>=', $request->time);
+        }
+
+        $audit= $audits->get();
+
         $data=['No'=>1,'audit'=>$audit];
         return response()->json($data);
     }
