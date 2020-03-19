@@ -25,8 +25,7 @@ use Carbon\Carbon;
 class TrainingController extends Controller
 {
   
-    public function index(Request $request)
-    {          
+    public function index(Request $request){          
         $user = Auth::user();
         $id_menu=5;
         $menu = menu($user,$id_menu);
@@ -47,7 +46,7 @@ class TrainingController extends Controller
             if($request->date !=""){
                 $now =Carbon::parse($request->date);
 
-                $data2 = TrainingDetailModel::select("detail_schedule_user.id as id", "detail_schedule_user.type_daily as type","inf.name as name", "inf.last_name as lastname","detail_schedule_user.time_start as time_s","detail_schedule_user.time_end as time_e","detail_schedule_user.status as status","cli.name as client","ccl.hex as color","info.name as name_trainer", "info.last_name as lastname_trainer", "tcd.date_end as end_training")
+                $data2 = TrainingDetailModel::select("detail_schedule_user.id as id", "detail_schedule_user.type_daily as type","inf.name as name", "inf.last_name as lastname","detail_schedule_user.time_start as time_s","detail_schedule_user.time_end as time_e","detail_schedule_user.status as status","cli.name as client","ccl.hex as color","info.name as name_trainer", "info.last_name as lastname_trainer", "tcd.date_end as end_training",'set.name as setting')
                 ->join('schedule as sch','sch.id', "=", 'detail_schedule_user.id_schedule')
                 ->join('t_or_c_duration as tcd', 'tcd.id',"=","sch.id_torcduration")
                 ->join('clients as cli', 'cli.id',"=","sch.id_client")
@@ -81,7 +80,7 @@ class TrainingController extends Controller
             }else{
                 $now = Carbon::now();
                 
-                $data2=TrainingDetailModel::select("detail_schedule_user.id as id", "detail_schedule_user.type_daily as type","inf.name as name", "inf.last_name as lastname","detail_schedule_user.time_start as time_s","detail_schedule_user.time_end as time_e","detail_schedule_user.status as status","cli.name as client","ccl.hex as color","info.name as name_trainer", "info.last_name as lastname_trainer", "tcd.date_end as end_training")
+                $data2=TrainingDetailModel::select("detail_schedule_user.id as id", "detail_schedule_user.type_daily as type","inf.name as name", "inf.last_name as lastname","detail_schedule_user.time_start as time_s","detail_schedule_user.time_end as time_e","detail_schedule_user.status as status","cli.name as client","ccl.hex as color","info.name as name_trainer", "info.last_name as lastname_trainer", "tcd.date_end as end_training",'set.name as setting')
                 ->join('schedule as sch','sch.id', "=", 'detail_schedule_user.id_schedule')
                 ->join('clients as cli', 'cli.id',"=","sch.id_client")
                 ->join('client_color as ccl', 'ccl.id',"=","cli.color")
@@ -115,34 +114,7 @@ class TrainingController extends Controller
         return $data2;
     }
 
-    public function validateTraining($request,$user=''){
-        $user=='' ? $email = 'required|email|unique:users,email,NULL,id,id_status,1 | unique:users,email,'.$user.',id,id_status,2' :  $email = 'sometimes|required|unique:users,email,'.$user.',id,id_status,1 | unique:users,email,'.$user.',id,id_status,2';
-            $this->validate(request(), [
-                'name' => 'required|max:150|regex:/^([a-zA-Z]+)(\s[a-zA-Z]+)*$/',
-                'last_name' => 'required|max:150|regex:/^([a-zA-Z]+)(\s[a-zA-Z]+)*$/',
-                'phone' => 'required|max:20|regex:/^[0-9]{0,20}(\.?)[0-9]{0,2}$/',
-                'gender' => 'required',
-                'emergency_contact_name' => 'sometimes|max:150|nullable|regex:/^([a-zA-Z]+)(\s[a-zA-Z]+)*$/',
-                'emergency_contact_phone' => 'sometimes|nullable|regex:/^[0-9]{0,20}(\.?)[0-9]{0,2}$/',
-                'birthdate' => 'required|date|before:18 years ago',
-                'nickname' => 'required',
-                'email' => $email,
-                'password' => 'sometimes|required|confirmed|min:8',
-                // 'id_client' => 'required',
-                'id_trainer' => 'required',
-                'start' => 'required',
-                'end' => 'required',
-                'start_training' => 'required|date',
-                'end_training' => 'required|date|after_or_equal:start_training',
-                'end_coaching' => 'date|after_or_equal:start_training',
-            
-            ]);
-
-        
-    }
-
-    public function generateEnd_training(Request $request)
-    { 
+    public function generateEnd_training(Request $request){ 
         $num=0;
 
         if ($request->start_training!=null && $request->end_training!=null) {
@@ -171,8 +143,7 @@ class TrainingController extends Controller
         return response()->json(['start_training'=>$request->start_training, 'end_training'=>$end_training,'num'=>$num]);
     }
 
-    public function generateEnd_coaching(Request $request)
-    { 
+    public function generateEnd_coaching(Request $request){ 
         $num=0;
 
         if ($request->end_training!=null && $request->end_coaching!=null) {
@@ -202,21 +173,90 @@ class TrainingController extends Controller
         return response()->json(['num'=>$num]);
     }
 
-    public function store(Request $request)
-    {     
+    public function validateNickname($nickname, $user=""){
+        $validaNick = User::where('nickname',$nickname)
+        ->whereNotIn('id', [$user])
+        ->whereIn('id_status', [1,2])
+        ->exists();
+        return $validaNick;
+    }
+
+    public function validateStartEndSchedule($start, $end){
+        if ($end=='00:00') {
+            $end='24:00';
+        }
+
+        if ($start > $end) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function validateTraining($request,$user=''){
+        $user=='' ? $email = 'required|email|unique:users,email,NULL,id,id_status,1 | unique:users,email,'.$user.',id,id_status,2' :  $email = 'sometimes|required|unique:users,email,'.$user.',id,id_status,1 | unique:users,email,'.$user.',id,id_status,2';
+            $this->validate(request(), [
+                'name' => 'required|max:150|regex:/^([a-zA-Z]+)(\s[a-zA-Z]+)*$/',
+                'last_name' => 'required|max:150|regex:/^([a-zA-Z]+)(\s[a-zA-Z]+)*$/',
+                'phone' => 'required|max:20|regex:/^[0-9]{0,20}(\.?)[0-9]{0,2}$/',
+                'gender' => 'required',
+                'emergency_contact_name' => 'sometimes|max:150|nullable|regex:/^([a-zA-Z]+)(\s[a-zA-Z]+)*$/',
+                'emergency_contact_phone' => 'sometimes|nullable|regex:/^[0-9]{0,20}(\.?)[0-9]{0,2}$/',
+                'birthdate' => 'required|date|before:18 years ago',
+                'nickname' => 'required',
+                'email' => $email,
+                'id_client' => 'required',
+                'id_trainer' => 'required',
+                'start' => 'required',
+                'end' => 'required',
+                'start_training' => 'required|date',
+                'end_training' => 'required|date|after_or_equal:start_training',
+                'end_coaching' => 'sometimes|nullable|after_or_equal:end_training',
+                'notes' => 'sometimes|max:180|nullable|regex:/^([a-zA-Z]+)(\s[a-zA-Z]+)*$/',
+                'description' => 'sometimes|max:380|nullable|regex:/^([a-zA-Z]+)(\s[a-zA-Z]+)*$/',
+            ]);
+    }
+
+    public function store(Request $request){     
         //in TorCDuration //type=1 está en training , type=2 está en coaching  //in ScheduleTrainingModel  //type=1 habilitado, type=2 tarining, type=3 coaching //in ScheduleTrainingModel  //type=1 habilitado, type=2 tarining, type=3 coaching //in training detail //type=1 workday, type=2 training, type=3 coaching, type=4 extra
     //--------------------------//
 
       //VALIDADOR DE FORMULARIO
       TrainingController::validateTraining($request);
+
       //VALIDAR NICK NAME
-      $validaNick = TrainingController::validateNickname($request->nickname);
+        $validaNick = TrainingController::validateNickname($request->nickname);
+
+      //VALIDATE START AND END SCHEDULE
+        $validaStartEnd = TrainingController::validateStartEndSchedule($request->start,$request->end);
+
+      //VALIDATE OPERATOR SCHEDULE
+        $validaOS=false;
+        $validaOS = TrainingController::validateStartEndSchedule($request->start_sunday,$request->end_sunday);
+        $validaOS = TrainingController::validateStartEndSchedule($request->start_monday,$request->end_monday);
+        $validaOS = TrainingController::validateStartEndSchedule($request->start_tuesday,$request->end_tuesday);
+        $validaOS = TrainingController::validateStartEndSchedule($request->start_wednesday,$request->end_wednesday);
+        $validaOS = TrainingController::validateStartEndSchedule($request->start_thursday,$request->end_thursday);
+        $validaOS = TrainingController::validateStartEndSchedule($request->start_friday,$request->end_friday);
+        $validaOS = TrainingController::validateStartEndSchedule($request->start_saturday,$request->end_saturday);
       
       if($validaNick){
           $msg= 'Another user already has that Nickname';
           $data=['No'=>2,'msg'=>$msg];
           return response()->json($data);
       }
+
+      if($validaStartEnd){
+        $msg= 'The end time cannot be greater than the start time';
+        $data=['No'=>2,'msg'=>$msg];
+        return response()->json($data);
+    }
+
+    if($validaOS){
+        $msg= 'The end time of Operator Schedule cannot be greater than the start time';
+        $data=['No'=>2,'msg'=>$msg];
+        return response()->json($data);
+    }
         //crea usuario
         $user =  User::Create([
             'id_type_user'=>11,
@@ -256,11 +296,12 @@ class TrainingController extends Controller
             for ($i=0 ; $i < count($horario); $i++ ) { 
                 $daysOff=$request->id_dayOff_O;
                 $status_dayoff=1;
-                foreach ($daysOff as $dayOff) {
-                    if ($i==$dayOff) {
-                        $status_dayoff=2;
+                if ($daysOff) {
+                    foreach ($daysOff as $dayOff) {
+                        if ($i==$dayOff) {
+                            $status_dayoff=2;
+                        }
                     }
-                    
                 }
                 $mirror_userScheduleDetail =  MirrorUserScheduleDetailModel::Create([
                     'id_schedule'=>0,
@@ -327,9 +368,6 @@ class TrainingController extends Controller
                     $day_end_week=$end_week->dayOfWeek;
 
                     $end_training=Carbon::parse($request->end_training);
-
-
-
                 }else{
                     $start_week='';
                     $start_training=Carbon::parse($request->end_training);
@@ -342,8 +380,6 @@ class TrainingController extends Controller
                     $day_start_week=$start_week->dayOfWeek;
                     $day_end_week=$end_week->dayOfWeek;
                     $end_training=Carbon::parse($request->end_coaching);
-
-
                 }
             //-------------------
                 //for que se repite el numero de semanas que dura el entrenamiendo o el coaching
@@ -372,7 +408,6 @@ class TrainingController extends Controller
                     'month'=>$month_I ,
                     'year'=>$year,
                     'status'=> 1 ,
-            
                 ]);
                 //Valida en que dia comienza y termina su entrenamiento
                 if ($day_start > $day_start_week) {
@@ -381,7 +416,6 @@ class TrainingController extends Controller
                 }else{
                     $in=$day_start_week;
                     $fin=$day_end_week;
-
                 }
 
                 if ($end_week > $end_training ) {
@@ -389,19 +423,20 @@ class TrainingController extends Controller
                         $fin=$day_end;
                     }else{
                         $fin=$day_end_week;
-    
                     } 
                 }
                 //----------------------------
                 for ($k=$in; $k <= $fin ; $k++) { 
                     $daysOff=$request->id_dayOff_T;
                     $status_dayoff=1;
-                    foreach ($daysOff as $dayOff) {
-                        if ($k==$dayOff) {
-                            $status_dayoff=2;
+                    if ($daysOff) {
+                        foreach ($daysOff as $dayOff) {
+                            if ($k==$dayOff) {
+                                $status_dayoff=2;
+                            }
                         }
-                        
                     }
+
                     $training_detail =  TrainingDetailModel::Create([
                         'id_schedule'=>$schedule->id,
                         'id_operator'=> $user->id,
@@ -430,12 +465,11 @@ class TrainingController extends Controller
         $result = TrainingController::getResult($user->id);
         return response()->json($result);
 
-      
-           
     }
 
     public function getResult($id){
-            $data=TrainingDetailModel::select("detail_schedule_user.id as id", "detail_schedule_user.type_daily as type","inf.name as name", "inf.last_name as lastname","detail_schedule_user.time_start as time_s","detail_schedule_user.time_end as time_e","detail_schedule_user.status as status","cli.name as client","ccl.hex as color","info.name as name_trainer", "info.last_name as lastname_trainer", "tcd.date_end as end_training")
+            $now = Carbon::now();
+            $data=TrainingDetailModel::select("detail_schedule_user.id as id", "detail_schedule_user.type_daily as type","inf.name as name", "inf.last_name as lastname","detail_schedule_user.time_start as time_s","detail_schedule_user.time_end as time_e","detail_schedule_user.status as status","cli.name as client","ccl.hex as color","info.name as name_trainer", "info.last_name as lastname_trainer", "tcd.date_end as end_training",'set.name as setting')
             ->join('schedule as sch','sch.id', "=", 'detail_schedule_user.id_schedule')
             ->join('clients as cli', 'cli.id',"=","sch.id_client")
             ->join('client_color as ccl', 'ccl.id',"=","cli.color")
@@ -443,7 +477,7 @@ class TrainingController extends Controller
             ->join('users_info as inf','inf.id_user', "=", 'detail_schedule_user.id_operator')
             ->join('users_info as info','info.id_user', "=", 'tcd.id_trainer')
             ->join('settings as set','set.id','=','detail_schedule_user.option')
-            ->join('users as usr', 'users_info.id_user', '=', 'usr.id')
+            ->join('users as usr', 'inf.id_user', '=', 'usr.id')
             ->where('detail_schedule_user.id_day',"=", $now->dayOfWeek)
             ->where('sch.week',"=", $now->weekOfYear)
             ->where('sch.month',"=", $now->month)
@@ -454,9 +488,7 @@ class TrainingController extends Controller
             return $data;
     }
 
-    public function show($settings_id)
-    {
-
+    public function show($settings_id){
         $dataSettings= SettingsController::data_settings($settings_id);
         $dataSettings->status=1;
         return response()->json($dataSettings);
