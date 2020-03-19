@@ -76,12 +76,24 @@
                     {{-- <li>
                         <a href="/schedule" class="icon-menu d-none d-sm-block d-md-none d-lg-block"><i class="icon-earphones-alt"></i></a>
                     </li> --}}
-                    <li class='startShift'>
-                        <button class="icon-menu d-none d-sm-block d-md-none d-lg-block btn btn-success" id="startShift"><i class="icon-call-in text-white"></i></button>
-                    </li>
-                    <li class='endShift' style="display:none">
-                        <button class="icon-menu d-none d-sm-block d-md-none d-lg-block  btn btn-warning"  id="endShift"><i class="icon-call-out text-white"></i></button>
-                    </li>
+                    @if($menu['shift'] == true)
+                        <li class='endShift'>
+                            <button class="icon-menu d-none d-sm-block d-md-none d-lg-block  btn btn-warning"  id="endShift"><i class="icon-call-out text-black"></i></button>
+                        </li>
+                        <li class='startShift' style="display:none">
+                            <button class="icon-menu d-none d-sm-block d-md-none d-lg-block btn btn-success" id="startShift"><i class="icon-call-in text-white"></i></button>
+                        </li>
+                    @else
+
+                        <li class='startShift'>
+                            <button class="icon-menu d-none d-sm-block d-md-none d-lg-block btn btn-success" id="startShift"><i class="icon-call-in text-white"></i></button>
+                        </li>
+                        <li class='endShift' style="display:none">
+                            <button class="icon-menu d-none d-sm-block d-md-none d-lg-block  btn btn-warning"  id="endShift"><i class="icon-call-out text-black"></i></button>
+                        </li>
+
+                    @endif
+                    
                     <li>
                         <a href="https://yascemail.com/" class="icon-menu d-none d-sm-block"><i class="icon-envelope"></i></a>
                     </li>                                     
@@ -145,60 +157,10 @@
                         cursor: default;">MÉRIDA Clima</a> --}}
                         @yield('content')
                     </div>
-                    <div class="card" id="incidentReport" style="display:none;">
-                       <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <form id="formIncident" class="form-row">
-
-                                        <div class="form-group col-sm-6">
-                                            <h4 id="labelTimer">00:00:00</h4>
-                                        </div>
-                                        <div class="form-group col-sm-6">
-                                            <h4 id="labelDate"></h4>
-                                        </div>
-                                        <div class="form-group col-sm-6">
-                                            <label>Reason</label>
-                                            <select name="reason" id="reason" class="form-control"></select>
-                                        </div>
-                                        <div class="form-group col-sm-6">
-                                            <label>Supervisor</label>
-                                            <select name="supervisor" id="supervisor" class="form-control"></select>
-                                        </div>
-                                        <div class="form-group col-sm-12">
-                                            <label>Note</label>
-                                            <textarea name="note" id="note" rows="4" class="form-control"></textarea>
-                                        </div>
-                                        <div class="form-group col-sm-12 text-center">
-                                            <button type="button" class="btn btn-danger" id="btn-cancel-incident">Cancel</button>
-                                            <button type="submit" class="btn btn-success" id="btn-save-incident" value="add">Save</button>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="col-sm-8">
-                                    <legend>List</legend>
-                                    <table class="table table-striped text-center" id="table-incidents">
-                                        <thead class="text-white thead-yasc">
-                                            <tr>
-                                                <th>Date</th>
-                                                <th>Operator</th>
-                                                <th>Reason</th>
-                                                <th>Supervisor</th>
-                                                <th>Total</th>
-                                                <th>Start</th>
-                                                <th>End</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id = 'incident-list'></tbody>
-                                    </table>
-                                </div>
-                            </div>
-                       </div>
-                    </div>
+                  @include('incident.formTable')
                 </div>
             </div>
- 
-            
+            @include('incident.modalDetailIncident')
         </div>
     </div>
     

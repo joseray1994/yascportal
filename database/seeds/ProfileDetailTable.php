@@ -25,6 +25,7 @@ class ProfileDetailTable extends Seeder
             ['id_type_user'=> 1,'id_menu'=> 10,'status'=> 1,],
             ['id_type_user'=> 1,'id_menu'=> 9,'status'=> 1,],
             ['id_type_user'=> 1,'id_menu'=> 11,'status'=> 1,],
+            ['id_type_user'=> 1,'id_menu'=> 12,'status'=> 1,],
 
             ['id_type_user'=> 9,'id_menu'=> 1,'status'=> 1,],
             ['id_type_user'=> 9,'id_menu'=> 2,'status'=> 1,],
@@ -37,7 +38,7 @@ class ProfileDetailTable extends Seeder
             ['id_type_user'=> 9,'id_menu'=> 10,'status'=> 1,],
             ['id_type_user'=> 9,'id_menu'=> 9,'status'=> 1,],
             ['id_type_user'=> 9,'id_menu'=> 11,'status'=> 1,],
-            
+             ['id_type_user'=> 9,'id_menu'=> 12,'status'=> 1,],
           ];
 
       foreach($tu_prof as $tu_prof){
