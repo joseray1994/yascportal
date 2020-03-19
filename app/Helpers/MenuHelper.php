@@ -7,6 +7,7 @@ use App\AssignamentTypeModel;
 use App\ActionModel;
 use App\TimeClockModel;
 use App\BaDetailModel;
+use App\IncidentReportModel;
 use Illuminate\Support\Facades\Auth;
 use App\TypeUserModel;
 
@@ -20,6 +21,8 @@ if (!function_exists('menu')) {
         if($usertypes == 1 && $user->id_status == 1){
 
             $shift_status = TimeClockModel::where('id_operator',$user->id)->where('status',1)->exists();
+
+            $incident = IncidentReportModel::where('id_user', $user->id)->where('status', 1)->exists();
 
             $valaccess=AssignamentTypeModel::where('id_type_user',$user->id_type_user)->where('id_menu',$id_menu)->where('status',1)->exists();
 
@@ -50,7 +53,8 @@ if (!function_exists('menu')) {
               'typeuser'=>$type,
               'dataUser'=>$dataUser,
               'actions'=>$bas,
-              'shift'=>$shift_status
+              'shift'=>$shift_status,
+              'incident'=>$incident
             ];
         }else{
                

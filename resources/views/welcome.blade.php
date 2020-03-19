@@ -68,7 +68,12 @@
             <div id="navbar-menu">
                 <ul class="nav navbar-nav">
                     <li>
+                        @if($menu['incident'] == true)
+                        <button class="icon-menu d-none d-sm-block d-md-none d-lg-block btn btn-warning" type="button" id="btn-incident">Incident Report</button>
+                        @else
                         <button class="icon-menu d-none d-sm-block d-md-none d-lg-block btn btn-danger" type="button" id="btn-incident">Incident Report</button>
+                        @endif
+
                     </li>
                     <li>
                         <a href="/schedule" class="icon-menu d-none d-sm-block d-md-none d-lg-block"><i class="icon-calendar"></i></a>
