@@ -18,7 +18,8 @@ $(document).ready(function(){
         operator=$('#operatorSearch').val();
         name =`${date}-${client}-${operator}`
         $("#tag_container").tableHTMLExport({type:'csv',filename:`Weekly${name}.csv`});
-      })
+      });
+      
     //display modal form for creating new product *********************
     $('#btn_add').click(function(){
         $('#btn-save').val("add");
@@ -70,8 +71,6 @@ $(document).ready(function(){
             }
         schedule.calculateEnd_time(baseUrl,formData);
     });
-
-
 
     //display modal form for product EDIT ***************************
     $(document).on('click','.open_modal',function(){

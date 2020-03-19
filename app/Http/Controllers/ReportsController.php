@@ -37,7 +37,7 @@ class ReportsController extends Controller
           if($request->date_start && $request->date_end){
             $date_start =Carbon::parse($request->date_start);
             $date_start = date($date_start);
-            dd($date_start);
+            // dd($date_start);
             $date_end =Carbon::parse($request->date_end);
             $date_end = date($date_end);
             // dd($date_end);
@@ -61,7 +61,8 @@ class ReportsController extends Controller
                                       ->join('users_client as uclt', 'uclt.id_user', '=', 'incident_reports.id_user')
                                       ->join('clients as clt', 'clt.id', '=', 'uclt.id_client')
                                       ->join('settings as set', 'set.id', '=', 'id_setting')
-                                      ->whereBetween('incident_reports.start', [$date_start, $date_end]);
+                                      ->whereBetween('incident_reports.start', [$date_start, $date_end])
+                                      ->where('incident_reports.status', 2);
 
                                       if($request->operator != "AllOperators"){
                                         $reports->where('user.id_user',"=", $request->operator);
@@ -97,6 +98,7 @@ class ReportsController extends Controller
                                       ->join('users_client as uclt', 'uclt.id_user', '=', 'incident_reports.id_user')
                                       ->join('clients as clt', 'clt.id', '=', 'uclt.id_client')
                                       ->join('settings as set', 'set.id', '=', 'id_setting')
+                                      ->where('incident_reports.status', 2)
                                       ->where('incident_reports.start', 'LIKE', '%'.$today.'%');
 
           }                        

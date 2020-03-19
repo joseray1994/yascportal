@@ -22,17 +22,6 @@ $(document).ready(function(){
     
     });
 
-    $('#view-attendance').click(function(){
-        $('#labelTitle').html("Attendance Report  <i class='fa fa-file-excel-o'></i>");
-        $("#incident").hide();
-        $("#attendance").hide();
-        $('.table-incident').hide();
-        $('.table-attendance').show();
-        $('.view-search-incident').hide();
-    
-    });
-
-
     $(window).on('hashchange', function() {
         if (window.location.hash) {
             var page = window.location.hash.replace('#', '');
@@ -47,9 +36,12 @@ $(document).ready(function(){
     $('.incident_reportSearch').change(function(){
         incident_report.get_data(1);
     });
-
-
 });
+
+  //export csv
+  $('#csv').on('click',function(){
+    $("#tag_container_incident").tableHTMLExport({type:'csv',filename:`incident.csv`});
+  });
 
 const incident_report = {
     get_data: function(page){
