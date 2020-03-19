@@ -1,7 +1,7 @@
 @extends ('welcome')
 @section ('content')
 <div class="row clearfix">
-                <div class="col-lg-12">
+                <div class="col-lg-12 view-index">
                     <div class="card">
                         <div class="header">
                             <h1>Schedule Weekly <i class="fa fa-tasks"></i></h1>
@@ -36,7 +36,13 @@
                 </div>
             </div>
             @include('schedule.weekly.form')
-
+            <div class="col-sm-12 text-center view-audit">
+                            <h2>Audit</h2>
+                            <div class="table-responsive tabletwo">
+                                @include('schedule.weekly.detail')
+                            </div>
+                        </div>
+            
           
 
              <!-- Passing BASE URL to AJAX -->
