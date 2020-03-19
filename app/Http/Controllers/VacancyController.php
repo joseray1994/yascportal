@@ -10,8 +10,7 @@ class VacancyController extends Controller
 {
 
     public function index(Request $request)
-    {          
-        
+    {       
         $user = Auth::user();
         
         $id_menu=5;
@@ -27,7 +26,8 @@ class VacancyController extends Controller
                 } 
                 $data=$data2;
                 if ($request->ajax()) {
-                    return view('vacancies.table', compact('data'));
+                    return view('vacancies.table', ["data"=>$data]);
+
                 }
 
                   return view('vacancies.index',["data"=>$data,"menu"=>$menu,]);
@@ -38,15 +38,55 @@ class VacancyController extends Controller
     }
 
 
-    public function validateVacancy($request,$vacancy_id){
+    public function validateVacancy($request){
         
         $this->validate(request(), [
-            'name' => 'required|unique:vacancies,name,'.$vacancy_id,
+            'name' => 'required',
+            'description' => 'max:300',
         ]); 
+    }
+
+    public function ValidateExtraVacancy($request,$vacancy_id){
+        $ExtraVacancyValidation=[]; 
+        $n ="";
+        $data = [];
+
+        $name = VacancyModel::where('name', $request->name)
+        ->whereIn('status', [1,2]);
+
+        if($vacancy_id > 0){
+            $name->where('id','!=',$vacancy_id);
+        }
+            
+        $nameV = $name->count();
+
+        if($nameV > 0){      
+            $n = 'Another user type already has that Name';
+            
+        }
+        if($n==''){
+            $data=[];
+
+          }else{
+              $data=[
+                  'No' =>2,
+                  'name'=>$n,
+                ];
+
+              array_push($ExtraVacancyValidation,$data);
+          }
+        return $ExtraVacancyValidation;
     }
   
     public function store(Request $request)
     {      
+        $answer=VacancyController::ValidateExtraVacancy($request,0);
+      
+        if($answer){
+
+              return response()->json($answer);
+
+        }else{
             $vacancy_id="";
             VacancyController::validateVacancy($request,$vacancy_id);
             $vacancy = VacancyModel::firstOrCreate(['name'=>$request->name,
@@ -54,6 +94,8 @@ class VacancyController extends Controller
             'status'=>1,]);
 
             return response()->json($vacancy);
+            
+        }
       
     }
 

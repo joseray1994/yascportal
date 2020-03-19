@@ -55,6 +55,7 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::post('/candidates/{id}/{candidate_id?}', 'CandidateController@update');
     Route::delete('/candidates/{id}/delete/{candidate_id?}', 'CandidateController@delete');
     Route::delete('/candidates/{id}/{candidate_id?}', 'CandidateController@destroy');
+    Route::get('/candidates/{id}/detail/{candidate_id?}', 'CandidateController@detail');
 
     //Training
     Route::get('/training', 'TrainingController@index');
@@ -134,6 +135,8 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::delete('/documents/delete/{id}', 'ServiceGeneralController@deleteDocuments');
     Route::post('/sumtime', 'ServiceGeneralController@SumTime');
     Route::get('/download/{id}/{mat}', 'ServiceGeneralController@download');
+    Route::get('/reason', 'ServiceGeneralController@getReason');
+    Route::get('/supervisor', 'ServiceGeneralController@getSupervisor');
     
     //PROFILE
     Route::get('/profile', 'ProfileController@index');
@@ -147,6 +150,10 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     //Shift
     Route::get('startShift/','shiftController@startShift');
     Route::get('endShift/','shiftController@endShift');
+
+    //INCIDENT REPORT
+    Route::post('/incident', 'IncidentReportController@store');
+    Route::put('/incident', 'IncidentReportController@update');
 
 
 });
