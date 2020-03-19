@@ -167,21 +167,10 @@ $(document).ready(function(){
     //display modal form for product DETAIL ***************************
     $(document).on('click','.open_detail',function(){
         var shcedule_id = $(this).val();
-       
-        // Populate Data in Edit Modal Form
-        $.ajax({
-            type: "GET",
-            url: url + '/' + shcedule_id,
-            success: function (data) {
-                console.log(data);
-                $(".modal-body-detail").html(data);
-                $('#myModal2').modal('show');
-            },
-            error: function (data) {
-                console.log('Error:', data);
-            }
+        var url= baseUrl + '/detail/' + shcedule_id;
+            actions.modal(url);
         });
-    });
+
     
 });
 const schedule ={
@@ -190,7 +179,7 @@ const schedule ={
             if(dato.type== 1){
                buttons +='<a class="btn btn-sm btn-outline-primary" title="Assignament Type" id="btn-edit" href="/assignmenttype/'+dato.id+'"  ><i class="fa fa-info-circle"></i></a>'
                buttons += ' <button class="btn btn-sm btn-secondary btn-detail open_modal"  data-toggle="tooltip" title="Editar nombre del Perfil"  value="'+dato.id+'"> <i class="fa fa-edit"></i></li></button>'
-           }else if(dato.type == 2){
+           }else if(dato.type == 4){
                 buttons +='<a class="btn btn-sm btn-outline-primary" title="Assignament Type" id="btn-edit" href="/assignmenttype/'+dato.id+'"  ><i class="fa fa-info-circle"></i></a>'
                 buttons += ' <button class="btn btn-sm btn-secondary btn-detail open_modal"  data-toggle="tooltip" title="Editar nombre del Perfil"  value="'+dato.id+'"> <i class="fa fa-edit"></i></li></button>';
                 buttons += '<button class="btn btn-danger btn-sm btn-delete delete-profile" data-toggle="tooltip" title="Desactivar Perfil" value="'+dato.id+'"><i class="fa fa-trash-o"></i> </button>';
@@ -210,7 +199,7 @@ const schedule ={
         var status='';
         if(dato.type== 1){
             status +='<span class="badge badge-light">Workday</span>';
-        }else if(dato.type == 2){
+        }else if(dato.type == 4){
             status +='<span class="badge badge-dark">Extra</span>';
         }
        return status;
@@ -309,6 +298,17 @@ const schedule ={
             },
             error: function (data) {
                 console.log('Error:', data);
+                $.notifyClose();
+                $.each(data.responseJSON.errors,function (k,message) {
+                    $.notify({
+                        // options
+                        title: "Error!",
+                        message:message,
+                    },{
+                        // settings
+                        type: 'warning'
+                    });
+                });
                 
             }
         });
@@ -318,21 +318,21 @@ const schedule ={
 const success = {
 
     new_update: function (data,state){
-        console.log(data.No);
+        console.log(data);
         var dato = data;    
         switch(dato.No) {
             case 1:
-                    var profile = `<tr id="shcedule_id${dato.wd.detail.id}">
-                                    <td>${dato.wd.detail.name} ${dato.wd.detail.lastname}</td>
-                                    <td style ="background:${dato.wd.detail.color}">${dato.wd.detail.client}</td>
-                                    <td>${dato.wd.detail.day}</td>
-                                    <td>${dato.wd.detail.time_s}</td>
-                                    <td>${dato.wd.detail.time_e}</td>
-                                    <td class="hidden-xs">${schedule.type(dato.wd.detail)}</td>
-                                    <td>${schedule.button(dato.wd.detail)}</td>
+                    var profile = `<tr id="shcedule_id${dato.ed.detail.id}">
+                                    <td>${dato.ed.detail.name} ${dato.ed.detail.lastname}</td>
+                                    <td style ="background:${dato.ed.detail.color}">${dato.ed.detail.client}</td>
+                                    <td>${dato.ed.detail.day}</td>
+                                    <td>${dato.ed.detail.time_s}</td>
+                                    <td>${dato.ed.detail.time_e}</td>
+                                    <td class="hidden-xs">${schedule.type(dato.ed.detail)}</td>
+                                    <td>${schedule.button(dato.ed.detail)}</td>
                                 </tr>`;
-                    $("#shcedule_id"+dato.wd.detail.id).replaceWith(profile);
-                    $("#shcedule_id"+dato.wd.detail.id).css("background-color", "#ffdf7e");
+                    $("#shcedule_id"+dato.ed.detail.id).replaceWith(profile);
+                    $("#shcedule_id"+dato.ed.detail.id).css("background-color", "#ffdf7e");
                     $('#myModal2').modal('hide')
             break;
             case 2:
@@ -364,6 +364,17 @@ const success = {
                     
                 
                     $('#myModal').modal('hide')
+            break;
+            case 3:
+                $.notifyClose();
+                    $.notify({
+                        // options
+                        title: "Error!",
+                        message:data.msg,
+                    },{
+                        // settings
+                        type: 'danger'
+                    });
             break;
         }
         
@@ -399,14 +410,17 @@ const success = {
         console.log(data);
     
       
-        if(data.wd.detail.type == 2){
+        if(data.wd.detail.type == 4){
             $('#btn-saveE').val("update");
             $('#shcedule_idE').val(data.wd.detail.id);
             $('#time_startE').val(data.wd.detail.time_s);
             $('#time_endE').val(data.wd.detail.time_e);
+            $("#hours").val(data.wd.detail.hours);
+            $("#minutes").val(data.wd.detail.minutes);
             $('#myModal2').modal('show');
             
         }else{
+            console.log();
             $('#btn-save').val("update");
             $('#shcedule_id').val(data.wd.detail.id);
             $('#time_start').val(data.wd.detail.time_s);
@@ -425,7 +439,45 @@ const success = {
         
         
     },
+    modal: function(data){
+        console.log(data);
+        dato="";
+        if(data.audit.length > 0) {
+            $("#off-row").remove();
+            $.each(data.audit, function (index, da) {
+                old = JSON.parse(da.old);
+                news = JSON.parse(da.new);
+                console.log(old)
+                var dato2 = `<tr class="dayofftd">
+                                <td>${da.name}${da.lname}</td>
+                                <td >
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Time Start: ${old.time_start}</li>
+                                        <li class="list-group-item">Time End:${old.time_end}</li>
+                                    </ul>
+                                </td>
+                                <td >
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Time Start: ${news.time_start}</li>
+                                        <li class="list-group-item">Time End:${news.time_end}</li>
+                                    </ul>
+                                </td>
+                                <td >${da.event}</td>
+                                <td >${da.created}</td>
+                             </tr>`;
+            dato += dato2;
+            });
+        }else{
+            dato += `<tr id="off-row" class="text-center">
+                            <th colspan="5" class="text-center">
+                            <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
+                            </th>
+                        </tr>`;
 
+        }  
+
+        $('#audit-table').html(dato);
+    },
     msj: function(data){
         console.log(data);
         $.notifyClose();
