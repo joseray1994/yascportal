@@ -220,13 +220,20 @@ const success = {
         
             if (state == "add"){ 
               $("#vacancy-list").append(vacancy);
-              $("#vacancy_id"+dato.id).css("background-color", "#c3e6cb");    
+              $("#vacancy_id"+dato.id).css("background-color", "#c3e6cb");  
+              $('#table-row').remove(); 
             }else{
               $("#vacancy_id"+dato.id).replaceWith(vacancy);
               $("#vacancy_id"+dato.id).css("background-color", "#ffdf7e");  
             }
 
             $('#myModal').modal('hide')
+
+            if ($('.rowType').length == 0) {
+                $('#table-row').show();
+            }
+            break;
+            
         }
         
     },
@@ -264,6 +271,15 @@ const success = {
 
         }else if(dato.status == 0){
             $("#vacancy_id"+dato.id).remove();
+
+            if($("#tag_container tr").length == 1){
+                $("#tag_container").append(` <tr id="table-row" class="text-center">
+                                                    <th colspan="8" class="text-center">
+                                                        <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
+                                                    </th>
+                                                </tr>`);
+
+            }
         }
        
     },

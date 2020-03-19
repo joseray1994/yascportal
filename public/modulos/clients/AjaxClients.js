@@ -52,6 +52,7 @@ $(document).ready(function(){
         $('#labelTitle').html("Clients  <i class='fa fa-briefcase'></i>");
         $(".formulario").hide();
         $(".tableClient").show();
+        $('.btn-back').hide();
         $('#btn_add').show();
         $(".formulario_contacts").hide();
         $('#formContacts').trigger("reset");
@@ -239,7 +240,7 @@ $(document).ready(function(){
 
    //Add Contacts
     function add_contacs(id){
-        $('#labelTitle').html(" <button type='button' class='btn btn-back'><i class='fa fa-arrow-left'></i></button> Add Contacts  <i class='fa fa-plus'></i>");
+        $('#labelTitle').html(" Add Contacts  <i class='fa fa-plus'></i>");
         $(".formulario").hide();
         $(".formulario_contacts").show();
         $(".tableClient").hide();
@@ -247,6 +248,8 @@ $(document).ready(function(){
         $('#formContacts').trigger("reset");
         $('#tag_put').remove();
         $('#client_id_contacts').val(id);
+        $('.btn-back').show();
+        $('#btn_add').hide();
         //Show the contacts table
         var my_url = $('#url').val() + '/contacts/show/'+ id;
         actions.show(my_url)
@@ -348,16 +351,16 @@ const clients ={
            var buttons='';
             if(dato.status== 1){
               
-               buttons += ` <button type="button" class="btn btn-sm btn-outline-secondary btn-edit" data-toggle="tooltip" title="Edit"  value="${dato.id}"> <i class="fa fa-edit"></i></li></button>
-                        	<button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-type" data-toggle="tooltip" title="Deactivated" data-type="confirm"  value="${dato.id}" ><i class="fa fa-window-close"></i></button>
-                             <button type="button" class="btn btn-sm btn-outline-secondary btn_add_contacts" data-toggle="tooltip" title="Contacts"  value="${dato.id}"> <i class="fa fa-users"></i> </button>
-                             <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument(${dato.id})" data-toggle="tooltip" title="Documents" value="${dato.id}"> <i class="fa fa-folder-open"></i> </button>`;
+               buttons += ` <button type="button" class="btn btn-sm btn-outline-secondary btn-edit"  title="Edit"  value="${dato.id}"> <i class="fa fa-edit"></i></li></button>
+                        	<button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-type"  title="Deactivated" data-type="confirm"  value="${dato.id}" ><i class="fa fa-window-close"></i></button>
+                             <button type="button" class="btn btn-sm btn-outline-warning btn_add_contacts"  title="Contacts"  onclick="add_contacs(${dato.id})"> <i class="fa fa-users"></i> </button>
+                             <button type="button" class="btn btn-sm btn-outline-warning open-documents" onclick="openDocument(${dato.id})"  title="Documents" value="${dato.id}"> <i class="fa fa-folder-open"></i> </button>`;
            }else if(dato.status == 2){
              
-               buttons += ` <button type="button" class="btn btn-sm btn-outline-success off-type" data-toggle="tooltip" title="Activated" data-type="confirm"  value="${dato.id}" > <i class="fa fa-check-square-o"></i></button>
-                             <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert deleteClient" data-toggle="tooltip" title="Delete" data-type="confirm"  value="${dato.id}"> <i class="fa fa-trash-o"></i> </button>
-                             <button type="button" class="btn btn-sm btn-outline-secondary btn_add_contacts" data-toggle="tooltip" title="Contacts"  value="${dato.id}"> <i class="fa fa-users"></i> </button>
-                             <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument(${dato.id})" data-toggle="tooltip" title="Documents" value="${dato.id}"> <i class="fa fa-folder-open"></i> </button>`;
+               buttons += ` <button type="button" class="btn btn-sm btn-outline-success off-type"  title="Activated" data-type="confirm"  value="${dato.id}" > <i class="fa fa-check-square-o"></i></button>
+                             <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert deleteClient"  title="Delete" data-type="confirm"  value="${dato.id}"> <i class="fa fa-trash-o"></i> </button>
+                             <button type="button" class="btn btn-sm btn-outline-warning btn_add_contacts"  title="Contacts"  onclick="add_contacs(${dato.id})"> <i class="fa fa-users"></i> </button>
+                             <button type="button" class="btn btn-sm btn-outline-warning open-documents" onclick="openDocument(${dato.id})"  title="Documents" value="${dato.id}"> <i class="fa fa-folder-open"></i> </button>`;
            }
            return buttons;
     },
@@ -379,12 +382,8 @@ const contacts ={
             if(dato.status== 1){
               
                buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary btn-edit-contact" data-toggle="tooltip" title="Edit" value="'+dato.id+'"> <i class="fa fa-edit"></i></li></button>';
-               buttons += '	<button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-type-contacts" data-toggle="tooltip" title="Deactivated" data-type="confirm" value="'+dato.id+'" ><i class="fa fa-window-close"></i></button>';
-          
-           }else if(dato.status == 2){
-             
-               buttons += ' <button type="button" class="btn btn-sm btn-outline-success off-type-contacts" data-toggle="tooltip" title="Activated" data-type="confirm" value="'+dato.id+'" > <i class="fa fa-check-square-o"></i></button>'
                buttons += ' <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert deleteContact" data-toggle="tooltip" title="Delete" data-type="confirm" value="'+dato.id+'"> <i class="fa fa-trash-o"></i> </button>';
+          
            }
            return buttons;
     },
@@ -415,8 +414,11 @@ const success = {
                 var dato = data.client;
                 var clientname =$('#name').val();
                 var type =$('#type').val();
-
-                    var client = `<tr id="client_id${dato.id}" style = "background:${dato.color}">
+                    if (dato.description == null){
+                        dato.description = "";
+                    }
+                    var client = `<tr id="client_id${dato.id}">
+                                        <td style="background:${dato.color}"></td>
                                         <td>${dato.name}</td>
                                         <td>${dato.description}</td>
                                         <td>${dato.interval}</td>
@@ -426,29 +428,29 @@ const success = {
                                     </tr>`;
                 
                     if (state == "add"){ 
-                    $("#client-list").append(client);
-                    $("#client_id"+dato.id).css("background-color", "#c3e6cb");  
-                    swal("Saved!", data.client_success, "success")  
-                    $('#labelTitle').html("Client  <i class='fa fa-briefcase'></i>");
-                    $(".formulario").hide();
-                    $(".tableClient").show();
-                    $('#btn_add').show();
-                    $(".formulario_contacts").hide();
-                    $('#formClients').trigger("reset");
-                    $('#tag_put').remove();
+                        $("#client-list").append(client);
+                        $("#client_id"+dato.id).css("background-color", "#c3e6cb");  
+                        swal("Saved!", data.client_success, "success")  
+                        $('#labelTitle').html("Client  <i class='fa fa-briefcase'></i>");
+                        $(".formulario").hide();
+                        $(".tableClient").show();
+                        $('#btn_add').show();
+                        $(".formulario_contacts").hide();
+                        $('#formClients').trigger("reset");
+                        $('#tag_put').remove();
                     }
                     else
                     {
-                    $("#client_id"+dato.id).replaceWith(client);
-                    $("#client_id"+dato.id).css("background-color", "#ffdf7e");  
-                    swal("Updated!", data.client_update, "success")
-                    $('#labelTitle').html("Client  <i class='fa fa-briefcase'></i>");
-                    $(".formulario").hide();
-                    $(".tableClient").show();
-                    $('#btn_add').show();
-                    $(".formulario_contacts").hide();
-                    $('#formClients').trigger("reset");
-                    $('#tag_put').remove();
+                        $("#client_id"+dato.id).replaceWith(client);
+                        $("#client_id"+dato.id).css("background-color", "#ffdf7e");  
+                        swal("Updated!", data.client_update, "success")
+                        $('#labelTitle').html("Client  <i class='fa fa-briefcase'></i>");
+                        $(".formulario").hide();
+                        $(".tableClient").show();
+                        $('#btn_add').show();
+                        $(".formulario_contacts").hide();
+                        $('#formClients').trigger("reset");
+                        $('#tag_put').remove();
                     }
 
                     
@@ -458,7 +460,9 @@ const success = {
                     var dato = data.contact;
                     var clientname =$('#name').val();
                     var type =$('#type').val();
-    
+                    if (dato.description == null){
+                        dato.description = "";
+                    }
                         var contact = `<tr id="client_id${dato.id}">
                                             <td>${dato.name}</td>
                                             <td>${dato.description}</td>
@@ -523,7 +527,7 @@ const success = {
                 console.log(data.client);
                 var dato = data.client;
                 if(dato.status != 0){
-                    if(dato.description = ''){
+                    if(dato.description == null){
                         dato.description = '';
                     }
                     var client = `<tr id="client_id${dato.id}" style = "background:${dato.color}">
@@ -622,6 +626,9 @@ const success = {
             case 2:
                 var contact = "";
                 data.contact.forEach(function(data){
+                    if(data.description == null){
+                        data.description = "";
+                    }
                     contact += `
                    
                         <tr id="client_id${data.id}">

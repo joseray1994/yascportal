@@ -21,8 +21,8 @@ class CreateIncidentReportsTable extends Migration
             $table->integer('id_supervisor');
             $table->string('start');
             $table->string('end');
-            $table->integer('duration');
-            $table->string('note')->nullable();
+            $table->string('duration');
+            $table->longText('note')->nullable();
             $table->integer('status')->default(1);
             $table->timestamps();
         });

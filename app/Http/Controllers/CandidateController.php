@@ -10,8 +10,30 @@ use App\DocumentModel;
 
 class CandidateController extends Controller
 {
+
+    public function search_settings($type){
+        $result='';
+
+        switch ($type) {
+
+            case 'last_name':
+                $result='candidates.last_name';
+                break;
+            case 'mail':
+                $result='candidates.mail';
+                break;
+            
+            default:
+               $result='';
+                break;
+
+        }
+        return $result;
+    }
+    
     public function index(Request $request, $id)
     {           
+      
         $user = Auth::user();
         
         $id_menu=5;
@@ -23,6 +45,8 @@ class CandidateController extends Controller
                 $search = trim($request->dato);
 
                 if(strlen($request->type) > 0 &&  strlen($search) > 0){
+                    $type= CandidateController::search_settings($request->type);
+
                     $data2 = CandidateModel::select('candidates.id as id',  'vac.name as name_vacancy', 'candidates.name as name', 'candidates.last_name as last_name', 'candidates.phone as phone', 
                     'candidates.mail as mail', 'candidates.channel as channel', 
                     'candidates.listening_test as listening_test', 'candidates.grammar_test as grammar_test', 
@@ -30,7 +54,8 @@ class CandidateController extends Controller
                     ->join('vacancies as vac', 'vac.id', '=', 'candidates.id_vacancy')
                     ->where('candidates.id_vacancy',$id)
                     ->whereNotIn('candidates.status',[0])
-                    ->where($request->type,'LIKE','%'.$search.'%');
+                    ->where($type,'LIKE','%'.$search.'%');
+
                 
 
                   
@@ -47,7 +72,7 @@ class CandidateController extends Controller
                 } 
                 $data=$data2->paginate(10);
                 if ($request->ajax()) {
-                    return view('candidates.table', compact('data'));
+                    return view('candidates.table', ["data"=>$data]);
                 }
   
                 return view('candidates.index',["data"=>$data, "vacancies"=>$vacancy, "menu"=>$menu]);
@@ -72,7 +97,7 @@ class CandidateController extends Controller
 
 
     public function validateCandidate($request, $candidate_id){
-       
+        //$user=='' ? $email = 'required|email|unique:users,email,NULL,id,id_status,1 | unique:users,email,'.$user.',id,id_status,2' :  $email = 'sometimes|required|unique:users,email,'.$user.',id,id_status,1 | unique:users,email,'.$user.',id,id_status,2';
         $this->validate(request(), [
            'id_vacancy' => 'required',
             'name' => 'required|max:30',
@@ -82,10 +107,10 @@ class CandidateController extends Controller
             'channel' => 'required',
             'listening_test' => 'required',
             'grammar_test' => 'required',
-            'typing_test' => 'required',
-            'typing_test2' => 'required',
-            'typing_test3' => 'required',
-            'typing_test4' => 'required',
+            'typing_test' => 'required|max:3',
+            'typing_test2' => 'required|max:3',
+            'typing_test3' => 'required|max:3',
+            'typing_test4' => 'required|max:3',
         ]); 
        
     }
@@ -123,6 +148,15 @@ class CandidateController extends Controller
         $candidate = CandidateModel::find($candidate_id);
         $candidate->status=1;
         return response()->json(["candidates" => $candidate, "flag" => 2]);
+    }
+
+    
+    public function detail($id, $candidate_id)
+    {
+
+        $candidate = CandidateModel::find($candidate_id);
+        $candidate->status=1;
+        return response()->json(["candidates" => $candidate, "flag" => 3]);
     }
 
     public function update(Request $request, $id,$candidate_id)

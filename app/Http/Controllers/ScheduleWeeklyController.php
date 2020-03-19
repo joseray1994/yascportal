@@ -91,7 +91,7 @@ class ScheduleWeeklyController extends Controller
 
     public function data_weekly($id){
         $days=[];
-        $data = ScheduleDetailModel::select( "detail_schedule_user.id as id",'set.name as setting',"detail_schedule_user.id_schedule as id_schedule", "detail_schedule_user.type_daily as type", "inf.name as name", "inf.last_name as lastname","cli.name as client","ccl.hex as color",'day.Eng-name as day','detail_schedule_user.time_start as time_s','detail_schedule_user.time_end as time_e',"detail_schedule_user.status as status")
+        $data = ScheduleDetailModel::select( "detail_schedule_user.id as id",'set.name as setting',"detail_schedule_user.id_schedule as id_schedule", "detail_schedule_user.type_daily as type", "inf.name as name", "inf.last_name as lastname","cli.name as client","ccl.hex as color",'day.Eng-name as day','detail_schedule_user.time_start as time_s','detail_schedule_user.time_end as time_e',"detail_schedule_user.hours as hours","detail_schedule_user.minutes as minutes","detail_schedule_user.status as status")
                     ->join('schedule as sch','sch.id', "=", 'detail_schedule_user.id_schedule')
                     ->join('clients as cli', 'cli.id',"=","sch.id_client")
                     ->join('client_color as ccl', 'ccl.id',"=","cli.color")
@@ -113,39 +113,48 @@ class ScheduleWeeklyController extends Controller
 
         return $data2;
     }
-    public function validateType($request,$weekly_id =""){
+
+    public function validateExistSchedule($request,$weekly){
+        $check=0; 
+        $valStart=ScheduleDetailModel::where('id','!=',$weekly->id)->where('type_daily',1)->where('id_day',$weekly->id_day)->where('time_start','>=',$request->time_start)->where('time_end','<=',$request->time_end)->count();
+        $valEnd=ScheduleDetailModel::where('id','!=',$weekly->id)->where('type_daily',1)->where('id_day',$weekly->id_day)->where('time_start','>=',$request->time_start)->where('time_end','<=',$request->time_end)->count();
+
+        if($request->time_extra && $request->time_endEx){
+            $valex =ScheduleDetailModel::where('type_daily',4)->where('id_day',$weekly->id_day)->where('time_start','>=',$request->time_extra)->where('time_end','<=',$request->time_endEx)->count();
+            $valendEx =ScheduleDetailModel::where('type_daily',4)->where('id_day',$weekly->id_day)->where('time_start','>=',$request->time_extra)->where('time_end','<=',$request->time_endEx)->count();
+            
+            if($valex > 0 || $valendEx > 0){
+                $check += 1 ; 
+            }
+        }
+
+        if($valEnd > 0 || $valStart > 0){
+            $check += 1 ; 
+        }
+
+        return $check;
+    }
+    public function validateSchedule($request){
         
             $this->validate(request(), [
-                'name' => 'required|max:30',
+                'time_start' => 'required|date_format:H:i',
+                'time_end' => 'required|date_format:H:i|after:time_start',
+                'time_extra' => 'sometimes|nullable|date_format:H:i',
+                'time_endEx' => 'sometimes|nullable|date_format:H:i|after:time_extra',
+                'hours' => 'sometimes|nullable|numeric|max:24|min:0',
+                'minutes' => 'sometimes|nullable|numeric|max:59|min:0',
             ]); 
     }
-  
-    public function ValidateExtraType($request,$weekly_id =""){
-        $ExtraTypeValidation=[]; 
-        $n ="";
-        $data = [];
 
-        $userValidation = ScheduleDetailModel::where('id','!=',$weekly_id)->where('name', $request->name)
-        ->whereIn('status', [1,2])
-        ->count();
-
-        if($name > 0){      
-            $n = 'Otro Proveedor ya cuenta con ese Nombre';
-            
-        }
-        if($n==''){
-            $data=[];
-
-          }else{
-              $data=[
-                  'No' =>2,
-                  'name'=>$n,
-              ];
-
-              array_push($ExtraTypeValidation,$data);
-          }
-        return $ExtraTypeValidation;
-    }
+    public function validateScheduleExtra($request,$weekly_id =""){
+        
+        $this->validate(request(), [
+            'time_start' => 'required',
+            'time_end' => 'required',
+            'hours' => 'required|numeric|max:24|min:0',
+            'minutes' => 'required|numeric|max:59|min:0',
+        ]); 
+}
   
     /**
      * Functions for create and Update schedule data .
@@ -162,6 +171,8 @@ class ScheduleWeeklyController extends Controller
                     "id_day"=>$weekly->id_day,
                     "time_start"=>$request->time_extra,
                     "time_end"=>$request->time_endEx,
+                    "hours"=>$request->hours,
+                    "minutes"=>$request->minutes,
                     "type_daily"=>4,
                     "option"=>1,
                     "status"=>1,
@@ -174,15 +185,22 @@ class ScheduleWeeklyController extends Controller
     public function store(Request $request,$weekly_id)
     {      
 
-  
+                ScheduleWeeklyController::validateScheduleExtra($request);
                 $weekly = ScheduleDetailModel::find($weekly_id);
+                if(ScheduleWeeklyController::validateExistSchedule($request,$weekly) == 0){
                 $weekly->time_start = $request->time_start;
                 $weekly->time_end = $request->time_end;
+                $weekly->hours = $request->hours;
+                $weekly->minutes = $request->minutes;
                 $weekly->status=1;
                 $weekly->save();
 
                 $weeklyData = ScheduleWeeklyController::data_weekly($weekly_id);
                 $data=['No'=>1,'ed'=>$weeklyData];
+
+                }else{
+                    $data=['No'=>3,'msg'=>"The schedule is already in use or one of the hours is between some other schedule"];
+                }
                 
                 return response()->json($data);
       
@@ -197,11 +215,25 @@ class ScheduleWeeklyController extends Controller
         return response()->json($data);
     }
 
-    public function detail($weekly_id)
+    public function detail(Request $request, $weekly_id)
     {   
         
         $weekly = ScheduleDetailModel::find($weekly_id);
-        $audit = Audit::where('user_id',$weekly->id_operator)->get();
+        $audits = Audit::select('audits.auditable_id as id','audits.old_values as old','audits.new_values as new','audits.created_at as created','audits.event as event','inf.name as name','inf.last_name as lname')
+        ->join('users_info as inf','inf.id_user', "=", 'audits.user_id')
+        ->where('audits.user_id',$weekly->id_operator)
+        ->where('audits.auditable_type','App\ScheduleDetailModel')
+        ->where('audits.auditable_id',$weekly_id);
+
+        if($request->date != ""){
+            $audits->whereDate('audits.created_at',$request->date);   
+            }
+        if($request->time != ""){
+            $audits->whereTime('audits.created_at', '>=', $request->time);
+        }
+
+        $audit= $audits->get();
+
         $data=['No'=>1,'audit'=>$audit];
         return response()->json($data);
     }
@@ -247,21 +279,27 @@ class ScheduleWeeklyController extends Controller
                 ->update(['time_start' => $request->time_start, 'time_end'=>$request->time_end]);
               } 
            }
-
+         
+          
             $weekly = ScheduleDetailModel::find($weekly_id);
-            $weekly->time_start = $request->time_start;
-            $weekly->time_end = $request->time_end;
-            $weekly->status=1;
-            $weekly->save();
+            ScheduleWeeklyController::validateSchedule($request);
+            if( ScheduleWeeklyController::validateExistSchedule($request,$weekly) == 0){
+                $weekly->time_start = $request->time_start;
+                $weekly->time_end = $request->time_end;
+                $weekly->status=1;
+                $weekly->save();
 
-            $extradata=ScheduleWeeklyController::CreateExtraShift($request,$weekly);
+                $extradata=ScheduleWeeklyController::CreateExtraShift($request,$weekly);
 
-            UpdateDayoff($weekly,$request);   
-            UpdateAllWeekly($weekly,$request);
+                UpdateDayoff($weekly,$request);   
+                UpdateAllWeekly($weekly,$request);
 
-            $weeklyData = ScheduleWeeklyController::data_weekly($weekly_id);
-           
-            $data=['No'=>2,'wd'=>$weeklyData, 'ed'=>$extradata];
+                $weeklyData = ScheduleWeeklyController::data_weekly($weekly_id);
+            
+                $data=['No'=>2,'wd'=>$weeklyData, 'ed'=>$extradata];
+            }else{
+                $data=['No'=>3,'msg'=>"The schedule is already in use or one of the hours is between some other schedule"];
+           }
             return response()->json($data);
     }
 

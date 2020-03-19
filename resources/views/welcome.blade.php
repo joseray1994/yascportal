@@ -157,30 +157,10 @@
                         cursor: default;">MÉRIDA Clima</a> --}}
                         @yield('content')
                     </div>
-                    <div class="card" id="incidentReport" style="display:none;">
-                       <div class="row">
-                            <div class="col-sm-6">
-                                <form action="" class="form-row">
-                                
-                                    <div class="form-group col-sm-6">
-                                        <label>Date</label>
-                                        <input type="text" class="form-control">
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <label>Date</label>
-                                        <input type="text" class="form-control">
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="col-sm-6">
-                                
-                            </div>
-                       </div>
-                    </div>
+                  @include('incident.formTable')
                 </div>
             </div>
- 
-            
+            @include('incident.modalDetailIncident')
         </div>
     </div>
     

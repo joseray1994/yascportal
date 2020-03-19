@@ -363,6 +363,7 @@ const types ={
 const success = { 
     new_update: function (data,state){
         $('#btn-save-documents').attr('disabled', false);
+        $('#labelTitle').html("Operators  <i class='fa fa-tasks'></i>");
         console.log(data);
         $('#btn-save').attr('disabled', false);
         $("#table-row").remove();

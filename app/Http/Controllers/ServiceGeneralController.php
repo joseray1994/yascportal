@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\User;
 use App\User_info;
 use App\DocumentModel;
+use App\SettingsModel;
 use Carbon\Carbon; 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -292,7 +293,14 @@ class ServiceGeneralController extends Controller
 
 
 
-    public function SumTime(Request $request){    
+    public function SumTime(Request $request){ 
+        
+        $this->validate(request(), [
+            'time_start' => 'required',
+            'hours' => 'required|numeric|max:24|min:0',
+            'minutes' => 'required|numeric|max:59|min:0',
+        ]); 
+      
         $m=0;
         $m+= $request->minutes;
 
@@ -304,7 +312,23 @@ class ServiceGeneralController extends Controller
             $now->addHours($h)->addMinutes($m);
             $hora = date("H:i", strtotime($now));
 
-        return response()->json($hora);
+      
+      return response()->json($hora); 
+
     }
 
+    public function getReason(){
+        $setting = SettingsModel::where('id_option', 2)->get();
+        return response()->json($setting);
+    }
+
+    public function getSupervisor(){
+        $supervisor = User_info::select('users.id', 'Users_info.name')
+        ->join('users', 'Users_info.id_user', '=', 'users.id')
+        ->whereIn('id_type_user', [2,5])->get();
+        return response()->json($supervisor);
+    }
+
+
 }
+

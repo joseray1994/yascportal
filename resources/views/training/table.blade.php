@@ -6,32 +6,60 @@
             <th>Trainee</th>
             <th>Trainer</th>
             <th>Schedule</th>
-            <th>At Woork</th>
+            <th>At Work</th>
+            <th>Work Type</th>
             <th class="hidden-xs" >Zoom Meting</th>
             <th class="hidden-xs" >Activities</th>
             <th >Ends Training</th>
-            {{-- <th>Option</th> --}}
+            <th>Status</th>
+            <th>Option</th>
         </tr>
     </thead>
     <tbody id="trainings-list">
         {{-- @foreach ($data as $training) --}}
         @forelse ($data as $training)
-        <tr id="trainings_id{{$training->id}}" class="rowTraining">
+        <tr id="trainings_id{{$training->id_user}}" class="rowTraining">
             <td style ="background:{{$training->color}}" >{{ $training->client }}</td>
-           <td>{{ $training->name }} {{ $training->lastname }}</td>
-           <td>{{ $training->name_trainer }} {{ $training->lastname_trainer }}</td>
-           <td>{{ $training->time_s}} - {{ $training->time_e}}</td>
-           @switch($training->type)
-                @case(2)
-                <td> <span class="badge badge-training">Training</span></td>
+            <td>{{ $training->name }} {{ $training->lastname }}</td>
+            <td>{{ $training->name_trainer }} {{ $training->lastname_trainer }}</td>
+            <td style ="background:{{$training->color}}">{{ $training->time_s}} - {{ $training->time_e}}</td>
+            <td>{{$training->setting}}</td>
+            @switch($training->type)
+                    @case(2)
+                    <td> <span class="badge badge-training">Training</span></td>
+                    @break
+                    @case(3)
+                    <td> <span class="badge badge-coaching">Coaching</span></td>
+                    @break
+                @endswitch
+            <td class="hidden-xs" >Zoom</td>
+            <td class="hidden-xs" >Activities</td>
+            <td>{{ $training->end_training}}</td>
+            @switch($training->status_user)
+                @case(1)
+                    <td class="hidden-xs">
+                        <span class='badge badge-success'>Activated</span>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="{{$training->id_user}}"  ><i class="fa fa-edit"></i></button>
+                        <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-type" title="Disable User and Schedule" data-type="confirm" value="{{$training->id_user}}"><i class="fa fa-window-close"></i></button>
+                    </td>
                 @break
-                @case(3)
-                <td> <span class="badge badge-coaching">Coaching</span></td>
+                @case(2)
+                <td class="hidden-xs">
+                    <span class='badge badge-secondary'>Deactivated</span>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-outline-success off-type" title="Activated" data-type="confirm" value="{{$training->id_user}}" ><i class="fa fa-check-square-o"></i></button>
+                    <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert deleteTraining" title="Delete User" data-type="confirm" value="{{$training->id_user}}"><i class="fa fa-trash-o"></i></button>
+                </td>
                 @break
             @endswitch
-           <td>Zoom</td>
-           <td>Activities</td>
-           <td>{{ $training->end_training}}</td>
+            {{-- <td>
+                <button type="button" class="btn btn-sm btn-outline-secondary open_change" data-toggle="tooltip" title="Edit" id="btn-edit" value="{{$training->id}}"  ><i class="fa fa-exchange"></i></button>
+                <button type="button" class="btn btn-sm btn-outline-secondary open_modal" data-toggle="tooltip" title="Edit" id="btn-edit" value="{{$training->id}}"  ><i class="fa fa-edit"></i></button>
+                <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert deleteTraining" data-toggle="tooltip" title="Delete" data-type="confirm" value="{{$training->id_user}}"><i class="fa fa-trash-o"></i></button>
+            </td> --}}
         </tr>
         {{-- @endforeach --}}
         @empty
