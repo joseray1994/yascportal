@@ -48,7 +48,7 @@ class ScheduleWeeklyController extends Controller
                     ->where('sch.week',"=", $now->weekOfYear)
                     ->where('sch.month',"=", $now->month)
                     ->where('sch.year',"=", $now->year)
-                    ->where('detail_schedule_user.status',1);
+                    ->whereIn('detail_schedule_user.status',[1,2]);
 
                     if($request->day != "allDays"){
                         $data2->where('detail_schedule_user.id_day',"=", $request->day);
@@ -137,8 +137,8 @@ class ScheduleWeeklyController extends Controller
     public function validateSchedule($request){
         
             $this->validate(request(), [
-                'time_start' => 'required|date_format:H:i',
-                'time_end' => 'required|date_format:H:i|after:time_start',
+                'time_start' => 'required',
+                'time_end' => 'required',
                 'time_extra' => 'sometimes|nullable|date_format:H:i',
                 'time_endEx' => 'sometimes|nullable|date_format:H:i|after:time_extra',
                 'hours' => 'sometimes|nullable|numeric|max:24|min:0',
@@ -241,7 +241,7 @@ class ScheduleWeeklyController extends Controller
     public function update(Request $request, $weekly_id)
     {
            function UpdateDayOff($weekly,$request){
-
+                $res=0;
                 DayOffModel::where("id_schedule",$weekly->id_schedule)->truncate();
 
                if(!empty($request->days))
@@ -256,28 +256,37 @@ class ScheduleWeeklyController extends Controller
                 $data = ScheduleDetailModel::whereIn('id_day',$request->days)
                         ->where('id_schedule',$weekly->id_schedule)
                         ->where('type_daily', 1)
-                        ->update(['option' => 2]);
+                        ->update(['status' => 2]);
 
                 $data2 = ScheduleDetailModel::whereNotIn('id_day',$request->days)
                         ->where('id_schedule',$weekly->id_schedule)
                         ->where('type_daily', 1)
-                        ->update(['option' => 1]); 
+                        ->update(['status' => 1]);
+                
+                $res+=1;
                }
-               
+               return $res; 
            }
            
-           function UpdateAllWeekly($request){
+           function UpdateAllWeekly($weekly,$request){
+            $res=0;
             if($request->now == "now"){
-                $data2 = ScheduleDetailModel::whereNotIn('id_day','>',$weekly->id_day)
+                $data2 = ScheduleDetailModel::where('id_day','>',$weekly->id_day)
                             ->where('id_schedule',$weekly->id_schedule)
                             ->where('type_daily', 1)
                             ->update(['time_start' => $request->time_start, 'time_end'=>$request->time_end]);
+
+                $res+=1;
               } 
+
               if($request->today == "ev"){
                 $data2 = ScheduleDetailModel::where('id_schedule',$weekly->id_schedule)
                 ->where('type_daily', 1)
                 ->update(['time_start' => $request->time_start, 'time_end'=>$request->time_end]);
+                $res+=1;
               } 
+
+              return $res; 
            }
          
           
@@ -289,14 +298,20 @@ class ScheduleWeeklyController extends Controller
                 $weekly->status=1;
                 $weekly->save();
 
-                $extradata=ScheduleWeeklyController::CreateExtraShift($request,$weekly);
+                $updayoff = UpdateDayoff($weekly,$request);
+                $upweek=UpdateAllWeekly($weekly,$request);
 
-                UpdateDayoff($weekly,$request);   
-                UpdateAllWeekly($weekly,$request);
+               
+                if($updayoff > 0 || $upweek > 0){
 
-                $weeklyData = ScheduleWeeklyController::data_weekly($weekly_id);
-            
-                $data=['No'=>2,'wd'=>$weeklyData, 'ed'=>$extradata];
+                    $data=['No'=>2];
+                }else{
+                    $extradata=ScheduleWeeklyController::CreateExtraShift($request,$weekly);
+                    $weeklyData = ScheduleWeeklyController::data_weekly($weekly_id);
+                    
+                    $data=['No'=>2,'wd'=>$weeklyData, 'ed'=>$extradata];
+                }
+                
             }else{
                 $data=['No'=>3,'msg'=>"The schedule is already in use or one of the hours is between some other schedule"];
            }
