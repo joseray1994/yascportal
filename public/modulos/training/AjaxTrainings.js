@@ -32,7 +32,7 @@ $(document).ready(function(){
         $('#id_trainer').val("");
         $('#id_trainer').trigger('change');
     });
-       //display modal form for creating new product *********************
+       //display cancel modal form for creating new product *********************
     $('.btn-cancel').click(function(){
         $('#myModalLabel').html(`Create New Trainee`);
         $('#formTraining').hide();
@@ -102,6 +102,7 @@ $(document).ready(function(){
     //function to calculate the date with the number of weeks for training
     $('.n_weeks_training').change(function(){
         var numWeek = $('#numWeek').val();
+        var numWeek2 = $('#numWeek2').val();
         var start_training=$('#start_training').val();
         var end_training=$('#end_training').val();
         
@@ -110,6 +111,7 @@ $(document).ready(function(){
 
     $('#numWeek').keyup(function(){
         var numWeek = $('#numWeek').val();
+        var numWeek2 = $('#numWeek2').val();
         var start_training=$('#start_training').val();
         var end_training=$('#end_training').val();
         if (numWeek>0) {
@@ -121,6 +123,7 @@ $(document).ready(function(){
 
     $('.n_weeks_coaching').change(function(){
         var numWeek_C = $('#numWeek_C').val();
+        var numWeek_C2 = $('#numWeek_C2').val();
         var end_training=$('#end_training').val();
         var end_coaching=$('#end_coaching').val();
         
@@ -174,8 +177,8 @@ $(document).ready(function(){
             })
                 if($(this).attr('class') == 'btn btn-sm btn-outline-success off-type')
                 {
-                    title= "Do you want to activate this option?";
-                    text="The Option will be activated";
+                    title= "Do you want to activate this Trainee?";
+                    text="The User and Schedule will be activated";
                     confirmButtonText="Activate";
 
                     datatitle="Activated";
@@ -184,8 +187,8 @@ $(document).ready(function(){
                 }
                 else 
                 {
-                    title= "Do you want to disable this option?";
-                    text= "The Option will be deactivated";
+                    title= "Do you want to disable this Trainee?";
+                    text= "The User and Schedule will be deactivated";
                     confirmButtonText="Desactivar";
 
                     datatitle="Deactivated";
@@ -208,7 +211,7 @@ $(document).ready(function(){
                 },
                 function(isConfirm) {
                     if (isConfirm) {
-                    swal(datatitle, "Option "+datatext, "success");
+                    swal(datatitle, "Trainee "+datatext, "success");
                     actions.deactivated(my_url);
                     } 
                     else {
@@ -220,7 +223,7 @@ $(document).ready(function(){
         });
 
     //delete product and remove it from TABLE list ***************************
-    $(document).on('click','.deleteSettings',function(){
+    $(document).on('click','.deleteTraining',function(){
         var privada_id = $(this).val();
         var my_url = url + '/delete/' + privada_id;
         $.ajaxSetup({
@@ -229,8 +232,8 @@ $(document).ready(function(){
             }
         })
         swal({
-            title: "Are you sure you wish to delete this option?",
-            text: "All records with this option will be modified",
+            title: "Are you sure you wish to delete this Trainee?",
+            text: "All the information of this apprentice will be eliminated",
             type: "warning",
             showCancelButton: true,
             confirmButtonClass: "btn btn-danger",
@@ -384,21 +387,21 @@ $(document).ready(function(){
 const training ={
     button: function(dato){
            var buttons='';
-            if(dato.status== 1){
-               buttons += ' <button class="btn  btn-sm btn-outline-secondary open_modal"  data-toggle="tooltip" title="Edit"  value="'+dato.id+'"> <i class="fa fa-edit"></i></li></button>';
-               buttons += '	<button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-type" title="Deactivated" data-type="confirm" value="'+dato.id+'" ><i class="fa fa-window-close"></i></button>';
+            if(dato.status_user== 1 || dato.status_user== "1"){
+               buttons += ' <button class="btn  btn-sm btn-outline-secondary open_modal"  data-toggle="tooltip" title="Edit"  value="'+dato.id_user+'"> <i class="fa fa-edit"></i></li></button>';
+               buttons += '	<button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-type" title="Disable User and Schedule" data-type="confirm" value="'+dato.id_user+'" ><i class="fa fa-window-close"></i></button>';
           
-           }else if(dato.status == 2){
-               buttons+='<button type="button" class="btn btn-sm btn-outline-success off-type" title="Activated" data-type="confirm" value="'+dato.id+'" ><i class="fa fa-check-square-o"></i></button>'
-               buttons += '<button class="btn btn-sm btn-outline-danger js-sweetalert deleteSettings" data-toggle="tooltip" title="Delete" value="'+dato.id+'"><i class="fa fa-trash-o"></i> </button>';
+           }else if(dato.status_user== 2 || dato.status_user== "2"){
+               buttons+='<button type="button" class="btn btn-sm btn-outline-success off-type" title="Activated" data-type="confirm" value="'+dato.id_user+'" ><i class="fa fa-check-square-o"></i></button>'
+               buttons += '<button class="btn btn-sm btn-outline-danger js-sweetalert deleteTraining" data-toggle="tooltip" title="Delete User" value="'+dato.id_user+'"><i class="fa fa-trash-o"></i> </button>';
            }
            return buttons;
     },
     status:function(dato){
         var status='';
-        if(dato.status== 1){
+        if(dato.status_user== 1 || dato.status_user== "1"){
             status +="<span class='badge badge-success'>Activated</span>";
-        }else if(dato.status == 2){
+        }else if(dato.status_user == 2 || dato.status_user== "2"){
             status +="<span class='badge badge-secondary'>Deactivated</span>";
         }
        return status;
@@ -446,6 +449,7 @@ const training ={
                 switch (data.num['flag']) {
                     case 1:
                         $('#numWeek').val(data.num['num']);
+                        $('#numWeek2').val(data.num['num']);
                         break;
                     case 2:
                         $('#end_training').val(data.end_training);
@@ -487,6 +491,7 @@ const training ={
                 switch (data.num['flag']) {
                     case 1:
                         $('#numWeek_C').val(data.num['num']);
+                        $('#numWeek_C2').val(data.num['num']);
                         break;
                     case 2:
                         $('#end_coaching').val(data.end_coaching);
@@ -504,10 +509,10 @@ const training ={
     },
     get_atwork: function(dato){
         var types='';
-         if(dato.type== 2){
-            types += '<span class="badge badge-training">Training</span>';
-        }else if(dato.type == 3){
-            types += '<span class="badge badge-coaching">Coaching</span>';
+         if(dato.type== 2 ||dato.type== "2"){
+            types = '<span class="badge badge-training">Training</span>';
+        }else if(dato.type == 3 ||dato.type== "3"){
+            types = '<span class="badge badge-coaching">Coaching</span>';
         }
         return types;
     },
@@ -539,30 +544,33 @@ const success = {
             break;
         
             default:
-                var training2 = `<tr id="training_id${dato.id}" class="rowTraining">
+                var training2 = `<tr id="trainings_id${dato.id_user}" class="rowTraining">
                     <td style ="background:${dato.color}">${dato.client }</td>
                     <td>${dato.name} ${dato.lastname}</td>
                     <td>${dato.name_trainer} ${dato.lastname_trainer}</td>
                     <td style ="background:${dato.color}">${dato.time_s} - ${dato.time_e}</td>
+                    <td>${dato.setting}</td>
                     <td>${training.get_atwork(dato)}</td>
-                    <td>Zoom</td>
-                    <td>Activities</td>
+                    <td class="hidden-xs" >Zoom</td>
+                    <td class="hidden-xs" >Activities</td>
                     <td>${dato.end_training}</td>
+                    <td class="hidden-xs">${training.status(dato)}</td>
+                    <td>${training.button(dato)}</td>
                 </tr>`;
 
                 if (state == "add"){ 
                     $("#trainings-list").append(training2);
-                    $("#training_id"+dato.id).css("background-color", "#c3e6cb");    
+                    $("#trainings_id"+dato.id_user).css("background-color", "#c3e6cb");    
                 }else{
-                    $("#training_id"+dato.id).replaceWith(training2);
-                    $("#training_id"+dato.id).css("background-color", "#ffdf7e");  
+                    $("#trainings_id"+dato.id_user).replaceWith(training2);
+                    $("#trainings_id"+dato.id_user).css("background-color", "#ffdf7e");  
                 }
                 $('#traineeNewForm').trigger("reset");
                 $('#formTraining').hide();
                 $(".bodyIndex").show();
                 $("#btn_add").show();
 
-                if ($('.rowType').length == 0) {
+                if ($('.rowTraining').length == 0) {
                     $('#table-row').show();
                 }
                 break;
@@ -573,33 +581,39 @@ const success = {
     deactivated:function(data) {
         console.log(data);
         var dato = data;
-        if(dato.status != 0){
-            var setting = `<tr id="training_id${dato.id}">
-                <td>${dato.id}</td>
-                <td>${dato.name}</td>
-                <td>${dato.option}</td>
+        if(dato.status_user != 0){
+            var training2 =`<tr id="trainings_id${dato.id_user}" class="rowTraining">
+                <td style ="background:${dato.color}">${dato.client }</td>
+                <td>${dato.name} ${dato.lastname}</td>
+                <td>${dato.name_trainer} ${dato.lastname_trainer}</td>
+                <td style ="background:${dato.color}">${dato.time_s} - ${dato.time_e}</td>
+                <td>${dato.setting}</td>
+                <td>${training.get_atwork(dato)}</td>
+                <td class="hidden-xs" >Zoom</td>
+                <td class="hidden-xs" >Activities</td>
+                <td>${dato.end_training}</td>
                 <td class="hidden-xs">${training.status(dato)}</td>
                 <td>${training.button(dato)}</td>
             </tr>`;
           
-            $("#training_id"+dato.id).replaceWith(setting);
-            if(dato.status == 1){
+            $("#trainings_id"+dato.id_user).replaceWith(training2);
+            if(dato.status_user == 1 || dato.status_user == "1"){
                 color ="#c3e6cb";
-            }else if(dato.status == 2){
+            }else if(dato.status_user == 2 ||dato.status_user == "2"){
                 color ="#ed969e";
             }
-            $("#training_id"+dato.id).css("background-color", color); 
+            $("#trainings_id"+dato.id_user).css("background-color", color); 
 
-        }else if(dato.status == 0){
-            $("#training_id"+dato.id).remove();
+        }else if(dato.status_user == 0){
+            $("#trainings_id"+dato.id_user).remove();
             if ($('.rowTraining').length == 0) {
-                var training = `<tr id="table-row" class="text-center">
+                var training3 = `<tr id="table-row" class="text-center">
                                     <th colspan="7" class="text-center">
                                     <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
                                      </th>
                                 </tr>`;
 
-                $("#trainings-list").append(training);
+                $("#trainings-list").append(training3);
               }
         }
        

@@ -144,7 +144,8 @@
                     </div>
                   <div class="col-xl-2 col-xs-12 col-md-2 col-sm-12">
                       <h6>Number of Training Weeks:</h6>
-                      <input type="text" name="numWeek" id="numWeek" class="form-control">
+                      <input type="hidden" name="numWeek" id="numWeek" class="form-control">
+                      <input type="text" id="numWeek2" class="form-control" disabled="disabled">
                  </div>
                  <div class="col-xl-2 col-xs-12 col-md-2 col-sm-12">
                     <h6>Day Off:</h6>
@@ -163,7 +164,8 @@
                     </div>
                     <div class="col-xl-2 col-xs-12 col-md-2 col-sm-12">
                       <h6>Number of Coaching Weeks:</h6>
-                      <input type="text" name="numWeek_C" id="numWeek_C" class="form-control">
+                      <input type="hidden" name="numWeek_C" id="numWeek_C" class="form-control">
+                      <input type="text" id="numWeek_C2" class="form-control" disabled="disabled">
                     </div>
                 </div>
                 <hr/>
