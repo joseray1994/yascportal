@@ -1,5 +1,5 @@
     <!-- MODAL SECTION -->
-    <div class="col-sm-12" id="formCU" style="display:none">
+    <div class="col-sm-12" id="formTraining" style="display:none">
       <div class="">
         <div class="">
           <div class="modal-header" >
@@ -13,7 +13,7 @@
                   <div class="col-xl-4 col-xs-12 col-md-4 col-sm-12 form-group">
                     <label>Trainer</label>
                     <select name="id_trainer" id="id_trainer" class='form-control'>
-                      <option value="0">Select Trainer</option>
+                      <option value="">Select Trainer</option>
                       @foreach($trainers as $trainer)
                       <option value="{{$trainer->id}}">{{$trainer->User_info->name}} {{$trainer->User_info->last_name}}</option>
                       @endforeach
@@ -22,7 +22,7 @@
                   <div class="col-xl-4 col-xs-12 col-md-4 col-sm-12 form-group">
                     <label>Client</label>
                     <select name="id_client" id="id_client" class='form-control'>
-                      <option value="0">Select Client</option>
+                      <option value="">Select Client</option>
                       @foreach($clients as $client)
                       <option value="{{$client->id}}">{{$client->name}}</option>
                       @endforeach
@@ -308,8 +308,9 @@
             </div>
             <div class="modal-footer">
               <div class="text-center col-sm-12">
-                <button type="button"  class="btn btn-danger cancel-cu">Cancelar</button>
-                <button type="submit" class="btn btn-success" id="btn-save" value="add">Guardar</button>
+                <button type="button" class="btn btn-danger btn-cancel">Cancel</button>
+                <button type="submit" class="btn btn-success segunda-seccion" id="btn-save" value="add" style="display:none">Save</button>
+
               </div>
             </div>
 			    </form> 
