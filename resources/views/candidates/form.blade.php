@@ -96,28 +96,28 @@
 							<div class="col-md-3 mb-3">
 								<label>Typing Test</label>
 								<div class="input-group">
-									<input type="number" min="0" max="100" class="form-control has-error" onKeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;" id="typing_test" name="typing_test" placeholder="" value="" >
+									<input type="number" class="form-control has-error" onKeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;" id="typing_test" name="typing_test" placeholder="" value="" >
 								</div> 
 							</div>
 
 							<div class="col-md-3 mb-3">
 							<label>&nbsp</label>
 								<div class="input-group">
-									<input type="number" min="0" max="100" class="form-control has-error"  onKeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;" id="typing_test2" name="typing_test2" placeholder="" value="" >
+									<input type="number"  class="form-control has-error"  onKeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;" id="typing_test2" name="typing_test2" placeholder="" value="" >
 								</div> 
 							</div>
 
 							<div class="col-md-3 mb-3">
 							<label>&nbsp</label>
 								<div class="input-group">
-									<input type="number" min="0" max="100" class="form-control has-error"  onKeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;" id="typing_test3" name="typing_test3" placeholder="" value="" >
+									<input type="number"  class="form-control has-error"  onKeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;" id="typing_test3" name="typing_test3" placeholder="" value="" >
 								</div> 
 							</div>
 
 							<div class="col-md-3 mb-3">
 							<label>&nbsp</label>
 								<div class="input-group">
-									<input type="number" min="0" max="100" class="form-control has-error"  onKeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;" id="typing_test4" name="typing_test4" placeholder="" value="" >
+									<input type="number"  class="form-control has-error"  onKeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;" id="typing_test4" name="typing_test4" placeholder="" value="" >
 								</div> 
 							</div>
 							
