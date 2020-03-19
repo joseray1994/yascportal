@@ -55,7 +55,13 @@
                                                 <th>Detail</th>
                                             </tr>
                                         </thead>
-                                        <tbody id = 'incident-list'></tbody>
+                                        <tbody id = 'incident-list'>
+                                        </tbody>
+                                        <tr id="no-data" class="text-center">
+                                            <th colspan="8" class="text-center">
+                                                <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
+                                            </th>
+                                        </tr>
                                     </table>
                                     </div>
                                 </div>
