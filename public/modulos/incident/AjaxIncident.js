@@ -1,30 +1,70 @@
 $(document).ready(function(){
 
     // change view
+    var url = $('#url').val();
     var baseUrl = $('#baseUrl').val();
-    $("#btn-incident").click(function(e){
-        e.preventDefault();
-        $("#documenter_cover").hide();
-        $("#incidentReport").show();
-        $('#tag_put').remove();
 
-        var state = $('#btn-save-incident').val();
-        var my_url = baseUrl + '/incident';
-        incident.edit_create("POST",my_url,state,"");
-    });
-    
     select(baseUrl + '/reason', "#reason");
     select(baseUrl + '/supervisor', "#supervisor");
+
+    $("#btn-incident").click(function(e){
+        e.preventDefault();
+
+        swal({
+            title: "Warning",
+            text: "Are you sure to start an incident?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Ok",
+            cancelButtonText: "Cancel",
+            closeOnConfirm: true,
+            closeOnCancel: true
+        },
+        function(isConfirm) {
+            if (isConfirm) {                
+                $("#documenter_cover").hide();
+                $("#incidentReport").show();
+                $('#tag_put').remove();
+                
+                var state = $('#btn-save-incident').val();
+                var my_url = baseUrl + '/incident';
+                incident.edit_create("POST",my_url,state,"");
+            } 
+            else {
+                swal("Cancelled", "error");
+            }
+        });
+
+    });
+
+    $("#btn-cancel-incident").click(function(e){
+        e.preventDefault();
+        //borrar incidena
+        swal({
+            title: "Warning",
+            text: "Are you sure to cancel this incident?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Ok",
+            cancelButtonText: "Cancel",
+            closeOnConfirm: true,
+            closeOnCancel: true
+        },
+        function(isConfirm) {
+            if (isConfirm) {                
+                location.href = url;
+            } 
+        });
+       
+    })
 
     //SAVE OPERATOR
     $("#formIncident").on('submit',function (e) {
 
         e.preventDefault(); 
         
-        // $('#btn-save').attr('disabled', true);
-        
-        // var formData = new FormData(this);
-        // var formData = $("#formOperators").serialize();
+        $('#btn-save-incident').attr('disabled', true);
+
         var formData = {
             reason: $("#reason").val(),
             supervisor: $("#supervisor").val(),
@@ -37,7 +77,10 @@ $(document).ready(function(){
 
         incident.edit_create(type,my_url,state,formData);
     });
+
 }); 
+
+var timer;
 
 function select(myUrl, name){
     $.ajaxSetup({
@@ -62,8 +105,8 @@ function select(myUrl, name){
     });
 }
 function startTime(time_start){
-   
-    // var start = Date.now(); 
+    
+
     count = document.getElementById('labelTimer');
     labelDate = document.getElementById('labelDate');
     
@@ -72,7 +115,7 @@ function startTime(time_start){
     var date = moment(time_start).format('YYYY-MM-DD');
     labelDate.innerHTML = date;
 
-    var x = setInterval(function() {
+    timer = setInterval(function() {
         // Get todays date and time
         var now = new Date().getTime();
         var total = now - start;
@@ -95,6 +138,7 @@ function startTime(time_start){
         }
         count.innerHTML = hora + ":" + minutos + ":"+ segundos;
     }, 1000);
+    
 }
 
 const incident = {
@@ -118,18 +162,65 @@ const incident = {
 
 const result = {
     new_update : function(data) {
-        console.log(data);
+        // console.log(data);
+        $('#btn-save-incident').attr('disabled', false);
         switch(data.flag){
             case 1:
+                $("#btn-incident").attr('disabled', true);
+                $("#btn-incident").removeClass('icon-menu d-none d-sm-block d-md-none d-lg-block btn btn-danger');
+                $("#btn-incident").addClass('icon-menu d-none d-sm-block d-md-none d-lg-block btn btn-warning');
                 $('#tag_put').remove();
                 $form = $('#formIncident');
                 $form.append('<input type="hidden" id="tag_put" name="_method" value="PUT">');
                 startTime(data.incident.start);
                 swal("Warning", data.msg, "warning");
             break;
-            default:
-                startTime(data.start);
+            case 2:
+                var incident = `
+                    <tr>
+                        <td>${data.result.created_at}</td>
+                        <td>${data.result.name} ${data.result.last_name}</td>
+                        <td>${data.result.setting_name}</td>
+                        <td>${data.result.supervisor_name} ${data.result.supervisor_last_name}</td>
+                        <td>${data.result.duration}</td>
+                        <td>${data.result.start}</td>
+                        <td>${data.result.end}</td>
+                    </tr>
+                `;
 
+                $("#incident-list").append(incident);
+                $('#formIncident').trigger('reset');
+
+                $("#btn-incident").attr('disabled', false);
+                $("#btn-incident").removeClass('icon-menu d-none d-sm-block d-md-none d-lg-block btn btn-warning');
+                $("#btn-incident").addClass('icon-menu d-none d-sm-block d-md-none d-lg-block btn btn-danger');
+                
+                clearInterval(timer);
+                $("#labelTimer").html("00:00:00");
+                fecha = new Date();
+                var fecha = moment(fecha).format('YYYY-MM-DD');
+
+
+                $("#labelDate").html(fecha);
+                swal({
+                    title: "Success",
+                    text: "saved incidence",
+                    type: "success",
+                    showCancelButton: false,
+                    closeOnConfirm: true,
+                },
+                function(isConfirm) {
+                    if (isConfirm) {
+                        console.log("redirects..")
+                    } 
+                });
+
+            break;
+            case 3:
+                $("#btn-incident").attr('disabled', true);
+                $("#btn-incident").removeClass('icon-menu d-none d-sm-block d-md-none d-lg-block btn btn-danger');
+                $("#btn-incident").addClass('icon-menu d-none d-sm-block d-md-none d-lg-block btn btn-warning');
+                startTime(data.incident.start);
             break;
         }
     },

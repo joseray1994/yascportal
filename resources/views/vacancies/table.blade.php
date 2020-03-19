@@ -8,10 +8,10 @@
             <th>Options</th>
         </tr>
     </thead>
-  <tbody id="vacancy-list" style="word-break: break-word; ">
-        @foreach ($data as $vacancy)
-        <tr id="vacancy_id{{$vacancy->id}}">
-            <td>{{ $vacancy->id }}</td>
+    <tbody id="vacancy-list" style="word-break: break-word; ">
+        @forelse ($data as $vacancy)
+        <tr id="vacancy_id{{$vacancy->id}}" class="rowType">
+			<td>{{ $vacancy->id }}</td>
             <td style=" white-space: normal !important; word-wrap: break-word;">{{ $vacancy->name }}</td>
             <td style=" white-space: normal !important; word-wrap: break-word;" >{{ $vacancy->description }}</td>
             @switch($vacancy->status)
@@ -36,7 +36,15 @@
                 @break
             @endswitch
         </tr>
-        @endforeach
+        @empty
+            <tr id="table-row" class="text-center">
+                <th colspan="5" class="text-center">
+                    <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
+                </th>
+            </tr>
+        @endforelse
     </tbody>
 </table>
+
+
 {!! $data->render() !!}

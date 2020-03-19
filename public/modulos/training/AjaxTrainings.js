@@ -15,24 +15,36 @@ $(document).ready(function(){
 
     //display modal form for creating new product *********************
     $('#btn_add').click(function(){
-        $('#btn-save').val("add");
-        $('#traineeNewForm').trigger("reset");
         $('#myModalLabel').html(`Create New Trainee `);
-        // $("#image").attr('src','');
+        $('#btn-save').val("add");
+        $('#formTraining').show();
+        $("#btn_add").hide();
+        $('#btn-save').val("add");
+        $('#id_client').val("");
+        $('#id_client').trigger('change');
+        $('#traineeNewForm').trigger("reset");
         $(".bodyIndex").hide();
-        $('#formCU').show();
         $("#flag").val(false);
-
-        
+        $(".seccion-sugerencia").hide();
+        $(".segunda-seccion").hide();
+        $("#nickname").attr('disabled', true);
+        $(".btnGenerate").show();
+        $('#id_trainer').val("");
+        $('#id_trainer').trigger('change');
     });
        //display modal form for creating new product *********************
-    $('.cancel-cu').click(function(){
-        $('#btn-save').val("add");
-        $('#traineeNewForm').trigger("reset");
+    $('.btn-cancel').click(function(){
         $('#myModalLabel').html(`Create New Trainee`);
-        // $("#image").attr('src','');
-        $('#formCU').hide();
+        $('#formTraining').hide();
         $(".bodyIndex").show();
+        $('#traineeNewForm').trigger("reset");
+        $('#btn-save').val("add");
+        $(".seccion-sugerencia").hide();
+        $("#btn_add").show();
+        $('#id_client').val("");
+        $('#id_client').trigger('change');
+        $('#id_trainer').val("");
+        $('#id_trainer').trigger('change');
     });
 
     $('#dateSearch').change(function(){
@@ -44,7 +56,7 @@ $(document).ready(function(){
         var weekday = fecha.getDay();
          $('#daySearch').val(weekday);
          $('#daySearch').trigger('change');
-         
+
 
         training.get_data(1);
     });
@@ -489,18 +501,25 @@ const training ={
                 console.log(err);
             }
         });
-    }
+    },
+    get_atwork: function(dato){
+        var types='';
+         if(dato.type== 2){
+            types += '<span class="badge badge-training">Training</span>';
+        }else if(dato.type == 3){
+            types += '<span class="badge badge-coaching">Coaching</span>';
+        }
+        return types;
+    },
 }
 const success = {
 
     new_update: function (data,state){
         console.log(data);
         var dato = data;
-        var typename =$('#name').val();
-        var type =$('#id_option').val();
         $('#btn-save').attr('disabled', false);
-
-
+        $("#table-row").remove();
+        $.notifyClose();
         switch (dato.No) {
             case 1:
                 swal({
@@ -511,27 +530,41 @@ const success = {
                   });
                 break;
             case 2:
-            
+                swal({
+                    title: "Error",
+                    text: dato.msg,
+                    type: "error",
+    
+                  });
             break;
         
             default:
-                var setting = `<tr id="training_id${dato.id}">
-                    <td>${dato.id}</td>
-                    <td>${dato.name}</td>
-                    <td>${dato.option}</td>
-                    <td class="hidden-xs">${settings2.status(dato)}</td>
-                    <td>${settings2.button(dato)}</td>
+                var training2 = `<tr id="training_id${dato.id}" class="rowTraining">
+                    <td style ="background:${dato.color}">${dato.client }</td>
+                    <td>${dato.name} ${dato.lastname}</td>
+                    <td>${dato.name_trainer} ${dato.lastname_trainer}</td>
+                    <td style ="background:${dato.color}">${dato.time_s} - ${dato.time_e}</td>
+                    <td>${training.get_atwork(dato)}</td>
+                    <td>Zoom</td>
+                    <td>Activities</td>
+                    <td>${dato.end_training}</td>
                 </tr>`;
 
                 if (state == "add"){ 
-                    $("#settings-list").append(setting);
+                    $("#trainings-list").append(training2);
                     $("#training_id"+dato.id).css("background-color", "#c3e6cb");    
                 }else{
-                    $("#training_id"+dato.id).replaceWith(setting);
+                    $("#training_id"+dato.id).replaceWith(training2);
                     $("#training_id"+dato.id).css("background-color", "#ffdf7e");  
                 }
-                $('#formCU').hide();
+                $('#traineeNewForm').trigger("reset");
+                $('#formTraining').hide();
                 $(".bodyIndex").show();
+                $("#btn_add").show();
+
+                if ($('.rowType').length == 0) {
+                    $('#table-row').show();
+                }
                 break;
         }
         
@@ -545,8 +578,8 @@ const success = {
                 <td>${dato.id}</td>
                 <td>${dato.name}</td>
                 <td>${dato.option}</td>
-                <td class="hidden-xs">${settings2.status(dato)}</td>
-                <td>${settings2.button(dato)}</td>
+                <td class="hidden-xs">${training.status(dato)}</td>
+                <td>${training.button(dato)}</td>
             </tr>`;
           
             $("#training_id"+dato.id).replaceWith(setting);
@@ -566,7 +599,7 @@ const success = {
                                      </th>
                                 </tr>`;
 
-                $("#training-list").append(training);
+                $("#trainings-list").append(training);
               }
         }
        

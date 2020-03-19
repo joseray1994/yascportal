@@ -144,6 +144,9 @@ return [
         'id_client' => [
             'required' => 'Choose Client',
         ],
+        'id_trainer' => [
+            'required' => 'Choose Trainer',
+        ],
     ],
 
     /*

@@ -9,7 +9,7 @@
 				<form enctype="multipart/form-data" method="POST" id="candidateForm" class="form-horizontal">
 					<div class="modal-body">
 
-						<div class="col-md-6 mb-3">
+					
 						<div class="col-md-6 mb-3">
                             <div class="input-group">
                                         @foreach ($vacancies as $vac)
@@ -17,7 +17,7 @@
                                         @endforeach
                             </div> 
                         </div>
-                        </div>
+                 
 					
 						<div class="form-row">
 							<div class="col-md-6 mb-3">

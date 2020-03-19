@@ -170,7 +170,8 @@
                                             <textarea name="note" id="note" rows="4" class="form-control"></textarea>
                                         </div>
                                         <div class="form-group col-sm-12 text-center">
-                                            <button type="submit" class="btn btn-success segunda-seccion" id="btn-save-incident" value="add">Save</button>
+                                            <button type="button" class="btn btn-danger" id="btn-cancel-incident">Cancel</button>
+                                            <button type="submit" class="btn btn-success" id="btn-save-incident" value="add">Save</button>
                                         </div>
                                     </form>
                                 </div>
