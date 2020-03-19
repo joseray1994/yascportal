@@ -19,10 +19,10 @@ class ScheduleTimeClock extends Migration
             $table->integer('id_schedule_detail')->nullable();
             $table->integer('id_operator')->nullable();
             $table->integer('id_client')->nullable();
-            $table->dateTime('date_start')->nullable();
-            $table->dateTime('date_end')->nullable();
+            $table->time('date_start')->nullable();
+            $table->time('date_end')->nullable();
             $table->float('duration')->nullable();
-            $table->integer('type');
+            $table->integer('type')->nullable();
             $table->integer('status')->nullable();
             $table->timestamps();
         });

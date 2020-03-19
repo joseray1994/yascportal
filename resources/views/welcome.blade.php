@@ -76,12 +76,24 @@
                     {{-- <li>
                         <a href="/schedule" class="icon-menu d-none d-sm-block d-md-none d-lg-block"><i class="icon-earphones-alt"></i></a>
                     </li> --}}
-                    <li class='startShift'>
-                        <button class="icon-menu d-none d-sm-block d-md-none d-lg-block btn btn-success" id="startShift"><i class="icon-call-in text-white"></i></button>
-                    </li>
-                    <li class='endShift' style="display:none">
-                        <button class="icon-menu d-none d-sm-block d-md-none d-lg-block  btn btn-warning"  id="endShift"><i class="icon-call-out text-white"></i></button>
-                    </li>
+                    @if($menu['shift'] == true)
+                        <li class='endShift'>
+                            <button class="icon-menu d-none d-sm-block d-md-none d-lg-block  btn btn-warning"  id="endShift"><i class="icon-call-out text-black"></i></button>
+                        </li>
+                        <li class='startShift' style="display:none">
+                            <button class="icon-menu d-none d-sm-block d-md-none d-lg-block btn btn-success" id="startShift"><i class="icon-call-in text-white"></i></button>
+                        </li>
+                    @else
+
+                        <li class='startShift'>
+                            <button class="icon-menu d-none d-sm-block d-md-none d-lg-block btn btn-success" id="startShift"><i class="icon-call-in text-white"></i></button>
+                        </li>
+                        <li class='endShift' style="display:none">
+                            <button class="icon-menu d-none d-sm-block d-md-none d-lg-block  btn btn-warning"  id="endShift"><i class="icon-call-out text-black"></i></button>
+                        </li>
+
+                    @endif
+                    
                     <li>
                         <a href="https://yascemail.com/" class="icon-menu d-none d-sm-block"><i class="icon-envelope"></i></a>
                     </li>                                     

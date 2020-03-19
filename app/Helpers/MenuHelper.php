@@ -5,6 +5,7 @@ use App\User;
 use App\User_info;
 use App\AssignamentTypeModel;
 use App\ActionModel;
+use App\TimeClockModel;
 use App\BaDetailModel;
 use Illuminate\Support\Facades\Auth;
 use App\TypeUserModel;
@@ -17,6 +18,8 @@ if (!function_exists('menu')) {
         $usertypes = TypeUserModel::where('id',$user->id_type_user)->where('status',1)->count(); 
 
         if($usertypes == 1 && $user->id_status == 1){
+
+            $shift_status = TimeClockModel::where('id_operator',$user->id)->where('status',1)->exists();
 
             $valaccess=AssignamentTypeModel::where('id_type_user',$user->id_type_user)->where('id_menu',$id_menu)->where('status',1)->exists();
 
@@ -47,6 +50,7 @@ if (!function_exists('menu')) {
               'typeuser'=>$type,
               'dataUser'=>$dataUser,
               'actions'=>$bas,
+              'shift'=>$shift_status
             ];
         }else{
                
@@ -60,6 +64,7 @@ if (!function_exists('menu')) {
         }
             return $menu;
     }
+
 
     function lote($user,$id_menu)
     {
