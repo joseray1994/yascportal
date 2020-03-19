@@ -128,7 +128,7 @@ const actions ={
             type: "GET",
             url:my_url,
             success: function (data) {
-                success.modal(data,action);
+                success.modal(data,action="");
             },
             error: function (data) {
                 console.log('Error:', data);
