@@ -1,6 +1,7 @@
 
 $(document).ready(function(){
     clearload();
+ 
     var nameDeli='<a href="/weekly">Schedule Weekly</i></a>';
     $('.nameDeli').html(nameDeli);
     $('#sidebar5').addClass('active') 
@@ -49,16 +50,15 @@ $(document).ready(function(){
          $('#daySearch').trigger('change');
     });
 
-    $('.scheduleWeeklySearch').change(function(){
-       
+    $('.scheduleWeeklySearch').bind("keyup change",function(){
         schedule.get_data(1);
     });
-    $('.AuditSearch').change(function(){
+    $('.AuditSearch').bind("keyup change",function(){
         var my_url= baseUrl + '/detail/' +  $('#auditid').val();
         schedule.get_data_audit(my_url);
     });
 
-    $('.timeinputsdataExtra').change(function(){
+    $('.timeinputsdataExtra').bind("keyup change",function(){
         var formData={
             time_start: $('#time_startE').val(),
             hours:$('#hours').val(),
@@ -67,7 +67,7 @@ $(document).ready(function(){
         schedule.calculateEnd_time(baseUrl,formData);
     });
 
-    $('.timeinputsdata').change(function(){
+    $('.timeinputsdata').bind("keyup change", function(){
         var formData={
             time_start: $('#time_startEx').val(),
             hours:$('#hoursEx').val(),
@@ -75,6 +75,7 @@ $(document).ready(function(){
             }
         schedule.calculateEnd_time(baseUrl,formData);
     });
+   
 
     //display modal form for product EDIT ***************************
     $(document).on('click','.open_modal',function(){
@@ -86,16 +87,6 @@ $(document).ready(function(){
        
     });
     
-    $(window).on('hashchange', function() {
-        if (window.location.hash) {
-            var page = window.location.hash.replace('#', '');
-            if (page == Number.NaN || page <= 0) {
-                return false;
-            }else{
-                schedule.get_data(page);
-            }
-        }
-    });
     //create new product / update existing product ***************************
     $("#typeUserForm").on('submit',function (e) {
         e.preventDefault(); 
@@ -199,9 +190,9 @@ const schedule ={
     status:function(dato){
         var status='';
         if(dato.status== 1){
-            status +="<span class='badge badge-success'>Activated</span>";
+            status +='<span class="badge badge-pill badge-success">Day on</span>';
         }else if(dato.status == 2){
-            status +="<span class='badge badge-secondary'>Deactivated</span>";
+            status +='<span class="badge badge-pill badge-secondary">Day off</span>';
         }
        return status;
     },
@@ -240,7 +231,7 @@ const schedule ={
                   alert('No response from server');
             });
         },
-        get_data_audit: function(my_url){
+    get_data_audit: function(my_url){
             var formData={
                 date: $('#dateSearchaudit').val(),
                 time:$('#timeSearchaudit').val(),
@@ -354,6 +345,7 @@ const success = {
                                     <td>${dato.ed.detail.day}</td>
                                     <td>${dato.ed.detail.time_s}</td>
                                     <td>${dato.ed.detail.time_e}</td>
+                                    <td class="hidden-xs">${schedule.status(dato.ed.detail)}</td>
                                     <td class="hidden-xs">${schedule.type(dato.ed.detail)}</td>
                                     <td>${schedule.button(dato.ed.detail)}</td>
                                 </tr>`;
@@ -362,32 +354,40 @@ const success = {
                     $('#myModal2').modal('hide')
             break;
             case 2:
-                    var profile = `<tr id="shcedule_id${dato.wd.detail.id}">
-                                        <td>${dato.wd.detail.name} ${dato.wd.detail.lastname}</td>
-                                        <td style ="background:${dato.wd.detail.color}">${dato.wd.detail.client}</td>
-                                        <td>${dato.wd.detail.day}</td>
-                                        <td>${dato.wd.detail.time_s}</td>
-                                        <td>${dato.wd.detail.time_e}</td>
-                                        <td class="hidden-xs">${schedule.type(dato.wd.detail)}</td>
-                                        <td>${schedule.button(dato.wd.detail)}</td>
-                                    </tr>`;
-                    $("#shcedule_id"+dato.wd.detail.id).replaceWith(profile);
-                    $("#shcedule_id"+dato.wd.detail.id).css("background-color", "#ffdf7e");
-                    
-                    if(dato.ed != 0){
-                        var profile = `<tr id="shcedule_id${dato.ed.detail.id}">
-                                        <td>${dato.ed.detail.name} ${dato.ed.detail.lastname}</td>
-                                        <td style ="background:${dato.wd.detail.color}">${dato.ed.detail.client}</td>
-                                        <td>${dato.ed.detail.day}</td>
-                                        <td>${dato.ed.detail.time_s}</td>
-                                        <td>${dato.ed.detail.time_e}</td>
-                                        <td class="hidden-xs">${schedule.type(dato.ed.detail)}</td>
-                                        <td>${schedule.button(dato.ed.detail)}</td>
+                    if($('#daySearch').val() =="allDays"){
+                        schedule.get_data(1);
+                    }else{
+                        var profile = `<tr id="shcedule_id${dato.wd.detail.id}">
+                                            <td>${dato.wd.detail.name} ${dato.wd.detail.lastname}</td>
+                                            <td style ="background:${dato.wd.detail.color}">${dato.wd.detail.client}</td>
+                                            <td>${dato.wd.detail.day}</td>
+                                            <td>${dato.wd.detail.time_s}</td>
+                                            <td>${dato.wd.detail.time_e}</td>
+                                            <td class="hidden-xs">${schedule.status(dato.wd.detail)}</td>
+                                            <td class="hidden-xs">${schedule.type(dato.wd.detail)}</td>
+                                            <td>${schedule.button(dato.wd.detail)}</td>
                                         </tr>`;
-                            $("#shcedule-list").prepend(profile);
-                            $("#shcedule_id"+dato.ed.detail.id).css("background-color", "#c3e6cb");    
+
+                        $("#shcedule_id"+dato.wd.detail.id).replaceWith(profile);
+                        $("#shcedule_id"+dato.wd.detail.id).css("background-color", "#ffdf7e");
+                        
+                        if(dato.ed != 0){
+                            var profile = `<tr id="shcedule_id${dato.ed.detail.id}">
+                                            <td>${dato.ed.detail.name} ${dato.ed.detail.lastname}</td>
+                                            <td style ="background:${dato.wd.detail.color}">${dato.ed.detail.client}</td>
+                                            <td>${dato.ed.detail.day}</td>
+                                            <td>${dato.ed.detail.time_s}</td>
+                                            <td>${dato.ed.detail.time_e}</td>
+                                            <td class="hidden-xs">${schedule.status(dato.ed.detail)}</td>
+                                            <td class="hidden-xs">${schedule.type(dato.ed.detail)}</td>
+                                            <td>${schedule.button(dato.ed.detail)}</td>
+                                            </tr>`;
+                                $("#shcedule-list").prepend(profile);
+                                $("#shcedule_id"+dato.ed.detail.id).css("background-color", "#c3e6cb");    
+                        }
+    
                     }
-                    
+                   
                 
                     $('#myModal').modal('hide')
             break;
@@ -403,8 +403,7 @@ const success = {
                     });
             break;
         }
-        
-        
+       
     },
 
     deactivated:function(data) {

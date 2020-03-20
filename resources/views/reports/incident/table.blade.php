@@ -11,7 +11,7 @@
             <th scope="col" >Note</th>
         </tr>
     </thead>
-    <tbody id="shcedule-list" class="table-data" >
+    <tbody id="incident-list" class="table-data" >
         @forelse($reports as $report)
         <tr id="report_id{{$report->id}}">
             <td scope="row" >{{ $report->name }} {{ $report->last_name }}</td>

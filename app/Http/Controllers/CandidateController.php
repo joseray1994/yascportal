@@ -216,6 +216,15 @@ class CandidateController extends Controller
 
     public function update(Request $request, $id,$candidate_id)
     {
+
+         $answer=CandidateController::ValidateExtraCandidate($request,0);
+  
+        if(CandidateController::ValidateExtraCandidate($request,$candidate_id)){
+
+            return response()->json($answer);
+
+        }else{
+        
        
             CandidateController::validateCandidate($request,$candidate_id);
             $candidate = CandidateModel::find($candidate_id);
@@ -239,7 +248,7 @@ class CandidateController extends Controller
             $candidate2 = CandidateController::resultdata($id);
 
             return response()->json($candidate2);
-        
+        }
         
     }
     
