@@ -125,7 +125,7 @@ class ReportsController extends Controller
             return view('reports.incident.table', ["reports"=>$data]);
         }
 
-        return view('reports.incident.incidents', ["menu"=>$menu, "days"=>$days, "reports" => $data, "clients" => $clients, "operators" => $operators]);
+        return view('reports.incident.index', ["menu"=>$menu, "days"=>$days, "reports" => $data, "clients" => $clients, "operators" => $operators]);
         }
         else
         {
@@ -135,7 +135,25 @@ class ReportsController extends Controller
 
     //Attendance Reports
     public function attendance_report(Request $request){
-        $attendance = ScheduleModel::all();
+        $user = Auth::user();
+        $clients = ClientModel::all();
+        $operators = User_info::select('users_info.id_user as id_user',
+                                       'users_info.name as name', 
+                                       'users_info.last_name as last_name',
+                                       )
+                                ->join('users as user', 'user.id', '=', 'users_info.id_user')   
+                                ->where('user.id_type_user', 9)
+                                ->get();    
+        
+        $id_menu=12;
+        $menu = menu($user,$id_menu);
+        if($menu['validate']){   
+
+                return view('reports.attendance.index', ["menu"=>$menu,  "clients" => $clients, "operators" => $operators]);
+        }else{
+            return redirect('/');
+        }
+       
     }
 
    
