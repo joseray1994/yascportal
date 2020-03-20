@@ -217,15 +217,8 @@ class CandidateController extends Controller
     public function update(Request $request, $id,$candidate_id)
     {
 
-    //     $var = count(CandidateController::ValidateExtraCandidate($request,$candidate_id));
-    //   //  dd($var);
          $answer=CandidateController::ValidateExtraCandidate($request,0);
-      
-    //     if($var>0){
-
-    //           return response()->json($answer);
-
-    //     }else{
+  
         if(CandidateController::ValidateExtraCandidate($request,$candidate_id)){
 
             return response()->json($answer);
