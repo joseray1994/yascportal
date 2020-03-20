@@ -1,13 +1,4 @@
-
-    // var nameDeli='<a href="/training">Training</i></a>';
-    // $('.nameDeli').html(nameDeli);
-    // $('#sidebar10').addClass('active');  
-
-    //get base URL *********************
-    // var url = $('#url').val();
-    //  $('.js-example-basic-single').select2();
-    // $('.js-example-basic-multiple').select2();
-    var baseUrl = $('#baseUrl').val();
+var baseUrl = $('#baseUrl').val();
 
     //display modal form for creating new product *********************
     $('#startShift').click(function(){
@@ -38,8 +29,16 @@
                       $('.endShift').show();
                     },
                     error: function(err){
-                        
-                        console.log(err);
+                        console.log(err.responseJSON.error);
+                        $.notifyClose();
+                            $.notify({
+                                // options
+                                title: "Error!",
+                                message:err.responseJSON.error,
+                            },{
+                                // settings
+                                type: 'danger'
+                            });
                     }
                 });
             } 

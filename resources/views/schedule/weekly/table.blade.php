@@ -6,6 +6,7 @@
             <th scope="col" >Day</th>
             <th scope="col" >Log in</th>
             <th scope="col" >Log out</th>
+            <th scope="col" >Note</th>
             <th scope="col" >Work Type</th>
             <th>Options</th>
         </tr>
@@ -18,6 +19,12 @@
             <td>{{ $type->day }}</td>
             <td>{{ $type->time_s }}</td>
             <td>{{ $type->time_e }}</td>
+            <td>@if($type->status == 2)
+                    <span class="badge badge-pill badge-secondary">Day off</span>
+                @elseif($type->status == 1)
+                     <span class="badge badge-pill badge-success">Day on</span>
+                @endif
+            </td>
             @switch($type->type)
                     @case(1)
                     <td> <span class="badge badge-light">Workday</span></td>
@@ -54,7 +61,7 @@
         </tr>
         @empty
             <tr id="table-row" class="text-center">
-                <th colspan="8" class="text-center">
+                <th colspan="9" class="text-center">
                     <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
                 </th>
             </tr>

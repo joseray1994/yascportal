@@ -96,27 +96,81 @@ class CandidateController extends Controller
     }
 
 
-    public function validateCandidate($request, $candidate_id){
+    public function validateCandidate($request){
         //$user=='' ? $email = 'required|email|unique:users,email,NULL,id,id_status,1 | unique:users,email,'.$user.',id,id_status,2' :  $email = 'sometimes|required|unique:users,email,'.$user.',id,id_status,1 | unique:users,email,'.$user.',id,id_status,2';
         $this->validate(request(), [
            'id_vacancy' => 'required',
             'name' => 'required|max:30',
             'last_name' => 'required|max:30',
-            'phone' => 'required|max:12|regex:/^[0-9]{0,20}(\.?)[0-9]{0,2}$/|unique:candidates,phone,'.$candidate_id,
-            'mail' => 'required|email|unique:candidates,mail,'.$candidate_id,
+            //'phone' => 'required|max:12|regex:/^[0-9]{0,20}(\.?)[0-9]{0,2}$/|unique:candidates,phone,'.$candidate_id,
+            'phone' => 'required|max:12|regex:/^[0-9]{0,20}(\.?)[0-9]{0,2}$/',
+            //'mail' => 'required|email|unique:candidates,mail,'.$candidate_id,\
+            'mail' => 'required|email',
             'channel' => 'required',
             'listening_test' => 'required',
             'grammar_test' => 'required',
-            'typing_test' => 'required|max:3',
-            'typing_test2' => 'required|max:3',
-            'typing_test3' => 'required|max:3',
-            'typing_test4' => 'required|max:3',
+            'typing_test' => 'required|numeric|min:0|max:100',
+            'typing_test2' => 'required|numeric|min:0|max:100',
+            'typing_test3' => 'required|numeric|min:0|max:100',
+            'typing_test4' => 'required|numeric|min:0|max:100',
         ]); 
        
     }
 
+    public function ValidateExtraCandidate($request,$candidate_id){
+        $ExtraCandidateValidation=[]; 
+        $p ="";
+        $e ="";
+        $data = [];
+
+        $phone = CandidateModel::where('phone', $request->phone)
+        ->whereIn('status', [1,2]);
+
+        $mail = CandidateModel::where('mail', $request->mail)
+        ->whereIn('status', [1,2]);
+
+        if($candidate_id > 0){
+            $phone->where('id','!=',$candidate_id);
+        }
+        if($candidate_id > 0){
+            $mail->where('id','!=',$candidate_id);
+        }
+            
+        $phoneV = $phone->count();
+        $emailV = $mail->count();
+
+        if($phoneV > 0){      
+            $p = 'Another user type already has that Phone';
+            
+        }
+        if($emailV > 0){      
+            $e = 'Another user type already has that Email';
+            
+        }
+        if($p=='' && $e==''){
+            $data=[];
+
+          }else{
+              $data=[
+                  'No' =>2,
+                  'phone'=>$p,
+                  'email'=>$e,
+                ];
+
+              array_push($ExtraCandidateValidation,$data);
+          }
+        return $ExtraCandidateValidation;
+    }
+
     public function store(Request $request)
     {      
+        $answer=CandidateController::ValidateExtraCandidate($request,0);
+      
+        if($answer){
+
+              return response()->json($answer);
+
+        }else{
             $candidate_id="";
             CandidateController::validateCandidate($request,$candidate_id);
             $candidate = CandidateModel::firstOrCreate([
@@ -139,6 +193,7 @@ class CandidateController extends Controller
             $candidate2 = CandidateController::resultdata($id);
 
             return response()->json($candidate2);
+        }
       
     }
 
@@ -161,6 +216,22 @@ class CandidateController extends Controller
 
     public function update(Request $request, $id,$candidate_id)
     {
+
+    //     $var = count(CandidateController::ValidateExtraCandidate($request,$candidate_id));
+    //   //  dd($var);
+         $answer=CandidateController::ValidateExtraCandidate($request,0);
+      
+    //     if($var>0){
+
+    //           return response()->json($answer);
+
+    //     }else{
+        if(CandidateController::ValidateExtraCandidate($request,$candidate_id)){
+
+            return response()->json($answer);
+
+        }else{
+        
        
             CandidateController::validateCandidate($request,$candidate_id);
             $candidate = CandidateModel::find($candidate_id);
@@ -184,6 +255,7 @@ class CandidateController extends Controller
             $candidate2 = CandidateController::resultdata($id);
 
             return response()->json($candidate2);
+        }
         
     }
     
