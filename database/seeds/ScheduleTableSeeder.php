@@ -4,6 +4,7 @@ use Illuminate\Database\Seeder;
 use App\User;
 use App\User_client;
 use App\ScheduleModel;
+use App\ScheduleDetailModel;
 use App\DaysModel;
 use Carbon\Carbon; 
 
@@ -18,106 +19,142 @@ class ScheduleTableSeeder extends Seeder
     public function run()
     {
 
-        $now1 = Carbon::now();
-        $now2 = Carbon::now();
-        $now3 = Carbon::now();
-        $now4 = Carbon::now();
-        $now5 = Carbon::now();
-
-        DB::table('schedule')->truncate();
-        DB::table('detail_schedule_user')->truncate();
-
-        $operators = User_client::select('users_client.id', 'users_client.id_client')
+       
+       
+        
+        // OBTENER TODOS LOS OPERADORES ACTIVOS
+        $operators = User_client::select('users_client.id_user as id_user', 'users_client.id_client as id_client')
             ->join('users', 'users_client.id_user', '=', 'users.id')
             ->where('users.id_type_user', 9)
             ->where('users.id_status', 1)
             ->get();
 
+        // CICLO PARA CREAR SCHEDULE
         foreach ($operators as $operator) { 
 
-            $schedules = [
-                [
-                    // 'id_trainer' => 1, 
-                    'id_operator' => $operator['id'], 
-                    'id_client' => $operator['id_client'], 
-                    'date_start' => $now1->startOfWeek(Carbon::SUNDAY), 
-                    'date_end' => $now2->endOfWeek(Carbon::SATURDAY), 
-                    'type_schedule' => '1', 
-                    'week' => $now3->weekOfYear, 
-                    'month' => $now4->month, 
-                    'year' => $now5->year, 
-                    'status' => '1'
-                ]
-            ];
-            DB::table('schedule')->insert($schedules);
+            //VALIDAR SI TIENE SCHEDULE, SI TIENE, PARTIR DE ESE, SINO INICIAR EN 0
+            $validaSchedule = ScheduleModel::where('id_operator', $operator['id_user'])->where('type_schedule', 1)->where('status', 1)->exists();
             
-        }
+            if($validaSchedule){
 
-        $schedules = ScheduleModel::select('id', 'id_operator')->where('status', 1)->get();
-        $days = DaysModel::select('id')->get();
+                $now = Carbon::now();
 
-        foreach ($schedules as $schedule) {
+                $validaScheduleThisWeek = ScheduleModel::where('id_operator', $operator['id_user'])->where('type_schedule', 1)->where('status', 1)->whereDate('date_start', Carbon::parse($now)->startOfWeek(Carbon::SUNDAY))->exists();
 
-            foreach($days as $day){
-
-                $detail = [
-                [
-                    "id_schedule"=>$schedule['id'],
-                    "id_operator"=>$schedule['id_operator'],
-                    "id_day"=>$day['id'],
-                    "time_start"=>'08:00:00',
-                    "time_end"=>'16:30:00',
-                    "type_daily"=>1,
-                    "option"=>1,
-                    "status"=>1,
-                    ]
-                ];
-                DB::table('detail_schedule_user')->insert($detail);
+                //VALIDAR QUE NO EXISTA SCHEDULE ESTA SEMANA
+                if(!$validaScheduleThisWeek){
+                    // OBTENER ULTIMA SEMANA PARA PARTIR DE ESOS DATOS
+                    $startLastWeek = Carbon::parse($now)->subWeek()->startOfWeek(Carbon::SUNDAY);
+                    $endLastWeek = Carbon::parse($now)->subWeek()->endOfWeek(Carbon::SATURDAY);
+                    
+                    $getIdSchedules = ScheduleModel::where('id_operator', $operator['id_user'])->where('type_schedule', 1)->where('status', 1)->whereDate('date_start', $startLastWeek)->first();
+    
+                    $getScheduleDetail = ScheduleDetailModel::where('id_schedule', $getIdSchedules['id'])->get();
+    
+                    // CREAR SCHEDULE DE SEMANA UNO
+                    $schedulesSemanaUno = ScheduleModel::Create([
+                        'id_operator' => $operator['id_user'], 
+                        'id_client' => $operator['id_client'],
+                        'date_start' => Carbon::parse($now)->startOfWeek(Carbon::SUNDAY),
+                        'date_end' => Carbon::parse($now)->endOfWeek(Carbon::SATURDAY),
+                        'type_schedule' => '1',
+                        'week' =>Carbon::parse($now)->weekOfYear,
+                        'month' => Carbon::parse($now)->month,
+                        'year' => Carbon::parse($now)->year,
+                        'status' => '1'
+                    ]) ;
+    
+                    // CREAR DETALLES DE LA SEMANA UNO
+                    foreach ($getScheduleDetail as $detailSchedule) {
+    
+                        $detail = ScheduleDetailModel::Create([
+                            "id_schedule"=>$schedulesSemanaUno->id,
+                            "id_operator"=>$detailSchedule['id_operator'],
+                            "id_day"=>$detailSchedule['id_day'],
+                            "time_start"=>$detailSchedule['time_start'],
+                            "time_end"=>$detailSchedule['time_end'],
+                            "hours"=>$detailSchedule['hours'],
+                            "minutes"=>$detailSchedule['minutes'],
+                            "type_daily"=>$detailSchedule['type_daily'],
+                            "option"=>$detailSchedule['option'],
+                            "status"=>1,
+                        ]);
+                    }
+                }
+                
             }
+            else{
+                //CREAR EL SCHEDULE DESDE 0
+
+                $now = Carbon::now();
+    
+                // CREAR SCHEDULE DE SEMANA UNO
+                $schedulesSemanaUno = ScheduleModel::Create([
+                    'id_operator' => $operator['id_user'], 
+                    'id_client' => $operator['id_client'],
+                    'date_start' => Carbon::parse($now)->startOfWeek(Carbon::SUNDAY),
+                    'date_end' => Carbon::parse($now)->endOfWeek(Carbon::SATURDAY),
+                    'type_schedule' => '1',
+                    'week' =>Carbon::parse($now)->weekOfYear,
+                    'month' => Carbon::parse($now)->month,
+                    'year' => Carbon::parse($now)->year,
+                    'status' => '1'
+                ]);
+    
+                // OBTENER LOS DIAS DE LA SEMANA
+                $days = DaysModel::select('id')->get();
+                
+                // CREAR DETALLES DE LA SEMANA UNO
+                foreach($days as $day){
+    
+                    $detail = [
+                    [
+                        "id_schedule"=>$schedulesSemanaUno->id,
+                        "id_operator"=>$operator['id_user'], 
+                        "id_day"=>$day['id'],
+                        "time_start"=>'08:00:00',
+                        "time_end"=>'16:30:00',
+                        "type_daily"=>1,
+                        "option"=>1,
+                        "status"=>1,
+                        ]
+                    ];
+                    DB::table('detail_schedule_user')->insert($detail);
+                }   
+            }            
         }
 
         //CLONAR EL SCHEDULE ANTERIOR 
-        //OBTENER SCHEDULE ANTERIOR DE USUARIO ACTIVOS
-        $schedules = ScheduleModel::where('status', 1)->get();
+
+
+        
+        // //OBTENER SCHEDULE ANTERIOR DE USUARIO ACTIVOS
+        // $schedules3 = ScheduleModel::where('status', 1)->get();
 
   
-        foreach($schedules as $schedule){
-            $nextStartWeek = Carbon::parse($schedule['date_start'])->addWeek();
-            $nextEndWeek = Carbon::parse($schedule['date_end'])->addWeek();
-            $next2StartWeek = Carbon::parse($schedule['date_start'])->addWeeks(2);
-            $next2EndWeek = Carbon::parse($schedule['date_end'])->addWeeks(2);
+        // foreach($schedules3 as $schedule){
+        //     $nextStartWeek = Carbon::parse($schedule['date_start'])->addWeek();
+        //     $nextEndWeek = Carbon::parse($schedule['date_end'])->addWeek();
+        //     $next2StartWeek = Carbon::parse($schedule['date_start'])->addWeeks(2);
+        //     $next2EndWeek = Carbon::parse($schedule['date_end'])->addWeeks(2);
 
-            $schedules = [
-                [
-                    // 'id_trainer' => $schedule['id_trainer'], 
-                    'id_operator' => $schedule['id_operator'], 
-                    'id_client' => $schedule['id_client'], 
-                    'date_start' => $nextStartWeek, 
-                    'date_end' =>  $nextEndWeek, 
-                    'type_schedule' => $schedule['type_schedule'], 
-                    'week' => $nextEndWeek->weekOfYear, 
-                    'month' => $nextEndWeek->month, 
-                    'year' => $nextEndWeek->year, 
-                    'status' =>1
-                ]
-            ];
-            DB::table('schedule')->insert($schedules);
-            $schedules = [
-                [
-                    // 'id_trainer' => $schedule['id_trainer'], 
-                    'id_operator' => $schedule['id_operator'], 
-                    'id_client' => $schedule['id_client'], 
-                    'date_start' => $next2StartWeek, 
-                    'date_end' =>  $next2EndWeek, 
-                    'type_schedule' => $schedule['type_schedule'], 
-                    'week' => $next2EndWeek->weekOfYear, 
-                    'month' => $next2EndWeek->month, 
-                    'year' => $next2EndWeek->year, 
-                    'status' =>1
-                ]
-            ];
-            DB::table('schedule')->insert($schedules);
-        }
+        //     $schedules4 = [
+        //         [
+        //             // 'id_trainer' => $schedule['id_trainer'], 
+        //             'id_operator' => $schedule['id_operator'], 
+        //             'id_client' => $schedule['id_client'], 
+        //             'date_start' => $nextStartWeek, 
+        //             'date_end' =>  $nextEndWeek, 
+        //             'type_schedule' => $schedule['type_schedule'], 
+        //             'week' => $nextEndWeek->weekOfYear, 
+        //             'month' => $nextEndWeek->month, 
+        //             'year' => $nextEndWeek->year, 
+        //             'status' =>1
+        //         ]
+        //     ];
+        //     DB::table('schedule')->insert($schedules4);
+
+        // }
 
 
     }
