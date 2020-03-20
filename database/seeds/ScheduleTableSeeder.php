@@ -19,9 +19,6 @@ class ScheduleTableSeeder extends Seeder
     public function run()
     {
 
-       
-       
-        
         // OBTENER TODOS LOS OPERADORES ACTIVOS
         $operators = User_client::select('users_client.id_user as id_user', 'users_client.id_client as id_client')
             ->join('users', 'users_client.id_user', '=', 'users.id')
@@ -80,6 +77,37 @@ class ScheduleTableSeeder extends Seeder
                             "status"=>1,
                         ]);
                     }
+
+                    // CREAR SEMANA DOS
+                    $schedulesSemanaDos = ScheduleModel::Create([
+                        'id_operator' => $operator['id_user'], 
+                        'id_client' => $operator['id_client'],
+                        'date_start' => Carbon::parse($now)->addWeek()->startOfWeek(Carbon::SUNDAY),
+                        'date_end' => Carbon::parse($now)->addWeek()->endOfWeek(Carbon::SATURDAY),
+                        'type_schedule' => '1',
+                        'week' =>Carbon::parse($now)->addWeek()->weekOfYear,
+                        'month' => Carbon::parse($now)->addWeek()->month,
+                        'year' => Carbon::parse($now)->addWeek()->year,
+                        'status' => '1'
+                    ]) ;
+
+    
+                    // CREAR DETALLES DE LA SEMANA DOS
+                    foreach ($getScheduleDetail as $detailSchedule) {
+    
+                        $detail = ScheduleDetailModel::Create([
+                            "id_schedule"=>$schedulesSemanaDos->id,
+                            "id_operator"=>$detailSchedule['id_operator'],
+                            "id_day"=>$detailSchedule['id_day'],
+                            "time_start"=>$detailSchedule['time_start'],
+                            "time_end"=>$detailSchedule['time_end'],
+                            "hours"=>$detailSchedule['hours'],
+                            "minutes"=>$detailSchedule['minutes'],
+                            "type_daily"=>$detailSchedule['type_daily'],
+                            "option"=>$detailSchedule['option'],
+                            "status"=>1,
+                        ]);
+                    }
                 }
                 
             }
@@ -121,41 +149,41 @@ class ScheduleTableSeeder extends Seeder
                     ];
                     DB::table('detail_schedule_user')->insert($detail);
                 }   
+
+                 // CREAR SCHEDULE DE SEMANA DOS
+                 $schedulesSemanaDos = ScheduleModel::Create([
+                    'id_operator' => $operator['id_user'], 
+                    'id_client' => $operator['id_client'],
+                    'date_start' => Carbon::parse($now)->addWeek()->startOfWeek(Carbon::SUNDAY),
+                    'date_end' => Carbon::parse($now)->addWeek()->endOfWeek(Carbon::SATURDAY),
+                    'type_schedule' => '1',
+                    'week' =>Carbon::parse($now)->addWeek()->weekOfYear,
+                    'month' => Carbon::parse($now)->addWeek()->month,
+                    'year' => Carbon::parse($now)->addWeek()->year,
+                    'status' => '1'
+                ]);
+    
+                // OBTENER LOS DIAS DE LA SEMANA
+                $days = DaysModel::select('id')->get();
+                
+                // CREAR DETALLES DE LA SEMANA DOS
+                foreach($days as $day){
+    
+                    $detail = [
+                    [
+                        "id_schedule"=>$schedulesSemanaDos->id,
+                        "id_operator"=>$operator['id_user'], 
+                        "id_day"=>$day['id'],
+                        "time_start"=>'08:00:00',
+                        "time_end"=>'16:30:00',
+                        "type_daily"=>1,
+                        "option"=>1,
+                        "status"=>1,
+                        ]
+                    ];
+                    DB::table('detail_schedule_user')->insert($detail);
+                }   
             }            
         }
-
-        //CLONAR EL SCHEDULE ANTERIOR 
-
-
-        
-        // //OBTENER SCHEDULE ANTERIOR DE USUARIO ACTIVOS
-        // $schedules3 = ScheduleModel::where('status', 1)->get();
-
-  
-        // foreach($schedules3 as $schedule){
-        //     $nextStartWeek = Carbon::parse($schedule['date_start'])->addWeek();
-        //     $nextEndWeek = Carbon::parse($schedule['date_end'])->addWeek();
-        //     $next2StartWeek = Carbon::parse($schedule['date_start'])->addWeeks(2);
-        //     $next2EndWeek = Carbon::parse($schedule['date_end'])->addWeeks(2);
-
-        //     $schedules4 = [
-        //         [
-        //             // 'id_trainer' => $schedule['id_trainer'], 
-        //             'id_operator' => $schedule['id_operator'], 
-        //             'id_client' => $schedule['id_client'], 
-        //             'date_start' => $nextStartWeek, 
-        //             'date_end' =>  $nextEndWeek, 
-        //             'type_schedule' => $schedule['type_schedule'], 
-        //             'week' => $nextEndWeek->weekOfYear, 
-        //             'month' => $nextEndWeek->month, 
-        //             'year' => $nextEndWeek->year, 
-        //             'status' =>1
-        //         ]
-        //     ];
-        //     DB::table('schedule')->insert($schedules4);
-
-        // }
-
-
     }
 }
