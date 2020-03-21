@@ -30,7 +30,7 @@
             </td>
             <td>@if($type->type == 1) <span class="badge badge-light">Workday</span>@else<span class="badge badge-dark">Extra</span>@endif</td>
             <td>
-                <button type="button" class="btn btn-sm btn-outline-secondary open_change" data-toggle="tooltip" title="Edit" id="btn-edit" value="{{$type->id}}"  ><i class="fa fa-exchange"></i></button>
+                <button type="button" class="btn btn-sm btn-outline-primary open_change" data-toggle="tooltip" title="Edit" id="btn-edit" value="{{$type->id}}"  ><i class="fa fa-exchange"></i></button>
                 <button type="button" class="btn btn-sm btn-outline-secondary open_modal" data-toggle="tooltip" title="Edit" id="btn-edit" value="{{$type->id}}"  ><i class="fa fa-edit"></i></button>
                 <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert deleteschedule" data-toggle="tooltip" title="Delete" data-type="confirm" value="{{$type->id}}"><i class="fa fa-trash-o"></i></button>
             </td>

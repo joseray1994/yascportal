@@ -63,7 +63,7 @@
 							</div>
                    		</div>
 
-						<button type="button" class="btn btn-danger btn-lg btn-block">Faking Good Alert</button>
+						<!-- <button type="button" class="btn btn-danger btn-lg btn-block">Faking Good Alert</button> -->
 
 						<br>
 						<div class="form-row">

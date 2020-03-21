@@ -156,39 +156,13 @@ class ScheduleDailyController extends Controller
     public function data_break(Request $request){
      
     }
-    public function validateType($request,$weekly_id =""){
+    public function validateDailyChange($request){
         
             $this->validate(request(), [
-                'name' => 'required|max:30',
+                'option' => 'required',
             ]); 
     }
   
-    public function ValidateExtraType($request,$weekly_id =""){
-        $ExtraTypeValidation=[]; 
-        $n ="";
-        $data = [];
-
-        $userValidation = ScheduleDetailModel::where('id','!=',$weekly_id)->where('name', $request->name)
-        ->whereIn('status', [1,2])
-        ->count();
-
-        if($name > 0){      
-            $n = 'Otro Proveedor ya cuenta con ese Nombre';
-            
-        }
-        if($n==''){
-            $data=[];
-
-          }else{
-              $data=[
-                  'No' =>2,
-                  'name'=>$n,
-              ];
-
-              array_push($ExtraTypeValidation,$data);
-          }
-        return $ExtraTypeValidation;
-    }
   
     public function show($weekly_id)
     {
@@ -199,12 +173,13 @@ class ScheduleDailyController extends Controller
 
     public function update(Request $request, $weekly_id)
     {
+            ScheduleDailyController::validateDailyChange($request);
             $weekly = ScheduleDetailModel::find($weekly_id);
             $weekly->option = $request->option;
             $weekly->save();
             $weeklyData = ScheduleDailyController::data_weekly($weekly_id);
            
-            $data=['No'=>2,'wd'=>$weeklyData,'ed'=>0];
+            $data=['No'=>2,'wd'=>$weeklyData,'ed'=>0, "color"=>2];
             return response()->json($data);
     }
 

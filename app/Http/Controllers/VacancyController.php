@@ -102,6 +102,14 @@ class VacancyController extends Controller
     public function update(Request $request, $vacancy_id)
     {
 
+        $var = count(VacancyController::ValidateExtraVacancy($request,$vacancy_id));
+        $answer=VacancyController::ValidateExtraVacancy($request,0);
+    
+        if($var>0){
+
+            return response()->json($answer);
+
+        }else{
      
 
             VacancyController::validateVacancy($request,$vacancy_id);
@@ -111,7 +119,7 @@ class VacancyController extends Controller
             $vacancy->status=1;
             $vacancy->save();
             return response()->json($vacancy);
-        
+        }
     }
 
    
