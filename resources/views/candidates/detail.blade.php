@@ -28,6 +28,7 @@
 									<div  class="col-sm-6 text-center"><label id="typing_test21"></label></div>
 								</div>
 							</li>
+						
 							<li class="list-group-item">
 								<div class="btn-group col-sm-12">
 									<div style="background-color:green; color:white; border-radius:3px;" class="col-sm-6 modaldelichef text-center"><i class="fa fa-align-justify"></i> Typing Test 2</div>

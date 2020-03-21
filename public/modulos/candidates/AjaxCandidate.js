@@ -64,12 +64,7 @@ $(document).ready(function(){
           
             e.preventDefault(); 
             var formData =  $("#candidateForm").serialize();
-            
-            if($("#name").val().length > 30)
-            {
-                alert("Ingrese un nombre menor a 30 caracteres");
-                return false;
-            }
+        
     
             //used to determine the http verb to use [add=POST], [update=PUT]
             var state = $('#btn-save').val();
