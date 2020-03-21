@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ShiftController extends Controller
 {
+
     public function startShift()
     {
         $now = Carbon::now();
@@ -27,10 +28,12 @@ class ShiftController extends Controller
         if($schedule != null)
         {
             $scheduleDetail = ScheduleDetailModel::where('id_schedule',$schedule->id)->where('id_day',$now->dayOfWeek)->first();
+            $timeclock_exist = TimeClockModel::where('id_schedule',$schedule->id)->where('id_schedule_detail',$scheduleDetail->id)->exists();
 
-            if($scheduleDetail != null)
+            if($scheduleDetail != null && !$timeclock_exist)
             {
-                $time_clock_status = $now->lte(Carbon::parse($scheduleDetail->time_start)->format('H:i'));
+                $time_clock_status = $now->lte(Carbon::parse($scheduleDetail->time_start));
+                // dd($time_clock_status);
                 if($time_clock_status)
                 {
                     $result = $this->storeShift($schedule,$scheduleDetail,2);     
@@ -42,6 +45,10 @@ class ShiftController extends Controller
                     $result = $this->storeShift($schedule,$scheduleDetail,3);
                     if(!$result) return response()->json(['error' => 'Start shift already active'], 404);
                 }
+            }
+            else if($scheduleDetail != null && $timeclock_exist)
+            {
+                return response()->json(['error' => 'You already have a registered shift for today'], 404);
             }
             else
             {
@@ -110,11 +117,12 @@ class ShiftController extends Controller
 
     public function updateShift($scheduleDetail, $time_clock, $state)
     {
+        $now = Carbon::now();
+        // dd($scheduleDetail->time_end);
+        // dd($now->gte(Carbon::parse($scheduleDetail->time_end)->format('H:i')));
+        if($now->gte(Carbon::parse($scheduleDetail->time_end)->format('H:i')))
+        {
 
-            // dd('hola');
-       
-
-   
             try {
                     DB::beginTransaction();
                         
@@ -135,6 +143,7 @@ class ShiftController extends Controller
                     DB::rollBack();
                     return false;
                 }
+        }
 
     }
 
