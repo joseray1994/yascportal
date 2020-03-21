@@ -8,7 +8,7 @@ class ClientColorSeeder extends Seeder
     public function run()
     {
     	$colors = [
-            ['hex'=> "ccfff2",],
+            ['hex'=> "#ccfff2",],
             ['hex'=> "#c6d9eb"],
             ['hex'=> "#ffb399"],
             ['hex'=> "#ffdd99"],
