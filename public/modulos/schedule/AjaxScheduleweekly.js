@@ -374,7 +374,7 @@ const success = {
                         if(dato.ed != 0){
                             var profile = `<tr id="shcedule_id${dato.ed.detail.id}">
                                             <td>${dato.ed.detail.name} ${dato.ed.detail.lastname}</td>
-                                            <td style ="background:${dato.wd.detail.color}">${dato.ed.detail.client}</td>
+                                            <td style ="background:${dato.ed.detail.color}">${dato.ed.detail.client}</td>
                                             <td>${dato.ed.detail.day}</td>
                                             <td>${dato.ed.detail.time_s}</td>
                                             <td>${dato.ed.detail.time_e}</td>
