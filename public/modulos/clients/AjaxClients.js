@@ -530,7 +530,8 @@ const success = {
                     if(dato.description == null){
                         dato.description = '';
                     }
-                    var client = `<tr id="client_id${dato.id}" style = "background:${dato.color}">
+                    var client = `<tr id="client_id${dato.id}" >
+                                         <td style="background:${dato.color}"></td>
                                         <td>${dato.name}</td>
                                         <td>${dato.description}</td>
                                         <td>${dato.interval}</td>

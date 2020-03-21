@@ -146,6 +146,7 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     //Reports
     Route::get('/reports/incident', 'ReportsController@incident_report');
     Route::get('/reports/attendance', 'ReportsController@attendance_report');
+    Route::get('/reports/focus', 'ReportsController@focus_report');
     Route::get('/reports', 'ReportsController@index');
   
 

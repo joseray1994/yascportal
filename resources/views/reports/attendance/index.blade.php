@@ -30,6 +30,7 @@
 @endsection
 @section('script')
 <script src="{{asset('modulos/ajaxscript_actions.js')}}"></script>
+<script src="{{asset('modulos/reports/AjaxReports.js')}}"></script>
 <script src="{{asset('modulos/reports/AjaxAttendanceReports.js')}}"></script>
 <script src="{{asset('modulos/documents/tableHTMLExport.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.4.1/jspdf.min.js"></script>
