@@ -64,16 +64,6 @@ $(document).ready(function(){
        
     });
     
-    $(window).on('hashchange', function() {
-        if (window.location.hash) {
-            var page = window.location.hash.replace('#', '');
-            if (page == Number.NaN || page <= 0) {
-                return false;
-            }else{
-                schedule.get_data(page);
-            }
-        }
-    });
     //create new product / update existing product ***************************
     $("#typeUserForm").on('submit',function (e) {
         e.preventDefault(); 
@@ -174,7 +164,7 @@ const schedule ={
         button: function(dato){
             var buttons='';
                 if(dato.status== 1){
-                buttons +=' <button type="button" class="btn btn-sm btn-outline-secondary open_change" data-toggle="tooltip" title="Edit" id="btn-edit" value="'+dato.id+'"  ><i class="fa fa-exchange"></i></button>'
+                buttons +=' <button type="button" class="btn btn-sm btn-outline-primary open_change" data-toggle="tooltip" title="Edit" id="btn-edit" value="'+dato.id+'"  ><i class="fa fa-exchange"></i></button>'
                 buttons += '<button type="button" class="btn btn-sm btn-outline-secondary open_modal" data-toggle="tooltip" title="Edit" id="btn-edit"  value="'+dato.id+'"  ><i class="fa fa-edit"></i></button>';
                 buttons += '<button type="button" class="btn btn-sm btn-outline-danger js-sweetalert deleteschedule" data-toggle="tooltip" title="Delete" data-type="confirm" value="'+dato.id+'"><i class="fa fa-trash-o"></i></button>';
             }
@@ -447,7 +437,14 @@ const success = {
                                         <td>${schedule.button(dato.wd.detail)}</td>
                                     </tr>`;
                     $("#shcedule_id"+dato.wd.detail.id).replaceWith(profile);
-                    $("#shcedule_id"+dato.wd.detail.id).css("background-color", "#ffdf7e");
+
+                    if(dato.color == 2){
+                        $("#shcedule_id"+dato.wd.detail.id).css("background-color", "#b8daff");
+                    }else{
+                        $("#shcedule_id"+dato.wd.detail.id).css("background-color", "#ffdf7e");
+                    }
+                   
+
                     
                     if(dato.ed != 0){
                         var profile = `<tr id="shcedule_id${dato.ed.detail.id}">
