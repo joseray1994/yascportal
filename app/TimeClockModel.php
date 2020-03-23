@@ -11,4 +11,5 @@ class TimeClockModel extends Model
     protected $fillable = [
         'id_schedule','id_schedule_detail','id_operator','id_client','date_start','date_end','duration','type','status','creatde_at','updated_at'
     ];
+    
 }
