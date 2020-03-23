@@ -12,6 +12,7 @@ use App\ClientColorModel;
 use App\ClientContactsModel;
 use App\DocumentModel;
 use App\BreakRulesModel;
+use App\TimeZoneModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -57,10 +58,13 @@ class ClientsController extends Controller
                                              'clients.status as status',
                                              'brk.interval as interval',
                                              'brk.duration as duration',
-                                             'clc.hex as color'
+                                             'clc.hex as color',
+                                             'tz.name as time_zone_name',
+                                             'tz.offset as time_zone_offset'
                                              )
                                         ->join('break_rules as brk', 'brk.id_client', '=', 'clients.id')
                                         ->join('client_color as clc', 'clc.id', '=', 'clients.color')
+                                        ->join('time_zone as tz', 'tz.id', '=', 'clients.id_time_zone' )
                                         ->whereNotIn('clients.status',[0])
                                         ->orderBy('clients.name')
                                         ->where($type,'LIKE','%'.$search.'%');
@@ -76,10 +80,13 @@ class ClientsController extends Controller
                                              'clients.status as status',
                                              'brk.interval as interval',
                                              'brk.duration as duration',
-                                             'clc.hex as color'
+                                             'clc.hex as color',
+                                             'tz.name as time_zone_name',
+                                             'tz.offset as time_zone_offset'
                                              )
                                         ->join('break_rules as brk', 'brk.id_client', '=', 'clients.id')
                                         ->join('client_color as clc', 'clc.id', '=', 'clients.color')
+                                        ->join('time_zone as tz', 'tz.id', '=', 'clients.id_time_zone' )
                                         ->whereNotIn('clients.status', [0])
                                         ->orderBy('clients.name');
                                         
@@ -87,12 +94,13 @@ class ClientsController extends Controller
            
             $data=$data2->paginate(5);
             $color = ClientColorModel::all(); 
-           
+            $time_zone = TimeZoneModel::orderBy('name')->get();
+        //    dd($time_zone);
             if ($request->ajax()) {
                 return view('clients.table', ["data"=>$data]);
             }
        
-             return view('clients.index',["data"=>$data,"menu"=>$menu, "color" => $color]);
+             return view('clients.index',["data"=>$data,"menu"=>$menu, "color" => $color, "time_zone" =>$time_zone]);
             
      
         }else{
@@ -118,10 +126,13 @@ class ClientsController extends Controller
                                     'clients.status as status',
                                     'brk.interval as interval',
                                     'brk.duration as duration',
-                                    'clc.hex as color'
+                                    'clc.hex as color',
+                                    'tz.name as time_zone_name',
+                                    'tz.offset as time_zone_offset'
                                     )
                             ->join('break_rules as brk', 'brk.id_client', '=', 'clients.id')
                             ->join('client_color as clc', 'clc.id', '=', 'clients.color')
+                            ->join('time_zone as tz', 'tz.id', '=', 'clients.id_time_zone' )
                             ->orderBy('clients.name')
                             ->where('clients.id', $client_id)->first();
         // ClientModel::whereNotIn('status',[0])->where('id', $client_id)->first();
@@ -138,6 +149,7 @@ class ClientsController extends Controller
         'name'=>$data['name'],
         'description'=>$data['description'],
         'color'=>$data['color'],
+        'id_time_zone' =>$data['time_zone']
         ]);
 
         $id_client = $clients->id;
@@ -156,6 +168,7 @@ class ClientsController extends Controller
 
     public function show($client_id)
     {  
+        // dd($client_id);
         $client = BreakRulesModel::select('break_rules.id as id', 
                                           'break_rules.id_client as id_client', 
                                           'break_rules.interval as interval', 
@@ -163,9 +176,14 @@ class ClientsController extends Controller
                                           'clt.name as name', 
                                           'clt.description as description', 
                                           'clt.color as color',
-                                          'clc.hex as hex')
+                                          'clc.hex as hex',
+                                          'tz.name as time_zone_name',
+                                          'tz.offset as time_zone_offset',
+                                          'tz.id as id_time_zone',
+                                          )
                               ->join('clients as clt', 'clt.id', '=', 'break_rules.id_client')
                               ->join('client_color as clc', 'clc.id', '=', 'clt.color')
+                              ->join('time_zone as tz', 'tz.id', '=', 'clt.id_time_zone' )
                               ->where('clt.status', 1)
                               ->where('break_rules.id_client', $client_id)
                               ->orderBy('clt.name')
@@ -186,6 +204,7 @@ class ClientsController extends Controller
         $client->name = $request['name'];
         $client->description = $request['description'];
         $client->color = $request['color'];
+        $client->id_time_zone = $request['time_zone'];
         $client->save();
 
         $id_client = $client->id;
@@ -209,10 +228,13 @@ class ClientsController extends Controller
                                         'clients.status as status',
                                         'brk.interval as interval',
                                         'brk.duration as duration',
-                                        'clc.hex as color'
+                                        'clc.hex as color',
+                                        'tz.name as time_zone_name',
+                                        'tz.offset as time_zone_offset'
                                         )
                                 ->join('break_rules as brk', 'brk.id_client', '=', 'clients.id')
                                 ->join('client_color as clc', 'clc.id', '=', 'clients.color')
+                                ->join('time_zone as tz', 'tz.id', '=', 'clients.id_time_zone' )
                                 ->where('clients.status', '!=', 0)
                                 ->where('clients.id', $client_id)->first();
         // dd($client);
