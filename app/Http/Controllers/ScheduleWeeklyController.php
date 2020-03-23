@@ -48,7 +48,8 @@ class ScheduleWeeklyController extends Controller
                     ->where('sch.week',"=", $now->weekOfYear)
                     ->where('sch.month',"=", $now->month)
                     ->where('sch.year',"=", $now->year)
-                    ->whereIn('detail_schedule_user.status',[1,2]);
+                    ->whereIn('sch.status',[1,2])
+                    ->whereIn('detail_schedule_user.status',[1,2,3]);
 
                     if($request->day != "allDays"){
                         $data2->where('detail_schedule_user.id_day',"=", $request->day);
@@ -75,10 +76,11 @@ class ScheduleWeeklyController extends Controller
                     ->where('sch.week',"=", $now->weekOfYear)
                     ->where('sch.month',"=", $now->month)
                     ->where('sch.year',"=", $now->year)
-                    ->where('detail_schedule_user.status',1);
+                    ->whereIn('sch.status',[1,2])
+                    ->whereIn('detail_schedule_user.status',[1,2,3]);
                     
                 } 
-                $data=$data2->paginate(100);
+                $data=$data2->orderBy('detail_schedule_user.id_day')->paginate(100);
                 if ($request->ajax()) {
                     return view('schedule.weekly.table', ["data"=>$data]);
                 }
@@ -351,10 +353,42 @@ class ScheduleWeeklyController extends Controller
         $type = ScheduleDetailModel::find($weekly_id);
             $type->status = 0;
             $type->save();
-      
+
         return response()->json($type);
     } 
 
+
+    public function quit($weekly_id)
+    {
+        $weekly = ScheduleDetailModel::find($weekly_id);
+        $schedule = ScheduleModel::where('id_operator',$weekly->id_operator)
+                                     ->update(['status' => 2]);
+      
+        $detail_sch = ScheduleDetailModel::where('id_operator',$weekly->id_operator)
+                                     ->update(['status' => 3]);
+
+        $weeklyData = ScheduleWeeklyController::data_weekly($weekly_id);
+        return response()->json($weeklyData);
+    } 
+
+
+    public function suspended($weekly_id)
+    {
+        $weekly = ScheduleDetailModel::find($weekly_id);
+
+        $schedule = ScheduleModel::where('id_operator',$weekly->id_operator)
+                                     ->update(['status' => 3]);
+      
+        $detail_sch = ScheduleDetailModel::where('id_operator',$weekly->id_operator)
+                                     ->update(['status' => 4]);
+
+        
+        
+        $weeklyData = ScheduleWeeklyController::data_weekly($weekly_id);
+
+    
+        return response()->json($weeklyData);
+    } 
 
 
 }

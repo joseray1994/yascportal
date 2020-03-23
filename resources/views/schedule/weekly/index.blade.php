@@ -4,7 +4,7 @@
                 <div class="col-lg-12 view-index">
                     <div class="card">
                         <div class="header">
-                            <h1>Schedule Weekly <i class="fa fa-tasks"></i></h1>
+                            <h1>Schedule Weekly <i class="fa fa-calendar"></i></h1>
                             <ul class="header-dropdown">
                                 <li><button id="csv" class="btn btn-info">TO CSV</button></li>
                             </ul>
@@ -36,8 +36,8 @@
                 </div>
             </div>
             @include('schedule.weekly.form')
-            @include('schedule.weekly.detail')
-            
+            @include('schedule.detail')
+            @include('schedule.suspended')
           
 
              <!-- Passing BASE URL to AJAX -->
