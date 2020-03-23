@@ -85,8 +85,16 @@ var baseUrl = $('#baseUrl').val();
                       $('.endShift').hide();
                     },
                     error: function(err){
-                        
-                        console.log(err);
+                        console.log(err.responseJSON.error);
+                        $.notifyClose();
+                            $.notify({
+                                // options
+                                title: "Warning!",
+                                message:err.responseJSON.error,
+                            },{
+                                // settings
+                                type: 'danger'
+                            });
                     }
                 });
             } 
