@@ -158,6 +158,62 @@ $(document).ready(function(){
                 actions.show(my_url);
            
     });
+
+    $(document).on('click','.quitschedule',function(){
+        var privada_id = $(this).val();
+        var my_url = baseUrl + '/quit/' + privada_id;
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        })
+        swal({
+            title: "¿Desea eliminar este Usuario?",
+            text: "El usuario se eliminara permanentemente",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn btn-danger",
+            confirmButtonText: "Eliminar",
+            cancelButtonText: "Cancelar",
+            closeOnConfirm: true,
+            closeOnCancel: false
+          },
+          function(isConfirm) {
+            if (isConfirm) {
+                actions.deactivated(my_url);
+            }else {
+               swal("Cancelado", "Eliminacion cancelada", "error");
+            }
+          });
+        });
+
+        $(document).on('click','.suspendedchedule',function(){
+            var privada_id = $(this).val();
+            var my_url = baseUrl + '/suspended/' + privada_id;
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            })
+            swal({
+                title: "¿Desea eliminar este Usuario?",
+                text: "El usuario se eliminara permanentemente",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn btn-danger",
+                confirmButtonText: "Eliminar",
+                cancelButtonText: "Cancelar",
+                closeOnConfirm: true,
+                closeOnCancel: false
+              },
+              function(isConfirm) {
+                if (isConfirm) {
+                    actions.deactivated(my_url);
+                }else {
+                   swal("Cancelado", "Eliminacion cancelada", "error");
+                }
+              });
+            });
     
 });
 const schedule ={
