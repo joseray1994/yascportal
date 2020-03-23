@@ -693,6 +693,7 @@ const success = {
         },
         msj: function(data){
             $('#btn-save').attr('disabled', false);
+            $('#btn-save-documents').attr('disabled', false);
             $.notifyClose();
             $.each(data.responseJSON.errors,function (k,message) {
                 $.notify({

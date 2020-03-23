@@ -47,8 +47,9 @@
     <h6>Gender:</h6>
     <select  class="custom-select" name="gender" id="gender">
       <option value="0" selected>Select Gender</option>
-      <option value="F">FEMALE</option>
-      <option value="M">MALE</option>
+      <option value="F">Female</option>
+      <option value="M">Male</option>
+      <option value="B">Non Binary</option>
     </select>
   </div>
 
