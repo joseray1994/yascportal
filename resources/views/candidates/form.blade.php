@@ -74,7 +74,10 @@
 											<option value = "">Select</option> 
 											<option value = "A1">A1</option>
 											<option value = "A2">A2</option> 
-											<option value = "A3">A3</option> 
+											<option value = "B1">B1</option>
+											<option value = "B2">B2</option> 
+											<option value = "C1">C1</option>
+											<option value = "C2">C2</option> 
 									</select>  
 								</div> 
 							</div>
@@ -82,10 +85,13 @@
 								<label>Grammar Test</label>
 								<div class="input-group">
 									<select class="custom-select" name="grammar_test" id = "grammar_test" >
-											<option value = "">Select</option> 
+									<option value = "">Select</option> 
 											<option value = "A1">A1</option>
 											<option value = "A2">A2</option> 
-											<option value = "A3">A3</option> 
+											<option value = "B1">B1</option>
+											<option value = "B2">B2</option> 
+											<option value = "C1">C1</option>
+											<option value = "C2">C2</option> 
 									</select>
 								</div>
 							</div>
