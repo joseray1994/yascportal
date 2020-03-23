@@ -19,7 +19,7 @@ class CreateZoomTable extends Migration
             $table->string('email');
             $table->string('password');
             $table->integer('status')->default(1);
-            $table->integer('id_user')->nullable();
+            $table->string('id_use_by')->nullable();
             $table->timestamps();
         });
     }
