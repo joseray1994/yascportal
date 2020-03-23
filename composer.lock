@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "91063445f0dcf8e50c1cd0ad62a12acf",
+    "content-hash": "390c1876dee5ad54558027ae557def93",
     "packages": [
         {
             "name": "beyondcode/laravel-websockets",
@@ -196,6 +196,52 @@
                 "reactphp"
             ],
             "time": "2020-02-26T12:05:32+00:00"
+        },
+        {
+            "name": "consoletvs/profanity",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ConsoleTVs/Profanity.git",
+                "reference": "8c3832325a806ede7f851104f05201d6804ce9ca"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ConsoleTVs/Profanity/zipball/8c3832325a806ede7f851104f05201d6804ce9ca",
+                "reference": "8c3832325a806ede7f851104f05201d6804ce9ca",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "5.4.*|5.5.*|5.6.*|5.7.*|5.8.*|6.*"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "ConsoleTVs\\Profanity\\ProfanityServiceProvider"
+                    ],
+                    "aliases": {
+                        "Profanity": "ConsoleTVs\\Profanity\\Facades\\Profanity"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "ConsoleTVs\\Profanity\\": "."
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Erik Campobadal",
+                    "email": "ConsoleTVs@gmail.com"
+                }
+            ],
+            "description": "PHP library to block bad words in a string",
+            "time": "2019-09-20T21:00:28+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
