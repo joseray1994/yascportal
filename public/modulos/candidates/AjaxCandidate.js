@@ -64,12 +64,7 @@ $(document).ready(function(){
           
             e.preventDefault(); 
             var formData =  $("#candidateForm").serialize();
-            
-            if($("#name").val().length > 30)
-            {
-                alert("Ingrese un nombre menor a 30 caracteres");
-                return false;
-            }
+        
     
             //used to determine the http verb to use [add=POST], [update=PUT]
             var state = $('#btn-save').val();
@@ -300,7 +295,7 @@ const success = {
                 else{
                     var candidate = `<tr id="candidate_id${dato.id}">
                                         <td>${dato.name_vacancy}</td>
-                                        <td>${dato.name} ${dato.last_name}</td>
+                                        <td style=" white-space: normal !important; word-wrap: break-word;">${dato.name} ${dato.last_name}</td>
                                         <td>${dato.phone}</td>
                                         <td>${dato.mail}</td>
                                         <td  style=" white-space: normal !important; word-wrap: break-word;">${dato.channel}</td>
@@ -414,7 +409,7 @@ const success = {
 
                     var candidate = `<tr id="candidate_id${dato.id}">
                                         <td>${dato.name_vacancy}</td>
-                                        <td>${dato.name} ${dato.last_name}</td>
+                                        <td style=" white-space: normal !important; word-wrap: break-word;">${dato.name} ${dato.last_name}</td>
                                         <td>${dato.phone}</td>
                                         <td>${dato.mail}</td>
                                         <td  style=" white-space: normal !important; word-wrap: break-word;">${dato.channel}</td>

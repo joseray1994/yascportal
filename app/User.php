@@ -44,7 +44,7 @@ class User extends Authenticatable implements Auditable
     }
 
     public function type_user(){
-        return $this->hasOne('App\TypeUserModel', 'id');
+        return $this->belongsTo('App\TypeUserModel', 'id_type_user');
     }
 
     public function Clients(){

@@ -172,6 +172,80 @@ $(document).ready(function(){
         $('.view-index').show();
         
     });
+
+    $(document).on('click','.quitschedule',function(){
+        var privada_id = $(this).val();
+        var my_url = baseUrl + '/quit/' + privada_id;
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        })
+        swal({
+            title: "Do you want to cancel this all schedules for this user?",
+            text: "All hours for this user will be canceled",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Quit",
+            cancelButtonText: "Cancel",
+            closeOnConfirm: true,
+            closeOnCancel: false
+          },
+          function(isConfirm) {
+            if (isConfirm) {
+                actions.deactivated(my_url);
+            }else {
+               swal("Canceled", "Deletion canceled", "error");
+            }
+          });
+        });
+
+        $(document).on('click','.suspendedchedule',function(){
+            var shcedule_id = $(this).val();
+            var url= baseUrl + '/detail/' + shcedule_id;
+            actions.modal(url);
+        });
+
+            $(document).on('click','.suspendedchedul12e',function(){
+                var privada_id = $(this).val();
+                var my_url = baseUrl + '/suspended/' + privada_id;
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                })
+                        actions.deactivated(my_url);
+                        
+                });
+    
+
+            $(document).on('click','.endShifSchedule',function(){
+                var privada_id = $(this).val();
+                var my_url = baseUrl + '/endshift/' + privada_id;
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                })
+                swal({
+                    title: "Do you want to end shift for this user?",
+                    text: "Shift for this user will be ending",
+                    type: "info",
+                    showCancelButton: true,
+                    confirmButtonText: "End Shift",
+                    cancelButtonText: "Cancel",
+                    closeOnConfirm: true,
+                    closeOnCancel: false
+                  },
+                  function(isConfirm) {
+                    if (isConfirm) {
+                        actions.deactivated(my_url);
+                    }else {
+                       swal("Canceled", "End Shift canceled", "error");
+                    }
+                  });
+                });
+        
     
 });
 const schedule ={
@@ -374,7 +448,7 @@ const success = {
                         if(dato.ed != 0){
                             var profile = `<tr id="shcedule_id${dato.ed.detail.id}">
                                             <td>${dato.ed.detail.name} ${dato.ed.detail.lastname}</td>
-                                            <td style ="background:${dato.wd.detail.color}">${dato.ed.detail.client}</td>
+                                            <td style ="background:${dato.ed.detail.color}">${dato.ed.detail.client}</td>
                                             <td>${dato.ed.detail.day}</td>
                                             <td>${dato.ed.detail.time_s}</td>
                                             <td>${dato.ed.detail.time_e}</td>
@@ -409,22 +483,10 @@ const success = {
     deactivated:function(data) {
         console.log(data);
         var dato = data;
-        if(dato.status != 0){
-            var profile = `<tr id="shcedule_id${dato.id}">
-                                <td>${dato.id}</td>
-                                <td>${dato.name}</td>
-                                <td class="hidden-xs">${types.status(dato)}</td>
-                                <td>${types.button(dato)}</td>
-                            </tr>`;
-          
-            $("#shcedule_id"+dato.id).replaceWith(profile);
-            if(dato.status == 1){
-                color ="#c3e6cb";
-            }else if(dato.status == 2){
-                color ="#ed969e";
-            }
-            $("#shcedule_id"+dato.id).css("background-color", color);  
-            
+        if(dato.status > 0){
+
+            schedule.get_data(1);
+
         }else if(dato.status == 0){
             $("#shcedule_id"+dato.id).remove();
         }
@@ -467,52 +529,114 @@ const success = {
     modal: function(data){
         console.log(data);
         dato="";
-        if(data.audit[0]){
-            $('#auditid').val(data.audit[0].id);
-        }
-        function listdataold(data){
-            datos=`<ul class="list-group">`;
-                if(data.time_start){
-                    datos+=`<li class="list-group-item">Time Start: ${data.time_start}</li>`;
+        switch(dato.No) {
+            case 1:
+                if(data.audit[0]){
+                    $('#auditid').val(data.audit[0].id);
                 }
+                function listdataold(data){
+                    datos=`<ul class="list-group">`;
+                        if(data.time_start){
+                            datos+=`<li class="list-group-item">Time Start: ${data.time_start}</li>`;
+                        }
 
-                if(data.time_end){
-                    datos+=`<li class="list-group-item">Time End:${data.time_end}</li>`;
+                        if(data.time_end){
+                            datos+=`<li class="list-group-item">Time End:${data.time_end}</li>`;
+                        }
+                    datos+= `</ul>`;
+                    return datos;
                 }
-            datos+= `</ul>`;
-            return datos;
+                if(data.audit.length > 0) {
+                    $("#off-row").remove();
+                    $.each(data.audit, function (index, da) {
+                        old = JSON.parse(da.old);
+                        news = JSON.parse(da.new);
+                    
+                        var dato2 = `<tr class="dayofftd">
+                                        <td>${da.name}${da.lname}</td>
+                                        <td>
+                                            ${listdataold(old)}
+                                        </td>
+                                        <td>
+                                            ${listdataold(news)} 
+                                        </td>
+                                        <td >${da.event}</td>
+                                        <td >${da.created}</td>
+                                    </tr>`;
+                    dato += dato2;
+                    });
+                }else{
+                    dato += `<tr id="off-row" class="text-center">
+                                    <th colspan="5" class="text-center">
+                                    <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
+                                    </th>
+                                </tr>`;
+
+                }  
+
+                $('#audit-table').html(dato);
+                $('.view-index').hide();
+                $('.view-suspended').hide();
+                $('.view-audit').show(); 
+            break;
+            case 2:
+                if(data.audit.length > 0) {
+                    $("#off-row").remove();
+
+                    function listdatastatus(dato){
+                        var status='';
+                        if(dato.status== 1){
+                            status +='<span class="badge badge-pill badge-success">On</span>';
+                        }else if(dato.status == 2){
+                            status +='<span class="badge badge-pill badge-secondary">Off</span>';
+                        }
+                       return status;
+    
+                        }
+                    function listdatabuttons(dato){
+                                var buttons='';
+                                    if(dato.status== 1){
+                                    buttons +='<a class="btn btn-sm btn-outline-primary" title="Assignament Type" id="btn-edit" href="/assignmenttype/'+dato.id+'"  ><i class="fa fa-info-circle"></i></a>'
+                                    buttons += ' <button class="btn btn-sm btn-outline-secondary btn-detail open_modal"  data-toggle="tooltip" title="Editar nombre del Perfil"  value="'+dato.id+'"> <i class="fa fa-edit"></i></li></button>';
+                                    buttons += '	<button type="button" class="btn btn-sm btn-outline-danger off-type" title="Desactivar Usuario" data-type="confirm" value="'+dato.id+'" ><i class="fa fa-window-close"></i></button>';
+                                
+                                }else if(dato.status == 2){
+                                    buttons+='<button type="button" class="btn btn-sm btn-outline-success off-type" title="Activar Usuario" data-type="confirm" value="'+dato.id+'" ><i class="fa fa-check-square-o"></i></button>'
+                                    buttons += '<button class="btn btn-danger btn-sm btn-delete delete-profile" data-toggle="tooltip" title="Desactivar Perfil" value="'+dato.id+'"><i class="fa fa-trash-o"></i> </button>';
+                                }
+                                return buttons;
+                            }
+                    $.each(data.audit, function (index, da) {
+                     
+                        var dato2 = `<tr class="dayofftd">
+                                        <td>${da.name}${da.lname}</td>
+                                        <td>
+                                            ${da.dateS}
+                                        </td>
+                                        <td>
+                                            ${da.dateE} 
+                                        </td>
+                                        <td >${listdatastatus(da)}</td>
+                                        <td >${listdatabuttons(da)}</td>
+                                    </tr>`;
+                    dato += dato2;
+                    });
+                }else{
+                    dato += `<tr id="off-row" class="text-center">
+                                    <th colspan="5" class="text-center">
+                                    <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
+                                    </th>
+                                </tr>`;
+
+                } 
+                $('#supended-table').html(dato);
+                $('.view-index').hide();
+                $('.view-audit').hide();
+                $('.view-suspended').show(); 
+            break;
         }
-        if(data.audit.length > 0) {
-            $("#off-row").remove();
-            $.each(data.audit, function (index, da) {
-                old = JSON.parse(da.old);
-                news = JSON.parse(da.new);
-            
-                var dato2 = `<tr class="dayofftd">
-                                <td>${da.name}${da.lname}</td>
-                                <td>
-                                    ${listdataold(old)}
-                                </td>
-                                <td>
-                                    ${listdataold(news)} 
-                                </td>
-                                <td >${da.event}</td>
-                                <td >${da.created}</td>
-                             </tr>`;
-            dato += dato2;
-            });
-        }else{
-            dato += `<tr id="off-row" class="text-center">
-                            <th colspan="5" class="text-center">
-                            <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
-                            </th>
-                        </tr>`;
 
-        }  
-
-        $('#audit-table').html(dato);
-        $('.view-index').hide();
-        $('.view-audit').show(); 
+      
     },
     msj: function(data){
         console.log(data);

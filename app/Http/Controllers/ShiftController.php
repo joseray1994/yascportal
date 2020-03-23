@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ShiftController extends Controller
 {
+
     public function startShift()
     {
         $now = Carbon::now();
@@ -27,21 +28,28 @@ class ShiftController extends Controller
         if($schedule != null)
         {
             $scheduleDetail = ScheduleDetailModel::where('id_schedule',$schedule->id)->where('id_day',$now->dayOfWeek)->first();
+            $timeclock_exist = TimeClockModel::where('id_schedule',$schedule->id)->where('id_schedule_detail',$scheduleDetail->id)->exists();
 
-            if($scheduleDetail != null)
+            if($scheduleDetail != null && !$timeclock_exist)
             {
-                $time_clock_status = $now->lte(Carbon::parse($scheduleDetail->time_start)->format('H:i'));
+                $time_clock_status = $now <= (Carbon::parse($scheduleDetail->time_start));
                 if($time_clock_status)
                 {
                     $result = $this->storeShift($schedule,$scheduleDetail,2);     
                     if(!$result) return response()->json(['error' => 'Start shift already  active'], 404);
+                    // return response()->json(['error' => 'in time'], 404);
                     
                 }
                 else
                 {
                     $result = $this->storeShift($schedule,$scheduleDetail,3);
                     if(!$result) return response()->json(['error' => 'Start shift already active'], 404);
+                    // return response()->json(['error' => 'late'], 404);
                 }
+            }
+            else if($scheduleDetail != null && $timeclock_exist)
+            {
+                return response()->json(['error' => 'You already have a registered shift for today'], 404);
             }
             else
             {
@@ -65,9 +73,9 @@ class ShiftController extends Controller
         $scheduleDetail = ScheduleDetailModel::where('id_schedule',$schedule->id)->where('id_day',$now->dayOfWeek)->first();
         $time_clock = TimeClockModel::where('id_operator',$user->id)->where('status',1)->first();
         $result = $this->updateShift($scheduleDetail,$time_clock,4); 
-
+        
        
-        if(!$result) return response()->json(['error' => 'Start shift already  active'], 404);
+        if(!$result) return response()->json(['error' => "You can't finish your shift before your out time, contact your teamleader"], 404);
        
     }
 
@@ -110,24 +118,23 @@ class ShiftController extends Controller
 
     public function updateShift($scheduleDetail, $time_clock, $state)
     {
+        $now = Carbon::now();
+        if($now>=(Carbon::parse($scheduleDetail->time_end)))
+        {
 
-            // dd('hola');
-       
-
-   
             try {
                     DB::beginTransaction();
                         
                     $user = Auth::user()->id;
                     $now = Carbon::now();
-                                    $a = Carbon::parse($time_clock->date_start);
-                                    $b = Carbon::parse($now);
-                                    // dd($scheduleDetail->date_start);
-                                                    $totalDuration = $a->diffInSeconds($b);
-                                                    $diferencia = gmdate('H:i:s', $totalDuration);
-                                    // dd(Carbon::parse($scheduleDetail->date_start)->$now->format('H:i:s'));
-                                    $scheduleDetail->update(array('option'=> $state));
-                                    $tmeclock = $time_clock->update(array('date_end'=> $now->format('H:i:s'),'status'=>0,'duration'=>$diferencia));
+                    $a = Carbon::parse($time_clock->date_start);
+                    $b = Carbon::parse($now);
+                    // dd($scheduleDetail->date_start);
+                    $totalDuration = $a->diffInSeconds($b);
+                    $diferencia = gmdate('H:i:s', $totalDuration);
+                    // dd(Carbon::parse($scheduleDetail->date_start)->$now->format('H:i:s'));
+                    $scheduleDetail->update(array('option'=> $state));
+                    $tmeclock = $time_clock->update(array('date_end'=> $now->format('H:i:s'),'status'=>0,'duration'=>$diferencia));
                     DB::commit();
                     return true;
                 } catch (\Exception $e) {
@@ -135,6 +142,11 @@ class ShiftController extends Controller
                     DB::rollBack();
                     return false;
                 }
+        }
+        else
+        {
+            return false;
+        }
 
     }
 

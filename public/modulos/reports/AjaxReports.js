@@ -10,6 +10,9 @@ $(document).ready(function(){
     
     $('#view-attendance').click(function(){
         location.href = url + '/attendance';
+
+        var my_url = url + '/attendance';
+        actions.show(my_url);
     });
 
 });

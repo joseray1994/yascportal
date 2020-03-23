@@ -29,8 +29,11 @@
                     @case(1)
                     <td> <span class="badge badge-light">Workday</span></td>
                     <td>
-                         <button type="button" class="btn btn-sm btn-outline-primary open_detail" data-toggle="tooltip" title="Edit" id="btn-edit" value="{{$type->id}}"  ><i class="fa fa-info-circle"></i></button>
+                        <button type="button" class="btn btn-sm btn-outline-primary open_detail" data-toggle="tooltip" title="Audit" id="btn-edit" value="{{$type->id}}"  ><i class="fa fa-info-circle"></i></button>
                         <button type="button" class="btn btn-sm btn-outline-secondary open_modal" data-toggle="tooltip" title="Edit" id="btn-edit" value="{{$type->id}}"  ><i class="fa fa-edit"></i></button>
+                        <button type="button" class="btn btn-sm btn-warning suspendedchedule" data-toggle="tooltip" title="Supended" id="btn-edit" value="{{$type->id}}"  ><i class="fa fa-level-up"></i></button>
+                        <button type="button" class="btn btn-sm btn-danger quitschedule" data-toggle="tooltip" title="Quit" id="btn-edit" value="{{$type->id}}"  ><i class="fa fa-ban"></i></button>
+                        <button type="button" class="btn btn-sm btn-outline-info endShifSchedule" data-toggle="tooltip" title="End Shift" id="btn-edit" value="{{$type->id}}"  ><i class="fa fa-power-off"></i></button>
                     </td>
                     @break
                     @case(2)

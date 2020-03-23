@@ -118,6 +118,8 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::get('/dayoff', 'ScheduleDailyController@data_dayoff');
     Route::get('/break', 'ScheduleDailyController@data_break');
     Route::get('/detail/{id?}', 'ScheduleWeeklyController@detail');
+    Route::put('/quit/{id}', 'ScheduleWeeklyController@quit');
+    Route::put('/suspended/{id}', 'ScheduleWeeklyController@suspended');
     
 
     //Operators
@@ -146,6 +148,7 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     //Reports
     Route::get('/reports/incident', 'ReportsController@incident_report');
     Route::get('/reports/attendance', 'ReportsController@attendance_report');
+    Route::get('/reports/focus', 'ReportsController@focus_report');
     Route::get('/reports', 'ReportsController@index');
   
 

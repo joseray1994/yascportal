@@ -42,6 +42,33 @@
         </tr>
     </thead>
     <tbody>
+        @foreach($time_clock as $key => $tc)
+            <tr id="attendance_id{{$key}}::{{$tc->id}}">
+            <td colspan="2">{{$tc->name}}</td>
 
+            <td scope="col"></td>
+            <td scope="col"></td>
+
+            <td scope="col"></td>
+            <td scope="col"></td>
+
+            <td scope="col"></td>
+            <td scope="col"></td>
+
+            <td scope="col"></td>
+            <td scope="col"></td>
+
+            <td scope="col"></td>
+            <td scope="col"></td>
+
+            <td scope="col"></td>
+            <td scope="col"></td>
+
+            <td scope="col"></td>
+            <td scope="col"></td>
+
+            <td colspan="2"></td>
+            </tr>
+        @endforeach  
    </tbody>
 </table>

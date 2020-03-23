@@ -2,7 +2,8 @@
     <thead class="text-white thead-yasc">
         <tr>
             <th ></th>
-            <th >Client</th>
+            <th>Client</th>
+            <th>Time Zone</th>
             <th>Description</th>
             <th>Interval</th>
             <th>Minutes</th>
@@ -15,6 +16,7 @@
         <tr id="client_id{{$client->id}}">
         <td style = "background:{{$client->color}}"></td>
             <td>{{$client->name }}</td>
+            <td>{{$client->time_zone_name}}, {{$client->time_zone_offset}}</td>
             <td>{{$client->description}}</td>
             <td>{{$client->interval}}</td>
             <td>{{$client->duration}}</td>

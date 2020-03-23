@@ -9,7 +9,7 @@ class ClientModel extends Model
     protected $table = 'clients';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'mat','name', 'description', 'color', 'documents', 'status'
+        'mat','name', 'description', 'color', 'documents', 'status', 'id_time_zone'
     ];
 
     public function Users(){

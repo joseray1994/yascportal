@@ -97,14 +97,12 @@ class CandidateController extends Controller
 
 
     public function validateCandidate($request){
-        //$user=='' ? $email = 'required|email|unique:users,email,NULL,id,id_status,1 | unique:users,email,'.$user.',id,id_status,2' :  $email = 'sometimes|required|unique:users,email,'.$user.',id,id_status,1 | unique:users,email,'.$user.',id,id_status,2';
+        
         $this->validate(request(), [
            'id_vacancy' => 'required',
-            'name' => 'required|max:30',
-            'last_name' => 'required|max:30',
-            //'phone' => 'required|max:12|regex:/^[0-9]{0,20}(\.?)[0-9]{0,2}$/|unique:candidates,phone,'.$candidate_id,
+            'name' => 'required|max:50',
+            'last_name' => 'required|max:50',
             'phone' => 'required|max:12|regex:/^[0-9]{0,20}(\.?)[0-9]{0,2}$/',
-            //'mail' => 'required|email|unique:candidates,mail,'.$candidate_id,\
             'mail' => 'required|email',
             'channel' => 'required',
             'listening_test' => 'required',
