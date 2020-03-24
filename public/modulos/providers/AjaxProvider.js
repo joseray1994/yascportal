@@ -1,15 +1,13 @@
-//getData(1);
-
 $(document).ready(function(){
     clearload();
-    var nameDeli='<a href="/vacancies">Vacancies</i></a>';
+    var nameDeli='<a href="/providers">Providers</i></a>';
     $('.nameDeli').html(nameDeli);
-    $('#sidebar9').addClass('active');  
+   // $('#sidebar9').addClass('active');  
 
-    //get base URL *********************
-    var url = $('#url').val();
+     //get base URL *********************
+     var url = $('#url').val();
 
-    $(window).on('hashchange', function() {
+     $(window).on('hashchange', function() {
         if (window.location.hash) {
             var page = window.location.hash.replace('#', '');
             if (page == Number.NaN || page <= 0) {
@@ -19,40 +17,40 @@ $(document).ready(function(){
             }
         }
     });
-    
-    //display modal form for creating new product *********************
-    $('#btn_add').click(function(){
+
+     //display modal form for creating new product *********************
+     $('#btn_add').click(function(){
         $('#btn-save').val("add");
-        $('#vacancyForm').trigger("reset");
+        $('#providerForm').trigger("reset");
         $('#myModal').modal('show');
     });
 
-    
-    //display modal form for product EDIT ***************************
-    $(document).on('click','.open_modal',function(){
-        $('#vacancyForm').trigger("reset");
-        var vacancy_id = $(this).val();
-        var my_url = url + '/' + vacancy_id;
+     //display modal form for product EDIT ***************************
+     $(document).on('click','.open_modal',function(){
+        $('#providerForm').trigger("reset");
+        var provider_id = $(this).val();
+        var my_url = url + '/' + provider_id;
 
         actions.show(my_url);
        
     });
 
-    //create new product / update existing product ***************************
-    $("#vacancyForm").on('submit',function (e) {
+      //create new product / update existing product ***************************
+      $("#providerForm").on('submit',function (e) {
         console.log('button');
       
         e.preventDefault(); 
-        var formData =  $("#vacancyForm").serialize();
+        var formData =  $("#providerForm").serialize();
         
         //used to determine the http verb to use [add=POST], [update=PUT]
         var state = $('#btn-save').val();
         var type = "POST"; //for creating new resource
-        var vacancy_id = $('#vacancy_id').val();;
+        var provider_id = $('#provider_id').val();
+        console.log(provider_id );
         var my_url = url;
         if (state == "update"){
             type = "POST"; //for updating existing resource
-            my_url += '/' + vacancy_id;
+            my_url += '/' + provider_id;
         }
         
             console.log(formData);
@@ -61,7 +59,7 @@ $(document).ready(function(){
     
     });
 
-    $(document).on('click','.off-vacancy',function(){
+    $(document).on('click','.off-provider',function(){
         var id = $(this).val();
         var my_url =url + '/' + id;
             $.ajaxSetup({
@@ -69,10 +67,10 @@ $(document).ready(function(){
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         })
-            if($(this).attr('class') == 'btn btn-sm btn-outline-success off-vacancy')
+            if($(this).attr('class') == 'btn btn-sm btn-outline-success off-provider')
             {
-                title= "Do you want to activate this Vacancy?";
-                text="The vacancy will be activated";
+                title= "Do you want to activate this Provider?";
+                text="The provider will be activated";
                 confirmButtonText="Activate";
 
                 datatitle="Activated";
@@ -81,8 +79,8 @@ $(document).ready(function(){
             }
             else 
             {
-                title= "Do you want to deactivate this vacancy?";
-                text= "The vacancy will be deactivated";
+                title= "Do you want to deactivate this provider?";
+                text= "The provider will be deactivated";
                 confirmButtonText="Deactivate";
 
                 datatitle="disabled";
@@ -105,7 +103,7 @@ $(document).ready(function(){
             },
             function(isConfirm) {
                 if (isConfirm) {
-                swal(datatitle, "Vacancy "+datatext, "success");
+                swal(datatitle, "Provider "+datatext, "success");
                 actions.deactivated(my_url);
                 } 
                 else {
@@ -116,18 +114,19 @@ $(document).ready(function(){
         });
     });
 
-     //delete product and remove it from TABLE list ***************************
-     $(document).on('click','.delete-vacancy',function(){
-        var vacancy_id = $(this).val();
-        var my_url = url + '/delete/' + vacancy_id;
+
+    //delete product and remove it from TABLE list ***************************
+    $(document).on('click','.delete-provider',function(){
+        var provider_id = $(this).val();
+        var my_url = url + '/delete/' + provider_id;
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         })
         swal({
-            title: "Do you want to delete this Vacancy?",
-            text: "The vacancy will be permanently eliminated",
+            title: "Do you want to delete this Provider?",
+            text: "The provider will be permanently eliminated",
             type: "warning",
             showCancelButton: true,
             confirmButtonClass: "btn btn-danger",
@@ -147,23 +146,21 @@ $(document).ready(function(){
           });
         });
 
-
 });
 
 
-
-const vacancies ={
+const providers ={
     button: function(dato){
            var buttons='<div class="">';
             if(dato.status== 1){
-                buttons += '<a class="btn btn-sm btn-outline-primary" data-toggle="tooltip" title="See Candidates" href="/candidates/'+dato.id+'"><i class="fa fa-users"></i></a>';
-               buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="'+dato.id+'"  ><i class="fa fa-edit"></i></button>';
-               buttons += '	<button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-vacancy" title="Deactivated" data-type="confirm" value="'+dato.id+'"><i class="fa fa-window-close"></i></button>';
+                buttons += '<a class="btn btn-sm btn-outline-primary" data-toggle="tooltip" title="See Suppplies" href=""><i class="fa fa-cubes"></i></a>';
+                buttons += ' <button type="button" data-toggle="tooltip" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="'+dato.id+'"  ><i class="fa fa-edit"></i></button>';
+                buttons += '	<button type="button" data-toggle="tooltip" class="btn btn-sm btn-outline-danger js-sweetalert off-provider" title="Deactivated" data-type="confirm" value="'+dato.id+'"><i class="fa fa-window-close"></i></button>';
           
            }else if(dato.status == 2){
            
-               buttons+='<button type="button" class="btn btn-sm btn-outline-success off-vacancy" title="Activated" data-type="confirm" value="'+dato.id+'" ><i class="fa fa-check-square-o"></i></button>'
-               buttons += ' <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert delete-vacancy" title="Delete" data-type="confirm" value="'+dato.id+'"><i class="fa fa-trash-o"></i></button>';
+               buttons+='<button type="button" data-toggle="tooltip" class="btn btn-sm btn-outline-success off-provider" title="Activated" data-type="confirm" value="'+dato.id+'" ><i class="fa fa-check-square-o"></i></button>';
+               buttons += '                     <button type="button" data-toggle="tooltip" class="btn btn-sm btn-outline-danger js-sweetalert delete-provider" title="Delete" data-type="confirm" value="'+dato.id+'"><i class="fa fa-trash-o"></i></button>';
            }
            buttons+='</div>';
            return buttons;
@@ -178,16 +175,8 @@ const vacancies ={
        return status;
     },
 
-    nullo:function(dato){
-        var description = "";
-        if(dato.description != null)
-        {
-            description = dato.description;
-        }
-
-        return description;
-    }
 }
+
 
 const success = {
 
@@ -221,21 +210,24 @@ const success = {
                     type: 'success'
                 });
            
-            var vacancy = `<tr id="vacancy_id${dato.id}">
+            var provider = `<tr id="provider_id${dato.id}">
                                 <td>${dato.id}</td>
-                                <td style="white-space: normal !important; word-wrap: break-word;">${dato.name}</td>
-                                <td  style="white-space: normal !important; word-wrap: break-word;">${vacancies.nullo(dato)}</td>
-                                <td class="hidden-xs">${vacancies.status(dato)}</td>
-                                <td>${vacancies.button(dato)}</td>
+                                <td>${dato.id_department}</td>
+                                <td>${dato.name}</td>
+                                <td>${dato.rfc}</td>
+                                <td>${dato.phone}</td>
+                                <td>${dato.email}</td>
+                                <td class="hidden-xs">${providers.status(dato)}</td>
+                                <td>${providers.button(dato)}</td>
                             </tr>`;
         
             if (state == "add"){ 
-              $("#vacancy-list").append(vacancy);
-              $("#vacancy_id"+dato.id).css("background-color", "#c3e6cb");  
+              $("#provider-list").append(provider);
+              $("#provider_id"+dato.id).css("background-color", "#c3e6cb");  
               $('#table-row').remove(); 
             }else{
-              $("#vacancy_id"+dato.id).replaceWith(vacancy);
-              $("#vacancy_id"+dato.id).css("background-color", "#ffdf7e");  
+              $("#provider_id"+dato.id).replaceWith(provider);
+              $("#provider_id"+dato.id).css("background-color", "#ffdf7e");  
             }
 
             $('#myModal').modal('hide')
@@ -248,12 +240,15 @@ const success = {
         }
         
     },
-    
+
     show: function(data){
         console.log(data);
-        $('#vacancy_id').val(data.id);
+        $('#provider_id').val(data.id);
+        $('#id_department').val(data.id_department);
         $('#name').val(data.name);
-        $('#description').val(data.description);
+        $('#rfc').val(data.rfc);
+        $('#phone').val(data.phone);
+        $('#email').val(data.email);
         $('#btn-save').val("update");
         $('#myModal').modal('show');
     },
@@ -262,26 +257,30 @@ const success = {
         console.log(data);
         var dato = data;
         if(dato.status != 0){
-            var vacancy = `<tr id="vacancy_id${dato.id}">
+              var provider = `<tr id="provider_id${dato.id}">
                                 <td>${dato.id}</td>
-                                <td style="white-space: normal !important; word-wrap: break-word;">${dato.name}</td>
-                                <td  style="white-space: normal !important; word-wrap: break-word;">${vacancies.nullo(dato)}</td>
-                                <td class="hidden-xs">${vacancies.status(dato)}</td>
-                                <td>${vacancies.button(dato)}</td>
+                                <td>${dato.id_department}</td>
+                                <td>${dato.name}</td>
+                                <td>${dato.rfc}</td>
+                                <td>${dato.phone}</td>
+                                <td>${dato.email}</td>
+                                <td class="hidden-xs">${providers.status(dato)}</td>
+                                <td>${providers.button(dato)}</td>
                             </tr>`;
+        
           
-            $("#vacancy_id"+dato.id).replaceWith(vacancy);
+            $("#provider_id"+dato.id).replaceWith(provider);
 
             if(dato.status == 1){
                 color ="#c3e6cb";
             }else if(dato.status == 2){
                 color ="#ed969e";
             }
-            $("#vacancy_id"+dato.id).css("background-color", color); 
+            $("#provider_id"+dato.id).css("background-color", color); 
 
 
         }else if(dato.status == 0){
-            $("#vacancy_id"+dato.id).remove();
+            $("#provider_id"+dato.id).remove();
 
             if($("#tag_container tr").length == 1){
                 $("#tag_container").append(` <tr id="table-row" class="text-center">
@@ -310,5 +309,5 @@ const success = {
         });
 
     },
-
+  
 }

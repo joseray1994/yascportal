@@ -162,7 +162,19 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::delete('/incident', 'IncidentReportController@delete');
     Route::post('/incident/getTable', 'IncidentReportController@getTable');
 
+    //Display Index Page Providers
+    Route::get('/providers', 'ProviderController@index');
+    Route::get('/providers/{provider_id?}', 'ProviderController@show');
+    Route::post('/providers', 'ProviderController@store');
+    Route::post('/providers/{id}/{provider_id?}', 'ProviderController@update');
+    Route::delete('/providers/{provider_id?}', 'ProviderController@destroy');
+    Route::delete('/providers/delete/{id}', 'ProviderController@delete');
 
+    //Display Index Page Supplies
+    Route::get('/supplies/{id}', 'SupplyController@index');
+    Route::post('/supplies/{id}', 'SupplyController@store');
+    Route::delete('/supplies/{id}/delete/{supply_id?}', 'SupplyController@delete');
+    Route::delete('/supplies/{id}/{supply_id?}', 'SupplyController@destroy');
 });
 
 
