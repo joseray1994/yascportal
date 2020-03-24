@@ -12,7 +12,7 @@
 						<div class="col-md-6 mb-3">
                             <div class="input-group">
                                        
-                                            <input type="hidden" id="id_department" name="id_department" value="2">
+                                            <input type="hidden" id="id_department" name="id_department" value="1">
                                      
                             </div> 
                         </div>
@@ -27,36 +27,37 @@
 
 							<div class="form-group error">
 								<div class="btn-group col-sm-12">
-									<button class="btn modaldelichef" disabled><i class="fa fa-user-plus"></i></button>
+									<button class="btn modaldelichef" disabled><i class="fa fa-cubes"></i></button>
 									<input type="text" class="form-control has-error" id="name" name="name" placeholder="Enter new supply" value="" maxlength ="60">
 								</div>
 							</div>
 						
 							<div class="form-group error">
 								<div class="btn-group col-sm-12">
-									<button class="btn modaldelichef" disabled><i class="fa fa-phone"></i></button>
-									<input type="number" class="form-control has-error" id="quantity" name="quantity" placeholder="Quantity" value="">
+									<button class="btn modaldelichef" disabled><i class="fa fa-balance-scale"></i></button>
+									<input type="number" class="form-control has-error add-price" id="quantity" name="quantity" placeholder="Quantity" value="">
 								</div>
 							</div>
 
 							<div class="form-group error">
 								<div class="btn-group col-sm-12">
-									<button class="btn modaldelichef" disabled><i class="fa fa-envelope"></i></button>
-									<input type="number" class="form-control has-error" id="price" name="price" placeholder="Price" value="">
+									<button class="btn modaldelichef" disabled><i class="fa fa-money"></i></button>
+									<input type="number" class="form-control has-error add-price" id="price" name="price" placeholder="Price" value="">
 								</div>
                             </div>
                             
                             <div class="form-group error">
 								<div class="btn-group col-sm-12">
-									<button class="btn modaldelichef" disabled><i class="fa fa-envelope"></i></button>
+									<button class="btn modaldelichef" disabled><i class="fa fa-money"></i></button>
 									<input type="number" class="form-control has-error" id="cost" name="cost" placeholder="Cost" value="">
 								</div>
                             </div>
                             
                             <div class="form-group error">
 								<div class="btn-group col-sm-12">
-									<button class="btn modaldelichef" disabled><i class="fa fa-envelope"></i></button>
-									<input type="number" class="form-control has-error" id="total_price" name="total_price" placeholder="total_price" value="">
+									<button class="btn modaldelichef" disabled><i class="fa fa-money"></i></button>
+									<input type="number" class="form-control has-error btn-calcular" id="total_price" name="total_price" placeholder="total_price" value=""
+									placeholder="00.00" onChange="validarNumero(this.value);" readonly>
 								</div>
 							</div>
 					</div>

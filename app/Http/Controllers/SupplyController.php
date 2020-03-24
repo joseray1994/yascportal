@@ -56,22 +56,6 @@ class SupplyController extends Controller
             
     }
 
-    public function validateSupply($request){
-        
-        $this->validate(request(), [
-           'id_department' => 'required',
-           'id_provider' => 'required',
-            'name' => 'required|max:50',
-            'quantity' => 'required',
-            'price' => 'required',
-            'cost' => 'required',
-            'total_price' => 'required',
-            
-        ]); 
-       
-    }
-
-
     public function resultdata($id){
 
         $supply = SupplyModel::select('supplies.id as id', 
@@ -87,9 +71,64 @@ class SupplyController extends Controller
 
         return $supply;
     }
+
+    public function validateSupply($request){
+        
+        $this->validate(request(), [
+           'id_department' => 'required',
+           'id_provider' => 'required',
+            'name' => 'required|max:60',
+            'quantity' => 'required|numeric|min:0',
+            'price' => 'required|numeric|min:0',
+            'cost' => 'required|numeric|min:0',
+            'total_price' => 'required',
+            
+        ]); 
+       
+    }
+
+    public function ValidateExtraSupply($request,$supply_id){
+        $ExtraSupplyValidation=[]; 
+        $n ="";
+        $data = [];
+
+        $name = SupplyModel::where('name', $request->name)
+        ->whereIn('status', [1,2]);
+
+        if($supply_id > 0){
+            $name->where('id','!=',$supply_id);
+        }
+            
+        $nameV = $name->count();
+
+        if($nameV > 0){      
+            $n = 'Another user type already has that Name';
+            
+        }
+        if($n==''){
+            $data=[];
+
+          }else{
+              $data=[
+                  'No' =>2,
+                  'name'=>$n,
+                ];
+
+              array_push($ExtraSupplyValidation,$data);
+          }
+        return $ExtraSupplyValidation;
+    }
  
     public function store(Request $request)
-    {      
+    {     
+        $answer=SupplyController::ValidateExtraSupply($request,0);
+      
+        if($answer){
+
+              return response()->json($answer);
+
+        }else{
+
         $supply_id="";
         SupplyController::validateSupply($request,$supply_id);
         $supply = SupplyModel::firstOrCreate([
@@ -107,7 +146,7 @@ class SupplyController extends Controller
         $supply2 = SupplyController::resultdata($id);
             
         return response()->json($supply2);
-      
+        }
     }
 
     public function show($id, $supply_id)
@@ -121,6 +160,14 @@ class SupplyController extends Controller
 
     public function update(Request $request, $id,$supply_id)
     {
+        $var = count(SupplyController::ValidateExtraSupply($request,$supply_id));
+        $answer=SupplyController::ValidateExtraSupply($request,0);
+      
+        if($var>0){
+
+              return response()->json($answer);
+
+        }else{
 
             SupplyController::validateSupply($request,$supply_id);
             $supply = SupplyModel::find($supply_id);
@@ -139,7 +186,7 @@ class SupplyController extends Controller
             $supply2 = SupplyController::resultdata($id);
 
             return response()->json($supply2);
-     
+        }
         
     }
 
