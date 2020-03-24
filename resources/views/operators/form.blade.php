@@ -34,6 +34,7 @@
                     <option value="">Select</option>
                     <option value="F">Female</option>
                     <option value="M">Male</option>
+                    <option value="B">Non Binary</option>
                 </select>
             </div>
             <div class="col-sm-3 form-group">
@@ -47,10 +48,6 @@
             <div class="col-sm-3 form-group">
                 <h6>Birthday (YYYY-MM-DD):</h6>
                 <input type="date" name="birthdate" id="birthdate" class="form-control">
-            </div>
-            <div class="col-sm-12 form-group">
-                <h6>Notes:</h6>
-                <input type="text" name="notes" id="notes" class="form-control" maxlength="150">
             </div>
             <div class="col-sm-12 form-group">
                 <h6>Information:</h6>
