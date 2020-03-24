@@ -25,9 +25,9 @@ class TypeUserController extends Controller
                 $search = trim($request->dato);
 
                 if(strlen($request->type) > 0 &&  strlen($search) > 0){
-                    $data2 = TypeUserModel::whereNotIn('status',[0])->where($request->type,'LIKE','%'.$search.'%');
+                    $data2 = TypeUserModel::whereNotIn('status',[0])->where('id',"!=",1)->where($request->type,'LIKE','%'.$search.'%');
                 } else{
-                    $data2 = TypeUserModel::whereNotIn('status',[0]);
+                    $data2 = TypeUserModel::whereNotIn('status',[0])->where('id',"!=",1);
                 } 
                 $data=$data2->paginate(10);
                 if ($request->ajax()) {
@@ -43,7 +43,7 @@ class TypeUserController extends Controller
     public function validateType($request){
         
             $this->validate(request(), [
-                'name' => 'required|max:30',
+                'name' => 'required|alpha_num|max:30',
             ]); 
         }
     
