@@ -7,9 +7,24 @@
         {{ csrf_field() }}
         <hr>
         <div class="row">
-            <div class="col-sm-12 form-group">
+            <div class="col-sm-6 form-group">
                 <h6>Title:</h6>
                 <input type="text" name="title" id="title" class="form-control" maxlength="150">
+            </div>
+            <div class="col-sm-3 form-group">
+                <h6>Who can see this?:</h6>
+                <select class="selectpicker selectpick form-control" id='id_type_user' multiple data-live-search="true" name='id_type_user[]'>
+                    @foreach ($types as $type)
+                        <option value='{{$type->id}}'>{{$type->name}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-sm-3 form-group">
+                <h6>Allow Comments:</h6>
+                <select class="form-control" id='status' name='status'>
+                    <option value="1">With comments</option>
+                    <option value="2">Without Comments</option>
+                </select>
             </div>
             <div class="col-sm-12">
                 <h6>Image:</h6>
@@ -21,8 +36,6 @@
             </div>            
         </div>
         <hr>
-        <div class="row">
-        </div>
         <div class="col-sm-12 text-center " >					 
             <button type="button" class="btn btn-danger btn-cancel">Cancel</button>
             <button type="submit" class="btn btn-success" id="btn-save" value="add">Save</button>
