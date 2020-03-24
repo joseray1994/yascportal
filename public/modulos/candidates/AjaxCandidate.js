@@ -69,7 +69,7 @@ $(document).ready(function(){
             //used to determine the http verb to use [add=POST], [update=PUT]
             var state = $('#btn-save').val();
             var type = "POST"; //for creating new resource
-            var candidate_id = $('#candidate_id').val();;
+            var candidate_id = $('#candidate_id').val();
             var my_url = url;
             if (state == "update"){
                 type = "POST"; //for updating existing resource

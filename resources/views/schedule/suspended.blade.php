@@ -1,9 +1,14 @@
-<div class="col-sm-12 text-center view-supended" style="display:none;">
+<div class="col-sm-12 text-center view-suspended" style="display:none;">
                         <div class="header">
-                            <h1>Audit <i class="fa fa-tasks"></i></h1>
+                            <h1>Suspended <i class="fa fa-tasks"></i></h1>
                             <input type="hidden" id="auditid" value="">
                             <ul class="header-dropdown">
-                                <li> <button type="button" class="btn btn-danger back-weekly">Back to Weekly</button></li>
+                                <li> 
+                                    <div class="btn-group">
+                                        <a href="javascript:void(0);" class="btn btn-success-create" disabled="" id="btn_add_suspended">New Suspended &nbsp;<i class="fa fa-plus" style="color:white"></i></a> 
+                                        <button type="button" class="btn btn-danger back-weekly">Back to Weekly</button>
+                                    </div>
+                                </li>
                             </ul>
                         </div>
                             <div class="row text-left">

@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ClientsSeeder::class);
         $this->call(ScheduleTableSeeder::class);
         $this->call(TimeZoneSeeder::class);
+        $this->call(ZoomSeeder::class);
         
     }
 }
