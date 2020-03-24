@@ -191,8 +191,11 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     //Display Index Page Supplies
     Route::get('/supplies/{id}', 'SupplyController@index');
     Route::post('/supplies/{id}', 'SupplyController@store');
+    Route::post('/supplies/{id}/{supply_id?}', 'SupplyController@update');
     Route::delete('/supplies/{id}/delete/{supply_id?}', 'SupplyController@delete');
     Route::delete('/supplies/{id}/{supply_id?}', 'SupplyController@destroy');
+    Route::get('/supplies/{id}/{supply_id?}', 'SupplyController@show');
+
 });
 
 

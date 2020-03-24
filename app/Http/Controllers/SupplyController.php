@@ -71,6 +71,7 @@ class SupplyController extends Controller
        
     }
 
+
     public function resultdata($id){
 
         $supply = SupplyModel::select('supplies.id as id', 
@@ -104,9 +105,42 @@ class SupplyController extends Controller
         $id=$supply->id;
 
         $supply2 = SupplyController::resultdata($id);
-            dd($supply2);
+            
         return response()->json($supply2);
       
+    }
+
+    public function show($id, $supply_id)
+    {
+
+        $supply = SupplyModel::find($supply_id);
+        $supply->status=1;
+        return response()->json($supply);
+    }
+
+
+    public function update(Request $request, $id,$supply_id)
+    {
+
+            SupplyController::validateSupply($request,$supply_id);
+            $supply = SupplyModel::find($supply_id);
+            $supply->id_department = $request->id_department;
+            $supply->id_provider = $request->id_provider;
+            $supply->name = $request->name;
+            $supply->quantity = $request->quantity;
+            $supply->price = $request->price;
+            $supply->cost = $request->cost;
+            $supply->total_price = $request->total_price;
+            $supply->status=1;
+            $supply->save();
+
+            $id=$supply->id;
+
+            $supply2 = SupplyController::resultdata($id);
+
+            return response()->json($supply2);
+     
+        
     }
 
     public function destroy($id, $supply_id)
