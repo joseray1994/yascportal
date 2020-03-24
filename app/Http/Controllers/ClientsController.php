@@ -109,7 +109,7 @@ class ClientsController extends Controller
        
     }
     public function validateClient($request, $client_id = ''){
-       
+    //    dd($request);
         $this->validate(request(), [
             'name' => 'unique:clients,name,'.$client_id.'|required|max:30|regex:/^([a-zA-Z]+)(\s[a-zA-Z]+)*$/',
             'color' => 'unique:clients,color,'.$client_id,
@@ -143,9 +143,10 @@ class ClientsController extends Controller
  
     public function store(Request $request)
     {
-    
+        // dd($request->input());
         ClientsController::validateClient($request);
         $data = $request->input();
+        // dd($data);
         $clients = ClientModel::firstOrCreate([
         'name'=>$data['name'],
         'description'=>$data['description'],
@@ -154,7 +155,7 @@ class ClientsController extends Controller
         ]);
 
         $id_client = $clients->id;
-
+        // dd($id_client);
         $breaks = BreakRulesModel::firstOrCreate([
         'interval'=>$data['interval'],
         'duration'=>$data['duration'],
