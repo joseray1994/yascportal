@@ -34,6 +34,16 @@ $(document).ready(function(){
         $('#myModal').modal('hide');
     });
 
+        //display modal form for product EDIT ***************************
+        $(document).on('click','.open_modal',function(){
+            $('#supplyForm').trigger("reset");
+            var supply_id = $(this).val();
+            var my_url = url + '/' + supply_id;
+    
+                actions.show(my_url);
+           
+        });
+
       
     
          //create new product / update existing product ***************************
@@ -183,24 +193,7 @@ const success = {
     new_update: function (data,state){
         console.log(data);
         var dato = data;
-        if(data[0]){
-            datos = data[0].No;
-        }else{
-            datos = data;
-        }
-        switch(datos) {
-            case 2:
-                $.notify({
-                    // options
-                    title: "Error!",
-                    message:data[0].name,
-                },{
-                    // settings
-                    type: 'danger'
-                });
-            break;
-            default:
-
+       
                 $.notify({
                     // options
                     title: "Saved!",
@@ -237,11 +230,25 @@ const success = {
             if ($('.rowType').length == 0) {
                 $('#table-row').show();
             }
-            break;
-            
-        }
+           
         
     },
+
+    
+    show: function(data){
+        console.log(data);
+        $('#supply_id').val(data.id);
+        $('#id_provider').val(data.id_provider);
+        $('#id_department').val(data.id_department);
+        $('#name').val(data.name);
+        $('#quantity').val(data.quantity);
+        $('#price').val(data.price);
+        $('#cost').val(data.cost);
+        $('#total_price').val(data.total_price);
+        $('#btn-save').val("update");
+        $('#myModal').modal('show');
+    },
+
 
     deactivated:function(data) {
         console.log(data);
