@@ -4,6 +4,7 @@
 /public/documents
 /public/images/operators
 /public/images/users
+/public/images/news
 /storage/*.key
 /vendor
 .env

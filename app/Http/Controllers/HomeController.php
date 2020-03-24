@@ -41,19 +41,19 @@ class HomeController extends Controller
         $clients = ClientModel::all();
         if($menu['validate']){ 
 
-            $search = trim($request->dato);
+            // $search = trim($request->dato);
 
-            if(strlen($request->type) > 0 &&  strlen($search) > 0){
-                $data2 = User::with('User_info')->paginate(10);
-            } else{
-                $data2 = User::with('User_info')->paginate(10);
-            } 
-            $data=$data2;
-            if ($request->ajax()) {
-                return view('users.table', compact('data'));
-            }
+            // if(strlen($request->type) > 0 &&  strlen($search) > 0){
+            //     $data2 = User::with('User_info')->paginate(10);
+            // } else{
+            //     $data2 = User::with('User_info')->paginate(10);
+            // } 
+            // $data=$data2;
+            // if ($request->ajax()) {
+            //     return view('users.table', compact('data'));
+            // }
             // return view('users.index',compact('data'));
-            return view('users.index',["data"=>$data,"menu"=>$menu,'types'=>$types, 'clients'=>$clients]);
+            return view('dashboard.index',["menu"=>$menu]);
         }
     }
 }

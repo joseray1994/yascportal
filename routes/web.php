@@ -163,6 +163,13 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::delete('/incident', 'IncidentReportController@delete');
     Route::post('/incident/getTable', 'IncidentReportController@getTable');
 
+    //NEWS
+    Route::get('/news', 'NewsController@index');
+    Route::get('/news/{id}', 'NewsController@getResult');
+    Route::post('/news', 'NewsController@store');
+    Route::put('/news/{id}', 'NewsController@update');
+    Route::delete('/news/{id}', 'NewsController@destroy');
+    Route::delete('/news/delete/{id}', 'NewsController@delete');
     //suspended work 
     Route::get('/suspended', 'SuspendedWorkController@index');
     Route::get('/suspended/{UserType_id?}', 'SuspendedWorkController@show');

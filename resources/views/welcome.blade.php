@@ -191,6 +191,9 @@
 <script src="{{asset('vendor/dropify/js/dropify.min.js')}}"></script>
 <script src="{{asset('modulos/auth/auth_javascript.js')}}"></script>
 <script src="{{asset('modulos/shift/AjaxShift.js')}}"></script>
+<script src="{{asset('vendor/ckeditor/ckeditor.js')}}"></script> <!-- Ckeditor --> 
+<script src="{{asset('js/pages/forms/editors.js')}}"></script>
+
 <link rel="stylesheet" href="{{asset('vendor/bootstrap/css/bootstrap-select.css')}}">
 <script src="{{asset('vendor/bootstrap/js/bootstrap-select.min.js')}}"></script>
 {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css"/> --}}

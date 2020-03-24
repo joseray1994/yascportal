@@ -31,7 +31,6 @@ class UserSeed extends Seeder
             'phone'=> 'admin',
             'emergency_contact_name'=>'admin emegency contact name',
             'emergency_contact_phone'=>'00000000',
-            'notes'=> 'admin notes',
             'description'=>'admin desc',
             'gender'=>'X',
             'birthdate'=> Carbon::now(),

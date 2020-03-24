@@ -210,7 +210,7 @@ class ServiceGeneralController extends Controller
         
         $this->validate(request(), [
             'document' => 'required',
-            'document.*' => 'required|file|max:5000|mimetypes:application/pdf,application/msword,application/vnd.ms-powerpoint,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/doc,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/zip,image/jpeg,image/png',
+            'document.*' => 'required|file|max:5000|mimetypes:application/pdf,application/msword,application/vnd.ms-powerpoint,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/doc,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/zip,image/jpeg,image/png,text/plain',
         ]);
     }
 
