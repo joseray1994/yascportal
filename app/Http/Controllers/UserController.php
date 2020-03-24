@@ -114,41 +114,41 @@ class UserController extends Controller
         //VALIDAR NICK NAME
         $validaNick = UserController::validateNickname($request->nickname);
 
-        // if($validaNick){
-        //     $msg= 'Another user already has that Nickname';
-        //     $data=['No'=>2,'msg'=>$msg];
-        //     return response()->json($data);
-        // }
+        if($validaNick){
+            $msg= 'Another user already has that Nickname';
+            $data=['No'=>2,'msg'=>$msg];
+            return response()->json($data);
+        }
         
-        // try {
-        //     DB::beginTransaction();
-        //         $input = $request->input();
-        //         $input['id_status'] = 1;
-        //         $input['nickname'] = 'nick'.$input['name'];
-        //         $input['password'] = Hash::make($input['password']);
-        //         $user = User::create($input);
+        try {
+            DB::beginTransaction();
+                $input = $request->input();
+                $input['id_status'] = 1;
+                $input['nickname'] = 'nick'.$input['name'];
+                $input['password'] = Hash::make($input['password']);
+                $user = User::create($input);
 
-        //         // SUBIR IMAGE
-        //         $imageName = UserController::documents($request, "users");
+                // SUBIR IMAGE
+                $imageName = UserController::documents($request, "users");
                 
-        //         $input['profile_picture'] = $imageName;
-        //         $input['id_user'] = $user->id;
-        //         $user_info = User_info::create($input);
+                $input['profile_picture'] = $imageName;
+                $input['id_user'] = $user->id;
+                $user_info = User_info::create($input);
                 
-        //         if($request->clients != null)
-        //         {
-        //             foreach($request->clients as $id_client)
-        //             {
-        //                 User_client::create(['id_user'=>$user->id,'id_client'=>$id_client]);
-        //             }
-        //         }
-        //     DB::commit();
-        //     // event(new NewMessage(User::where('id',$user->id)->with('User_info')->first()));
-        //     return response()->json(User::where('id',$user->id)->with('User_info')->with('type_user')->first());
-        // } catch (\Exception $e) {
-        //     return response()->json($e);    
-        //     DB::rollBack();
-        // }
+                if($request->clients != null)
+                {
+                    foreach($request->clients as $id_client)
+                    {
+                        User_client::create(['id_user'=>$user->id,'id_client'=>$id_client]);
+                    }
+                }
+            DB::commit();
+            // event(new NewMessage(User::where('id',$user->id)->with('User_info')->first()));
+            return response()->json(User::where('id',$user->id)->with('User_info')->with('type_user')->first());
+        } catch (\Exception $e) {
+            return response()->json($e);    
+            DB::rollBack();
+        }
     }
 
     /**
