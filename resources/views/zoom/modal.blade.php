@@ -24,7 +24,7 @@
 					<button type="submit" class="btn btn-success" id="btn-save-user" value="add">Save</button>
                 </div>
 			  </form> 
-			  <input type="hidden" id="user_id" name="user_id" value="0"> 
+			  <input type="hidden" id="zoom_user_id" name="zoom_user_id"> 
             </div>
           </div>
         </div>

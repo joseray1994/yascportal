@@ -11,7 +11,7 @@
     </thead>
     <tbody id="zoom-list">
     @forelse ($zoom as $zm)
-        <tr id="zm_id{{$zm->id}}">
+        <tr id="zoom_id{{$zm->id}}">
             <td>{{$zm->name }}</td>
             <td>{{$zm->email}}</td>
             <td>{{$zm->password}}</td>
@@ -22,7 +22,7 @@
                                 <span class='badge badge-success'>Available</span>
                             </td>
                             <td>
-                               <button type="button" class="btn btn-sm btn-outline-warning btn_add_user"  title="Assing User"  value="{{$zm->id}}"  ><i class="fa fa-user"></i></button>
+                               <button type="button" class="btn btn-sm btn-outline-warning" id = "btn_add_user"  title="Assing User"  value="{{$zm->id}}"  ><i class="fa fa-user"></i></button>
                                 <button type="button" class="btn btn-sm btn-outline-secondary btn-edit"  title="Edit"  value="{{$zm->id}}"  ><i class="fa fa-edit"></i></button>
                                 <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-type"  title="Deactivated" data-type="confirm" value="{{$zm->id}}"><i class="fa fa-window-close"></i></button>
                             </td>
