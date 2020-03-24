@@ -3,7 +3,7 @@
           <div class="modal-dialog">
             <div class="modal-content">
                <div class="modal-header text-white  bg-danger" >
-                            <h4 class="modal-title" id="myModalLabel">Registro Perfil <i class="fa fa-user-plus"></i></h4>
+                            <h4 class="modal-title" >Modify Schedule <i class="fa fa-arrows-v"></i> <i class="fa fa-calendar"></i></h4>
 				        </div>
               <form enctype="multipart/form-data" method="POST" id="typeUserForm" class="form-horizontal">
                 <div class="modal-body">
@@ -104,7 +104,7 @@
           <div class="modal-dialog">
             <div class="modal-content">
                <div class="modal-header text-white  bg-danger" >
-                            <h4 class="modal-title" id="myModalLabel">Registro Perfil <i class="fa fa-user-plus"></i></h4>
+                            <h4 class="modal-title" >Edit Extra Shift <i class="fa fa-clock-o"></i></h4>
 				        </div>
               <form enctype="multipart/form-data" method="POST" id="ExtraForm" class="form-horizontal">
                 <div class="modal-body">       

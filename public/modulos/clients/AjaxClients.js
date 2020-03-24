@@ -420,6 +420,7 @@ const success = {
                     var client = `<tr id="client_id${dato.id}">
                                         <td style="background:${dato.color}"></td>
                                         <td>${dato.name}</td>
+                                        <td>${dato.time_zone_name}, ${dato.time_zone_offset}</td>
                                         <td>${dato.description}</td>
                                         <td>${dato.interval}</td>
                                         <td>${dato.duration}</td>
@@ -465,6 +466,7 @@ const success = {
                     }
                         var contact = `<tr id="client_id${dato.id}">
                                             <td>${dato.name}</td>
+                                            <td>${dato.time_zone_name}, ${dato.time_zone_offset}</td>
                                             <td>${dato.description}</td>
                                             <td>${dato.phone}</td>
                                             <td>${dato.email}</td>
@@ -532,6 +534,7 @@ const success = {
                     }
                     var client = `<tr id="client_id${dato.id}" >
                                          <td style="background:${dato.color}"></td>
+                                         <td>${dato.time_zone_name}, ${dato.time_zone_offset}</td>
                                         <td>${dato.name}</td>
                                         <td>${dato.description}</td>
                                         <td>${dato.interval}</td>
@@ -673,11 +676,11 @@ const success = {
                 console.log(data);
                 $('#client_id').val(data.id_client);
                 $('#name').val(data.name);
+                $('#time_zone').val(data.id_time_zone);
                 $('#description').val(data.description);
                 $('#color').val(data.color);
                 $('#interval').val(data.interval);
                 $('#duration').val(data.duration);
-                $('#btn-save').val("update");
                 $('#myModal').modal('show');
             break
 
@@ -704,9 +707,4 @@ const success = {
 }
 
 
-
-    
-function newFunction() {
-    return '#url';
-}
 

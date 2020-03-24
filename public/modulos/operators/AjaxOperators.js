@@ -505,7 +505,6 @@ const success = {
                 $('#birthdate').val(data.birthdate);
                 $('#emergency_contact_name').val(data.emergency_contact_name);
                 $('#emergency_contact_phone').val(data.emergency_contact_phone);
-                $('#notes').val(data.notes);
                 $('#description').val(data.description);
                 break;
         }

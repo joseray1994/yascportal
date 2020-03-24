@@ -153,6 +153,9 @@ return [
         'id_supervisor' => [
             'required' => 'Choose Supervisor',
         ],
+        'document.*' => [
+            'mimetypes' => 'Invalid format. Accepted File Types: pdf/png/jpg/docx/xlsx/zip',
+        ],
     ],
 
     /*

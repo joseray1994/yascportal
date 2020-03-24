@@ -15,10 +15,11 @@ class AddColumnsToClientsTable extends Migration
     {
         Schema::table('clients', function (Blueprint $table) {
             $table->string('name');
-            $table->string('description');
-            $table->string('color');
-            $table->string('documents');
-            $table->string('updated_by');
+            $table->integer('time_zone')->nullable();
+            $table->string('description')->nullable();
+            $table->string('color')->nullable();
+            $table->string('documents')->nullable();
+            $table->string('updated_by')->nullable();
             $table->integer('status')->default(1);
            
         });

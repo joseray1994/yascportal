@@ -160,19 +160,25 @@ class ReportsController extends Controller
                                                 'schedule_time_clock.id as id',
                                                 'schedule_time_clock.id_client as id_client',
                                                 'det.id_day as id_day',
+                                                'sch.week as week',
                                                 'schedule_time_clock.date_start as date_start',
                                                 'schedule_time_clock.date_end as date_end',
                                                 'schedule_time_clock.duration as duration',
                                                 'usinfo.name as name',
                                                 'usinfo.last_name as last_name',
+
                                                 )
+                                        ->join('schedule as sch', 'sch.id', '=', 'schedule_time_clock.id_schedule')
                                         ->join('detail_schedule_user as det', 'det.id', '=', 'schedule_time_clock.id_schedule_detail')
                                         ->join('users as user', 'user.id', '=', 'schedule_time_clock.id_operator')
                                         ->join('users_info as usinfo', 'usinfo.id_user', '=', 'user.id')
                                         ->orderBy('det.id_day')
+                                        ->orderBy('user.id')
                                         ->get();
 
             dd($time_clock);
+            $count = count($time_clock);
+            // dd($count);
                 return view('reports.attendance.index', ["menu"=>$menu,  "clients" => $clients, "operators" => $operators, "time_clock" => $time_clock]);
         }else{
             return redirect('/');

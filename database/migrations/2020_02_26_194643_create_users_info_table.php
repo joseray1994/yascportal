@@ -23,7 +23,6 @@ class CreateUsersInfoTable extends Migration
             $table->string('phone');
             $table->string('emergency_contact_name')->nullable();
             $table->string('emergency_contact_phone')->nullable();
-            $table->string('notes')->nullable();
             $table->string('description')->nullable();
             $table->string('gender');
             $table->string('birthdate');
