@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use App\NewsModel;
+use App\TypeUserModel;
+use App\UserViewsNewsModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -41,7 +43,9 @@ class NewsController extends Controller
             if ($request->ajax()) {
                 return view('news.table', ["data"=>$data]);
             }
-            return view('news.index',["menu"=>$menu, "data"=>$data]);
+
+            $types_user = TypeUserModel::where('status', 1)->get();
+            return view('news.index',["menu"=>$menu, "data"=>$data, "types"=>$types_user]);
             
         }else{
             return redirect('/');
@@ -53,6 +57,7 @@ class NewsController extends Controller
             'title' => 'required',
             'description' => 'required',
             'news_picture' => 'sometimes|nullable|image',
+            'id_type_user' => 'required',
         ]);
     }
 
@@ -73,7 +78,15 @@ class NewsController extends Controller
             "description"=>$request->description,
             "news_picture"=>$imageName['name'],
             "path"=>$imageName['path'],
+            "status"=>$request->status
         ]);
+
+        if($request->id_type_user != null){
+            foreach($request->id_type_user as $id_type)
+            {
+                UserViewsNewsModel::create(['id_type_user'=>$id_type,'id_new'=>$news->id]);
+            }
+        }
 
         $result = NewsController::getResult($news->id);
         return response()->json($result);
@@ -87,7 +100,20 @@ class NewsController extends Controller
         return $row;
     }
 
-    
+    public function show($id){
+        $row = NewsModel::select('news.id', 'news.title', 'users_info.name', 'users_info.last_name', 'news.created_at', 'news.status', 'news.news_picture', 'news.path', 'news.description')
+        ->join('users_info', 'news.id_user', '=', 'users_info.id_user')
+        ->where('news.id', $id)
+        ->first();
+
+        $user_view = UserViewsNewsModel::where('id_new', $id)->get();
+        return response()->json(["data"=>$row, "types"=>$user_view]);
+    }
+
+    public function getTypes(){
+        $types_user = TypeUserModel::where('status', 1)->get();
+        return response()->json($types_user);
+    }
     //save document
     public function documents($request, $folder){
         
@@ -127,7 +153,18 @@ class NewsController extends Controller
 
         $news->title = $request->title;
         $news->description = $request->description;
+        $news->status=$request->status;
+
         $news->update();
+
+        if($request->id_type_user != null){
+            UserViewsNewsModel::where('id_new',$id)->delete();
+
+            foreach($request->id_type_user as $id_type)
+            {
+                UserViewsNewsModel::create(['id_type_user'=>$id_type,'id_new'=>$id]);
+            }
+        }
         
         $result = NewsController::getResult($news->id);
         return response()->json($result);
@@ -136,27 +173,11 @@ class NewsController extends Controller
     public function destroy($id)
     {
         $news = NewsModel::find($id);
-        if($news->status == 2)
-        {
-            $news->status = 1;
-        }
-        else
-        {
-            $news->status = 2;  
-        }
-        $news->save();
-
-        $result = NewsController::getResult($id);
-        return response()->json($result);
-    } 
-
-    public function delete($id)
-    {
-        $news = NewsModel::find($id);
         $news->status = 0;
         $news->save();
     
         $result = NewsController::getResult($id);
         return response()->json($result);
     } 
+
 }

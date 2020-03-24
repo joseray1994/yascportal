@@ -184,7 +184,8 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
 
     //NEWS
     Route::get('/news', 'NewsController@index');
-    Route::get('/news/{id}', 'NewsController@getResult');
+    Route::get('/news/{id}', 'NewsController@show');
+    Route::get('/getTypes', 'NewsController@getTypes');
     Route::post('/news', 'NewsController@store');
     Route::put('/news/{id}', 'NewsController@update');
     Route::delete('/news/{id}', 'NewsController@destroy');
