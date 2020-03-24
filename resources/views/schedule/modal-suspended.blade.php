@@ -12,11 +12,11 @@
                         <br/>
                         <div class="col-sm-6">
                           <label for="sel1">Date Start:</label>
-                          <input type="date" class="form-control has-error" id="date_startS" name="time_start" value="" >
+                          <input type="date" class="form-control has-error" id="date_startS" name="time_start" value="" required>
                         </div>
                         <div class="col-sm-6">
                           <label for="sel1">Date End:</label>
-                          <input type="date" class="form-control has-error" id="date_EndS" name="time_end" value="" >
+                          <input type="date" class="form-control has-error" id="date_EndS" name="time_end" value="" required>
                       </div>
                       </br>
                     </div>
