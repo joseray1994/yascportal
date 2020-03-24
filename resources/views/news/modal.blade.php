@@ -10,7 +10,7 @@
             <div style="max-height: 85vh; overflow: scroll;">
                 <div class="modal-body">
                     <div class="form-group text-center seccion-image">
-                        <img src="" class="rounded-lg user-photo" id="picture_news" alt="News" style="max-height:350px">
+                        <img src="" class="rounded-lg user-photo" id="picture_news" alt="News" style="max-width:100%;max-height:350px">
                     </div>
                     <div class="form-group">
                         <h4 class="text-center">Description</h4>

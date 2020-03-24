@@ -27,7 +27,7 @@ $(document).ready(function(){
         $('#btn-save').val("add");
         $("#formNews").trigger('reset');
         $('#tag_put').remove();
-
+        $('.selectpick').selectpicker("selectAll");
         CKEDITOR.instances['ckeditor'].setData("");
 
 
@@ -74,6 +74,7 @@ $(document).ready(function(){
 
      //SHOW
      $(document).on('click','.btn-edit',function(){
+        getTypes();
         var id = $(this).val();
         var my_url = url + '/' + id;
 
@@ -89,57 +90,9 @@ $(document).ready(function(){
     });
 
     //DELETE
-    $(document).on('click','.delete-op',function(){
+$(document).on('click','.delete-op',function(){
         var id = $(this).val();
-        var my_url =url + '/' + id;
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                }
-            })
-        if($(this).attr('class') == 'btn btn-sm btn-outline-success delete-op'){
-            title= "Do you want to activate this News?";
-            text="News will be activated";
-            confirmButtonText="Activate";
-
-            datatitle="Activated";
-            datatext="activated";
-            datatext2="Activation";
-        }else {
-            title= "Do you want to disable this News?";
-            text= "News will be deactivated";
-            confirmButtonText="Desactivar";
-
-            datatitle="Deactivated";
-            datatext="deactivated";
-            datatext2="Deactivation";
-        }
-
-        swal({
-            title: title,
-            text: text,
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonClass: "btn btn-danger",
-            confirmButtonText: confirmButtonText,
-            cancelButtonText: "Cancel",
-            closeOnConfirm: false,
-            closeOnCancel: false
-        },
-        function(isConfirm) {
-            if (isConfirm) {
-                swal(datatitle, "Option "+datatext, "success");
-                actions.deactivated(my_url);
-            } 
-            else {
-            swal("Cancelled", datatext2+" cancelled", "error");
-            }
-        });
-    });
-
-    $(document).on('click','.destroy-op',function(){
-        var id = $(this).val();
-        var my_url = url + '/delete/' + id;
+        var my_url = url + '/' + id;
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -180,19 +133,48 @@ function showDetail(id) {
     actions.modal(my_url);
 }
 
+function getTypes()
+{
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+        }
+    })       
+    $.ajax({
+        type: 'GET',
+        url: baseUrl+'/getTypes',
+        dataType: 'json',
+        success: function (data) {
+            console.log(data);
+            var html = '';
+            $.each(data, function (key, val) {
+                html+= "<option value='"+val.id+"'>"+ val.name+"</option>"
+        });
+        $('#id_type_user').html(html); 
+        
+        },
+        error: function (data) {
+            console.log(data);
+            
+
+        }
+        }); 
+}
+
+
 const types ={
     button: function(dato){
            var buttons='<div>';
             if(dato.status== 1){
                buttons += ` <button type="button" class="btn btn-sm btn-outline-info open-modal" onclick="showDetail(${dato.id})" data-toggle="tooltip" title="Detail" value="${dato.id}"  ><i class="fa fa-eye"></i></button>
                             <button type="button" class="btn btn-sm btn-outline-secondary btn-edit" data-toggle="tooltip" title="Edit" value="${dato.id}"  ><i class="fa fa-edit"></i></button>
-                            <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert delete-op" data-toggle="tooltip" title="Desactivated" data-type="confirm" value="${dato.id}"><i class="fa fa-window-close"></i></button>
+                            <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert delete-op" data-toggle="tooltip" title="Delete" data-type="confirm" value="${dato.id}"><i class="fa fa-window-close"></i></button>
                ` ;
           
            }else if(dato.status == 2){
-               buttons  += `<button type="button" class="btn btn-sm btn-outline-info open-modal"  onclick="showDetail(${dato.id})" data-toggle="tooltip" title="Detail" value="${dato.id}"  ><i class="fa fa-eye"></i></button>
-                            <button type="button" class="btn btn-sm btn-outline-success delete-op" title="Activated" data-toggle="tooltip" data-type="confirm" value="${dato.id}" ><i class="fa fa-check-square-o"></i></button>
-                            <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert destroy-op" data-toggle="tooltip" title="Delete" data-type="confirm" value="${dato.id}"><i class="fa fa-trash-o"></i></button>
+               buttons  += ` <button type="button" class="btn btn-sm btn-outline-info open-modal" onclick="showDetail(${dato.id})" data-toggle="tooltip" title="Detail" value="${dato.id}"  ><i class="fa fa-eye"></i></button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary btn-edit" data-toggle="tooltip" title="Edit" value="${dato.id}"  ><i class="fa fa-edit"></i></button>
+                            <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert delete-op" data-toggle="tooltip" title="Delete" data-type="confirm" value="${dato.id}"><i class="fa fa-window-close"></i></button>
                             `
            }
            buttons+='</div>';
@@ -201,8 +183,10 @@ const types ={
     status:function(dato){
         var status='';
         if(dato.status== 1){
-            status +="<span class='badge badge-success'>Activated</span>";
+            status +="<span class='badge badge-success'>With Comments</span>";
         }else if(dato.status == 2){
+            status +="<span class='badge badge-secondary'>Without Comments</span>";
+        }else if(dato.status == 3){
             status +="<span class='badge badge-secondary'>Deactivated</span>";
         }
        return status;
@@ -215,6 +199,8 @@ const success = {
         console.log(data);
         $('#labelTitle').html("News <i class='fa fa-tasks'></i>");
         $('#btn-save').attr('disabled', false);
+        $("#table-row").remove();
+        $("#no-data-doc").hide();
         var dato = data;
 
         var news = `<tr id="news_id${dato.id}" class="rowType">
@@ -246,13 +232,15 @@ const success = {
         }
                 
     },
-    show: function(data){
-        console.log(data);
+    show: function(dato){
+        console.log(dato);
         $('#tag_put').remove();
         $form = $('#formNews');
         $form.append('<input type="hidden" id="tag_put" name="_method" value="PUT">');
+        data = dato.data;
         $("#title").val(data.title);
         $('#id_hidden').val(data.id);
+        $('#status').val(data.status);
         CKEDITOR.instances['ckeditor'].setData(data.description);
         
         var baseUrl = $('#baseUrl').val();
@@ -272,11 +260,16 @@ const success = {
             drEvent.settings.defaultFile = rutaImage;
             drEvent.destroy();
             drEvent.init();
+
+        $.each(dato.types, function (key, val) {
+            $('.selectpick option[value=' + val.id_type_user + ']').attr('selected', true);
+        });
+        $('.selectpick').selectpicker('refresh'); 
         
 
     },
-    modal: function(data){
-        console.log(data);
+    modal: function(dato){
+        data = dato.data;
         $("#labelTitleModal").html(data.title);
         $("#labelDescriptionNews").html(data.description);
         var baseUrl = $('#baseUrl').val();
@@ -328,22 +321,22 @@ const success = {
             }
         }      
     },
-        msj: function(data){
-            $('#btn-save').attr('disabled', false);
-            $('#btn-save-documents').attr('disabled', false);
-            $.notifyClose();
-            $.each(data.responseJSON.errors,function (k,message) {
-                $.notify({
-                    // options
-                    title: "Error!",
-                    message:message,
-                },{
-                    // settings
-                    type: 'danger'
-                });
-                $('#name').addClass('border-dange');
+    msj: function(data){
+        $('#btn-save').attr('disabled', false);
+        $('#btn-save-documents').attr('disabled', false);
+        $.notifyClose();
+        $.each(data.responseJSON.errors,function (k,message) {
+            $.notify({
+                // options
+                title: "Error!",
+                message:message,
+            },{
+                // settings
+                type: 'danger'
             });
-            
-        }
+            $('#name').addClass('border-dange');
+        });
+        
+    }
 }
        

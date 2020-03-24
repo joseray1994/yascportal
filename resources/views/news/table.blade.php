@@ -19,23 +19,23 @@
                 @switch($news->status)
                     @case(1)
                         <td class="hidden-xs">
-                            <span class='badge badge-success'>Activated</span>
+                            <span class='badge badge-success'>With Comments</span>
                         </td>
                         <td>
                             <button type="button" class="btn btn-sm btn-outline-info open-modal" onclick="showDetail('{{$news->id}}')" data-toggle="tooltip" title="Detail" value="{{$news->id}}"  ><i class="fa fa-eye"></i></button>
                             <button type="button" class="btn btn-sm btn-outline-secondary btn-edit" data-toggle="tooltip" title="Edit" value="{{$news->id}}"  ><i class="fa fa-edit"></i></button>
-                            <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert delete-op" data-toggle="tooltip" title="Desactivated" data-type="confirm" value="{{$news->id}}"><i class="fa fa-window-close"></i></button>
+                            <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert delete-op" data-toggle="tooltip" title="Delete" data-type="confirm" value="{{$news->id}}"><i class="fa fa-window-close"></i></button>
                         </td>
                     @break
                     @case(2)
-                    <td class="hidden-xs">
-                        <span class='badge badge-secondary'>Desactivated</span>
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-sm btn-outline-info open-modal" onclick="showDetail('{{$news->id}}')" data-toggle="tooltip" title="Detail" value="{{$news->id}}"  ><i class="fa fa-eye"></i></button>
-                        <button type="button" class="btn btn-sm btn-outline-success delete-op" title="Activated" data-toggle="tooltip" data-type="confirm" value="{{$news->id}}" ><i class="fa fa-check-square-o"></i></button>
-                        <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert destroy-op" data-toggle="tooltip" title="Delete" data-type="confirm" value="{{$news->id}}"><i class="fa fa-trash-o"></i></button>
-                    </td>
+                        <td class="hidden-xs">
+                            <span class='badge badge-secondary'>Without Comments</span>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-outline-info open-modal" onclick="showDetail('{{$news->id}}')" data-toggle="tooltip" title="Detail" value="{{$news->id}}"  ><i class="fa fa-eye"></i></button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary btn-edit" data-toggle="tooltip" title="Edit" value="{{$news->id}}"  ><i class="fa fa-edit"></i></button>
+                            <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert delete-op" data-toggle="tooltip" title="Delete" data-type="confirm" value="{{$news->id}}"><i class="fa fa-window-close"></i></button>
+                        </td>
                     @break
                 @endswitch
             </tr>

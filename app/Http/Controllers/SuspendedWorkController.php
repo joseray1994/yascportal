@@ -49,8 +49,8 @@ class SuspendedWorkController extends Controller
     public function validateSuspended($request){
         
             $this->validate(request(), [
-                'date_start' => 'required',
-                'date_end' => 'required',
+                'date_start' => 'required|date',
+                'date_end' => 'required|date|after:date_start',
                 'operator' => 'required',
             ]); 
         }
