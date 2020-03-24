@@ -36,6 +36,7 @@
                 </div>
             </div>
             @include('schedule.weekly.form')
+            @include('schedule.modal-suspended')
             @include('schedule.detail')
             @include('schedule.suspended')
           

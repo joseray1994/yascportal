@@ -119,7 +119,6 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::get('/break', 'ScheduleDailyController@data_break');
     Route::get('/detail/{id?}', 'ScheduleWeeklyController@detail');
     Route::put('/quit/{id}', 'ScheduleWeeklyController@quit');
-    Route::put('/suspended/{id}', 'ScheduleWeeklyController@suspended');
     
 
     //Operators
@@ -163,6 +162,14 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::put('/incident', 'IncidentReportController@update');
     Route::delete('/incident', 'IncidentReportController@delete');
     Route::post('/incident/getTable', 'IncidentReportController@getTable');
+
+    //suspended work 
+    Route::get('/suspended', 'SuspendedWorkController@index');
+    Route::get('/suspended/{UserType_id?}', 'SuspendedWorkController@show');
+    Route::post('/suspended', 'SuspendedWorkController@store');
+    Route::put('/suspended/{UserType_id}', 'SuspendedWorkController@update');
+    Route::delete('/suspended/{UserType_id}', 'SuspendedWorkController@destroy');
+    Route::delete('/suspended/delete/{id}', 'SuspendedWorkController@delete');
 
 
 });
