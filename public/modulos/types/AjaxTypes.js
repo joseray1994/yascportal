@@ -14,15 +14,15 @@ $(document).ready(function(){
             if (page == Number.NaN || page <= 0) {
                 return false;
             }else{
-                get_data(page);
+                getData(page);
             }
         }
     });
     //display modal form for creating new product *********************
     $('#btn_add').click(function(){
         $('#btn-save').val("add");
+        $("#myModalLabelType").html('Create User Type <i class="fa fa-address-card"></i>');
         $('#typeUserForm').trigger("reset");
-        $("#image").attr('src','');
         $('#myModal').modal('show');
     });
 
@@ -48,12 +48,6 @@ $(document).ready(function(){
         e.preventDefault(); 
         var formData =  $("#typeUserForm").serialize();
         
-        if($("#name").val().length > 30)
-        {
-            alert("Ingrese un nombre menor a 30 caracteres");
-            return false;
-        }
-
         //used to determine the http verb to use [add=POST], [update=PUT]
         var state = $('#btn-save').val();
         var type = "POST"; //for creating new resource
@@ -80,23 +74,23 @@ $(document).ready(function(){
             })
                 if($(this).attr('class') == 'btn btn-sm btn-outline-success off-type')
                 {
-                    title= "¿Deseas activar este Usuario?";
-                    text="El Usuario se activara";
-                    confirmButtonText="Activar";
+                    title= "Do you want to activated User type?";
+                    text="The User Type will be activated";
+                    confirmButtonText="Activate";
 
-                    datatitle="Activado";
-                    datatext="activado";
-                    datatext2="Activacion";
+                    datatitle="Activate";
+                    datatext="Activate";
+                    datatext2="Activated";
                 }
                 else 
                 {
-                    title= "¿Desea desactivar este Usuario?";
-                    text= "El Usuario se desactivara";
-                    confirmButtonText="Desactivar";
+                    title= "Do you want to deactivated User type?";
+                    text= "The User Type will be deactivated";
+                    confirmButtonText="Deactivate";
 
-                    datatitle="Desactivado";
-                    datatext="desactivado";
-                    datatext2="Desactivacion";
+                    datatitle="Deactivate";
+                    datatext="deactivate";
+                    datatext2="Deactivated";
 
                 }
     
@@ -108,18 +102,18 @@ $(document).ready(function(){
                     showCancelButton: true,
                     confirmButtonClass: "btn btn-danger",
                     confirmButtonText: confirmButtonText,
-                    cancelButtonText: "Cancelar",
+                    cancelButtonText: "Cancel",
                     closeOnConfirm: false,
                     closeOnCancel: false
                 },
                 function(isConfirm) {
                     if (isConfirm) {
-                    swal(datatitle, "Usuario "+datatext, "success");
+                    swal(datatitle, "User Type "+datatext, "success");
                     actions.deactivated(my_url);
                     } 
                     else {
                     
-                    swal("Cancelado", datatext2+" cancelada", "error");
+                    swal("Cancel", datatext2+" cancel", "error");
                 
                     }
             });
@@ -135,13 +129,13 @@ $(document).ready(function(){
             }
         })
         swal({
-            title: "¿Desea eliminar este Usuario?",
-            text: "El usuario se eliminara permanentemente",
+            title: "Do you want to remove User type?",
+            text: "The User Type will be delete",
             type: "warning",
             showCancelButton: true,
             confirmButtonClass: "btn btn-danger",
-            confirmButtonText: "Eliminar",
-            cancelButtonText: "Cancelar",
+            confirmButtonText: "Delete",
+            cancelButtonText: "Cancel",
             closeOnConfirm: true,
             closeOnCancel: false
           },
@@ -149,7 +143,7 @@ $(document).ready(function(){
             if (isConfirm) {
                 actions.deactivated(my_url);
             }else {
-               swal("Cancelado", "Eliminacion cancelada", "error");
+               swal("Cancel", "Deleting cancelada", "error");
             }
           });
         });
@@ -180,12 +174,12 @@ const types ={
            var buttons='';
             if(dato.status== 1){
                buttons +='<a class="btn btn-sm btn-outline-primary" title="Assignament Type" id="btn-edit" href="/assignmenttype/'+dato.id+'"  ><i class="fa fa-info-circle"></i></a>'
-               buttons += ' <button class="btn btn-sm btn-outline-secondary btn-detail open_modal"  data-toggle="tooltip" title="Editar nombre del Perfil"  value="'+dato.id+'"> <i class="fa fa-edit"></i></li></button>';
-               buttons += '	<button type="button" class="btn btn-sm btn-outline-danger off-type" title="Desactivar Usuario" data-type="confirm" value="'+dato.id+'" ><i class="fa fa-window-close"></i></button>';
+               buttons += ' <button class="btn btn-sm btn-outline-secondary btn-detail open_modal"  data-toggle="tooltip" title="Edit"  value="'+dato.id+'"> <i class="fa fa-edit"></i></li></button>';
+               buttons += '	<button type="button" class="btn btn-sm btn-outline-danger off-type" title="Deactivated" data-type="confirm" value="'+dato.id+'" ><i class="fa fa-window-close"></i></button>';
           
            }else if(dato.status == 2){
-               buttons+='<button type="button" class="btn btn-sm btn-outline-success off-type" title="Activar Usuario" data-type="confirm" value="'+dato.id+'" ><i class="fa fa-check-square-o"></i></button>'
-               buttons += '<button class="btn btn-danger btn-sm btn-delete delete-profile" data-toggle="tooltip" title="Desactivar Perfil" value="'+dato.id+'"><i class="fa fa-trash-o"></i> </button>';
+               buttons+='<button type="button" class="btn btn-sm btn-outline-success off-type" title="Activated" data-type="confirm" value="'+dato.id+'" ><i class="fa fa-check-square-o"></i></button>'
+               buttons += ' <button class="btn btn-outline-danger btn-sm btn-delete delete-profile" data-toggle="tooltip" title="Delete" value="'+dato.id+'"><i class="fa fa-trash-o"></i> </button>';
            }
            return buttons;
     },
@@ -279,6 +273,7 @@ const success = {
 
     show: function(data){
         console.log(data);
+        $("#myModalLabelType").html('Edit User Type <i class="fa fa-address-card"></i>');
         $('#usertype_id').val(data.id);
         $('#name').val(data.name);
         $('#btn-save').val("update");

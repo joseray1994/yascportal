@@ -13,7 +13,7 @@
                                     <select name="id_user" id = "id_user" class="custom-select">
                                              <option >Select a Trainer</option>
                                             @foreach($users as $user)
-                                            <option value = "{{$user->id}}">{{$user->name}} {{$user->last_name}}</option>
+                                            <option value = "{{$user->id}}" name = "{{$user->name}}">{{$user->name}} {{$user->last_name}}</option>
                                             @endforeach
                                     </select>
 								</div>
@@ -21,7 +21,7 @@
                 </div>
                 <div class="modal-footer">
 				  <button type="button"  class="btn btn-danger" data-dismiss="modal">Cancel</button>
-					<button type="submit" class="btn btn-success" id="btn-save-user" value="add">Save</button>
+					<button type="submit" class="btn btn-success" id="btn-save-user" value="update">Save</button>
                 </div>
 			  </form> 
 			  <input type="hidden" id="zoom_user_id" name="zoom_user_id"> 
