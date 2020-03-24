@@ -1,7 +1,7 @@
-getData(1);
+//getData(1);
 
 $(document).ready(function(){
-
+    clearload();
     var nameDeli='<a href="/vacancies">Vacancies</i></a>';
     $('.nameDeli').html(nameDeli);
     $('#sidebar9').addClass('active');  

@@ -74,10 +74,11 @@ class UserController extends Controller
             'emergency_contact_name' => 'sometimes|max:150|nullable|regex:/^([a-zA-Z]+)(\s[a-zA-Z]+)*$/',
             'emergency_contact_phone' => 'sometimes|nullable|regex:/^[0-9]{0,20}(\.?)[0-9]{0,2}$/',
             'email' => $email,
-            'birthdate' => 'date|before:18 years ago',
-            'phone' => 'max:20',
+            'birthdate' => 'required|date|before:18 years ago',
+            'entrance_date' => 'required|date|after:2014-01-01',
             'image' => 'image',
             'id_type_user' => 'gt:0',
+            'nickname' => 'required',
             'password' => 'sometimes|required|confirmed|min:8',
         ]);
     }

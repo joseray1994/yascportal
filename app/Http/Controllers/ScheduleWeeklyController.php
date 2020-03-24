@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\User;
 use App\Audit;
+use App\SettingsModel;
+use App\SuspendedModel;
 use Illuminate\Http\Request;
 use App\ScheduleDetailModel;
 use App\DaysModel;
@@ -35,7 +37,7 @@ class ScheduleWeeklyController extends Controller
                 ->where('users.id_type_user','=',9)
                 ->get();
                 $clients=ClientModel::all();
-
+                $settings= SettingsModel::all();
                 if($request->date !=""){
                     $now =Carbon::parse($request->date);
 
@@ -85,7 +87,7 @@ class ScheduleWeeklyController extends Controller
                     return view('schedule.weekly.table', ["data"=>$data]);
                 }
             
-        return view('schedule.weekly.index',["data"=>$data,"days"=>$days,"today"=>$now->toDateString(),"NoD"=>$now->dayOfWeek, "clients"=>$clients,"operators"=>$operators,"menu"=>$menu,]);
+        return view('schedule.weekly.index',["data"=>$data,"days"=>$days,"settings"=>$settings,"today"=>$now->toDateString(),"NoD"=>$now->dayOfWeek, "clients"=>$clients,"operators"=>$operators,"menu"=>$menu,]);
         }else{
             return redirect('/');
         }
@@ -249,27 +251,54 @@ class ScheduleWeeklyController extends Controller
         $data=['No'=>1,'wd'=>$weekly];
         return response()->json($data);
     }
+    public function audit_data($id,$request){
+            $weekly = ScheduleDetailModel::find($id);
+            $audits = Audit::select('audits.id as id','audits.old_values as old','audits.new_values as new','audits.created_at as created','audits.event as event','inf.name as name','inf.last_name as lname')
+            ->join('users_info as inf','inf.id_user', "=", 'audits.user_id')
+            ->where('audits.user_id',$weekly->id_operator)
+            ->where('audits.auditable_type','App\ScheduleDetailModel')
+            ->where('audits.auditable_id',$id);
+
+            if($request->date != ""){
+                $audits->whereDate('audits.created_at',$request->date);   
+                }
+            if($request->time != ""){
+                $audits->whereTime('audits.created_at', '>=', $request->time);
+            }
+
+            $audit= $audits->get();
+
+            $data=['No'=>2,'audit'=>$audit];
+            return $data;
+    }
+
+    public function suspended_data($id){
+        $weekly = ScheduleDetailModel::find($id);
+        $suspended = SuspendedModel::select('schedule_suspended.id as id','schedule_suspended.date_start as dateS','schedule_suspended.date_end as dateE','schedule_suspended.created_at as created','schedule_suspended.status as status','inf.name as name','inf.last_name as lname')
+        ->join('users_info as inf','inf.id_user', "=", 'schedule_suspended.id_operator')
+        ->where('schedule_suspended.id_operator',$weekly->id_operator)
+        ->whereIn('schedule_suspended.status',[1,2])
+        ->get();
+      
+        $data=['No'=>1,'suspended'=>$suspended, 'operator'=>$weekly->id_operator];
+        return $data;
+    }
+
 
     public function detail(Request $request, $weekly_id)
     {   
-        
-        $weekly = ScheduleDetailModel::find($weekly_id);
-        $audits = Audit::select('audits.auditable_id as id','audits.old_values as old','audits.new_values as new','audits.created_at as created','audits.event as event','inf.name as name','inf.last_name as lname')
-        ->join('users_info as inf','inf.id_user', "=", 'audits.user_id')
-        ->where('audits.user_id',$weekly->id_operator)
-        ->where('audits.auditable_type','App\ScheduleDetailModel')
-        ->where('audits.auditable_id',$weekly_id);
+        if($request->action == 1){
 
-        if($request->date != ""){
-            $audits->whereDate('audits.created_at',$request->date);   
-            }
-        if($request->time != ""){
-            $audits->whereTime('audits.created_at', '>=', $request->time);
+            $data = ScheduleWeeklyController::suspended_data($weekly_id);
+
+        }else if($request->action == 2){
+
+            $data = ScheduleWeeklyController::audit_data($weekly_id,$request);
+
+        }else{
+            $data=['No'=>3,'error'=>"Request Error, Try again"];
         }
-
-        $audit= $audits->get();
-
-        $data=['No'=>1,'audit'=>$audit];
+        
         return response()->json($data);
     }
 
@@ -350,11 +379,13 @@ class ScheduleWeeklyController extends Controller
 
     public function delete($weekly_id)
     {
-        $type = ScheduleDetailModel::find($weekly_id);
-            $type->status = 0;
-            $type->save();
+        $weekly = ScheduleDetailModel::find($weekly_id);
+            $weekly->status = 0;
+            $weekly->save();
 
-        return response()->json($type);
+            $data=['No'=>1,'wd'=>$weekly];
+
+        return response()->json($data);
     } 
 
 
@@ -368,11 +399,13 @@ class ScheduleWeeklyController extends Controller
                                      ->update(['status' => 3]);
 
         $weeklyData = ScheduleWeeklyController::data_weekly($weekly_id);
-        return response()->json($weeklyData);
+
+        $data=['No'=>3,'quit'=>$weeklyDat];
+        return response()->json($data);
     } 
 
 
-    public function suspended($weekly_id)
+    public function suspended_create($weekly_id)
     {
         $weekly = ScheduleDetailModel::find($weekly_id);
 
@@ -389,6 +422,15 @@ class ScheduleWeeklyController extends Controller
     
         return response()->json($weeklyData);
     } 
+    
+    public function auditdetail($id){
+        $audit = Audit::select('audits.auditable_id as id','audits.old_values as old','audits.new_values as new','inf.name as name','inf.last_name as lname')
+            ->join('users_info as inf','inf.id_user', "=", 'audits.user_id')
+            ->where('audits.id',$id)
+            ->first();
 
+            $data=['No'=>3,'audit'=>$audit];
+        return response()->json($data);
+    }
 
 }

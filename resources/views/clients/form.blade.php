@@ -31,6 +31,7 @@
         <div class="col-sm-4 form-group">
             <h6>Time Zone:</h6>
             <select name="time_zone" id = "time_zone" class="custom-select">
+                    <option>Select a Time Zone</option>
                     @foreach($time_zone as $tz)
                       <option value = "{{$tz->id}}">{{$tz->name}}, {{$tz->offset}}</option>
                       @endforeach
@@ -39,6 +40,7 @@
         <div class="col-sm-4 form-group">
             <h6>Color:</h6>
             <select name="color" id = "color" class="custom-select" onchange="colorSelect()">
+                    <option>Select a Color</option>
                     @foreach($color as $color)
                       <option style = "background:{{$color->hex}}" value = "{{$color->id}}">{{$color->mat}}  {{$color->hex}}</option>
                       @endforeach

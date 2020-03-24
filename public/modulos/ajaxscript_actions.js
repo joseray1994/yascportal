@@ -123,10 +123,13 @@ const actions ={
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         })
+           
+        var formData={action:action};
         // Populate Data in Edit Modal Form
         $.ajax({
             type: "GET",
             url:my_url,
+            data: formData,
             success: function (data) {
                 success.modal(data,action="");
             },

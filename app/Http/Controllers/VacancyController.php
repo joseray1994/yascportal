@@ -20,7 +20,7 @@ class VacancyController extends Controller
                 $search = trim($request->dato);
 
                 if(strlen($request->type) > 0 &&  strlen($search) > 0){
-                    $data2 = VacancyModel::whereNotIn('status',[0])->where($request->type,'LIKE','%'.$search.'%')->paginate(5);
+                    $data2 = VacancyModel::whereNotIn('status',[0])->where($request->type,'LIKE','%'.$search.'%')->paginate(10);
                 } else{
                     $data2 = VacancyModel::whereNotIn('status',[0])->paginate(10);
                 } 
