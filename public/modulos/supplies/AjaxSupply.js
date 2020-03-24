@@ -34,6 +34,16 @@ $(document).ready(function(){
         $('#myModal').modal('hide');
     });
 
+        //display modal form for product EDIT ***************************
+        $(document).on('click','.open_modal',function(){
+            $('#supplyForm').trigger("reset");
+            var supply_id = $(this).val();
+            var my_url = url + '/' + supply_id;
+    
+                actions.show(my_url);
+           
+        });
+
       
     
          //create new product / update existing product ***************************
@@ -146,6 +156,18 @@ $(document).ready(function(){
                 }
               });
             });
+
+             
+        //total
+        $(".add-price").on("keyup", function() {
+            price = $('#price').val();
+            quantity = $('#quantity').val();
+
+            total =  parseFloat(price) * parseFloat(quantity);
+            
+            $('#total_price').val(total);
+            
+        });
 });
 
 
@@ -180,6 +202,7 @@ const supplies ={
 }
 
 const success = {
+
     new_update: function (data,state){
         console.log(data);
         var dato = data;
@@ -210,38 +233,55 @@ const success = {
                     type: 'success'
                 });
            
-            var supply = `<tr id="supply_id${dato.id}">
-                                <td>${dato.id}</td>
-                                <td>${dato.id_department}</td>
-                                <td>${dato.name_prov}</td>
-                                <td>${dato.name}</td>
-                                <td>${dato.quantity}</td>
-                                <td>${dato.price}</td>
-                                <td>${dato.cost}</td>
-                                <td>${dato.total_price}</td>
-                                <td class="hidden-xs">${supplies.status(dato)}</td>
-                                <td>${supplies.button(dato)}</td>
+                var supply = `<tr id="supply_id${dato.id}">
+                                    <td>${dato.id}</td>
+                                    <td>${dato.id_department}</td>
+                                    <td>${dato.name_prov}</td>
+                                    <td>${dato.name}</td>
+                                    <td>${dato.quantity}</td>
+                                    <td>${'$'+dato.price.toFixed(2)}</td>
+                                    <td>${'$'+dato.cost.toFixed(2)}</td>
+                                    <td>${'$'+dato.total_price.toFixed(2)}</td>
+                                    <td class="hidden-xs">${supplies.status(dato)}</td>
+                                    <td>${supplies.button(dato)}</td>
                             </tr>`;
+
         
-            if (state == "add"){ 
-              $("#supply-list").append(supply);
-              $("#supply_id"+dato.id).css("background-color", "#c3e6cb");  
-              $('#table-row').remove(); 
-            }else{
-              $("#supply_id"+dato.id).replaceWith(supply);
-              $("#supply_id"+dato.id).css("background-color", "#ffdf7e");  
-            }
-
-            $('#myModal').modal('hide')
-
-            if ($('.rowType').length == 0) {
-                $('#table-row').show();
-            }
+                            if (state == "add"){ 
+                                $("#supply-list").append(supply);
+                                $("#supply_id"+dato.id).css("background-color", "#c3e6cb");  
+                                $('#table-row').remove(); 
+                              }else{
+                                $("#supply_id"+dato.id).replaceWith(supply);
+                                $("#supply_id"+dato.id).css("background-color", "#ffdf7e");  
+                              }
+                  
+                              $('#myModal').modal('hide')
+                  
+                              if ($('.rowType').length == 0) {
+                                  $('#table-row').show();
+                              }
             break;
             
         }
         
     },
+
+    
+    show: function(data){
+        console.log(data);
+        $('#supply_id').val(data.id);
+        $('#id_provider').val(data.id_provider);
+        $('#id_department').val(data.id_department);
+        $('#name').val(data.name);
+        $('#quantity').val(data.quantity);
+        $('#price').val(data.price);
+        $('#cost').val(data.cost);
+        $('#total_price').val(data.total_price);
+        $('#btn-save').val("update");
+        $('#myModal').modal('show');
+    },
+
 
     deactivated:function(data) {
         console.log(data);
@@ -253,9 +293,9 @@ const success = {
                                 <td>${dato.name_prov}</td>
                                 <td>${dato.name}</td>
                                 <td>${dato.quantity}</td>
-                                <td>${dato.price}</td>
-                                <td>${dato.cost}</td>
-                                <td>${dato.total_price}</td>
+                                <td>${'$'+dato.price.toFixed(2)}</td>
+                                <td>${'$'+dato.cost.toFixed(2)}</td>
+                                <td>${'$'+dato.total_price.toFixed(2)}</td>
                                 <td class="hidden-xs">${supplies.status(dato)}</td>
                                 <td>${supplies.button(dato)}</td>
                             </tr>`;

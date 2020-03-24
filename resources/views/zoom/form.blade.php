@@ -3,14 +3,14 @@
         $user = Auth::user();
     ?>
 <div class="col-sm-12 formulario-zoom" style="display:none">
-        <form id="formClients" class="form-horizontal" enctype="multipart/form-data">
+        <form id="formZoom" class="form-horizontal" enctype="multipart/form-data">
         {{ csrf_field() }}
     <div class="row">
         <div class="col-sm-12">
             <div class="row">
                 <div class="col-sm-4 form-group">
                     <h6>Zoom:</h6>
-                    <input type="text" name="zoom" id="zoom" class="form-control" title="Este campo solo admite letras" maxlength="120">
+                    <input type="text" name="name" id="name" class="form-control" title="Este campo solo admite letras" maxlength="120">
                 </div>
                 <div class="col-sm-4 form-group">
                     <h6>Email:</h6>

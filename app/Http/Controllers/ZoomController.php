@@ -41,10 +41,10 @@ class ZoomController extends Controller
             if(strlen($request->type) > 0 &&  strlen($search) > 0){
 
                 $type= ZoomController::search_zoom($request->type);
-                $data = ZoomModel::where($type,'LIKE','%'.$search.'%')->orderBy('zoom.id');
+                $data = ZoomModel::select('id', 'name', 'email', 'password', 'in_use_by', 'status')->where($type,'LIKE','%'.$search.'%')->where('status', '!=', 0)->orderBy('id');
             } 
             else{
-                $data = ZoomModel::orderBy('zoom.id');
+                $data = ZoomModel::select('id', 'name', 'email', 'password', 'in_use_by', 'status')->where('status', '!=', 0)->orderBy('id');
                                         
             } 
 
@@ -63,69 +63,104 @@ class ZoomController extends Controller
         }
     }
 
-    public function assign_user($zoom_id)
-    {
-        dd($zoom_id);
+    public function validateZoom($request, $zoom_id = ''){
+       
+        $this->validate(request(), [
+            'name' => 'unique:zoom,name,'.$zoom_id,
+            'email' => 'unique:zoom,email,'.$zoom_id,
+           
+        ]); 
     }
 
-    public function create()
-    {
-        //
+    public function getResult($zoom_id){
+        $data =  ZoomModel::select('id', 'name', 'email', 'password', 'in_use_by', 'status')->orderBy('id')->where('id', $zoom_id)->where('status', '!=', 0)->first();;
+        return $data;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+ 
     public function store(Request $request)
     {
-        //
+    
+        ZoomController::validateZoom($request);
+        $data = $request->input();
+        // dd($data);
+        $zoom = ZoomModel::firstOrCreate([
+        'name'=>$data['name'],
+        'email'=>$data['email'],
+        'password'=>$data['password'],
+    
+        ]);
+
+        $id_zoom = $zoom->id;
+         $result = $this->getResult($id_zoom);
+         $name = $zoom->name;
+        return response()->json(['zoom' => $result, 'flag' => 1, 'zoom_success' =>"The zoom $name has been saved successfully"]);
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+   
+    public function show($zoom_id)
     {
-        //
+            $zoom = ZoomModel::where('id', $zoom_id)->where('status', '!=', 0)->first();
+        return response()->json(["zoom" => $zoom, "flag" => 1]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function edit($id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+  
+    public function update(Request $request, $zoom_id)
+    {   
+        ZoomController::validateZoom($request, $zoom_id);
+        $zoom = ZoomModel::where('id',$zoom_id)->first();
+      
+        $zoom->name = $request['name'];
+        $zoom->email = $request['email'];
+        $zoom->password = $request['password'];
+        $zoom->save();
+
+        $id_zoom = $zoom->id;
+        $name = $zoom->name;
+        $result = $this->getResult($id_zoom);
+        return response()->json(['zoom' => $result, 'flag' => 1, 'zoom_update' => "The zoom $name has been updated successfully"]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
+        // dd($id);
+         $zoom = ZoomModel::select('id', 'name', 'email', 'password', 'in_use_by', 'status')->where('id',$id)->where('status', '!=', 0)->first();
+
+        if($zoom->status == 2)
+        {
+            $zoom->status = 1;
+        }
+        else
+        {
+            $zoom->status = 2;  
+        }
+        $zoom->save();
+
+        return response()->json(['zoom' => $zoom, 'flag' => 1]);
+    } 
+
+    public function delete($id)
+    {
+            $zoom = ZoomModel::where('id',$id)->first();
+            $zoom->status = 0;
+            $zoom->save();
+
+            $result = $this->getResult($id);
+            $name = $zoom->name;
+        return response()->json(['zoom'=>$result, 'flag' => 1, 'zoom_deleted' => "The zoom $name has been deleted" ]);
+    } 
+
+    
+    public function assign_user(Request $request, $id)
+    {
+        dd($id);
     }
+
 }

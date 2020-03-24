@@ -10,7 +10,7 @@
 							 <div class="form-group error">
 								<div class="btn-group col-sm-12">
 									<button class="btn" disabled><i class="fa fa-user"></i></button>
-                                    <select name="time_zone" id = "time_zone" class="custom-select">
+                                    <select name="id_user" id = "id_user" class="custom-select">
                                              <option >Select a Trainer</option>
                                             @foreach($users as $user)
                                             <option value = "{{$user->id}}">{{$user->name}} {{$user->last_name}}</option>
@@ -24,7 +24,7 @@
 					<button type="submit" class="btn btn-success" id="btn-save-user" value="add">Save</button>
                 </div>
 			  </form> 
-			  <input type="hidden" id="usertype_id" name="usertype_id" value="0"> 
+			  <input type="hidden" id="zoom_user_id" name="zoom_user_id"> 
             </div>
           </div>
         </div>
