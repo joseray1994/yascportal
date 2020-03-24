@@ -48,7 +48,7 @@ class ZoomController extends Controller
                                         
             } 
 
-             $zoom=$data->paginate(5);
+             $zoom=$data->paginate(10);
                 if ($request->ajax()) {
                     return view('zoom.table', ["zoom"=>$zoom]);
 
@@ -160,7 +160,35 @@ class ZoomController extends Controller
     
     public function assign_user(Request $request, $id)
     {
-        dd($id);
+        $id_user = $request['id_user'];
+
+        $user = User::select('info.name as name', 'info.last_name as last_name')
+                    ->join('users_info as info', 'info.id_user', '=', 'users.id')
+                    ->where('users.id', $id_user)
+                    ->first();
+                      
+        $name = $user->name.' '.$user->last_name;
+        $zoom = ZoomModel::where('id',$id)->first();
+        $zoom->in_use_by = $name;
+        $zoom->status = 3;
+        $zoom->save();
+
+        $id_zoom = $zoom->id;
+        $zoom_name = $zoom->name;
+        $result = $this->getResult($id_zoom);
+        return response()->json(['zoom'=>$result,'flag' => 2, 'user_update' => "The zoom $zoom_name is used by $name"]);
     }
 
+   public function quit_user(Request $request, $id){
+    //    dd($id);
+        $zoom = ZoomModel::where('id',$id)->first();
+        $zoom->in_use_by = null;
+        $zoom->status = 1;
+        $zoom->save();
+
+        $id_zoom = $zoom->id;
+        $zoom_name = $zoom->name;
+        $result = $this->getResult($id_zoom);
+        return response()->json(['zoom'=>$result,'flag' => 3, 'user_update' => "The zoom $zoom_name is available"]);
+   }
 }

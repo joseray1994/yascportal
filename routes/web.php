@@ -179,6 +179,7 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::delete('/zoom/deactivate/{id}', 'ZoomController@destroy');
     Route::delete('/zoom/delete/{id}', 'ZoomController@delete');
 
+    Route::put('/zoom/free/{id}', 'ZoomController@quit_user');
     Route::put('/zoom/assign/{id}', 'ZoomController@assign_user');
 
     //NEWS

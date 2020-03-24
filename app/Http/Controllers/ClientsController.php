@@ -92,7 +92,7 @@ class ClientsController extends Controller
                                         
             } 
            
-            $data=$data2->paginate(5);
+            $data=$data2->paginate(10);
             $color = ClientColorModel::all(); 
             $time_zone = TimeZoneModel::orderBy('name')->get();
         //    dd($time_zone);
