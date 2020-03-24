@@ -164,7 +164,9 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::delete('/incident', 'IncidentReportController@delete');
     Route::post('/incident/getTable', 'IncidentReportController@getTable');
 
-
+    //Zoom
+    Route::get('/zoom', 'ZoomController@index');
+    Route::put('/zoom/update/{zoom_id}', 'ZoomController@assign_user');
 });
 
 

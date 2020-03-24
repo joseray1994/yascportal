@@ -708,8 +708,3 @@ const success = {
 
 
 
-    
-function newFunction() {
-    return '#url';
-}
-

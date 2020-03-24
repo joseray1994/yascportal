@@ -25,6 +25,7 @@ class MenuTable extends Seeder
             ['name'=> 'Vacancies','icon'=> 'fa fa-id-badge','link'=>'/vacancies','prioridad'=> '1','status'=> 1,],
             ['name'=> 'Profile','icon'=> 'fa icon-user','link'=>'/profile','prioridad'=> '0','status'=> 1,],
             ['name'=> 'Training','icon'=> 'fa  fa-book','link'=>'/training','prioridad'=> '1','status'=> 1,],
+            ['name'=> 'Zoom','icon'=> 'fa  fa-video-camera','link'=>'/zoom','prioridad'=> '1','status'=> 1,],
 
         ];
       
