@@ -172,7 +172,9 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::delete('/providers/delete/{id}', 'ProviderController@delete');
     //Zoom
     Route::get('/zoom', 'ZoomController@index');
-    Route::put('/zoom/update/{zoom_id}', 'ZoomController@assign_user');
+    Route::post('/zoom', 'ZoomController@store');
+    Route::put('/zoom/update/{id}', 'ZoomController@assign_user');
+
     //NEWS
     Route::get('/news', 'NewsController@index');
     Route::get('/news/{id}', 'NewsController@getResult');

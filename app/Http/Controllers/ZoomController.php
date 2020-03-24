@@ -41,10 +41,10 @@ class ZoomController extends Controller
             if(strlen($request->type) > 0 &&  strlen($search) > 0){
 
                 $type= ZoomController::search_zoom($request->type);
-                $data = ZoomModel::where($type,'LIKE','%'.$search.'%')->orderBy('zoom.id');
+                $data = ZoomModel::select('id', 'name', 'email', 'password', 'in_use_by', 'status')->where($type,'LIKE','%'.$search.'%')->orderBy('id');
             } 
             else{
-                $data = ZoomModel::orderBy('zoom.id');
+                $data = ZoomModel::select('id', 'name', 'email', 'password', 'in_use_by', 'status')->orderBy('id');
                                         
             } 
 
@@ -63,9 +63,46 @@ class ZoomController extends Controller
         }
     }
 
-    public function assign_user($zoom_id)
+    public function validateClient($request, $client_id = ''){
+       
+        $this->validate(request(), [
+            'name' => 'unique:clients,name,'.$client_id.'|required|max:30|regex:/^([a-zA-Z]+)(\s[a-zA-Z]+)*$/',
+            'color' => 'unique:clients,color,'.$client_id,
+            'time_zone' => 'required',
+            'interval' => 'required|max:2',
+            'duration' => 'required|max:3'
+        ]); 
+    }
+
+    public function getResult($zoom_id){
+        $data =  ZoomModel::select('id', 'name', 'email', 'password', 'in_use_by', 'status')->orderBy('id')->where('id', $zoom_id)->first();;
+        return $data;
+    }
+
+ 
+    public function store(Request $request)
     {
-        dd($zoom_id);
+    
+        // ZoomController::validateClient($request);
+        $data = $request->input();
+        // dd($data);
+        $zoom = ZoomModel::firstOrCreate([
+        'name'=>$data['name'],
+        'email'=>$data['email'],
+        'password'=>$data['password'],
+    
+        ]);
+
+        $id_zoom = $zoom->id;
+         $result = $this->getResult($id_zoom);
+         $name = $zoom->name;
+        return response()->json(['zoom' => $result, 'flag' => 1, 'zoom_success' =>"The zoom $name has been saved successfully"]);
+
+    }
+
+    public function assign_user(Request $request, $id)
+    {
+        dd($id);
     }
 
     public function create()
@@ -73,57 +110,25 @@ class ZoomController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+   
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function edit($id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+  
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function destroy($id)
     {
         //
