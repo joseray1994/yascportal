@@ -48,9 +48,92 @@ class ProviderController extends Controller
         ]); 
     }
 
+    public function ValidateExtraProvider($request,$provider_id){
+        $ExtraProviderValidation=[]; 
+        $n ="";
+        $r ="";
+        $p ="";
+        $e ="";
+        $data = [];
+
+        $name = ProviderModel::where('name', $request->name)
+        ->whereIn('status', [1,2]);
+
+        $rfc = ProviderModel::where('rfc', $request->rfc)
+        ->whereIn('status', [1,2]);
+
+        $phone = ProviderModel::where('phone', $request->phone)
+        ->whereIn('status', [1,2]);
+
+        $email = ProviderModel::where('email', $request->email)
+        ->whereIn('status', [1,2]);
+
+        if($provider_id > 0){
+            $name->where('id','!=',$provider_id);
+        }
+
+        if($provider_id > 0){
+            $rfc->where('id','!=',$provider_id);
+        }
+
+        if($provider_id > 0){
+            $phone->where('id','!=',$provider_id);
+        }
+
+        if($provider_id > 0){
+            $email->where('id','!=',$provider_id);
+        }
+            
+        $nameV = $name->count();
+        $rfcV = $rfc->count();
+        $phoneV = $phone->count();
+        $emailV = $email->count();
+
+        if($nameV > 0){      
+            $n = 'Another user type already has that Name';
+            
+        }
+        if($rfcV > 0){      
+            $p = 'Another user type already has that RFC';
+            
+        }
+        if($phoneV > 0){      
+            $p = 'Another user type already has that Phone';
+            
+        }
+        if($emailV > 0){      
+            $e = 'Another user type already has that Email';
+            
+        }
+
+        if($n==''  && $r=='' && $p=='' && $e==''){
+            $data=[];
+
+          }else{
+              $data=[
+                  'No' =>2,
+                  'name'=>$n,
+                  'rfc'=>$r,
+                  'phone'=>$p,
+                  'email'=>$e,
+                ];
+
+              array_push($ExtraProviderValidation,$data);
+          }
+        return $ExtraProviderValidation;
+    }
      
     public function store(Request $request)
     {      
+             
+        $answer=ProviderController::ValidateExtraProvider($request,0);
+      
+        if($answer){
+
+              return response()->json($answer);
+
+        }else{
+
             $provider_id="";
             ProviderController::validateProvider($request,$provider_id);
             $provider = ProviderModel::firstOrCreate(['id_department'=>$request->id_department,
@@ -61,11 +144,18 @@ class ProviderController extends Controller
             'status'=>1,]);
 
             return response()->json($provider);
-      
+        }
     }
 
     public function update(Request $request, $provider_id)
     {
+        $answer=ProviderController::ValidateExtraProvider($request,0);
+  
+        if(ProviderController::ValidateExtraProvider($request,$provider_id)){
+
+            return response()->json($answer);
+
+        }else{
 
             ProviderController::validateProvider($request,$provider_id);
             
@@ -77,7 +167,7 @@ class ProviderController extends Controller
             $provider->status=1;
             $provider->save();
             return response()->json($provider);
-       
+        }
     }
 
     public function show($provider_id)

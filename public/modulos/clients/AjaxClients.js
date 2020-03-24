@@ -400,9 +400,6 @@ const contacts ={
 
 
 const success = {
-    response: function(data){
-        console.log(data.success)
-    },
     
     new_update: function (data,state){
         $('#btn-save-documents').attr('disabled', false);

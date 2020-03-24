@@ -156,6 +156,18 @@ $(document).ready(function(){
                 }
               });
             });
+
+             
+        //total
+        $(".add-price").on("keyup", function() {
+            price = $('#price').val();
+            quantity = $('#quantity').val();
+
+            total =  parseFloat(price) * parseFloat(quantity);
+            
+            $('#total_price').val(total);
+            
+        });
 });
 
 
@@ -190,10 +202,28 @@ const supplies ={
 }
 
 const success = {
+
     new_update: function (data,state){
         console.log(data);
         var dato = data;
-       
+        if(data[0]){
+            datos = data[0].No;
+        }else{
+            datos = data;
+        }
+        switch(datos) {
+            case 2:
+                $.notify({
+                    // options
+                    title: "Error!",
+                    message:data[0].name,
+                },{
+                    // settings
+                    type: 'danger'
+                });
+            break;
+            default:
+
                 $.notify({
                     // options
                     title: "Saved!",
@@ -203,34 +233,37 @@ const success = {
                     type: 'success'
                 });
            
-            var supply = `<tr id="supply_id${dato.id}">
-                                <td>${dato.id}</td>
-                                <td>${dato.id_department}</td>
-                                <td>${dato.name_prov}</td>
-                                <td>${dato.name}</td>
-                                <td>${dato.quantity}</td>
-                                <td>${dato.price}</td>
-                                <td>${dato.cost}</td>
-                                <td>${dato.total_price}</td>
-                                <td class="hidden-xs">${supplies.status(dato)}</td>
-                                <td>${supplies.button(dato)}</td>
+                var supply = `<tr id="supply_id${dato.id}">
+                                    <td>${dato.id}</td>
+                                    <td>${dato.id_department}</td>
+                                    <td>${dato.name_prov}</td>
+                                    <td>${dato.name}</td>
+                                    <td>${dato.quantity}</td>
+                                    <td>${'$'+dato.price.toFixed(2)}</td>
+                                    <td>${'$'+dato.cost.toFixed(2)}</td>
+                                    <td>${'$'+dato.total_price.toFixed(2)}</td>
+                                    <td class="hidden-xs">${supplies.status(dato)}</td>
+                                    <td>${supplies.button(dato)}</td>
                             </tr>`;
+
         
-            if (state == "add"){ 
-              $("#supply-list").append(supply);
-              $("#supply_id"+dato.id).css("background-color", "#c3e6cb");  
-              $('#table-row').remove(); 
-            }else{
-              $("#supply_id"+dato.id).replaceWith(supply);
-              $("#supply_id"+dato.id).css("background-color", "#ffdf7e");  
-            }
-
-            $('#myModal').modal('hide')
-
-            if ($('.rowType').length == 0) {
-                $('#table-row').show();
-            }
-           
+                            if (state == "add"){ 
+                                $("#supply-list").append(supply);
+                                $("#supply_id"+dato.id).css("background-color", "#c3e6cb");  
+                                $('#table-row').remove(); 
+                              }else{
+                                $("#supply_id"+dato.id).replaceWith(supply);
+                                $("#supply_id"+dato.id).css("background-color", "#ffdf7e");  
+                              }
+                  
+                              $('#myModal').modal('hide')
+                  
+                              if ($('.rowType').length == 0) {
+                                  $('#table-row').show();
+                              }
+            break;
+            
+        }
         
     },
 
@@ -260,9 +293,9 @@ const success = {
                                 <td>${dato.name_prov}</td>
                                 <td>${dato.name}</td>
                                 <td>${dato.quantity}</td>
-                                <td>${dato.price}</td>
-                                <td>${dato.cost}</td>
-                                <td>${dato.total_price}</td>
+                                <td>${'$'+dato.price.toFixed(2)}</td>
+                                <td>${'$'+dato.cost.toFixed(2)}</td>
+                                <td>${'$'+dato.total_price.toFixed(2)}</td>
                                 <td class="hidden-xs">${supplies.status(dato)}</td>
                                 <td>${supplies.button(dato)}</td>
                             </tr>`;

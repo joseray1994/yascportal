@@ -21,9 +21,9 @@
 			<td>{{ $supply->name_prov }}</td>
             <td>{{ $supply->name }}</td>
             <td>{{ $supply->quantity }}</td>
-			<td>{{ $supply->price }}</td>
-			<td>{{ $supply->cost }}</td>
-			<td>{{ $supply->total_price }}</td>
+            <td> $ {{number_format($supply->price, 2)}}</td>
+			<td> $ {{number_format($supply->cost, 2)}}</td>
+			<td> $ {{number_format($supply->total_price, 2)}}</td>
             @switch($supply->status)
                 @case(1)
                     <td class="hidden-xs">
