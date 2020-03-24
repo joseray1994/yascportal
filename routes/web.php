@@ -190,6 +190,9 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::put('/news/{id}', 'NewsController@update');
     Route::delete('/news/{id}', 'NewsController@destroy');
     Route::delete('/news/delete/{id}', 'NewsController@delete');
+
+    // DASHBOARD
+    Route::post('/like', 'HomeController@addLike');
     //suspended work 
     Route::get('/suspended', 'SuspendedWorkController@index');
     Route::get('/suspended/{UserType_id?}', 'SuspendedWorkController@show');

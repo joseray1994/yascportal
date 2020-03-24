@@ -22,9 +22,28 @@ function toggleDescription(id) {
         $("#more"+id).hide();
         $("#titleBtnRead"+id).html("Read More");
     }
-
 }
 function toggleComments(id) {
-    $(".section-comment").fadeToggle();
+    $(".section-comment"+id).fadeToggle();
     $("#inputComment"+id).focus();
+}
+
+function addLike(id){
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+        }
+    })
+    $.ajax({
+        type:"POST",
+        url:baseUrl+'/like',
+        data:{id:id},
+        dataType:"json",
+        success: function(data){
+           console.log(data);
+        },
+        error: function(err){
+            console.log(err);
+        }
+    });
 }

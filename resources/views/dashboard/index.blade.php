@@ -23,18 +23,31 @@
                             </div>
                             <div class="footer">
                                 <ul class="stats">
-                                    <li><button class="icon-heart btn-like btn btn-secondary" value="{{$news->id}}"> <span>28</span></button></li>
-                                    <li><button class="icon-bubbles btn-comments btn btn-secondary" onclick="toggleComments('{{$news->id}}')"> <span>123</span> </button></li>
+                                        @foreach($likes as $like)
+                                            @if($news->id ==  $like['id_news'])
+                                                <li><button class="icon-heart btn-like btn btn-secondary" onclick="addLike('{{$news->id}}')"> <span>{{$like['likes']}}</span></button></li>
+                                            @endif
+                                        @endforeach
+
+                                        
+                                    @if($news->status == 1)
+                                        <li><button class="icon-bubbles btn-comments btn btn-secondary" onclick="toggleComments('{{$news->id}}')"> <span>123</span> </button></li>
+                                    @endif
                                 </ul>
                             </div>
-                            <div class="card section-comment" style="display:none">
+                            <div class="card section-comment{{$news->id}}" style="display:none">
                                 <div class="header">
                                     <h2>Comments 3</h2>
                                 </div>
                                 <div class="body" >
                                     <ul class="comment-reply list-unstyled more2">
                                         <li class="row clearfix">
-                                            <div class="icon-box col-md-2 col-4"><img class="img-fluid img-thumbnail" src="{{asset('images/sm/avatar3.jpg')}}" alt="Awesome Image"></div>
+                                            
+                                            <div class="icon-box col-md-2 col-4">
+                                                <div class="icon">
+                                                    <img src="{{asset('images/sm/avatar2.jpg')}}" class="rounded-circle" alt="">
+                                                </div>
+                                            </div>
                                             <div class="text-box col-md-10 col-8 p-l-0 p-r0">
                                                 <h5 class="m-b-0">Gigi Hadid </h5>
                                                 <p>Why are there so many tutorials on how to decouple WordPress? how fast and easy it is to get it running (and keep it running!) and its massive ecosystem. </p>
@@ -47,11 +60,15 @@
                                     </ul>                                        
                                 </div>
                             </div>
-                            <div class="card section-comment" style="display:none">
+                            <div class="card section-comment{{$news->id}}" style="display:none">
                                 <div class="body">
                                     <ul class="comment-reply list-unstyled">
                                         <li class="row clearfix">
-                                            <div class="icon-box col-md-2 col-4"><img class="img-fluid img-thumbnail" src="{{asset('images/sm/avatar2.jpg')}}" alt="Awesome Image"></div>
+                                            <div class="icon-box col-md-2 col-4">
+                                                <div class="icon">
+                                                    <img src="{{asset('images/sm/avatar2.jpg')}}" class="rounded-circle" alt="">
+                                                </div>
+                                            </div>
                                             <div class="text-box col-md-10 col-8 p-l-0 p-r0">
                                             <textarea name="description-comment" id="inputComment{{$news->id}}" class="form-control" placeholder="Please type what you think..."></textarea>
                                             </div>
