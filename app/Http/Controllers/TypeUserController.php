@@ -25,11 +25,11 @@ class TypeUserController extends Controller
                 $search = trim($request->dato);
 
                 if(strlen($request->type) > 0 &&  strlen($search) > 0){
-                    $data2 = TypeUserModel::whereNotIn('status',[0])->where($request->type,'LIKE','%'.$search.'%')->paginate(10);
+                    $data2 = TypeUserModel::whereNotIn('status',[0])->where($request->type,'LIKE','%'.$search.'%');
                 } else{
-                    $data2 = TypeUserModel::whereNotIn('status',[0])->paginate(10);
+                    $data2 = TypeUserModel::whereNotIn('status',[0]);
                 } 
-                $data=$data2;
+                $data=$data2->paginate(10);
                 if ($request->ajax()) {
                     return view('types.table', ["data"=>$data]);
                 }

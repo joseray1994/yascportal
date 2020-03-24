@@ -14,15 +14,15 @@ $(document).ready(function(){
             if (page == Number.NaN || page <= 0) {
                 return false;
             }else{
-                get_data(page);
+                getData(page);
             }
         }
     });
     //display modal form for creating new product *********************
     $('#btn_add').click(function(){
         $('#btn-save').val("add");
+        $("#myModalLabelType").html('Create User Type <i class="fa fa-address-card"></i>');
         $('#typeUserForm').trigger("reset");
-        $("#image").attr('src','');
         $('#myModal').modal('show');
     });
 
@@ -279,6 +279,7 @@ const success = {
 
     show: function(data){
         console.log(data);
+        $("#myModalLabelType").html('Edit User Type <i class="fa fa-address-card"></i>');
         $('#usertype_id').val(data.id);
         $('#name').val(data.name);
         $('#btn-save').val("update");
