@@ -153,7 +153,7 @@ const providers ={
     button: function(dato){
            var buttons='<div class="">';
             if(dato.status== 1){
-                buttons += '<a class="btn btn-sm btn-outline-primary" data-toggle="tooltip" title="See Suppplies" href=""><i class="fa fa-cubes"></i></a>';
+                buttons += '<a class="btn btn-sm btn-outline-primary" data-toggle="tooltip" title="See Suppplies"  href="/supplies/'+dato.id+'"><i class="fa fa-cubes"></i></a>';
                 buttons += ' <button type="button" data-toggle="tooltip" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="'+dato.id+'"  ><i class="fa fa-edit"></i></button>';
                 buttons += '	<button type="button" data-toggle="tooltip" class="btn btn-sm btn-outline-danger js-sweetalert off-provider" title="Deactivated" data-type="confirm" value="'+dato.id+'"><i class="fa fa-window-close"></i></button>';
           
@@ -182,22 +182,55 @@ const success = {
 
     new_update: function (data,state){
         console.log(data);
-        var dato = data;
         if(data[0]){
-            datos = data[0].No;
+            var dato = data[0];
         }else{
-            datos = data;
+            var dato = data;
         }
-        switch(datos) {
+        switch(dato.No) {
             case 2:
-                $.notify({
-                    // options
-                    title: "Error!",
-                    message:data[0].name,
-                },{
-                    // settings
-                    type: 'danger'
-                });
+                if(data[0].name != ''){
+                    $.notify({
+                        // options
+                        title: "Error!",
+                        message:data[0].name,
+                    },{
+                        // settings
+                        type: 'danger'
+                    });
+                }
+                if(data[0].rfc != ''){
+                    $.notify({
+                        // options
+                        title: "Error!",
+                        message:data[0].rfc,
+                    },{
+                        // settings
+                        type: 'danger'
+                    });
+                }
+                if(data[0].phone != ''){
+                    $.notify({
+                        // options
+                        title: "Error!",
+                        message:data[0].phone,
+                    },{
+                        // settings
+                        type: 'danger'
+                    });
+                }
+
+                if(data[0].email != ''){
+                    $.notify({
+                        // options
+                        title: "Error!",
+                        message:data[0].email,
+                    },{
+                        // settings
+                        type: 'danger'
+                    });
+                }
+
             break;
             default:
 
