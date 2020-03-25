@@ -45,5 +45,41 @@ class UserSeed extends Seeder
             $user = DB::table('users')->insert($admin);
             $user = DB::table('users_info')->insert($adminInformation);
         }
+    
+
+    for ($i = 2; $i <= 101; $i++) {
+
+            $operator2 = [
+                ['nickname'=> 'operator'.$i,
+                'id_type_user'=>9,
+                'email'=>'operator'.$i.'@yasc.com',
+                'password'=> bcrypt('operator'),
+                'id_status'=>1]
+            ];
+
+
+            $operatorInformation2 = [
+                [
+                'id_user' => $i,
+                'name'=> 'operator'.$i.'',
+                'last_name'=>'operator'.$i.'',
+                'address'=>'operator',
+                'phone'=> 'operator',
+                'emergency_contact_name'=>'operator'.$i.' emegency contact name',
+                'emergency_contact_phone'=>'0000'.$i.'0000',
+                'description'=>'operator'.$i.' desc',
+                'gender'=>'X',
+                'birthdate'=> Carbon::now(),
+                'profile_picture'=>'operator',
+                'entrance_date'=> Carbon::now(),
+                'biotime_status'=> '1',
+                'access_code'=>12322332]
+            ];
+
+            $user2 = DB::table('users')->insert($operator2);
+            $user2 = DB::table('users_info')->insert($operatorInformation2);
     }
+
+}
+           
 }
