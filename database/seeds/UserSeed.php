@@ -76,6 +76,7 @@ class UserSeed extends Seeder
                 'access_code'=>12322332]
             ];
 
+            $users_client =DB::table('users_client')->insert(["id_user"=>$i,"id_client"=>1]);
             $user2 = DB::table('users')->insert($operator2);
             $user2 = DB::table('users_info')->insert($operatorInformation2);
     }
