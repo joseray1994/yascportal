@@ -213,7 +213,9 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
      //Display Index Page Inventory
     Route::get('/inventory', 'InventoryController@index');
     Route::get('/inventory/{supply_id?}', 'InventoryController@show');
+    Route::get('/inventory/show/{supply_id?}', 'InventoryController@showProv');
     Route::post('/inventory/{supply_id?}', 'InventoryController@update');
+    Route::put('/inventory/updateProv/{supply_id?}', 'InventoryController@updateProv');
     Route::delete('/inventory/{supply_id?}', 'InventoryController@destroy');
     Route::delete('/inventory/delete/{supply_id?}', 'InventoryController@delete');
 

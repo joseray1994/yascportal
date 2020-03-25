@@ -2,6 +2,7 @@
     <thead class="text-white thead-yasc">
         <tr>
             <th width="100px">ID</th>
+            <th>Department</th>
             <th>Provider</th>
             <th>Supply</th>
 			<th>Quantity</th>
@@ -16,6 +17,7 @@
         @forelse ($data as $inventory)
         <tr id="inventory_id{{$inventory->id}}" class="rowType">
             <td>{{ $inventory->id }}</td>
+            <td>{{ $inventory->id_department }}</td>
 			<td>{{ $inventory->name_prov }}</td>
             <td>{{ $inventory->name }}</td>
             <td>{{ $inventory->quantity }}</td>
@@ -28,7 +30,8 @@
                         <span class='badge badge-success'>Activated</span>
                     </td>
                     <td>
-                        <button type="button" data-toggle="tooltip" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="{{$inventory->id}}"  ><i class="fa fa-edit"></i></button>
+                        <button type="button" data-toggle="tooltip" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="{{$inventory->id}}"><i class="fa fa-edit"></i></button>
+                        <button type="button" data-toggle="tooltip" class="btn btn-sm btn-outline-primary prov_modal" title="Change provider" id="btn-edit-prov" value="{{$inventory->id}}" data-toggle="modal"><i class="fa fa-cog"></i></button>
                         <button type="button" data-toggle="tooltip" class="btn btn-sm btn-outline-danger js-sweetalert off-inventory" title="Deactivated" data-type="confirm" value="{{$inventory->id}}"><i class="fa fa-window-close"></i></button>
                     </td>
                 @break

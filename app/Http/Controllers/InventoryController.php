@@ -84,7 +84,21 @@ class InventoryController extends Controller
         ->where('supplies.id',$id)
         ->first();
 
-        return  $inventory;
+        return response()->json(["inventory" => $inventory, "flag" => 1]);
+
+    }
+
+    public function showProv($id)
+    {
+        $inventory = SupplyModel::select('supplies.id as id', 'supplies.mat as mat', 'supplies.id_department as id_department', 
+        'prov.name as name_prov', 'prov.id as id_provider','supplies.name as name','supplies.quantity as quantity', 'supplies.price as price', 'supplies.cost as cost', 
+        'supplies.total_price as total_price', 'supplies.status as status')
+        ->join('providers as prov', 'prov.id', '=', 'supplies.id_provider')
+        ->where('supplies.id',$id)
+        ->first();
+
+        return response()->json(["inventory" => $inventory, "flag" => 2]);
+
     }
 
 
@@ -110,6 +124,24 @@ class InventoryController extends Controller
             return response()->json($inventory2);
 
             
+    }
+
+    public function updateProv(Request $request, $supply_id)
+    {
+        $inventory = SupplyModel::find($supply_id);
+        $inventory->id_provider = $request->id_provider2;
+        $inventory->save();
+      
+        $id=$inventory->id;
+
+        $inventory2 = SupplyModel::select('supplies.id as id', 'supplies.mat as mat', 'supplies.id_department as id_department', 
+        'prov.name as name_prov', 'prov.id as id_provider','supplies.name as name','supplies.quantity as quantity', 'supplies.price as price', 'supplies.cost as cost', 
+        'supplies.total_price as total_price', 'supplies.status as status')
+        ->join('providers as prov', 'prov.id', '=', 'supplies.id_provider')
+        ->where('supplies.id',$id)
+        ->first();
+
+        return response()->json($inventory2);
     }
 
     public function destroy($supply_id)

@@ -6,6 +6,7 @@ $(document).ready(function(){
     $('.nameDeli').html(nameDeli);
 
     var url = $('#url').val();
+    var baseurl = $('#baseurl').val();
 
     $(window).on('hashchange', function() {
         if (window.location.hash) {
@@ -18,38 +19,63 @@ $(document).ready(function(){
         }
     });
 
-      
     //display modal form for product EDIT ***************************
     $(document).on('click','.open_modal',function(){
         $('#inventoryForm').trigger("reset");
         var inventory_id = $(this).val();
         var my_url = url + '/' + inventory_id;
 
-        actions.show(my_url);
+            actions.show(my_url);
+       
+    });
+
+    //display modal form for product EDIT ***************************
+    $(document).on('click','.prov_modal',function(){
+        $('#provForm').trigger("reset");
+        var inventory_id = $(this).val();
+        var my_url = url + '/show/' + inventory_id;
+
+            actions.show(my_url);
        
     });
 
         //create new product / update existing product ***************************
-        $("#inventoryForm").on('submit',function (e) {
-            console.log('button');
-          
-            e.preventDefault(); 
-            var formData =  $("#inventoryForm").serialize();
-            
-            //used to determine the http verb to use [add=POST], [update=PUT]
-            var state = $('#btn-save').val();
-            var type = "POST"; //for creating new resource
-            var inventory_id = $('#inventory_id').val();;
-            var my_url = url;
-            if (state == "update"){
-                type = "POST"; //for updating existing resource
-                my_url += '/' + inventory_id;
-            }
-            
-                console.log(formData);
-            
-                actions.edit_create(type,my_url,state,formData);
+    $("#btn-save").click(function (e) {
         
+        e.preventDefault(); 
+        var formData = $("#inventoryForm").serialize();
+
+        //used to determine the http verb to use [add=POST], [update=PUT]
+        var state = $('#btn-save').val();
+        var type = "POST"; //for creating new resource
+        var inventory_id = $('#inventory_id').val();
+        var my_url = url;
+
+        if (state == "update"){
+            type = "POST"; //for updating existing resource
+            my_url=url + '/' + inventory_id;
+        }
+        actions.edit_create(type,my_url,state,formData);
+    });
+
+           
+        //create new product / update existing product ***************************
+        $("#btn-save-prov").click(function (e) {
+            
+            e.preventDefault(); 
+            var formData = $("#provForm").serialize();
+
+            //used to determine the http verb to use [add=POST], [update=PUT]
+            var state = $('#btn-save-prov').val();
+            var type = "PUT"; //for creating new resource
+            var inventory_id = $('#inventory_id').val();
+            var my_url = url;
+
+            if (state == "update"){
+                type = "PUT"; //for updating existing resource
+                my_url=url + '/updateProv/' + inventory_id;
+            }
+            actions.edit_create(type,my_url,state,formData);
         });
 
     
@@ -218,6 +244,7 @@ const success = {
            
                 var inventory = `<tr id="inventory_id${dato.id}">
                                 <td>${dato.id}</td>
+                                <td>${dato.id_department}</td>
                                 <td>${dato.name_prov}</td>
                                 <td>${dato.name}</td>
                                 <td>${dato.quantity}</td>
@@ -233,12 +260,14 @@ const success = {
               $("#inventory-list").append(inventory);
               $("#inventory_id"+dato.id).css("background-color", "#c3e6cb");  
               $('#table-row').remove(); 
+           
             }else{
               $("#inventory_id"+dato.id).replaceWith(inventory);
               $("#inventory_id"+dato.id).css("background-color", "#ffdf7e");  
             }
 
             $('#myModal').modal('hide')
+            $('#myModalProv').modal('hide')
 
             if ($('.rowType').length == 0) {
                 $('#table-row').show();
@@ -251,14 +280,25 @@ const success = {
 
     show: function(data){
         console.log(data);
-        $('#inventory_id').val(data.id);
-        $('#name').val(data.name);
-        $('#quantity').val(data.quantity);
-        $('#price').val(data.price);
-        $('#cost').val(data.cost);
-        $('#total_price').val(data.total_price);
-        $('#btn-save').val("update");
-        $('#myModal').modal('show');
+        switch (data.flag) {
+        case 1:
+            $('#inventory_id').val(data.inventory.id);
+            $('#id_provider').val(data.inventory.id_provider);
+            $('#name').val(data.inventory.name);
+            $('#quantity').val(data.inventory.quantity);
+            $('#price').val(data.inventory.price);
+            $('#cost').val(data.inventory.cost);
+            $('#total_price').val(data.inventory.total_price);
+            $('#btn-save').val("update");
+            $('#myModal').modal('show');
+        break;
+        case 2:
+            $('#inventory_id').val(data.inventory.id);
+            $('#id_provider2').val(data.inventory.id_provider);
+            $('#btn-save').val("update");
+            $('#myModalProv').modal('show');
+        break;
+        }
     },
 
     deactivated:function(data) {
@@ -267,6 +307,7 @@ const success = {
         if(dato.status != 0){
             var inventory = `<tr id="inventory_id${dato.id}">
                                 <td>${dato.id}</td>
+                                <td>${dato.id_department}</td>
                                 <td>${dato.name_prov}</td>
                                 <td>${dato.name}</td>
                                 <td>${dato.quantity}</td>
