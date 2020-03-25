@@ -16,7 +16,7 @@ $(document).ready(function(){
         }
         });
 
-    $('#sidebar12').addClass('active'); 
+    $('#sidebar13').addClass('active'); 
     
     // BTN NEW
     $('#btn_add').click(function(){
