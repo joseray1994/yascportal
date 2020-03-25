@@ -1,8 +1,7 @@
 <table class="table table-striped text-center" id="tag_container">
     <thead class="text-white thead-yasc">
         <tr>
-            <th ></th>
-            <th>Client</th>
+            <th width="100px">Client</th>
             <th>Time Zone</th>
             <th>Description</th>
             <th>Interval</th>
@@ -14,7 +13,6 @@
     <tbody id="client-list">
         @forelse ($data as $client)
         <tr id="client_id{{$client->id}}">
-        <td style = "background:{{$client->color}}"></td>
             <td>{{$client->name }}</td>
             <td>{{$client->time_zone_name}}, {{$client->time_zone_offset}}</td>
             <td>{{$client->description}}</td>
@@ -28,8 +26,8 @@
                             <td>
                                 <button type="button" class="btn btn-sm btn-outline-secondary btn-edit"  title="Edit"  value="{{$client->id}}"  ><i class="fa fa-edit"></i></button>
                                 <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-type"  title="Deactivated" data-type="confirm" value="{{$client->id}}"><i class="fa fa-window-close"></i></button>
-                                <button type="button" class="btn btn-sm btn-outline-warning btn_add_contacts"   title="Contacts" onclick="add_contacs('{{$client->id}}')"><i class="fa fa-users"></i></button>
-                                <button type="button" class="btn btn-sm btn-outline-warning open-documents" onclick="openDocument('{{$client->id}}')"  title="Documents" value="{{$client->id}}"><i class="fa  fa-folder-open"></i></button>
+                                <button type="button" class="btn btn-sm btn-outline-primary btn_add_contacts"   title="Contacts" onclick="add_contacs('{{$client->id}}')"><i class="fa fa-users"></i></button>
+                                <button type="button" class="btn btn-sm btn-outline-info open-documents" onclick="openDocument('{{$client->id}}')"  title="Documents" value="{{$client->id}}"><i class="fa  fa-folder-open"></i></button>
                             </td>
                     @break
                     @case(2)
@@ -39,8 +37,8 @@
                             <td>
                                 <button type="button" class="btn btn-sm btn-outline-success off-type"  title="Activated" data-type="confirm" value="{{$client->id}}" ><i class="fa fa-check-square-o"></i></button>
                                 <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert deleteClient"  title="Delete" data-type="confirm" value="{{$client->id}}"><i class="fa fa-trash-o"></i></button>
-                                <button type="button" class="btn btn-sm btn-outline-warning btn_add_contacts"  title="Contacts" onclick="add_contacs('{{$client->id}}')" ><i class="fa fa-users"></i></button>
-                                <button type="button" class="btn btn-sm btn-outline-warning open-documents" onclick="openDocument('{{$client->id}}')"  title="Documents" value="{{$client->id}}"><i class="fa  fa-folder-open"></i></button>
+                                <button type="button" class="btn btn-sm btn-outline-primary btn_add_contacts"  title="Contacts" onclick="add_contacs('{{$client->id}}')" ><i class="fa fa-users"></i></button>
+                                <button type="button" class="btn btn-sm btn-outline-info open-documents" onclick="openDocument('{{$client->id}}')"  title="Documents" value="{{$client->id}}"><i class="fa  fa-folder-open"></i></button>
                             </td>
                     @break
                 @endswitch 

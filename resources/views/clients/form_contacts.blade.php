@@ -10,19 +10,19 @@
             <div class="row">
                 <div class="col-sm-4 form-group">
                     <h6>Contact:</h6>
-                    <input type="text" name="name_contact" id="name_contact" class="form-control" title="Email" maxlength="120">
+                    <input type="text" name="name" id="name_contact" class="form-control" title="Email" maxlength="120">
                 </div>
                 <div class="col-sm-4 form-group">
                     <h6>E-mail:</h6>
-                    <input type="text" name="email_contact" id="email_contact" class="form-control" title="Email" maxlength="120">
+                    <input type="text" name="email" id="email_contact" class="form-control" title="Email" maxlength="120">
                 </div>
                 <div class="col-sm-4 form-group">
                     <h6>Phone:</h6>
-                    <input type = "number" name="phone_contact" id="phone_contact" class="form-control" title="Email" maxlength="120">
+                    <input type = "number" name="phone" id="phone_contact" class="form-control" title="Email" maxlength="120">
                 </div>
                 <div class="col-sm-12 form-group">
                     <h6>Description:</h6>
-                    <textarea name="description_contact" id="description_contact" class="form-control" title="Este campo solo admite letras" maxlength="60"></textarea>
+                    <textarea name="description" id="description_contact" class="form-control" title="Este campo solo admite letras" maxlength="60"></textarea>
                 </div>
             </div>
         </div>
