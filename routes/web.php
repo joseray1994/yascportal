@@ -191,6 +191,9 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::put('/news/{id}', 'NewsController@update');
     Route::delete('/news/{id}', 'NewsController@destroy');
     Route::delete('/news/delete/{id}', 'NewsController@delete');
+
+    // DASHBOARD
+    Route::post('/like', 'HomeController@addLike');
     //suspended work 
     Route::get('/suspended', 'SuspendedWorkController@index');
     Route::get('/suspended/{UserType_id?}', 'SuspendedWorkController@show');
@@ -206,6 +209,14 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::delete('/supplies/{id}/delete/{supply_id?}', 'SupplyController@delete');
     Route::delete('/supplies/{id}/{supply_id?}', 'SupplyController@destroy');
     Route::get('/supplies/{id}/{supply_id?}', 'SupplyController@show');
+
+     //Display Index Page Inventory
+    Route::get('/inventory', 'InventoryController@index');
+    Route::get('/inventory/{supply_id?}', 'InventoryController@show');
+    Route::post('/inventory/{supply_id?}', 'InventoryController@update');
+    Route::delete('/inventory/{supply_id?}', 'InventoryController@destroy');
+    Route::delete('/inventory/delete/{supply_id?}', 'InventoryController@delete');
+
 
 });
 

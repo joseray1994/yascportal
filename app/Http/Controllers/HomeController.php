@@ -37,12 +37,30 @@ class HomeController extends Controller
         $id_menu=13;
         $menu = menu($user,$id_menu);
         if($menu['validate']){ 
-            $data = NewsModel::select('id', 'title','description', 'news_picture', 'path', 'created_at')
+            $data = NewsModel::select('id', 'title','description', 'news_picture', 'path', 'status', 'created_at')
             ->whereIn('status', [1,2])
             ->latest()
             ->get();
-            return view('dashboard.index',["menu"=>$menu, "data"=>$data]);
+
+            $arrLikes = array();
+
+            foreach ($data as $new) {
+                $countLikes = LikesModel::where('id_news', $new->id)->count();
+                array_push($arrLikes, ["id_news"=>$new->id, "likes"=>$countLikes]);
+            }
+
+
+            return view('dashboard.index',["menu"=>$menu, "data"=>$data, "likes"=>$arrLikes]);
         }
+    }
+
+    public function addLike(Request $request){
+        $user = Auth::user();
+        $like = LikesModel::Create([
+            "id_user"=>$user->id,
+            "id_news"=>$request->id
+        ]);
+        return response()->json($like);
     }
 
 }
