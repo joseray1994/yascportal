@@ -125,15 +125,15 @@ class ScheduleWeeklyController extends Controller
         if($weekly->status == 1){
             if($request->time_start > $request->time_end){
             
-                $valStart=ScheduleDetailModel::where('id','!=',$weekly->id)->where('id_day',$weekly->id_day)->where('time_start','>=',$request->time_start)->where('time_start','<=',"23:59:59")->where('status',1)->count();
-                $valMs=ScheduleDetailModel::where('id','!=',$weekly->id)->where('id_day',$weekly->id_day)->where('time_start','>=',"00:00:00")->where('time_start','<=',$request->time_end)->where('status',1)->count();
-                $valMe=ScheduleDetailModel::where('id','!=',$weekly->id)->where('id_day',$weekly->id_day)->where('time_end','>=',$request->time_start)->where('time_end','<=',"23:59:59")->where('status',1)->count();
-                $valEnd=ScheduleDetailModel::where('id','!=',$weekly->id)->where('id_day',$weekly->id_day)->where('time_end','>=',"00:00:00")->where('time_end','<=',$request->time_end)->where('status',1)->count();
+                $valStart=ScheduleDetailModel::where('id','!=',$weekly->id)->where('id_schedule',$weekly->id_schedule)->where('id_schedule','!=',$weekly->id_schedule)->where('id_day',$weekly->id_day)->where('time_start','>=',$request->time_start)->where('time_start','<=',"23:59:59")->where('status',1)->count();
+                $valMs=ScheduleDetailModel::where('id','!=',$weekly->id)->where('id_schedule',$weekly->id_schedule)->where('id_day',$weekly->id_day)->where('time_start','>=',"00:00:00")->where('time_start','<=',$request->time_end)->where('status',1)->count();
+                $valMe=ScheduleDetailModel::where('id','!=',$weekly->id)->where('id_schedule',$weekly->id_schedule)->where('id_day',$weekly->id_day)->where('time_end','>=',$request->time_start)->where('time_end','<=',"23:59:59")->where('status',1)->count();
+                $valEnd=ScheduleDetailModel::where('id','!=',$weekly->id)->where('id_schedule',$weekly->id_schedule)->where('id_day',$weekly->id_day)->where('time_end','>=',"00:00:00")->where('time_end','<=',$request->time_end)->where('status',1)->count();
 
             }else if($request->time_end > $request->time_start){
             
-                $valStart=ScheduleDetailModel::where('id','!=',$weekly->id)->where('id_day',$weekly->id_day)->where('time_start','>=',$request->time_start)->where('time_start','<=',$request->time_end)->where('status',1)->count();
-                $valEnd=ScheduleDetailModel::where('id','!=',$weekly->id)->where('id_day',$weekly->id_day)->where('time_end','>=',$request->time_start)->where('time_end','<=',$request->time_end)->where('status',1)->count();
+                $valStart=ScheduleDetailModel::where('id','!=',$weekly->id)->where('id_schedule',$weekly->id_schedule)->where('id_day',$weekly->id_day)->where('time_start','>=',$request->time_start)->where('time_start','<=',$request->time_end)->where('status',1)->count();
+                $valEnd=ScheduleDetailModel::where('id','!=',$weekly->id)->where('id_schedule',$weekly->id_schedule)->where('id_day',$weekly->id_day)->where('time_end','>=',$request->time_start)->where('time_end','<=',$request->time_end)->where('status',1)->count();
                 $valMs=0;
                 $valMe=0;
             }
@@ -148,15 +148,15 @@ class ScheduleWeeklyController extends Controller
 
             if($request->time_extra > $request->time_endEx){
                 
-                $valStartex=ScheduleDetailModel::where('id','!=',$weekly->id)->where('id_day',$weekly->id_day)->where('time_start','>=',$request->time_extra)->where('time_start','<=',"23:59:59")->where('status',1)->count();
-                $valMsex=ScheduleDetailModel::where('id','!=',$weekly->id)->where('id_day',$weekly->id_day)->where('time_start','>=',"00:00:00")->where('time_start','<=',$request->time_endEx)->where('status',1)->count();
-                $valMeex=ScheduleDetailModel::where('id','!=',$weekly->id)->where('id_day',$weekly->id_day)->where('time_end','>=',$request->time_extra)->where('time_end','<=',"23:59:59")->where('status',1)->count();
-                $valEndex=ScheduleDetailModel::where('id','!=',$weekly->id)->where('id_day',$weekly->id_day)->where('time_end','>=',"00:00:00")->where('time_end','<=',$request->time_endEx)->where('status',1)->count();
+                $valStartex=ScheduleDetailModel::where('id','!=',$weekly->id)->where('id_schedule',$weekly->id_schedule)->where('id_day',$weekly->id_day)->where('time_start','>=',$request->time_extra)->where('time_start','<=',"23:59:59")->where('status',1)->count();
+                $valMsex=ScheduleDetailModel::where('id','!=',$weekly->id)->where('id_schedule',$weekly->id_schedule)->where('id_day',$weekly->id_day)->where('time_start','>=',"00:00:00")->where('time_start','<=',$request->time_endEx)->where('status',1)->count();
+                $valMeex=ScheduleDetailModel::where('id','!=',$weekly->id)->where('id_schedule',$weekly->id_schedule)->where('id_day',$weekly->id_day)->where('time_end','>=',$request->time_extra)->where('time_end','<=',"23:59:59")->where('status',1)->count();
+                $valEndex=ScheduleDetailModel::where('id','!=',$weekly->id)->where('id_schedule',$weekly->id_schedule)->where('id_day',$weekly->id_day)->where('time_end','>=',"00:00:00")->where('time_end','<=',$request->time_endEx)->where('status',1)->count();
             
             }else if($request->time_endEx > $request->time_extra){
 
-                $valStartex=ScheduleDetailModel::where('id','!=',$weekly->id)->where('id_day',$weekly->id_day)->where('time_start','>=',$request->time_extra)->where('time_start','<=',$request->time_endEx)->where('status',1)->count();
-                $valEndex=ScheduleDetailModel::where('id','!=',$weekly->id)->where('id_day',$weekly->id_day)->where('time_end','>=',$request->time_extra)->where('time_end','<=',$request->time_endEx)->where('status',1)->count();
+                $valStartex=ScheduleDetailModel::where('id','!=',$weekly->id)->where('id_schedule',$weekly->id_schedule)->where('id_day',$weekly->id_day)->where('time_start','>=',$request->time_extra)->where('time_start','<=',$request->time_endEx)->where('status',1)->count();
+                $valEndex=ScheduleDetailModel::where('id','!=',$weekly->id)->where('id_schedule',$weekly->id_schedule)->where('id_day',$weekly->id_day)->where('time_end','>=',$request->time_extra)->where('time_end','<=',$request->time_endEx)->where('status',1)->count();
                 $valMeex = 0;
                 $valMsex = 0;
 

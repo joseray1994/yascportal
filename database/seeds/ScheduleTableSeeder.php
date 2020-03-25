@@ -54,11 +54,11 @@ class ScheduleTableSeeder extends Seeder
                         'id_client' => $operator['id_client'],
                         'date_start' => Carbon::parse($now)->startOfWeek(Carbon::SUNDAY),
                         'date_end' => Carbon::parse($now)->endOfWeek(Carbon::SATURDAY),
-                        'type_schedule' => '1',
+                        'type_schedule' => 1,
                         'week' =>Carbon::parse($now)->weekOfYear,
                         'month' => Carbon::parse($now)->month,
                         'year' => Carbon::parse($now)->year,
-                        'status' => '1'
+                        'status' => 1
                     ]) ;
     
                     // CREAR DETALLES DE LA SEMANA UNO
@@ -84,11 +84,11 @@ class ScheduleTableSeeder extends Seeder
                         'id_client' => $operator['id_client'],
                         'date_start' => Carbon::parse($now)->addWeek()->startOfWeek(Carbon::SUNDAY),
                         'date_end' => Carbon::parse($now)->addWeek()->endOfWeek(Carbon::SATURDAY),
-                        'type_schedule' => '1',
+                        'type_schedule' => 1,
                         'week' =>Carbon::parse($now)->addWeek()->weekOfYear,
                         'month' => Carbon::parse($now)->addWeek()->month,
                         'year' => Carbon::parse($now)->addWeek()->year,
-                        'status' => '1'
+                        'status' => 1
                     ]) ;
 
     
@@ -122,11 +122,11 @@ class ScheduleTableSeeder extends Seeder
                     'id_client' => $operator['id_client'],
                     'date_start' => Carbon::parse($now)->startOfWeek(Carbon::SUNDAY),
                     'date_end' => Carbon::parse($now)->endOfWeek(Carbon::SATURDAY),
-                    'type_schedule' => '1',
+                    'type_schedule' => 1,
                     'week' =>Carbon::parse($now)->weekOfYear,
                     'month' => Carbon::parse($now)->month,
                     'year' => Carbon::parse($now)->year,
-                    'status' => '1'
+                    'status' => 1
                 ]);
     
                 // OBTENER LOS DIAS DE LA SEMANA
@@ -156,11 +156,11 @@ class ScheduleTableSeeder extends Seeder
                     'id_client' => $operator['id_client'],
                     'date_start' => Carbon::parse($now)->addWeek()->startOfWeek(Carbon::SUNDAY),
                     'date_end' => Carbon::parse($now)->addWeek()->endOfWeek(Carbon::SATURDAY),
-                    'type_schedule' => '1',
+                    'type_schedule' => 1,
                     'week' =>Carbon::parse($now)->addWeek()->weekOfYear,
                     'month' => Carbon::parse($now)->addWeek()->month,
                     'year' => Carbon::parse($now)->addWeek()->year,
-                    'status' => '1'
+                    'status' => 1
                 ]);
     
                 // OBTENER LOS DIAS DE LA SEMANA

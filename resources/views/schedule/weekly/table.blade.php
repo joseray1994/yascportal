@@ -20,15 +20,15 @@
             <td>{{ $type->time_s }}</td>
             <td>{{ $type->time_e }}</td>
             <td> @switch($type->status)
-                    @case(1)
-                    <span class="badge badge-pill badge-secondary">Day off</span>
-                    @break
-                    @case(2)
-                     <span class="badge badge-pill badge-success">Day on</span>
-                    @break
-                    @case(3)
-                    <span class="badge badge-pill badge-danger">Quit</span>
-                    @break
+                        @case(1)
+                        <span class="badge badge-pill badge-success">Day on</span>
+                        @break
+                        @case(2)
+                        <span class="badge badge-pill badge-secondary">Day off</span>
+                        @break
+                        @case(3)
+                        <span class="badge badge-pill badge-danger">Quit</span>
+                        @break
                     @endswitch
             </td>
             @switch($type->type)
