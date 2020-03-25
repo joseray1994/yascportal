@@ -6,8 +6,8 @@
                         <div class="header">
                             <h1 id="labelTitle">Clients <i class="fa fa-suitcase"></i></h1>
                             <ul class="header-dropdown">
-                               <li style = "display:none" class = "btn-back"><a href="javascript:void(0);" class="btn btn-secondary">Back </a></li>
-                                <li><a href="javascript:void(0);" class="btn btn-success" disabled id="btn_add" >New Client <i class="fa fa-plus"></i></a></li>
+                               <li style = "display:none" class = "btn-back"><a href="javascript:void(0);" class="btn btn-secondary" data-toggle="tooltip" title="Back to Clients">Back </a></li>
+                                <li><a href="javascript:void(0);" class="btn btn-success" disabled id="btn_add" >New Client <i class="fa fa-suitcase"></i></a></li>
                             </ul>
                         </div>
                         

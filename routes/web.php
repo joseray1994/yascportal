@@ -194,6 +194,8 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
 
     // DASHBOARD
     Route::post('/like', 'HomeController@addLike');
+    Route::post('/getComments', 'HomeController@getComments');
+    Route::post('/addComments', 'HomeController@addComment');
     //suspended work 
     Route::get('/suspended', 'SuspendedWorkController@index');
     Route::get('/suspended/{UserType_id?}', 'SuspendedWorkController@show');
