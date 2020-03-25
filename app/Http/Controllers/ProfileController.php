@@ -23,7 +23,7 @@ class ProfileController extends Controller
         $menu = menu($user,$id_menu);
         if($menu['validate']){  
 
-            $profile = User_info::select('users_info.name', 'users_info.last_name', 'users_info.address', 'users_info.phone', 'users_info.emergency_contact_phone', 'users_info.emergency_contact_name', 'users_info.notes', 'users_info.description', 'users_info.profile_picture', 'users_info.birthdate', 'usr.email', 'usr.id', 'usr.id_status', 'usr.nickname')
+            $profile = User_info::select('users_info.name', 'users_info.last_name', 'users_info.address', 'users_info.phone', 'users_info.emergency_contact_phone', 'users_info.emergency_contact_name', 'users_info.description', 'users_info.profile_picture', 'users_info.birthdate', 'usr.email', 'usr.id', 'usr.id_status', 'usr.nickname')
             ->join('users as usr', 'users_info.id_user', '=', 'usr.id')
             ->where('usr.id', $user->id)
             ->first();
@@ -135,7 +135,6 @@ class ProfileController extends Controller
         $user_info->phone = $request->phone;
         $user_info->emergency_contact_name = $request->emergency_contact_name;
         $user_info->emergency_contact_phone = $request->emergency_contact_phone;
-        $user_info->notes = $request->notes;
         $user_info->description = $request->description;
         $user_info->birthdate = $request->birthdate;
 
@@ -146,7 +145,7 @@ class ProfileController extends Controller
     }
 
     public function getResult($id){
-        $profile = User_info::select('users_info.name', 'users_info.last_name', 'users_info.address', 'users_info.phone', 'users_info.emergency_contact_phone', 'users_info.emergency_contact_name', 'users_info.notes', 'users_info.description', 'users_info.profile_picture', 'users_info.path_image', 'users_info.birthdate', 'usr.email', 'usr.id', 'usr.id_status', 'usr.nickname')
+        $profile = User_info::select('users_info.name', 'users_info.last_name', 'users_info.address', 'users_info.phone', 'users_info.emergency_contact_phone', 'users_info.emergency_contact_name', 'users_info.description', 'users_info.profile_picture', 'users_info.path_image', 'users_info.birthdate', 'usr.email', 'usr.id', 'usr.id_status', 'usr.nickname')
         ->join('users as usr', 'users_info.id_user', '=', 'usr.id')
         ->where('usr.id', $id)
         ->first();

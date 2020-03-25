@@ -25,15 +25,14 @@ class SupplyController extends Controller
                 $search = trim($request->dato);
 
                 if(strlen($request->type) > 0 &&  strlen($search) > 0){
-                    $type= CandidateController::search_settings($request->type);
-
+                 
                     $data2 = SupplyModel::select('supplies.id as id', 'supplies.mat as mat', 'supplies.id_department as id_department', 
                     'prov.name as name_prov','supplies.name as name','supplies.quantity as quantity', 'supplies.price as price', 'supplies.cost as cost', 
                     'supplies.total_price as total_price', 'supplies.status as status')
                     ->join('providers as prov', 'prov.id', '=', 'supplies.id_provider')
                     ->where('supplies.id_provider',$id)
                     ->whereNotIn('supplies.status',[0])
-                    ->where($type,'LIKE','%'.$search.'%');
+                    ->where($request->type,'LIKE','%'.$search.'%');
                   
                 } else{
                     $data2 = SupplyModel::select('supplies.id as id', 'supplies.mat as mat', 'supplies.id_department as id_department', 
