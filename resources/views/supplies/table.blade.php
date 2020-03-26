@@ -17,7 +17,7 @@
         @forelse ($data as $supply)
         <tr id="supply_id{{$supply->id}}" class="rowType">
             <td>{{ $supply->id }}</td>
-			<td>{{ $supply->id_department }}</td>
+			<td>{{ $supply->name_dep }}</td>
 			<td>{{ $supply->name_prov }}</td>
             <td>{{ $supply->name }}</td>
             <td>{{ $supply->quantity }}</td>

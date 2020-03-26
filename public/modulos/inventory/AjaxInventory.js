@@ -185,8 +185,9 @@ const inventories ={
     button: function(dato){
            var buttons='<div class="">';
             if(dato.status== 1){
-
+                
                 buttons += '  <button type="button" data-toggle="tooltip" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="'+dato.id+'"  ><i class="fa fa-edit"></i></button>';
+                buttons += '  <button type="button" data-toggle="tooltip" class="btn btn-sm btn-outline-primary prov_modal" title="Change provider" id="btn-edit-prov" value="'+dato.id+'" data-toggle="modal"><i class="fa fa-cog"></i></button>';
                 buttons += '  <button type="button" data-toggle="tooltip" class="btn btn-sm btn-outline-danger js-sweetalert off-inventory" title="Deactivated" data-type="confirm" value="'+dato.id+'"><i class="fa fa-window-close"></i></button>';
 
           

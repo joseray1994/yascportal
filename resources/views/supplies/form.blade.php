@@ -9,14 +9,14 @@
 				<form enctype="multipart/form-data" method="POST" id="supplyForm" class="form-horizontal">
 					<div class="modal-body">
 							
-						<div class="col-md-6 mb-3">
+						<!-- <div class="col-md-6 mb-3">
                             <div class="input-group">
                                        
                                             <input type="hidden" id="id_department" name="id_department" value="1">
                                      
                             </div> 
                         </div>
-                            
+                             -->
 						<div class="col-md-6 mb-3">
                             <div class="input-group">
                                         @foreach ($providers as $prov)
