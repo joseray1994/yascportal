@@ -245,7 +245,7 @@ const success = {
            
             var provider = `<tr id="provider_id${dato.id}">
                                 <td>${dato.id}</td>
-                                <td>${dato.id_department}</td>
+                                <td>${dato.name_dep}</td>
                                 <td>${dato.name}</td>
                                 <td>${dato.rfc}</td>
                                 <td>${dato.phone}</td>
@@ -292,7 +292,7 @@ const success = {
         if(dato.status != 0){
               var provider = `<tr id="provider_id${dato.id}">
                                 <td>${dato.id}</td>
-                                <td>${dato.id_department}</td>
+                                <td>${dato.name_dep}</td>
                                 <td>${dato.name}</td>
                                 <td>${dato.rfc}</td>
                                 <td>${dato.phone}</td>
