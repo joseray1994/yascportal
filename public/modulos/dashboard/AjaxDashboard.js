@@ -84,8 +84,10 @@ function toggleComments(id){
             
     if (seccionComment[0].style.display === "none") {
         $(".section-comment"+id).show();
+        location.href = "#comment"+id;
     } else {
         $(".section-comment"+id).hide();
+        location.href = "#news"+id;
     }
 }
 

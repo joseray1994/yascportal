@@ -11,7 +11,7 @@
             <div class="col-md-6 col-sm-12 myScroll" style="max-height:75vh; overflow-y: scroll;">
                 @forelse($data as $news)
                     <div class="card single_post" >
-                        <div class="header">
+                        <div class="header" id="news{{$news->id}}">
                             <div class="icon-box col-md-12 col-4">
                                 <legend>{{$news->title}}</legend>
                                 <div class="icon">
@@ -30,7 +30,7 @@
                             </div>
                             <button onclick="toggleDescription('{{$news->id}}')" type="button" class="btn btn-link"><span id="titleBtnRead{{$news->id}}">Read More...</span></button>
                         </div>
-                        <div class="footer">
+                        <div class="footer" id="comment{{$news->id}}">
                             <ul class="stats my-2">
                                     @foreach($likes as $like)
                                         @if($news->id ==  $like['id_news'])
@@ -57,7 +57,7 @@
                             <div class="header">
                                 <h2 id="totalComments{{$news->id}}"></h2>
                             </div>
-                            <div class="body" >
+                            <div class="body myScrollComments" style="max-height:40vh; overflow: scroll;">
                                 <ul class="comment-reply list-unstyled more2" id="comments{{$news->id}}">
                                     
                                 </ul>                                        
