@@ -46,9 +46,11 @@
                                 </div>
                         </div>
                     </div>
+                    @include('training.formschedule')
+
                 </div>
             </div>
-            @include('training.form')
+                @include('training.form')
 
         <!-- Passing BASE URL to AJAX -->
         <input id="url" type="hidden" value="{{ \Request::url() }}">
