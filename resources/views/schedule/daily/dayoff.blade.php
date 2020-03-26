@@ -3,7 +3,6 @@
         <tr>
             <th>Operator</th>
             <th>Client</th>
-            <th class="hidden-xs" >Status</th>
         </tr>
     </thead>
     <tbody id="dayoff-list" class="table-data" >

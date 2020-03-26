@@ -11,7 +11,7 @@
                 <div class="col-md-2 col-sm-12">
                     <h2>Birthday</h2>
                 </div>
-                <div class="col-md-6 col-sm-12" id="news" style="max-height:75vh; overflow-y: scroll;">
+                <div class="col-md-6 col-sm-12 myScroll" style="max-height:75vh; overflow-y: scroll;">
                     @forelse($data as $news)
                         <div class="card single_post ">
                             <div class="body">

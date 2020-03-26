@@ -24,6 +24,10 @@ class ShiftController extends Controller
         $now = Carbon::now();
         $schedule = ScheduleModel::where('id_operator',Auth::user()->id)
         ->where('week',$now->week)->where('month',$now->month)->where('year',$now->year)->first();
+        // $extraDetail = ScheduleDetailModel::where('id_schedule',$schedule->id)->where('id_day',$now->dayOfWeek)
+        // ->where('type_daily',3)->where('option',1)->orderBy('time_start')->first();
+        // dd($extraDetail);
+        
         if($schedule == null)
         {
             return response()->json(['error' => 'Schedule not found for this week, contact your teamleader'], 404);
@@ -36,10 +40,45 @@ class ShiftController extends Controller
         {
                 return response()->json(['error' => 'Schedule not found for today, contact your teamleader'], 404);
         }
-        
+
         if($scheduleDetail != null && $timeclock_exist)
         {
-            return response()->json(['error' => 'You already have a registered shift for today'], 404);
+            $extraDetail = ScheduleDetailModel::where('id_schedule',$schedule->id)->where('id_day',$now->dayOfWeek)
+            ->where('type_daily',3)->where('option',1)->orderBy('time_start')->first();
+            if($extraDetail != null)
+            {
+                $timeclock_exist = TimeClockModel::where('id_schedule',$schedule->id)->where('id_schedule_detail',$extraDetail->id)->exists();
+
+                if($timeclock_exist)
+                {
+                    return response()->json(['error' => 'You already have a registered extra shift for today'], 404);
+
+                }
+                else
+                {
+                    $time_clock_status = $now <= (Carbon::parse($extraDetail->time_start));
+                    if($time_clock_status)
+                    {
+                        $result = $this->storeShift($schedule,$extraDetail,2);     
+                        if(!$result) return response()->json(['error' => 'Start shift already  active'], 404);
+                        // return response()->json(['error' => 'in time'], 404);
+                        
+                    }
+                    else
+                    {
+                        $result = $this->storeShift($schedule,$extraDetail,3);
+                        if(!$result) return response()->json(['error' => 'Start shift already active'], 404);
+                        // return response()->json(['error' => 'late'], 404);
+                    }
+                }
+                
+                
+            }
+            else
+            {
+
+                return response()->json(['error' => 'You already have a registered shift for today'], 404);
+            }
         }
         else
         {
@@ -104,7 +143,8 @@ class ShiftController extends Controller
         $now = Carbon::now();
         $schedule = ScheduleModel::where('id_operator',Auth::user()->id)
         ->where('week',$now->week)->where('month',$now->month)->where('year',$now->year)->first();
-        $scheduleDetail = ScheduleDetailModel::where('id_schedule',$schedule->id)->where('id_day',$now->dayOfWeek)->first();
+        $scheduleDetail = ScheduleDetailModel::where('id_schedule',$schedule->id)->where('option',2)->orwhere('option',3)->first();
+        
         $time_clock = TimeClockModel::where('id_operator',$user->id)->where('status',1)->first();
         $result = $this->updateShift($scheduleDetail,$time_clock,4); 
         
