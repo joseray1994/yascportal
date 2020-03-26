@@ -9,6 +9,8 @@
                 </div>
             </div>
             <div class="col-md-6 col-sm-12 myScroll" style="max-height:75vh; overflow-y: scroll;">
+                <div class="gallery b4gallery" style="display:none;">
+                </div>
                 @forelse($data as $news)
                     <div class="card single_post" >
                         <div class="header" id="news{{$news->id}}">
@@ -22,7 +24,7 @@
                         </div>
                         <div class="body">
                             <div class="img-post">
-                                <img class="d-block img-fluid" src="{{$news->path}}" alt="First slide">
+                                <img  class="gallery-item d-block img-fluid" src="{{$news->path}}" alt="picture" />
                             </div>
                             <h5 class="mx-5">{{$news->title}}</h5>
                             <div id="more{{$news->id}}" style="display:none">
@@ -106,4 +108,6 @@
 @section('script')
 <script src="{{asset('modulos/ajaxscript_actions.js')}}"></script>
 <script src="{{asset('modulos/dashboard/AjaxDashboard.js')}}"></script>
+<script src="{{asset('/vendor/LightboxGallery/mauGallery.min.js')}}"></script>
+<script src="{{asset('/vendor/LightboxGallery/scripts.js')}}"></script>
 @endsection

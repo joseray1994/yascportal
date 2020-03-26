@@ -20,6 +20,8 @@
 <link rel="stylesheet" href="{{asset('vendor/select2/select2.css')}}">
 <link rel="stylesheet" href="{{asset('vendor/dropify/css/dropify.min.css')}}">
 <link rel="stylesheet" href="{{asset('css/blog.css')}}">
+<link rel="stylesheet" href="{{asset('vendor/light-gallery/css/lightgallery.css')}}">
+
 
 <link rel="stylesheet" href="{{asset('vendor/nestable/jquery-nestable.css')}}"/>
 
