@@ -11,6 +11,7 @@ use App\ClientModel;
 use App\User_info;
 use App\ScheduleModel;
 use App\TimeClockModel;
+use App\ScheduleDetailModel;
 use Carbon\Carbon; 
 class ReportsController extends Controller
 {   
@@ -91,7 +92,8 @@ class ReportsController extends Controller
           else
           {
             $now = Carbon::now();
-            $today = $now->format('Y-m-d');
+            $today = $now->format('Y-m-d H:m:s');
+            // dd($today);
             $reports = ReportsModel::select('incident_reports.id as id',
                                               'incident_reports.id_user as id_user',
                                               'user.name as name',
@@ -112,8 +114,8 @@ class ReportsController extends Controller
                                       ->join('users_client as uclt', 'uclt.id_user', '=', 'incident_reports.id_user')
                                       ->join('clients as clt', 'clt.id', '=', 'uclt.id_client')
                                       ->join('settings as set', 'set.id', '=', 'id_setting')
-                                      ->where('incident_reports.status', 2)
-                                      ->where('incident_reports.start', 'LIKE', '%'.$today.'%');
+                                      ->whereDate('incident_reports.created_at', Carbon::today())
+                                      ->where('incident_reports.status', 2);
 
           }                        
          
@@ -125,7 +127,7 @@ class ReportsController extends Controller
             return view('reports.incident.table', ["reports"=>$data]);
         }
 
-        return view('reports.incident.incidents', ["menu"=>$menu, "days"=>$days, "reports" => $data, "clients" => $clients, "operators" => $operators]);
+        return view('reports.incident.index', ["menu"=>$menu, "days"=>$days, "reports" => $data, "clients" => $clients, "operators" => $operators]);
         }
         else
         {
@@ -135,7 +137,53 @@ class ReportsController extends Controller
 
     //Attendance Reports
     public function attendance_report(Request $request){
-        $attendance = ScheduleModel::all();
+        $user = Auth::user();
+        
+        $id_menu=12;
+        $menu = menu($user,$id_menu);
+        if($menu['validate']){ 
+            // dd($request);  
+            $now = Carbon::now();
+            $noWeek = $now->weekOfYear;
+            // dd($noWeek);
+
+            $clients = ClientModel::all();
+            $operators = User_info::select('users_info.id_user as id_user',
+                                       'users_info.name as name', 
+                                       'users_info.last_name as last_name',
+                                       )
+                                ->join('users as user', 'user.id', '=', 'users_info.id_user')   
+                                ->where('user.id_type_user', 9)
+                                ->get();   
+
+            $time_clock = TimeClockModel::select(
+                                                'schedule_time_clock.id as id',
+                                                'schedule_time_clock.id_client as id_client',
+                                                'det.id_day as id_day',
+                                                'sch.week as week',
+                                                'schedule_time_clock.date_start as date_start',
+                                                'schedule_time_clock.date_end as date_end',
+                                                'schedule_time_clock.duration as duration',
+                                                'usinfo.name as name',
+                                                'usinfo.last_name as last_name',
+
+                                                )
+                                        ->join('schedule as sch', 'sch.id', '=', 'schedule_time_clock.id_schedule')
+                                        ->join('detail_schedule_user as det', 'det.id', '=', 'schedule_time_clock.id_schedule_detail')
+                                        ->join('users as user', 'user.id', '=', 'schedule_time_clock.id_operator')
+                                        ->join('users_info as usinfo', 'usinfo.id_user', '=', 'user.id')
+                                        ->orderBy('det.id_day')
+                                        ->orderBy('user.id')
+                                        ->get();
+
+            dd($time_clock);
+            $count = count($time_clock);
+            // dd($count);
+                return view('reports.attendance.index', ["menu"=>$menu,  "clients" => $clients, "operators" => $operators, "time_clock" => $time_clock]);
+        }else{
+            return redirect('/');
+        }
+       
     }
 
    

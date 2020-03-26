@@ -1,7 +1,7 @@
-getData(1);
+//getData(1);
 
 $(document).ready(function(){
-
+    clearload();
     var nameDeli='<a href="/vacancies">Vacancies</i></a>';
     $('.nameDeli').html(nameDeli);
     $('#sidebar9').addClass('active');  
@@ -71,23 +71,23 @@ $(document).ready(function(){
         })
             if($(this).attr('class') == 'btn btn-sm btn-outline-success off-vacancy')
             {
-                title= "¿Deseas activar esta Vacante?";
-                text="La vacante se activara";
-                confirmButtonText="Activar";
+                title= "Do you want to activate this Vacancy?";
+                text="The vacancy will be activated";
+                confirmButtonText="Activate";
 
-                datatitle="Activado";
-                datatext="activado";
-                datatext2="Activacion";
+                datatitle="Activated";
+                datatext="Activated";
+                datatext2="Activation";
             }
             else 
             {
-                title= "¿Desea desactivar esta vacante?";
-                text= "La vacante se desactivara";
-                confirmButtonText="Desactivar";
+                title= "Do you want to deactivate this vacancy?";
+                text= "The vacancy will be deactivated";
+                confirmButtonText="Deactivate";
 
-                datatitle="Desactivado";
-                datatext="desactivado";
-                datatext2="Desactivacion";
+                datatitle="disabled";
+                datatext="disabled";
+                datatext2="Deactivation";
 
             }
 
@@ -99,18 +99,18 @@ $(document).ready(function(){
                 showCancelButton: true,
                 confirmButtonClass: "btn btn-danger",
                 confirmButtonText: confirmButtonText,
-                cancelButtonText: "Cancelar",
+                cancelButtonText: "Cancel",
                 closeOnConfirm: false,
                 closeOnCancel: false
             },
             function(isConfirm) {
                 if (isConfirm) {
-                swal(datatitle, "Vacante "+datatext, "success");
+                swal(datatitle, "Vacancy "+datatext, "success");
                 actions.deactivated(my_url);
                 } 
                 else {
                 
-                swal("Cancelado", datatext2+" cancelada", "error");
+                swal("Cancelled", datatext2+" cancelled", "error");
             
                 }
         });
@@ -126,21 +126,23 @@ $(document).ready(function(){
             }
         })
         swal({
-            title: "¿Desea eliminar esta Vacante?",
-            text: "La vacante se eliminara permanentemente",
+            title: "Do you want to delete this Vacancy?",
+            text: "The vacancy will be permanently eliminated",
             type: "warning",
             showCancelButton: true,
             confirmButtonClass: "btn btn-danger",
-            confirmButtonText: "Eliminar",
-            cancelButtonText: "Cancelar",
+            confirmButtonText: "Remove",
+            cancelButtonText: "Cancel",
             closeOnConfirm: true,
             closeOnCancel: false
           },
           function(isConfirm) {
             if (isConfirm) {
+            
                 actions.deactivated(my_url);
+               
             }else {
-               swal("Cancelado", "Eliminacion cancelada", "error");
+               swal("Cancelled", "Deletion canceled", "error");
             }
           });
         });
@@ -154,7 +156,7 @@ const vacancies ={
     button: function(dato){
            var buttons='<div class="">';
             if(dato.status== 1){
-                buttons += '<a class="btn btn-sm btn-outline-primary" data-toggle="tooltip" title="Ver Candidatos" href="/candidates/'+dato.id+'"><i class="fa fa-users"></i></a>';
+                buttons += '<a class="btn btn-sm btn-outline-primary" data-toggle="tooltip" title="See Candidates" href="/candidates/'+dato.id+'"><i class="fa fa-users"></i></a>';
                buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="'+dato.id+'"  ><i class="fa fa-edit"></i></button>';
                buttons += '	<button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-vacancy" title="Deactivated" data-type="confirm" value="'+dato.id+'"><i class="fa fa-window-close"></i></button>';
           
@@ -209,6 +211,15 @@ const success = {
                 });
             break;
             default:
+
+                $.notify({
+                    // options
+                    title: "Saved!",
+                    message:data.name,
+                },{
+                    // settings
+                    type: 'success'
+                });
            
             var vacancy = `<tr id="vacancy_id${dato.id}">
                                 <td>${dato.id}</td>
@@ -253,8 +264,8 @@ const success = {
         if(dato.status != 0){
             var vacancy = `<tr id="vacancy_id${dato.id}">
                                 <td>${dato.id}</td>
-                                <td>${dato.name}</td>
-                                <td>${vacancies.nullo(dato)}</td>
+                                <td style="white-space: normal !important; word-wrap: break-word;">${dato.name}</td>
+                                <td  style="white-space: normal !important; word-wrap: break-word;">${vacancies.nullo(dato)}</td>
                                 <td class="hidden-xs">${vacancies.status(dato)}</td>
                                 <td>${vacancies.button(dato)}</td>
                             </tr>`;
@@ -278,7 +289,7 @@ const success = {
                                                         <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
                                                     </th>
                                                 </tr>`);
-
+                                                
             }
         }
        

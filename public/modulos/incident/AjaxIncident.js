@@ -314,24 +314,30 @@ const result = {
     },
     list: function(data){
 
-        var tableIncident = "";
-        data.forEach(function(data){
-
-            tableIncident += `
-                <tr>
-                    <td>${data.created_at}</td>
-                    <td>${data.name} ${data.last_name}</td>
-                    <td>${data.setting_name}</td>
-                    <td>${data.supervisor_name} ${data.supervisor_last_name}</td>
-                    <td>${data.duration}</td>
-                    <td>${data.start}</td>
-                    <td>${data.end}</td>
-                    <td>${incident.buttons(data)}</td>
-                </tr>
-            `;
-        });
-
-        $("#incident-list").html(tableIncident);
+        if(data.length > 0){     
+            var tableIncident = "";
+            data.forEach(function(data){
+    
+                tableIncident += `
+                    <tr>
+                        <td>${data.created_at}</td>
+                        <td>${data.name} ${data.last_name}</td>
+                        <td>${data.setting_name}</td>
+                        <td>${data.supervisor_name} ${data.supervisor_last_name}</td>
+                        <td>${data.duration}</td>
+                        <td>${data.start}</td>
+                        <td>${data.end}</td>
+                        <td>${incident.buttons(data)}</td>
+                    </tr>
+                `;
+            });
+    
+            $("#no-data").hide();
+            $("#incident-list").html(tableIncident);
+        }else{
+            $("#incident-list").html("");
+            $("#no-data").show();
+        }
     },
     delete: function(data){
         console.log(data);

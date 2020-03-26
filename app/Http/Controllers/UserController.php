@@ -43,13 +43,12 @@ class UserController extends Controller
                 ->with('type_user')
                 ->whereNotIn('id_type_user',[9])->whereIn('id_status', [1,2]);
             } else{
-                $data2 = User::select('id','email','id_status')->
+                $data2 = User::select('id','id_type_user','email','id_status')->
                 with('User_info:id_user,name,last_name,phone,entrance_date,birthdate')
                 ->with('type_user')
                 ->whereNotIn('id_type_user',[9])->whereIn('id_status', [1,2]);
             } 
             $data=$data2->paginate(10);
-            // dd($data);
             if ($request->ajax()) {
                 return view('users.table', ["data"=>$data]);
             }
@@ -68,16 +67,18 @@ class UserController extends Controller
         $user=='' ? $email = 'required|unique:users,email,NULL,id,id_status,1 | required|unique:users,email,NULL,id,id_status,2' :  $email = 'sometimes|required|unique:users,email,'.$user.',id,id_status,1 | required|unique:users,email,'.$user.',id,id_status,2';
         // dd($email);
         $this->validate(request(), [
-            'name' => 'required|max:40',
-            'last_name' => 'required|max:40',
-            'phone' => 'max:16',
-            'emergency_contact_phone' => 'max:16',
-            'emergency_contact_name' => 'max:40',
+            'name' => 'required|max:150|regex:/^([a-zA-Z]+)(\s[a-zA-Z]+)*$/',
+            'last_name' => 'required|max:150|regex:/^([a-zA-Z]+)(\s[a-zA-Z]+)*$/',
+            'phone' => 'required|max:20|regex:/^[0-9]{0,20}(\.?)[0-9]{0,2}$/',
+            'gender' => 'not_in:0|required',
+            'emergency_contact_name' => 'sometimes|max:150|nullable|regex:/^([a-zA-Z]+)(\s[a-zA-Z]+)*$/',
+            'emergency_contact_phone' => 'sometimes|nullable|regex:/^[0-9]{0,20}(\.?)[0-9]{0,2}$/',
             'email' => $email,
-            'birthdate' => 'date|before:18 years ago',
-            'phone' => 'max:20',
-            'gender' => 'not_in:0' ,
+            'birthdate' => 'required|date|before:18 years ago|after:1920-01-01',
+            'entrance_date' => 'required|date|after:2014-01-01',
+            'image' => 'image',
             'id_type_user' => 'gt:0',
+            'nickname' => 'required',
             'password' => 'sometimes|required|confirmed|min:8',
         ]);
     }
@@ -123,7 +124,7 @@ class UserController extends Controller
             DB::beginTransaction();
                 $input = $request->input();
                 $input['id_status'] = 1;
-                $input['nickname'] = 'nick'.$input['name'];
+                $input['nickname'] = $request->nickname;
                 $input['password'] = Hash::make($input['password']);
                 $user = User::create($input);
 
@@ -169,6 +170,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        // dd(User::where('id',$user->id)->with('User_info')->with('clients')->with('type_user')->first());
         return response()->json(User::where('id',$user->id)->with('User_info')->with('clients')->with('type_user')->first());
     }
 
@@ -194,6 +196,7 @@ class UserController extends Controller
         }
         $user->email == $request->email ? $user->email = $request->email : '';
         $user->id_type_user = $request->id_type_user;
+        $user->nickname = $request->nickname;
         if($request->password != null)
         {
             $user->password = Hash::make($request->password);
@@ -222,8 +225,9 @@ class UserController extends Controller
         $user_info->phone = $request->phone;
         $user_info->emergency_contact_phone = $request->emergency_contact_phone;
         $user_info->emergency_contact_name = $request->emergency_contact_name;
-        $user_info->notes = $request->notes;
         $user_info->description = $request->description;
+        $user_info->birthdate = $request->birthdate;
+        $user_info->entrance_date = $request->entrance_date;
         $user_info->update();
 
         if($request->clients != null)

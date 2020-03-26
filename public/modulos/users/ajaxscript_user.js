@@ -3,6 +3,8 @@ var url = $('#url').val();
 var baseUrl = $('#baseUrl').val();
 $(document).ready(function(){
     clearload();
+    // var rowCount = $('#tag_container tr').length;
+    // console.log(rowCount);
     //get base URL *********************
     // $('.selectpick').selectpicker({
     //     liveSearchPlaceholder: 'Search Client'
@@ -378,6 +380,13 @@ $(document).ready(function(){
 
     });
 
+    $(".allownumericwithoutdecimal").on("keypress keyup blur",function (event) {    
+        $(this).val($(this).val().replace(/[^\d].+/, ""));
+         if ((event.which < 48 || event.which > 57)) {
+             event.preventDefault();
+         }
+     });
+
 
     
  });      
@@ -554,7 +563,7 @@ const success = {
                                     <td class="hidden-xs">${types.status(dato)}</td>
                                     <td>${types.button(dato)}</td>
                                 </tr>`;
-                    
+
                     $('.formulario').hide();
                     $('.tableUser').show(); 
                     $("#user_id"+dato.id).replaceWith(user);
@@ -622,7 +631,6 @@ const success = {
                 $('#emergency_contact_name').val(data.user_info.emergency_contact_name);
                 $('#emergency_contact_phone').val(data.user_info.emergency_contact_phone);
                 $('#id_type_user').val(data.id_type_user);
-                $('#notes').val(data.user_info.notes);
                 $('#entrance_date').val(data.user_info.entrance_date);
                 $('#birthdate').val(data.user_info.birthdate);
                 $('#gender').val(data.user_info.gender);
@@ -693,6 +701,7 @@ const success = {
         },
         msj: function(data){
             $('#btn-save').attr('disabled', false);
+            $('#btn-save-documents').attr('disabled', false);
             $.notifyClose();
             $.each(data.responseJSON.errors,function (k,message) {
                 $.notify({

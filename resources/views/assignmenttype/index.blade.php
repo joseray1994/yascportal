@@ -4,7 +4,7 @@
   <div class="col-lg-12">
       <div class="card">
           <div class="header">
-            <h1><a href="/types" data-toggle="tooltip" title="Regresar a  todos los Perfiles"><i class="fa fa-arrow-left"></i></a><label style="padding-right:20px; padding-left:20px;">Perfil: </label></h1>
+            <h1><a href="/types" data-toggle="tooltip" title="back to User Type"><i class="fa fa-arrow-left"></i></a><label style="padding-right:20px; padding-left:20px;">User Type Permissions : </label></h1>
            <input id="id_typeuser" type="hidden" value="">
           </div>
           <div class="body">

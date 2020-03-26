@@ -19,11 +19,11 @@
   </div>
   <div class="col-sm-3 form-group">
       <h6>First Day of Work (YYYY-MM-DD):</h6>
-      <input type="date" name="entrance_date" id="entrance_date" class="form-control" title="Este campo solo admite letras" maxlength="60">
+      <input type="date" name="entrance_date" id="entrance_date" class="form-control" onkeydown="return false" maxlength="60">
   </div>
   <div class="col-sm-3 form-group">
       <h6>Phone:</h6>
-      <input type="text" name="phone" id="phone" class="form-control" title="Este campo solo admite letras" maxlength="60">
+      <input type="text" name="phone" id="phone" class="form-control allownumericwithoutdecimal" title="Este campo solo admite letras" maxlength="15">
   </div>
   <div class="col-sm-3 form-group">
       <h6>Emergency Contact Name:</h6>
@@ -31,11 +31,11 @@
   </div>
   <div class="col-sm-3 form-group">
       <h6>Emergency Contact Phone:</h6>
-      <input type="text" name="emergency_contact_phone" id="emergency_contact_phone" class="form-control" title="Este campo solo admite letras" maxlength="60">
+      <input type="text" name="emergency_contact_phone" id="emergency_contact_phone" class="form-control allownumericwithoutdecimal" title="Este campo solo admite letras" maxlength="15">
   </div>
   <div class="col-sm-3 form-group">
       <h6>Birthday (YYYY-MM-DD):</h6>
-      <input type="date" name="birthdate" id="birthdate" class="form-control" title="Este campo solo admite letras" maxlength="60">
+      <input type="date" name="birthdate" id="birthdate"  class="form-control"  maxlength="60">
   </div>
 
   <div class="col-sm-3 form-group">
@@ -47,8 +47,9 @@
     <h6>Gender:</h6>
     <select  class="custom-select" name="gender" id="gender">
       <option value="0" selected>Select Gender</option>
-      <option value="F">FEMALE</option>
-      <option value="M">MALE</option>
+      <option value="F">Female</option>
+      <option value="M">Male</option>
+      <option value="B">Non Binary</option>
     </select>
   </div>
 
@@ -71,10 +72,6 @@
     </select>
   </div>
 
-  <div class="col-sm-12 form-group">
-      <h6>Notes:</h6>
-      <input type="text" name="notes" id="notes" class="form-control" title="Este campo solo admite letras" maxlength="60">
-  </div>
   <div class="col-sm-12 form-group">
       <h6>Additional information:</h6>
       <textarea name="description" id="description" class="form-control"></textarea>

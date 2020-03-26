@@ -14,7 +14,7 @@
         @forelse ($data as $candidate)
         <tr  id="candidate_id{{$candidate->id}}" class="rowType">
 			<td>{{ $candidate->name_vacancy }}</td>
-            <td>{{ $candidate->name}} {{ $candidate->last_name}}</td>
+            <td style=" white-space: normal !important; word-wrap: break-word;">{{ $candidate->name}} {{ $candidate->last_name}}</td>
             <td>{{ $candidate->phone }}</td>
             <td>{{ $candidate->mail }}</td>
             <td style=" white-space: normal !important; word-wrap: break-word;">{{ $candidate->channel }}</td>

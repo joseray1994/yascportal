@@ -20,9 +20,9 @@ class VacancyController extends Controller
                 $search = trim($request->dato);
 
                 if(strlen($request->type) > 0 &&  strlen($search) > 0){
-                    $data2 = VacancyModel::whereNotIn('status',[0])->where($request->type,'LIKE','%'.$search.'%')->paginate(5);
+                    $data2 = VacancyModel::whereNotIn('status',[0])->where($request->type,'LIKE','%'.$search.'%')->paginate(10);
                 } else{
-                    $data2 = VacancyModel::whereNotIn('status',[0])->paginate(5);
+                    $data2 = VacancyModel::whereNotIn('status',[0])->paginate(10);
                 } 
                 $data=$data2;
                 if ($request->ajax()) {
@@ -101,6 +101,17 @@ class VacancyController extends Controller
 
     public function update(Request $request, $vacancy_id)
     {
+
+        $var = count(VacancyController::ValidateExtraVacancy($request,$vacancy_id));
+        $answer=VacancyController::ValidateExtraVacancy($request,0);
+    
+        if($var>0){
+
+            return response()->json($answer);
+
+        }else{
+     
+
             VacancyController::validateVacancy($request,$vacancy_id);
             $vacancy = VacancyModel::find($vacancy_id);
             $vacancy->name = $request->name;
@@ -108,6 +119,7 @@ class VacancyController extends Controller
             $vacancy->status=1;
             $vacancy->save();
             return response()->json($vacancy);
+        }
     }
 
    

@@ -64,17 +64,12 @@ $(document).ready(function(){
           
             e.preventDefault(); 
             var formData =  $("#candidateForm").serialize();
-            
-            if($("#name").val().length > 30)
-            {
-                alert("Ingrese un nombre menor a 30 caracteres");
-                return false;
-            }
+        
     
             //used to determine the http verb to use [add=POST], [update=PUT]
             var state = $('#btn-save').val();
             var type = "POST"; //for creating new resource
-            var candidate_id = $('#candidate_id').val();;
+            var candidate_id = $('#candidate_id').val();
             var my_url = url;
             if (state == "update"){
                 type = "POST"; //for updating existing resource
@@ -98,23 +93,23 @@ $(document).ready(function(){
             })
                 if($(this).attr('class') == 'btn btn-sm btn-outline-success off-candidate')
                 {
-                    title= "¿Deseas activar esta Candidato?";
-                    text="La Candidato se activara";
-                    confirmButtonText="Activar";
+                    title= "Do you want to activate this Candidate?";
+                    text="The Candidate will be activated";
+                    confirmButtonText="Activate";
     
-                    datatitle="Activado";
-                    datatext="activado";
-                    datatext2="Activacion";
+                    datatitle="Activated";
+                    datatext="Activated";
+                    datatext2="Activation";
                 }
                 else 
                 {
-                    title= "¿Desea desactivar esta Candidato?";
-                    text= "La Candidato se desactivara";
-                    confirmButtonText="Desactivar";
+                    title= "Do you want to disable this Candidate?";
+                    text= "The Candidate will be deactivated";
+                    confirmButtonText="Deactivate";
     
-                    datatitle="Desactivado";
-                    datatext="desactivado";
-                    datatext2="Desactivacion";
+                    datatitle="Deactivate";
+                    datatext="Deactivate";
+                    datatext2="Deactivation";
     
                 }
     
@@ -126,18 +121,18 @@ $(document).ready(function(){
                     showCancelButton: true,
                     confirmButtonClass: "btn btn-danger",
                     confirmButtonText: confirmButtonText,
-                    cancelButtonText: "Cancelar",
+                    cancelButtonText: "Cancel",
                     closeOnConfirm: false,
                     closeOnCancel: false
                 },
                 function(isConfirm) {
                     if (isConfirm) {
-                    swal(datatitle, "Candidato "+datatext, "success");
+                    swal(datatitle, "Candidate "+datatext, "success");
                     actions.deactivated(my_url);
                     } 
                     else {
                     
-                    swal("Cancelado", datatext2+" cancelada", "error");
+                    swal("Cancelled", datatext2+" Cancelled", "error");
                 
                     }
             });
@@ -157,13 +152,13 @@ $(document).ready(function(){
                 }
             })
             swal({
-                title: "¿Desea eliminar este Candidato?",
-                text: "El candidato se eliminara permanentemente",
+                title: "Do you want to delete this Candidate?",
+                text: "The candidate will be permanently eliminated",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonClass: "btn btn-danger",
-                confirmButtonText: "Eliminar",
-                cancelButtonText: "Cancelar",
+                confirmButtonText: "Remove",
+                cancelButtonText: "Cancel",
                 closeOnConfirm: true,
                 closeOnCancel: false
               },
@@ -171,7 +166,7 @@ $(document).ready(function(){
                 if (isConfirm) {
                     actions.deactivated(my_url);
                 }else {
-                   swal("Cancelado", "Eliminacion cancelada", "error");
+                   swal("Cancelled", "Deletion canceled", "error");
                 }
               });
             });
@@ -190,15 +185,15 @@ const candidates ={
             if(dato.status== 1){
 
                 buttons += '  <button type="button"  data-toggle="tooltip" class="btn btn-sm btn-outline-primary  info_modal" title="Information" id="btn-info" value="'+dato.id+'"  ><i class="fa fa-info-circle"></i></button>'
-                buttons += ' <button type="button" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="'+dato.id+'"  ><i class="fa fa-edit"></i></button>';
-                buttons += ' <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-candidate" title="Deactivated" data-type="confirm" value="'+dato.id+'"><i class="fa fa-window-close"></i></button>';
+                buttons += ' <button type="button" data-toggle="tooltip" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="'+dato.id+'"  ><i class="fa fa-edit"></i></button>';
+                buttons += ' <button type="button" data-toggle="tooltip" class="btn btn-sm btn-outline-danger js-sweetalert off-candidate" title="Deactivated" data-type="confirm" value="'+dato.id+'"><i class="fa fa-window-close"></i></button>';
                 buttons += '  <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument('+dato.id+')" data-toggle="tooltip" title="Documents" value="'+dato.id+'"><i class="fa  fa-folder-open"></i></button>';
 
           
            }else if(dato.status == 2){
                buttons += '  <button type="button"  data-toggle="tooltip" class="btn btn-sm btn-outline-primary  info_modal" title="Information" id="btn-info" value="'+dato.id+'"  ><i class="fa fa-info-circle"></i></button>'
-               buttons += '<button type="button" class="btn btn-sm btn-outline-success off-candidate" title="Activated" data-type="confirm" value="'+dato.id+'" ><i class="fa fa-check-square-o"></i></button> ';
-               buttons += '  <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert delete-candidate" title="Delete" data-type="confirm" value="'+dato.id+'"><i class="fa fa-trash-o"></i></button>';
+               buttons += '<button type="button" data-toggle="tooltip" class="btn btn-sm btn-outline-success off-candidate" title="Activated" data-type="confirm" value="'+dato.id+'" ><i class="fa fa-check-square-o"></i></button> ';
+               buttons += '  <button type="button" data-toggle="tooltip" class="btn btn-sm btn-outline-danger js-sweetalert delete-candidate" title="Delete" data-type="confirm" value="'+dato.id+'"><i class="fa fa-trash-o"></i></button>';
                buttons += '  <button type="button" class="btn btn-sm btn-outline-secondary open-documents" onclick="openDocument('+dato.id+')" data-toggle="tooltip" title="Documents" value="'+dato.id+'"><i class="fa  fa-folder-open"></i></button>';
 
            }
@@ -219,31 +214,35 @@ const candidates ={
 
 const success = {
     new_update: function (data,state){
-        console.log(data);
+     
         $('#btn-save-documents').attr('disabled', false);
         $('#btn-save').attr('disabled', false);
         $("#table-row").remove();
         $("#no-data-doc").hide();
-        var dato = data;
+        if(data[0]){
+            var dato = data[0];
+        }else{
+            var dato = data;
+        }
         $.notifyClose();
         switch(dato.No) {
             case 2:
-                if(data.msg[0].phone != ''){
+                if(data[0].phone != ''){
                     $.notify({
                         // options
                         title: "Error!",
-                        message:data.msg[0].phone,
+                        message:data[0].phone,
                     },{
                         // settings
                         type: 'danger'
                     });
                 }
 
-                if(data.msg[0].email != ''){
+                if(data[0].email != ''){
                     $.notify({
                         // options
                         title: "Error!",
-                        message:data.msg[0].email,
+                        message:data[0].email,
                     },{
                         // settings
                         type: 'danger'
@@ -296,7 +295,7 @@ const success = {
                 else{
                     var candidate = `<tr id="candidate_id${dato.id}">
                                         <td>${dato.name_vacancy}</td>
-                                        <td>${dato.name} ${dato.last_name}</td>
+                                        <td style=" white-space: normal !important; word-wrap: break-word;">${dato.name} ${dato.last_name}</td>
                                         <td>${dato.phone}</td>
                                         <td>${dato.mail}</td>
                                         <td  style=" white-space: normal !important; word-wrap: break-word;">${dato.channel}</td>
@@ -410,7 +409,7 @@ const success = {
 
                     var candidate = `<tr id="candidate_id${dato.id}">
                                         <td>${dato.name_vacancy}</td>
-                                        <td>${dato.name} ${dato.last_name}</td>
+                                        <td style=" white-space: normal !important; word-wrap: break-word;">${dato.name} ${dato.last_name}</td>
                                         <td>${dato.phone}</td>
                                         <td>${dato.mail}</td>
                                         <td  style=" white-space: normal !important; word-wrap: break-word;">${dato.channel}</td>

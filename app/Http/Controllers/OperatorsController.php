@@ -108,7 +108,6 @@ class OperatorsController extends Controller
             'phone'=>$request->phone,
             'emergency_contact_name'=>$request->emergency_contact_name,
             'emergency_contact_phone'=>$request->emergency_contact_phone,
-            'notes'=>$request->notes,
             'description'=>$request->description,
             'gender'=>$request->gender,
             'birthdate'=>$request->birthdate,
@@ -132,7 +131,7 @@ class OperatorsController extends Controller
     }
 
     public function show($id){
-        $data = User_client::select('cl.id as id_client', 'users_info.name', 'users_info.last_name', 'users_info.address', 'users_info.phone', 'users_info.emergency_contact_name', 'users_info.emergency_contact_phone', 'users_info.notes', 'users_info.description', 'users_info.gender', 'users_info.birthdate',  'users_info.profile_picture as image', 'users_info.entrance_date', 'usr.email', 'usr.nickname', 'usr.id', 'usr.id_status')
+        $data = User_client::select('cl.id as id_client', 'users_info.name', 'users_info.last_name', 'users_info.address', 'users_info.phone', 'users_info.emergency_contact_name', 'users_info.emergency_contact_phone', 'users_info.description', 'users_info.gender', 'users_info.birthdate',  'users_info.profile_picture as image', 'users_info.entrance_date', 'usr.email', 'usr.nickname', 'usr.id', 'usr.id_status')
             ->join('clients as cl', 'users_client.id_client', '=', 'cl.id')
             ->join('users as usr', 'users_client.id_user', '=', 'usr.id')
             ->join('users_info as users_info', 'users_client.id_user', '=', 'users_info.id_user')
@@ -189,7 +188,6 @@ class OperatorsController extends Controller
         $user_info->phone = $request->phone;
         $user_info->emergency_contact_name = $request->emergency_contact_name;
         $user_info->emergency_contact_phone = $request->emergency_contact_phone;
-        $user_info->notes = $request->notes;
         $user_info->description = $request->description;
         $user_info->gender = $request->gender;
         $user_info->birthdate = $request->birthdate;

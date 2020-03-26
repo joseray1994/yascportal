@@ -4,7 +4,7 @@
                 <div class="col-lg-12 view-index">
                     <div class="card">
                         <div class="header">
-                            <h1>Schedule Weekly <i class="fa fa-tasks"></i></h1>
+                            <h1>Schedule Weekly <i class="fa fa-calendar"></i></h1>
                             <ul class="header-dropdown">
                                 <li><button id="csv" class="btn btn-info">TO CSV</button></li>
                             </ul>
@@ -22,7 +22,7 @@
                         </div>
                         <div class="body">
                                  @include('schedule.weekly.search')
-                                <div class="table-responsive">
+                                <div class="table-responsive"  style="max-height:65vh; overflow: scroll;">
                                     @include('schedule.weekly.table')
                                 </div>
                                 <div class="loading-table col-sm-12 text-center">
@@ -36,12 +36,14 @@
                 </div>
             </div>
             @include('schedule.weekly.form')
-            @include('schedule.weekly.detail')
-            
+            @include('schedule.modal-suspended')
+            @include('schedule.detail')
+            @include('schedule.suspended')
           
 
              <!-- Passing BASE URL to AJAX -->
         <input id="url" type="hidden" value="{{ \Request::url() }}">
+        <input id="da" type="hidden" value="">
         <input id="baseUrl" type="hidden" value="{{ \Request::root() }}">
 @endsection
 @section('script')

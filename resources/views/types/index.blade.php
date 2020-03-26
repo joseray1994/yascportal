@@ -4,9 +4,9 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="header">
-                            <h1>Users Types <i class="fa fa-tasks"></i></h1>
+                            <h1>Users Types <i class="fa fa-address-card"></i></h1>
                             <ul class="header-dropdown">
-                                <li><a href="javascript:void(0);" class="btn btn-success" disabled id="btn_add" >New User Type <i class="fa fa-plus"></i></a></li>
+                                <li><a href="javascript:void(0);" class="btn btn-success-create" disabled id="btn_add" >New User Type <i class="fa fa-plus text-white"></i></a></li>
                             </ul>
                         </div>
                         <div class="body">

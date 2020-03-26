@@ -20,17 +20,27 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-4 form-group">
+        <div class="col-sm-2 form-group">
             <h6>Interval:</h6>
             <input type="number" name="interval" id="interval" class="form-control" maxlength="60">
         </div>
-        <div class="col-sm-4 form-group">
+        <div class="col-sm-2 form-group">
             <h6>Duration (Minutes):</h6>
             <input type="number" name="duration" id="duration" class="form-control"  maxlength="60">
         </div>
         <div class="col-sm-4 form-group">
+            <h6>Time Zone:</h6>
+            <select name="time_zone" id = "time_zone" class="custom-select">
+                    <option>Select a Time Zone</option>
+                    @foreach($time_zone as $tz)
+                      <option value = "{{$tz->id}}">{{$tz->name}}, {{$tz->offset}}</option>
+                      @endforeach
+              </select>
+        </div>
+        <div class="col-sm-4 form-group">
             <h6>Color:</h6>
             <select name="color" id = "color" class="custom-select" onchange="colorSelect()">
+                    <option>Select a Color</option>
                     @foreach($color as $color)
                       <option style = "background:{{$color->hex}}" value = "{{$color->id}}">{{$color->mat}}  {{$color->hex}}</option>
                       @endforeach

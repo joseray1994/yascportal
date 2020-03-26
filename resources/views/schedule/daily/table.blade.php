@@ -28,12 +28,69 @@
             <td>    
                 {{ $type->setting }}
             </td>
-            <td>@if($type->type == 1) <span class="badge badge-light">Workday</span>@else<span class="badge badge-dark">Extra</span>@endif</td>
-            <td>
-                <button type="button" class="btn btn-sm btn-outline-secondary open_change" data-toggle="tooltip" title="Edit" id="btn-edit" value="{{$type->id}}"  ><i class="fa fa-exchange"></i></button>
-                <button type="button" class="btn btn-sm btn-outline-secondary open_modal" data-toggle="tooltip" title="Edit" id="btn-edit" value="{{$type->id}}"  ><i class="fa fa-edit"></i></button>
-                <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert deleteschedule" data-toggle="tooltip" title="Delete" data-type="confirm" value="{{$type->id}}"><i class="fa fa-trash-o"></i></button>
-            </td>
+            @switch($type->type)
+                    @case(1)
+                        <td> <span class="badge badge-light">Workday</span></td>
+                        @switch($type->status)
+                            @case(1)
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary open_modal" data-toggle="tooltip" title="Edit" id="btn-edit" value="{{$type->id}}"  ><i class="fa fa-edit"></i></button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger text-dark quitschedule" data-toggle="tooltip" title="Quit"  value="{{$type->id}}"  ><i class="fa fa-ban"></i></button>
+                                    
+                                </td>
+                            @break
+                            @case(2)
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary open_modal" data-toggle="tooltip" title="Edit" id="btn-edit" value="{{$type->id}}"  ><i class="fa fa-edit"></i></button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger text-dark quitschedule" data-toggle="tooltip" title="Quit"  value="{{$type->id}}"  ><i class="fa fa-ban"></i></button>
+                                    
+                                </td>
+                            @break
+                            @case(3)
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-outline-primary open_detail" data-toggle="tooltip" title="Audit" id="btn-edit" value="{{$type->id}}"  ><i class="fa fa-info-circle"></i><input type="hidden" id="tokenSch{{$type->id}}" value="2"></button>
+                                </td>
+                            @break
+                        @endswitch
+                   
+                    @break
+                    @case(2)
+                    <td> <span class="badge badge-training">Training</span></td>
+                    <td>
+                      
+                        <button type="button" class="btn btn-sm btn-outline-secondary open_modal" data-toggle="tooltip" title="Edit" id="btn-edit" value="{{$type->id}}"  ><i class="fa fa-edit"></i></button>
+                    </td>
+                    @break
+                    @case(3)
+                    <td> <span class="badge badge-coaching">Coaching</span></td>
+                    <td>
+                       
+                        <button type="button" class="btn btn-sm btn-outline-secondary open_modal" data-toggle="tooltip" title="Edit" id="btn-edit" value="{{$type->id}}"  ><i class="fa fa-edit"></i></button>
+                    </td>
+                    @break
+                    @case(4)
+                    <td><span class="badge badge-dark">Extra</span></td>
+                    @switch($type->status)
+                            @case(1)
+                                 <td>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary open_modal" data-toggle="tooltip" title="Edit" id="btn-edit" value="{{$type->id}}"  ><i class="fa fa-edit"></i></button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert deleteschedule" data-toggle="tooltip" title="Delete" data-type="confirm" value="{{$type->id}}"><i class="fa fa-trash-o"></i></button>
+                                </td>
+                            @break
+                            @case(2)
+                                 <td>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary open_modal" data-toggle="tooltip" title="Edit" id="btn-edit" value="{{$type->id}}"  ><i class="fa fa-edit"></i></button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert deleteschedule" data-toggle="tooltip" title="Delete" data-type="confirm" value="{{$type->id}}"><i class="fa fa-trash-o"></i></button>
+                                </td>
+                            @break
+                            @case(3)
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-outline-primary open_detail" data-toggle="tooltip" title="Audit" id="btn-edit" value="{{$type->id}}"  ><i class="fa fa-info-circle"></i><input type="hidden" id="tokenSch{{$type->id}}" value="2"></button>
+                                </td>
+                            @break
+                        @endswitch
+                @break
+            @endswitch
  
         </tr>
         @empty

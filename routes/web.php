@@ -121,6 +121,8 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::get('/dayoff', 'ScheduleDailyController@data_dayoff');
     Route::get('/break', 'ScheduleDailyController@data_break');
     Route::get('/detail/{id?}', 'ScheduleWeeklyController@detail');
+    Route::get('/auditdetail/{id?}', 'ScheduleWeeklyController@auditdetail');
+    Route::delete('/quit/{id}', 'ScheduleWeeklyController@quit');
     
 
     //Operators
@@ -149,6 +151,7 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     //Reports
     Route::get('/reports/incident', 'ReportsController@incident_report');
     Route::get('/reports/attendance', 'ReportsController@attendance_report');
+    Route::get('/reports/focus', 'ReportsController@focus_report');
     Route::get('/reports', 'ReportsController@index');
   
 
@@ -163,6 +166,63 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::put('/incident', 'IncidentReportController@update');
     Route::delete('/incident', 'IncidentReportController@delete');
     Route::post('/incident/getTable', 'IncidentReportController@getTable');
+
+    //Display Index Page Providers
+    Route::get('/providers', 'ProviderController@index');
+    Route::get('/providers/{provider_id?}', 'ProviderController@show');
+    Route::post('/providers', 'ProviderController@store');
+    Route::post('/providers/{id}/{provider_id?}', 'ProviderController@update');
+    Route::delete('/providers/{provider_id?}', 'ProviderController@destroy');
+    Route::delete('/providers/delete/{id}', 'ProviderController@delete');
+
+    //Zoom
+    Route::get('/zoom', 'ZoomController@index');
+    Route::post('/zoom', 'ZoomController@store');
+    Route::get('/zoom/{zoom_id}', 'ZoomController@show');
+    Route::put('/zoom/{zoom_id}', 'ZoomController@update');
+    Route::delete('/zoom/deactivate/{id}', 'ZoomController@destroy');
+    Route::delete('/zoom/delete/{id}', 'ZoomController@delete');
+
+    Route::put('/zoom/free/{id}', 'ZoomController@quit_user');
+    Route::put('/zoom/assign/{id}', 'ZoomController@assign_user');
+
+    //NEWS
+    Route::get('/news', 'NewsController@index');
+    Route::get('/news/{id}', 'NewsController@show');
+    Route::get('/getTypes', 'NewsController@getTypes');
+    Route::post('/news', 'NewsController@store');
+    Route::put('/news/{id}', 'NewsController@update');
+    Route::delete('/news/{id}', 'NewsController@destroy');
+    Route::delete('/news/delete/{id}', 'NewsController@delete');
+
+    // DASHBOARD
+    Route::post('/like', 'HomeController@addLike');
+    Route::post('/getComments', 'HomeController@getComments');
+    Route::post('/addComments', 'HomeController@addComment');
+    //suspended work 
+    Route::get('/suspended', 'SuspendedWorkController@index');
+    Route::get('/suspended/{UserType_id?}', 'SuspendedWorkController@show');
+    Route::post('/suspended', 'SuspendedWorkController@store');
+    Route::put('/suspended/{UserType_id}', 'SuspendedWorkController@update');
+    Route::delete('/suspended/{UserType_id}', 'SuspendedWorkController@destroy');
+    Route::delete('/suspended/delete/{id}', 'SuspendedWorkController@delete');
+
+    //Display Index Page Supplies
+    Route::get('/supplies/{id}', 'SupplyController@index');
+    Route::post('/supplies/{id}', 'SupplyController@store');
+    Route::post('/supplies/{id}/{supply_id?}', 'SupplyController@update');
+    Route::delete('/supplies/{id}/delete/{supply_id?}', 'SupplyController@delete');
+    Route::delete('/supplies/{id}/{supply_id?}', 'SupplyController@destroy');
+    Route::get('/supplies/{id}/{supply_id?}', 'SupplyController@show');
+
+     //Display Index Page Inventory
+    Route::get('/inventory', 'InventoryController@index');
+    Route::get('/inventory/{supply_id?}', 'InventoryController@show');
+    Route::get('/inventory/show/{supply_id?}', 'InventoryController@showProv');
+    Route::post('/inventory/{supply_id?}', 'InventoryController@update');
+    Route::put('/inventory/updateProv/{supply_id?}', 'InventoryController@updateProv');
+    Route::delete('/inventory/{supply_id?}', 'InventoryController@destroy');
+    Route::delete('/inventory/delete/{supply_id?}', 'InventoryController@delete');
 
 
 });

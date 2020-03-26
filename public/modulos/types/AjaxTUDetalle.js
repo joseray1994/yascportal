@@ -1,7 +1,7 @@
 
 $(document).ready(function(){
     var url = $('#url').val();
-    var nameDeli='<a href="/types">Users Types</i></a> / <a href="'+url+'">Detail User Type</i></a>';
+    var nameDeli='<a href="/types">Users Types</i></a> / <a href="'+url+'">User Type Permissions</i></a>';
     $('.nameDeli').html(nameDeli);
     $('#sidebar1').addClass('active');  
 
@@ -69,13 +69,13 @@ $(document).ready(function(){
             }
         })
         swal({
-            title: "¿Desea eliminar este Usuario?",
-            text: "El usuario se eliminara permanentemente",
+            title: "Do you want to remove detail?",
+            text: "the detail will be delete",
             type: "warning",
             showCancelButton: true,
             confirmButtonClass: "btn btn-danger",
-            confirmButtonText: "Eliminar",
-            cancelButtonText: "Cancelar",
+            confirmButtonText: "Delete",
+            cancelButtonText: "Cancel",
             closeOnConfirm: true,
             closeOnCancel: false
           },
@@ -83,7 +83,7 @@ $(document).ready(function(){
             if (isConfirm) {
                 actions.deactivated(my_url);
             }else {
-               swal("Cancelado", "Eliminacion cancelada", "error");
+               swal("Cancel", "Deleting cancelled", "error");
             }
           });
     });
@@ -96,12 +96,12 @@ const types ={
     button: function(dato){
            var buttons='<div class="btn-group">';
             if(dato.status== 1){
-               buttons += ' <button class="btn btn-secondary btn-detail open_modal"  data-toggle="tooltip" title="Editar nombre del Perfil"  value="'+dato.id+'"> <i class="fa fa-edit"></i></li></button>';
-               buttons += '	<button type="button" class="btn btn-outline-danger off-type" title="Desactivar Usuario" data-type="confirm" value="'+dato.id+'" ><i class="fa fa-window-close"></i></button>';
+               buttons += ' <button class="btn btn-secondary btn-detail open_modal"  data-toggle="tooltip" title="Actived"  value="'+dato.id+'"> <i class="fa fa-edit"></i></li></button>';
+               buttons += '	<button type="button" class="btn btn-outline-danger off-type" title="Remove Detail" data-type="confirm" value="'+dato.id+'" ><i class="fa fa-window-close"></i></button>';
           
            }else if(dato.status == 2){
-               buttons+='<button type="button" class="btn btn-outline-success off-type" title="Activar Usuario" data-type="confirm" value="'+dato.id+'" ><i class="fa fa-check-square-o"></i></button>'
-               buttons += '<button class="btn btn-danger btn-delete delete-profile" data-toggle="tooltip" title="Desactivar Perfil" value="'+dato.id+'"><i class="fa fa-trash-o"></i> </button>';
+               buttons+='<button type="button" class="btn btn-outline-success off-type" title="Activated" data-type="confirm" value="'+dato.id+'" ><i class="fa fa-check-square-o"></i></button>'
+               buttons += '<button class="btn btn-danger btn-delete delete-profile" data-toggle="tooltip" title="Remove Detail" value="'+dato.id+'"><i class="fa fa-trash-o"></i> </button>';
            }
            buttons+='</div>';
            return buttons;
