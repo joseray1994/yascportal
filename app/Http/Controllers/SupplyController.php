@@ -19,7 +19,7 @@ class SupplyController extends Controller
         
         $id_menu=5;
         $menu = menu($user,$id_menu);
-        if($menu['validate']){  
+        if($menu['validate'] && !$user->id_type_user==1){  
            
                 $typeuser = TypeUserModel::all();
 
