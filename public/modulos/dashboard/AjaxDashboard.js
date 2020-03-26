@@ -20,11 +20,11 @@ function toggleDescription(id) {
         $("#titleBtnRead"+id).html("Read Less");
     } else {
         $("#more"+id).hide();
-        $("#titleBtnRead"+id).html("Read More");
+        $("#titleBtnRead"+id).html("Read More...");
     }
 }
-function toggleComments(id) {
-
+function getComments(id) {
+   
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -47,6 +47,7 @@ function toggleComments(id) {
             }
 
             $("#totalComments"+id).html(totalComments + labelComment);
+            $("#totalCommentsLabel"+id).html(totalComments);
 
             var comments = ``;
             data.forEach(function(data){
@@ -69,14 +70,23 @@ function toggleComments(id) {
                 `;
             });
             $("#comments"+id).html(comments);
-
-            $(".section-comment"+id).fadeToggle();
-            $("#inputComment"+id).focus();
+           
         },
         error: function(err){
             console.log(err);
         }
     });
+}
+
+function toggleComments(id){
+    getComments(id);
+    seccionComment = document.getElementsByClassName('section-comment'+id);
+            
+    if (seccionComment[0].style.display === "none") {
+        $(".section-comment"+id).show();
+    } else {
+        $(".section-comment"+id).hide();
+    }
 }
 
 function addLike(id){
@@ -91,7 +101,16 @@ function addLike(id){
         data:{id:id},
         dataType:"json",
         success: function(data){
-           console.log(data);
+            console.log(data);
+            if(data.status === 1){
+                $("#btnLikes"+id).removeClass('icon-heart btn-like btn btn-secondary');
+                $("#btnLikes"+id).addClass('icon-heart btn-like btn btn-danger');
+                $("#countLikes"+id).html(data.likes);
+            }else{
+                $("#btnLikes"+id).removeClass('icon-heart btn-like btn btn-danger');
+                $("#btnLikes"+id).addClass('icon-heart btn-like btn btn-secondary');
+                $("#countLikes"+id).html(data.likes);
+            }
         },
         error: function(err){
             console.log(err);
@@ -115,7 +134,8 @@ function addComment(id){
         data:formData,
         dataType:"json",
         success: function(data){
-           console.log(data);
+           $("#inputComment"+id).val('');
+           getComments(id);
         },
         error: function(err){
             console.log(err);
