@@ -1,6 +1,7 @@
 getData(1);
 
 $(document).ready(function(){
+    clearload();
     
     var nameDeli='<a href="/training">Training</i></a>';
     $('.nameDeli').html(nameDeli);
@@ -15,11 +16,10 @@ $(document).ready(function(){
 
     //display modal form for creating new product *********************
     $('#btn_add').click(function(){
-        $('#myModalLabel').html(`Create New Trainee `);
+        $('#title').html(`Create New Trainee `);
         $('#btn-save').val("add");
         $('#formTraining').show();
         $("#btn_add").hide();
-        $('#btn-save').val("add");
         $('#id_client').val("");
         $('#id_client').trigger('change');
         $('#traineeNewForm').trigger("reset");
@@ -31,10 +31,12 @@ $(document).ready(function(){
         $(".btnGenerate").show();
         $('#id_trainer').val("");
         $('#id_trainer').trigger('change');
+        $('#tag_put').remove();
+
     });
        //display cancel modal form for creating new product *********************
     $('.btn-cancel').click(function(){
-        $('#myModalLabel').html(`Create New Trainee`);
+        $('#title').html(`Create New Trainee`);
         $('#formTraining').hide();
         $(".bodyIndex").show();
         $('#traineeNewForm').trigger("reset");
@@ -45,10 +47,21 @@ $(document).ready(function(){
         $('#id_client').trigger('change');
         $('#id_trainer').val("");
         $('#id_trainer').trigger('change');
+        $('#tag_put').remove();
+        $(".Edit_TS").show();
+        $(".import_noti").show();
     });
 
+    //display cancel modal form for update schedule
+    $('.cancel_data').click(function(){
+        $('#btn-save').val("add");
+        $('#days').val(null).trigger('change');
+        $('#trainingForm').trigger("reset");
+        $('#myModal').modal('hide');
+    });
+
+
     $('#dateSearch').change(function(){
-        //  $('#daySearch').val(),
         var date = $('#dateSearch').val();
          date = moment(date).format('YYYY/MM/DD');
         var fecha = new Date(date);
@@ -56,8 +69,6 @@ $(document).ready(function(){
         var weekday = fecha.getDay();
          $('#daySearch').val(weekday);
          $('#daySearch').trigger('change');
-
-
         training.get_data(1);
     });
 
@@ -132,13 +143,43 @@ $(document).ready(function(){
 
 
     //display modal form for product EDIT ***************************
-    $(document).on('click','.open_modal',function(){
-        $('#traineeNewForm').trigger("reset");
+    $(document).on('click','.btn-editSchedule',function(){
+        $('#myModal').modal('show');
+        $('#trainingForm').trigger("reset");
+        $('#tag_put').remove();
+        $('#btn-save').val("update");
+
+
+
         var training_id = $(this).val();
-        var my_url = url + '/' + training_id;
+        var my_url = url + '/schedule/' + training_id;
+            actions.show(my_url); 
+    });
+
+    $(document).on('click','.btn-editInfo',function(){
+        var id = $(this).val();  
+        var my_url = url + '/' + id;
+
+        $('#title').html(`Update Trainee `);
+        $('#formTraining').show();
+        $(".bodyIndex").hide();
+        $("#btn_add").hide();
+        $('#btn-save').val("update");
+        $('#traineeNewForm').trigger("reset");
+        $("#flag").val(true);
+        $('#traineeNewForm').trigger("reset");
+        $(".Edit_TS").hide();
+        $(".seccion-sugerencia").hide();
+        $(".segunda-seccion").show();
+        $("#nickname").attr('disabled', false);
+        $(".btnGenerate").hide();
+        $("#email").attr('disabled', true);
+        $(".pass").hide();
+        $(".import_noti").hide();
+        $('#tag_put').remove();
+
 
             actions.show(my_url);
-       
     });
 
 
@@ -157,8 +198,33 @@ $(document).ready(function(){
         var training_id = $('#training_id').val();;
         var my_url = url;
         if (state == "update"){
-            type = "PUT"; //for updating existing resource
+            type = "POST"; //for updating existing resource
             my_url += '/' + training_id;
+        }
+        
+            console.log(formData);
+        
+            actions.edit_create(type,my_url,state,formData);
+    
+    });
+
+    $("#trainingForm").on('submit',function (e) {
+        console.log('button');
+      
+        e.preventDefault(); 
+        $('#btn-save').attr('disabled', true);
+        // var formData =  $("#trainingForm").serialize();
+        var formData =  training.dataSend();
+
+
+        //used to determine the http verb to use [add=POST], [update=PUT]
+        var state = $('#btn-save').val();
+        var type = "POST"; //for creating new resource
+        var training_id = $('#id_schedule').val();;
+        var my_url = url;
+        if (state == "update"){
+            type = "PUT"; //for updating existing resource
+            my_url += '/schedule/' + training_id;
         }
         
             console.log(formData);
@@ -388,7 +454,8 @@ const training ={
     button: function(dato){
            var buttons='';
             if(dato.status_user== 1 || dato.status_user== "1"){
-               buttons += ' <button class="btn  btn-sm btn-outline-secondary open_modal"  data-toggle="tooltip" title="Edit"  value="'+dato.id_user+'"> <i class="fa fa-edit"></i></li></button>';
+               buttons +=  '<button type="button" class="btn btn-sm btn-outline-secondary btn-editInfo" title="Edit User Information" value="'+dato.id_user+'"  ><i class="icon-user-following"></i></button>';
+               buttons +=  ' <button type="button" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="'+dato.id_schedule+'"   ><i class="fa fa-edit"></i></button>';
                buttons += '	<button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-type" title="Disable User and Schedule" data-type="confirm" value="'+dato.id_user+'" ><i class="fa fa-window-close"></i></button>';
           
            }else if(dato.status_user== 2 || dato.status_user== "2"){
@@ -516,6 +583,26 @@ const training ={
         }
         return types;
     },
+    dataSend: function(){
+        n="";
+        if($("#now").prop("checked") == true){
+            n+=$("#now").val();
+        }
+        var data =  {
+                time_start:$('#time_start').val(),
+                time_end:$('#time_end').val(),
+                days:$("#sch_days").val(),
+                end_training:$("#sch_end_training").val(),
+                end_coaching:$("#sch_end_coaching").val(),
+                hidden_end_training:$("#hidden_endTraining").val(),
+                hidden_end_coaching:$("#hidden_endCoaching").val(),
+                now:n,
+                id_schedule:$('#id_schedule').val(),
+
+        }
+    
+        return data;
+    },
 }
 const success = {
 
@@ -542,7 +629,6 @@ const success = {
     
                   });
             break;
-        
             default:
                 var training2 = `<tr id="trainings_id${dato.id_user}" class="rowTraining">
                     <td style ="background:${dato.color}">${dato.client }</td>
@@ -620,13 +706,85 @@ const success = {
     },
 
     show: function(data){
-        console.log(data);
-        $('#training_id').val(data.id);
-        $('#name').val(data.name);
-        $('#id_option').val(data.id_option);
-        $('#btn-save').val("update");
-        $('#myModalLabel').html(`Update Settings <i class="fa fa-user-plus"></i>`);
-        $('#myModal').modal('show');
+        switch (data.flag) {
+            case 1:
+                console.log(data, 'option 1');
+                $('#tag_put').remove();
+                $form = $('#trainingForm');
+                $form.append('<input type="hidden" id="tag_put" name="_method" value="PUT">');
+
+                $('#id_schedule').val(data.data.id_schedule);
+                $('#name').val(data.data.name);
+                $('#last_name').val(data.data.lastname);
+                $('#time_start').val(data.data.time_s);
+                $('#time_start').trigger('change');
+                $('#time_end').val(data.data.time_e);
+                $('#time_end').trigger('change');
+                if(data.duration_training !=null){
+                    $('#sch_end_training').val(data.duration_training.training_end);
+                    $('#sch_end_training').trigger('change');
+                    $('#hidden_endTraining').val(data.duration_training.training_end);
+                    $('#hidden_endTraining').trigger('change');
+                }else{
+                    $('#sch_end_training').val(null);
+                    $('#sch_end_training').trigger('change');
+                    $('#hidden_endTraining').val(null);
+                    $('#hidden_endTraining').trigger('change');
+                }
+                if(data.duration_coaching!=null) {
+                    $('#sch_end_coaching').val(data.duration_coaching.coaching_end);
+                    $('#sch_end_coaching').trigger('change');
+                    $('#hidden_endCoaching').val(data.duration_coaching.coaching_end);
+                    $('#hidden_endCoaching').trigger('change');
+                }else{
+                    $('#sch_end_coaching').val(null);
+                    $('#sch_end_coaching').trigger('change');
+                    $('#hidden_endCoaching').val(null);
+                    $('#hidden_endCoaching').trigger('change');
+
+                }
+
+                if(data.days.length == 0){
+                    $('#sch_days').val(null);
+                    $('#sch_days').trigger('change');
+                }else{
+        
+                    $('#sch_days').val(data.days)
+                    $('#sch_days').trigger('change');
+                }
+
+                $('#myModalLabel').html('Update Trainee: <h4><u>'+data.data.name+' '+ data.data.lastname+'</u></h4>');
+                $('#label_trainer').html('<label for="entrenador">Trainer: '+data.data.name_trainer+' '+ data.data.lastname_trainer+'</label>');
+                $('#label_client').html('<label for="cliente" style ="background:'+data.data.color+'">Client: '+data.data.client+'</label>');
+                break;
+        
+            default:
+                console.log(data, 'default');
+                $('#tag_put').remove();
+                $form = $('#traineeNewForm');
+                $form.append('<input type="hidden" id="tag_put" name="_method" value="PUT">');
+
+                $('#training_id').val(data.id_user);
+                $('#name').val(data.name);
+                $('#last_name').val(data.lastname);
+                $('#birthdate').val(data.birthday);
+                $('#phone').val(data.phone);
+                $('#emergency_contact_name').val(data.emergency_contact_name);
+                $('#emergency_contact_phone').val(data.emergency_contact_phone);
+                $('#nickname').val(data.nickname);
+                $('#email').val(data.email);
+                $('#email2').val(data.email);
+                $('#gender').val(data.gender);
+                $('#notes').val(data.notes);
+                $('#description').val(data.description);
+                $('#id_client').val(data.id_client);
+                $('#id_trainer').val(data.id_trainer);
+                $('#btn-save').val("update");
+                $('#title').html(`Update Trainee`);
+                // $('#myModal').modal('show');
+                break;
+        }
+        
     },
 
     msj: function(data){

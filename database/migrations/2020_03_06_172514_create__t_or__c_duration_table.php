@@ -17,6 +17,7 @@ class CreateTOrCDurationTable extends Migration
             $table->bigIncrements('id');
             $table->string('mat', 3)->default('TCD');
             $table->integer('id_trainer');
+            $table->integer('id_operator');
             $table->date('date_start');
             $table->date('date_end');
             $table->integer('type');
