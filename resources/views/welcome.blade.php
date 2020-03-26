@@ -142,14 +142,14 @@
 
             <div class="row clearfix">
                 <div class="col-sm-12 ">
-                    <div class="card" id="documenter_cover">
+                    <!-- <div class="card" id="documenter_cover"> -->
                         {{-- <script>
                             !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
                         </script>
                         <a class="weatherwidget-io" href="https://forecast7.com/es/20d97n89d59/merida/" data-label_1="MÉRIDA" data-label_2="Clima" data-theme="weather_one" style="pointer-events: none;
                         cursor: default;">MÉRIDA Clima</a> --}}
                         @yield('content')
-                    </div>
+                    <!-- </div> -->
                   @include('incident.formTable')
                 </div>
             </div>
