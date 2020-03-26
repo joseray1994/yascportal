@@ -7,7 +7,7 @@
                 <div class="col-lg-8" style="height:100vh">
                     <div class="card">
                         <div class="body">
-                            <div class="table-responsive">
+                            <div class="table-responsive" style="max-height:65vh; overflow: scroll;">
                             <h4 id="titledaily">{{$day['Eng-name']}} {{$date}}<i class="fa fa-tasks"></i></h4>
                               @include('schedule.daily.table')
                             </div>
