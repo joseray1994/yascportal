@@ -7,15 +7,15 @@
                 <div class="col-lg-8" style="height:100vh">
                     <div class="card">
                         <div class="body">
-                            <div class="table-responsive">
+                            <div class="table-responsive" style="max-height:65vh; overflow-x: scroll;">
                             <h4 id="titledaily">{{$day['Eng-name']}} {{$date}}<i class="fa fa-tasks"></i></h4>
                               @include('schedule.daily.table')
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4" style="height:50vh">
-                    <div class="card">
+                <div class="col-lg-4" >
+                    <div class="card" style="max-height:32vh; overflow-x: scroll;">
                         <div class="body">
                         <h4>Day off <i class="fa fa-tasks"></i></h4>
                                 <div class="table-responsive">
@@ -23,7 +23,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card" style="height:50vh">
+                    <div class="card" style="max-height:33vh; overflow-x: scroll;">
                         <div class="body">
                         <h4>Break & Lunch <i class="fa fa-tasks"></i></h4>
                                 <div class="table-responsive">

@@ -92,7 +92,7 @@ class ClientsController extends Controller
                                         
             } 
            
-            $data=$data2->paginate(5);
+            $data=$data2->paginate(10);
             $color = ClientColorModel::all(); 
             $time_zone = TimeZoneModel::orderBy('name')->get();
         //    dd($time_zone);
@@ -179,8 +179,7 @@ class ClientsController extends Controller
                                           'clt.description as description', 
                                           'clt.color as color',
                                           'clc.hex as hex',
-                                          'tz.name as time_zone_name',
-                                          'tz.offset as time_zone_offset',
+                                          'tz.id as id_time_zone',
                                           )
                               ->join('clients as clt', 'clt.id', '=', 'break_rules.id_client')
                               ->join('client_color as clc', 'clc.id', '=', 'clt.color')
@@ -267,13 +266,15 @@ class ClientsController extends Controller
     //Functions for contacts
     public function storeContacts(Request $request)
     {
+        ClientsController::validateContact($request);
         $data = $request->input();
+        // dd($data);
         $clients = ClientContactsModel::create([
         'id_client'=>$data['client_id_contacts'],
-        'name'=>$data['name_contact'],
-        'description'=>$data['description_contact'],
-        'phone'=>$data['phone_contact'],
-        'email'=>$data['email_contact'],
+        'name'=>$data['name'],
+        'description'=>$data['description'],
+        'phone'=>$data['phone'],
+        'email'=>$data['email'],
         ]);
         $id = $clients->id;
         $name = $clients->name;
@@ -286,10 +287,10 @@ class ClientsController extends Controller
         // ClientModel::whereNotIn('status',[0])->where('id', $client_id)->first();
         return $data;
     }
-    public function validateContact($request, $client = ''){
+    public function validateContact($request, $id = ''){
         
         $this->validate(request(), [
-            'name_contact' => 'unique:client_contacts|required|max:30|regex:/^([a-zA-Z]+)(\s[a-zA-Z]+)*$/',
+            'name' => 'required|max:30|regex:/^([a-zA-Z]+)(\s[a-zA-Z]+)*$/',
             'phone' => 'required|max:20|regex:/^[0-9]{0,20}(\.?)[0-9]{0,2}$/',
             
         ]); 
@@ -311,13 +312,13 @@ class ClientsController extends Controller
 
     public function updateContacts(Request $request, $id)
     {
-        // dd($request);
+        ClientsController::validateContact($request, $id);
         $contact = ClientContactsModel::where('id',$id)->first();
         // dd($contact);
-        $contact->name = $request['name_contact'];
-        $contact->description = $request['description_contact'];
-        $contact->phone = $request['phone_contact'];
-        $contact->email = $request['email_contact'];
+        $contact->name = $request['name'];
+        $contact->description = $request['description'];
+        $contact->phone = $request['phone'];
+        $contact->email = $request['email'];
         $contact->save();
         $id = $contact->id;
         

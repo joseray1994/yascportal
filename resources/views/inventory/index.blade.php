@@ -4,11 +4,10 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="header">
-                            <h1>Users Types <i class="fa fa-address-card"></i></h1>
-                            <ul class="header-dropdown">
-                                <li><a href="javascript:void(0);" class="btn btn-success-create" disabled id="btn_add" >New User Type <i class="fa fa-plus text-white"></i></a></li>
-                            </ul>
+                            <h1>Inventory <i class="fa fa-tasks"></i></h1>
                         </div>
+                        @include('inventory.form')
+                        @include('inventory.formProv')
                         <div class="body">
                                 <div class="input-group mb-3 input-group-sm">
                                     <div class="input-group-prepend">
@@ -21,7 +20,7 @@
                                     <button type="button" class="btn btn-primary search-query">Search</button>
                                 </div>
                                 <div class="table-responsive">
-                                 @include('types.table')
+                                 @include('inventory.table')
                                 </div>
                                 <div class="loading-table col-sm-12 text-center">
                                         <div class="spinner-grow text-success"></div>
@@ -33,12 +32,14 @@
                     </div>
                 </div>
             </div>
-            @include('types.form')
+         
              <!-- Passing BASE URL to AJAX -->
              <input id="url" type="hidden" value="{{ \Request::url() }}">
              <input id="baseUrl" type="hidden" value="{{ \Request::root() }}">
 @endsection
 @section('script')
 <script src="{{asset('modulos/ajaxscript_actions.js')}}"></script>
-<script src="{{asset('modulos/types/AjaxTypes.js')}}"></script>
+<script src="{{asset('modulos/inventory/AjaxInventory.js')}}"></script>
 @endsection
+
+

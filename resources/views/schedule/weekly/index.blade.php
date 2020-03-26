@@ -43,6 +43,7 @@
 
              <!-- Passing BASE URL to AJAX -->
         <input id="url" type="hidden" value="{{ \Request::url() }}">
+        <input id="da" type="hidden" value="">
         <input id="baseUrl" type="hidden" value="{{ \Request::root() }}">
 @endsection
 @section('script')

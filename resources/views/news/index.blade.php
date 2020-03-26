@@ -46,4 +46,8 @@
 <script src="{{asset('modulos/ajaxscript_actions.js')}}"></script>
 <script src="{{asset('modulos/documents/AjaxDocuments.js')}}"></script>
 <script src="{{asset('modulos/news/AjaxNews.js')}}"></script>
+
+<script src="{{asset('vendor/ckeditor/ckeditor.js')}}"></script> <!-- Ckeditor --> 
+<script src="{{asset('js/pages/forms/editors.js')}}"></script>
+
 @endsection

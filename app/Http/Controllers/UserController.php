@@ -124,7 +124,7 @@ class UserController extends Controller
             DB::beginTransaction();
                 $input = $request->input();
                 $input['id_status'] = 1;
-                $input['nickname'] = 'nick'.$input['name'];
+                $input['nickname'] = $request->nickname;
                 $input['password'] = Hash::make($input['password']);
                 $user = User::create($input);
 
@@ -196,6 +196,7 @@ class UserController extends Controller
         }
         $user->email == $request->email ? $user->email = $request->email : '';
         $user->id_type_user = $request->id_type_user;
+        $user->nickname = $request->nickname;
         if($request->password != null)
         {
             $user->password = Hash::make($request->password);

@@ -18,6 +18,7 @@ class CreateDatailScheduleUser extends Migration
             $table->integer('id_schedule')->nullable();
             $table->integer('id_operator')->nullable();
             $table->integer('id_day')->nullable();
+            $table->date('date')->nullable();
             $table->string('mat', 3)->default('SCD');
             $table->time('time_start');
             $table->time('time_end');

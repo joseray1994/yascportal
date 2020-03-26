@@ -237,6 +237,8 @@ $(document).ready(function(){
     
                 actions.show(my_url);
     });
+
+    
     $(document).on('click','#btn_add_suspended',function(){
         $('#SuspendedForm').trigger("reset");
         $('#btn-saveS').val('add');
@@ -349,7 +351,25 @@ $(document).on('click','.delete-profile',function(){
         }
       });
     });
-        
+      
+    
+$(document).on('click','.open_modal_audit',function(){
+
+        $('#SuspendedForm').trigger("reset");
+        var shcedule_id = $(this).val();
+        var my_url = baseUrl + '/auditdetail/' + shcedule_id;
+        actions.show(my_url);
+      
+});
+
+$(document).on('click','.cancel_data_detail',function(){
+        $("#option-old").val('');
+        $("#select-option-old").hide();
+        $("#option-news").val('');
+        $("#select-option-news").hide();
+   
+});
+
     
 });
 const schedule ={
@@ -413,6 +433,7 @@ const schedule ={
             var formData={
                 date: $('#dateSearchaudit').val(),
                 time:$('#timeSearchaudit').val(),
+                action:$("#da").val(),
             }
             console.log(formData);
             $.ajax(
@@ -533,7 +554,86 @@ const suspendedValue ={
                     buttons += '<button class="btn btn-danger btn-sm btn-delete delete-profile" data-toggle="tooltip" title="Desactivar Perfil" value="'+dato.id+'"><i class="fa fa-trash-o"></i> </button>';
                 }
                 return buttons;
+            },
+}
+
+const audit = {
+
+    button: function(dato){
+        var buttons='';
+            buttons += '<button class="btn btn-sm btn-outline-secondary btn-detail open_modal_audit"  data-toggle="tooltip" title="Detail Audit"  value="'+dato.id+'"> <i class="fa fa-info"></i></li></button>'; 
+        return buttons;
+    },
+    dataresultaudit: function(data){
+                old = JSON.parse(data.audit.old);
+                news = JSON.parse(data.audit.new);
+                var datosold="";
+                var datosnews="";
+
+                    if(old.time_start){
+                        datosold+=`<li class="list-group-item">Time Start: ${old.time_start}</li>`;
+                    }
+                    if(old.time_end){
+                        datosold+=`<li class="list-group-item">Time Start: ${old.time_end}</li>`;
+                    }
+                    if(old.status){
+                        switch(old.status) {
+                            case 1:
+                              datosold+=`<li class="list-group-item">Status: Day ON</li>`;
+                              break;
+                            case 2:
+                              datosold+=`<li class="list-group-item">Status: Day Off</li>`;
+                              break;
+                            case 3:
+                              datosold+=`<li class="list-group-item">Status: Quit</li>`;
+                              break;
+                            case 0:
+                                datosold+=`<li class="list-group-item">Status: Remove</li>`;
+                            break;
+                          }
+                        
+                    }
+
+                    if(old.option){
+                        $("#option-old").val(old.option);
+                        $("#select-option-old").show();
+                    }
+
+                    if(news.time_start){
+                        datosnews+=`<li class="list-group-item">Time Start: ${news.time_start}</li>`;
+                    }
+                    if(news.time_end){
+                        datosnews+=`<li class="list-group-item">Time Start: ${news.time_end}</li>`;
+                    }
+                    if(news.status){
+                        switch(news.status) {
+                            case 1:
+                              datosnews+=`<li class="list-group-item">Status: Day ON</li>`;
+                              break;
+                            case 2:
+                              datosnews+=`<li class="list-group-item">Status: Day Off</li>`;
+                              break;
+                            case 3:
+                              datosnews+=`<li class="list-group-item">Status: Quit</li>`;
+                            break;
+                            case 0:
+                                datosnews+=`<li class="list-group-item">Status: Remove</li>`;
+                            break;
+                          }
+                        
+                    }
+                    if(news.option){
+                        $("#option-news").val(news.option);
+                        $("#select-option-news").show();
+                    }
+            data={
+                old:datosold,
+                news:datosnews,
             }
+        
+        return data;
+
+    }
 }
 const success = {
 
@@ -715,6 +815,13 @@ const success = {
                     $('#shcedule_idS').val(data.suspended.id);
                     $('#myModaSuspended').modal('show');
             break;
+            case 3:
+                    da=audit.dataresultaudit(data);
+                    $("#new_values").html(da.news);
+                    $("#old_values").html(da.old);
+
+                    $("#myModaAudit").modal('show');
+            break;
         }
         
     },
@@ -752,6 +859,7 @@ const success = {
 
                 } 
                 $('#user_suspended').val(data.operator),
+                $("#da").val(1);
                 $('#supended-table').html(dato);
                 $('.view-index').hide();
                 $('.view-audit').hide();
@@ -762,40 +870,22 @@ const success = {
                 if(data.audit[0]){
                     $('#auditid').val(data.audit[0].id);
                 }
-                function listdataold(data){
-                    datos=`<ul class="list-group">`;
-                        if(data.time_start){
-                            datos+=`<li class="list-group-item">Time Start: ${data.time_start}</li>`;
-                        }
-
-                        if(data.time_end){
-                            datos+=`<li class="list-group-item">Time End:${data.time_end}</li>`;
-                        }
-                    datos+= `</ul>`;
-                    return datos;
-                }
+               
                 if(data.audit.length > 0) {
                     $("#off-row").remove();
                     $.each(data.audit, function (index, da) {
-                        old = JSON.parse(da.old);
-                        news = JSON.parse(da.new);
-                    
+
                         var dato2 = `<tr class="dayofftd">
                                         <td>${da.name}${da.lname}</td>
-                                        <td>
-                                            ${listdataold(old)}
-                                        </td>
-                                        <td>
-                                            ${listdataold(news)} 
-                                        </td>
                                         <td >${da.event}</td>
                                         <td >${da.created}</td>
+                                        <td >${audit.button(da)}</td>
                                     </tr>`;
                     dato += dato2;
                     });
                 }else{
                     dato += `<tr id="off-row" class="text-center">
-                                    <th colspan="5" class="text-center">
+                                    <th colspan="4" class="text-center">
                                     <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
                                     </th>
                                 </tr>`;
@@ -803,6 +893,7 @@ const success = {
                 }  
 
                 $('#audit-table').html(dato);
+                $("#da").val(2);
                 $('.view-index').hide();
                 $('.view-suspended').hide();
                 $('.view-audit').show(); 

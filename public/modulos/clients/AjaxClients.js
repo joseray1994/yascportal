@@ -1,6 +1,9 @@
 
 $(document).ready(function(){
     clearload();
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
 
     $(window).on('hashchange', function() {
         if (window.location.hash) {
@@ -128,7 +131,6 @@ $(document).ready(function(){
                 actions.show(my_url);
            
         });
-
 
 
       //Edit Client
@@ -353,14 +355,14 @@ const clients ={
               
                buttons += ` <button type="button" class="btn btn-sm btn-outline-secondary btn-edit"  title="Edit"  value="${dato.id}"> <i class="fa fa-edit"></i></li></button>
                         	<button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-type"  title="Deactivated" data-type="confirm"  value="${dato.id}" ><i class="fa fa-window-close"></i></button>
-                             <button type="button" class="btn btn-sm btn-outline-warning btn_add_contacts"  title="Contacts"  onclick="add_contacs(${dato.id})"> <i class="fa fa-users"></i> </button>
-                             <button type="button" class="btn btn-sm btn-outline-warning open-documents" onclick="openDocument(${dato.id})"  title="Documents" value="${dato.id}"> <i class="fa fa-folder-open"></i> </button>`;
+                             <button type="button" class="btn btn-sm btn-outline-primary btn_add_contacts"  title="Contacts"  onclick="add_contacs(${dato.id})"> <i class="fa fa-users"></i> </button>
+                             <button type="button" class="btn btn-sm btn-outline-info open-documents" onclick="openDocument(${dato.id})"  title="Documents" value="${dato.id}"> <i class="fa fa-folder-open"></i> </button>`;
            }else if(dato.status == 2){
              
                buttons += ` <button type="button" class="btn btn-sm btn-outline-success off-type"  title="Activated" data-type="confirm"  value="${dato.id}" > <i class="fa fa-check-square-o"></i></button>
                              <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert deleteClient"  title="Delete" data-type="confirm"  value="${dato.id}"> <i class="fa fa-trash-o"></i> </button>
-                             <button type="button" class="btn btn-sm btn-outline-warning btn_add_contacts"  title="Contacts"  onclick="add_contacs(${dato.id})"> <i class="fa fa-users"></i> </button>
-                             <button type="button" class="btn btn-sm btn-outline-warning open-documents" onclick="openDocument(${dato.id})"  title="Documents" value="${dato.id}"> <i class="fa fa-folder-open"></i> </button>`;
+                             <button type="button" class="btn btn-sm btn-outline-primary btn_add_contacts"  title="Contacts"  onclick="add_contacs(${dato.id})"> <i class="fa fa-users"></i> </button>
+                             <button type="button" class="btn btn-sm btn-outline-info open-documents" onclick="openDocument(${dato.id})"  title="Documents" value="${dato.id}"> <i class="fa fa-folder-open"></i> </button>`;
            }
            return buttons;
     },
@@ -409,13 +411,10 @@ const success = {
             case 1:
                 console.log(data);
                 var dato = data.client;
-                var clientname =$('#name').val();
-                var type =$('#type').val();
                     if (dato.description == null){
                         dato.description = "";
                     }
                     var client = `<tr id="client_id${dato.id}">
-                                        <td style="background:${dato.color}"></td>
                                         <td>${dato.name}</td>
                                         <td>${dato.time_zone_name}, ${dato.time_zone_offset}</td>
                                         <td>${dato.description}</td>
@@ -461,9 +460,11 @@ const success = {
                     if (dato.description == null){
                         dato.description = "";
                     }
+                    if (dato.email == null){
+                        dato.email = "";
+                    }
                         var contact = `<tr id="client_id${dato.id}">
                                             <td>${dato.name}</td>
-                                            <td>${dato.time_zone_name}, ${dato.time_zone_offset}</td>
                                             <td>${dato.description}</td>
                                             <td>${dato.phone}</td>
                                             <td>${dato.email}</td>
@@ -530,9 +531,8 @@ const success = {
                         dato.description = '';
                     }
                     var client = `<tr id="client_id${dato.id}" >
-                                         <td style="background:${dato.color}"></td>
-                                         <td>${dato.time_zone_name}, ${dato.time_zone_offset}</td>
                                         <td>${dato.name}</td>
+                                        <td>${dato.time_zone_name}, ${dato.time_zone_offset}</td>
                                         <td>${dato.description}</td>
                                         <td>${dato.interval}</td>
                                         <td>${dato.duration}</td>
@@ -557,6 +557,12 @@ const success = {
                
                 var dato = data.contact;
                 if(dato.status != 0){
+                    if (dato.email == null){
+                        dato.email = "";
+                    }
+                    if (dato.description == null){
+                        dato.description = "";
+                    }
                     var contact = `<tr id="client_id${dato.id}">
                                         <td>${dato.name}</td>
                                         <td>${dato.description}</td>
@@ -659,13 +665,13 @@ const success = {
             $('#document-list').html(document);
             break;
             case 4:
-            var data = data.contact_edit;
+            var dato = data.contact_edit;
             console.log(data)   
-                $('#client_id_contacts').val(data.id);
-                $('#name_contact').val(data.name);
-                $('#description_contact').val(data.description);
-                $('#email_contact').val(data.email);
-                $('#phone_contact').val(data.phone);
+                $('#client_id_contacts').val(dato.id);
+                $('#name_contact').val(dato.name);
+                $('#description_contact').val(dato.description);
+                $('#email_contact').val(dato.email);
+                $('#phone_contact').val(dato.phone);
                 $('#btn-save-contacts').val("update");
             break;
             case 5:
