@@ -15,7 +15,7 @@ class InventoryController extends Controller
       
         $user = Auth::user();
         
-        $id_menu=5;
+        $id_menu=16;
         $menu = menu($user,$id_menu);
         if($menu['validate'] && $user->id_type_user==1){  
 
