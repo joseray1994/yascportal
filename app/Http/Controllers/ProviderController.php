@@ -13,10 +13,11 @@ class ProviderController extends Controller
     {       
         $user = Auth::user();
         $idtype = Auth::user()->id_type_user;
+     
         
-        $id_menu=5;
+        $id_menu=15;
         $menu = menu($user,$id_menu);
-        if($menu['validate']){   
+        if($menu['validate'] &&  $idtype!=1){   
             $typeuser = TypeUserModel::all();
 
                 $search = trim($request->dato);
@@ -66,7 +67,7 @@ class ProviderController extends Controller
         
         $this->validate(request(), [
             'name' => 'required|max:60',
-            'rfc' => 'required|regex:/^[a-zA-Z]{3,4}\d{6}$/',
+            'rfc' => 'required|regex:/^[a-zA-Z]{3,4}\d{6}([a-z0-9]{3})$/',
             'phone' => 'required|max:12|regex:/^[0-9]{0,20}(\.?)[0-9]{0,2}$/',
             'email' => 'required|email',
         ]); 

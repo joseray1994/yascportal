@@ -11,12 +11,11 @@
             <th class="hidden-xs" >Zoom Meting</th>
             <th class="hidden-xs" >Activities</th>
             <th >Ends Training</th>
-            <th>Status</th>
+            <th class="hidden-xs" >Status</th>
             <th>Option</th>
         </tr>
     </thead>
     <tbody id="trainings-list">
-        {{-- @foreach ($data as $training) --}}
         @forelse ($data as $training)
         <tr id="trainings_id{{$training->id_user}}" class="rowTraining">
             <td style ="background:{{$training->color}}" >{{ $training->client }}</td>
@@ -41,7 +40,8 @@
                         <span class='badge badge-success'>Activated</span>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-sm btn-outline-secondary open_modal" title="Edit" id="btn-edit" value="{{$training->id_user}}"  ><i class="fa fa-edit"></i></button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary btn-editInfo" title="Edit User Information" value="{{$training->id_user}}"  ><i class="icon-user-following"></i></button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary btn-editSchedule" title="Edit Schedule" id="btn-edit" value="{{$training->id_schedule}}"  ><i class="fa fa-edit"></i></button>
                         <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert off-type" title="Disable User and Schedule" data-type="confirm" value="{{$training->id_user}}"><i class="fa fa-window-close"></i></button>
                     </td>
                 @break
@@ -55,16 +55,10 @@
                 </td>
                 @break
             @endswitch
-            {{-- <td>
-                <button type="button" class="btn btn-sm btn-outline-secondary open_change" data-toggle="tooltip" title="Edit" id="btn-edit" value="{{$training->id}}"  ><i class="fa fa-exchange"></i></button>
-                <button type="button" class="btn btn-sm btn-outline-secondary open_modal" data-toggle="tooltip" title="Edit" id="btn-edit" value="{{$training->id}}"  ><i class="fa fa-edit"></i></button>
-                <button type="button" class="btn btn-sm btn-outline-danger js-sweetalert deleteTraining" data-toggle="tooltip" title="Delete" data-type="confirm" value="{{$training->id_user}}"><i class="fa fa-trash-o"></i></button>
-            </td> --}}
         </tr>
-        {{-- @endforeach --}}
         @empty
             <tr id="table-row" class="text-center">
-                <th colspan="8" class="text-center">
+                <th colspan="11" class="text-center">
                     <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
                 </th>
             </tr>

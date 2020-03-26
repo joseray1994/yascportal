@@ -245,7 +245,7 @@ const success = {
            
                 var inventory = `<tr id="inventory_id${dato.id}">
                                 <td>${dato.id}</td>
-                                <td>${dato.id_department}</td>
+                                <td>${dato.name_dep}</td>
                                 <td>${dato.name_prov}</td>
                                 <td>${dato.name}</td>
                                 <td>${dato.quantity}</td>
@@ -308,7 +308,7 @@ const success = {
         if(dato.status != 0){
             var inventory = `<tr id="inventory_id${dato.id}">
                                 <td>${dato.id}</td>
-                                <td>${dato.id_department}</td>
+                                <td>${dato.name_dep}</td>
                                 <td>${dato.name_prov}</td>
                                 <td>${dato.name}</td>
                                 <td>${dato.quantity}</td>

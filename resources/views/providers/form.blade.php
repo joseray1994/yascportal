@@ -8,14 +8,7 @@
 				
 				<form enctype="multipart/form-data" method="POST" id="providerForm" class="form-horizontal">
 					<div class="modal-body">
-						<!-- <div class="col-md-6 mb-3">
-                            <div class="input-group">
-                                       
-                                            <input type="hidden" id="id_department" name="id_department" value="1">
-                                     
-                            </div> 
-                        </div> -->
-
+					
 							<div class="form-group error">
 								<div class="btn-group col-sm-12">
 									<button class="btn modaldelichef" disabled><i class="fa fa-user-plus"></i></button>
