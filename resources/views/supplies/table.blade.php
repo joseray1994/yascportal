@@ -2,7 +2,7 @@
     <thead class="text-white thead-yasc">
         <tr>
             <th width="100px">ID</th>
-            <th>Departament</th>
+            <th>Department</th>
 			<th>Provider</th>
             <th>Name</th>
             <th>Quantity</th>

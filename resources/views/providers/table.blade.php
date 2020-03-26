@@ -2,7 +2,7 @@
     <thead class="text-white thead-yasc">
         <tr>
             <th width="100px">ID</th>
-			<th>Departamento</th>
+			<th>Department</th>
             <th>Name</th>
             <th>RFC</th>
 			<th>Phone</th>

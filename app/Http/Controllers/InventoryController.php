@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\SupplyModel;
 use App\ProviderModel;
-
+use App\TypeUserModel;
 
 class InventoryController extends Controller
 {
@@ -17,7 +17,7 @@ class InventoryController extends Controller
         
         $id_menu=5;
         $menu = menu($user,$id_menu);
-        if($menu['validate']){  
+        if($menu['validate'] && $user->id_type_user==1){  
 
                 $provider = ProviderModel::all();
 
@@ -25,17 +25,19 @@ class InventoryController extends Controller
 
                 if(strlen($request->type) > 0 &&  strlen($search) > 0){
                  
-                    $data2 = SupplyModel::select('supplies.id as id', 'supplies.mat as mat', 'supplies.id_department as id_department', 
+                    $data2 = SupplyModel::select('supplies.id as id', 'supplies.mat as mat', 'typeuser.name as name_dep', 
                     'prov.name as name_prov','supplies.name as name','supplies.quantity as quantity', 'supplies.price as price', 'supplies.cost as cost', 
                     'supplies.total_price as total_price', 'supplies.status as status')
+                    ->join('type_user as typeuser', 'typeuser.id', '=', 'supplies.id_department')
                     ->join('providers as prov', 'prov.id', '=', 'supplies.id_provider')
                     ->whereNotIn('supplies.status',[0])
                     ->where($request->type,'LIKE','%'.$search.'%');
                   
                 } else{
-                    $data2 = SupplyModel::select('supplies.id as id', 'supplies.mat as mat', 'supplies.id_department as id_department', 
+                    $data2 = SupplyModel::select('supplies.id as id', 'supplies.mat as mat', 'typeuser.name as name_dep', 
                     'prov.name as name_prov','supplies.name as name','supplies.quantity as quantity', 'supplies.price as price', 'supplies.cost as cost', 
                     'supplies.total_price as total_price', 'supplies.status as status')
+                    ->join('type_user as typeuser', 'typeuser.id', '=', 'supplies.id_department')
                     ->join('providers as prov', 'prov.id', '=', 'supplies.id_provider')
                     ->whereNotIn('supplies.status',[0]);
                   
@@ -55,9 +57,10 @@ class InventoryController extends Controller
     
     public function resultdata($id){
 
-        $inventory = SupplyModel::select('supplies.id as id', 'supplies.mat as mat', 'supplies.id_department as id_department', 
+        $inventory = SupplyModel::select('supplies.id as id', 'supplies.mat as mat', 'typeuser.name as name_dep', 
         'prov.name as name_prov','supplies.name as name','supplies.quantity as quantity', 'supplies.price as price', 'supplies.cost as cost', 
         'supplies.total_price as total_price', 'supplies.status as status')
+        ->join('type_user as typeuser', 'typeuser.id', '=', 'supplies.id_department')
         ->join('providers as prov', 'prov.id', '=', 'supplies.id_provider')
         ->where('supplies.id',$id)
         ->first();
@@ -77,9 +80,10 @@ class InventoryController extends Controller
     
     public function show($id)
     {
-        $inventory = SupplyModel::select('supplies.id as id', 'supplies.mat as mat', 'supplies.id_department as id_department', 
+        $inventory = SupplyModel::select('supplies.id as id', 'supplies.mat as mat', 'typeuser.name as name_dep', 
         'prov.name as name_prov','supplies.name as name','supplies.quantity as quantity', 'supplies.price as price', 'supplies.cost as cost', 
         'supplies.total_price as total_price', 'supplies.status as status')
+        ->join('type_user as typeuser', 'typeuser.id', '=', 'supplies.id_department')
         ->join('providers as prov', 'prov.id', '=', 'supplies.id_provider')
         ->where('supplies.id',$id)
         ->first();
@@ -90,9 +94,10 @@ class InventoryController extends Controller
 
     public function showProv($id)
     {
-        $inventory = SupplyModel::select('supplies.id as id', 'supplies.mat as mat', 'supplies.id_department as id_department', 
+        $inventory = SupplyModel::select('supplies.id as id', 'supplies.mat as mat', 'typeuser.name as name_dep', 
         'prov.name as name_prov', 'prov.id as id_provider','supplies.name as name','supplies.quantity as quantity', 'supplies.price as price', 'supplies.cost as cost', 
         'supplies.total_price as total_price', 'supplies.status as status')
+        ->join('type_user as typeuser', 'typeuser.id', '=', 'supplies.id_department')
         ->join('providers as prov', 'prov.id', '=', 'supplies.id_provider')
         ->where('supplies.id',$id)
         ->first();
@@ -134,9 +139,10 @@ class InventoryController extends Controller
       
         $id=$inventory->id;
 
-        $inventory2 = SupplyModel::select('supplies.id as id', 'supplies.mat as mat', 'supplies.id_department as id_department', 
+        $inventory2 = SupplyModel::select('supplies.id as id', 'supplies.mat as mat', 'typeuser.name as name_dep', 
         'prov.name as name_prov', 'prov.id as id_provider','supplies.name as name','supplies.quantity as quantity', 'supplies.price as price', 'supplies.cost as cost', 
         'supplies.total_price as total_price', 'supplies.status as status')
+        ->join('type_user as typeuser', 'typeuser.id', '=', 'supplies.id_department')
         ->join('providers as prov', 'prov.id', '=', 'supplies.id_provider')
         ->where('supplies.id',$id)
         ->first();
