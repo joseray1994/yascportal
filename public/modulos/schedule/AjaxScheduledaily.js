@@ -3,7 +3,7 @@ $(document).ready(function(){
     clearload();
     var nameDeli='<a href="/weekly">Schedule Weekly</i></a>';
     $('.nameDeli').html(nameDeli);
-    $('#sidebar5').addClass('active') 
+    $('#sidebar7').addClass('active') 
 
     //get base URL *********************
     var url = $('#url').val();
