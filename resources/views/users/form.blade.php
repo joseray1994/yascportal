@@ -19,7 +19,7 @@
   </div>
   <div class="col-sm-3 form-group">
       <h6>First Day of Work (YYYY-MM-DD):</h6>
-      <input type="date" name="entrance_date" id="entrance_date" class="form-control" min="2012-01-01" onkeydown="return false" maxlength="60">
+      <input type="date" name="entrance_date" id="entrance_date" class="form-control" onkeydown="return false" maxlength="60">
   </div>
   <div class="col-sm-3 form-group">
       <h6>Phone:</h6>
@@ -35,7 +35,7 @@
   </div>
   <div class="col-sm-3 form-group">
       <h6>Birthday (YYYY-MM-DD):</h6>
-      <input type="date" name="birthdate" id="birthdate"  class="form-control" min="1950-01-01" onkeydown="return false" maxlength="60">
+      <input type="date" name="birthdate" id="birthdate"  class="form-control"  maxlength="60">
   </div>
 
   <div class="col-sm-3 form-group">
