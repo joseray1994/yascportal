@@ -287,25 +287,25 @@ body::-webkit-scrollbar
 body::-webkit-scrollbar-thumb
 {
 	border-radius: 10px;
-	background-color: #fff;
+	background-color: #C82333;
 
 }
-#news::-webkit-scrollbar-track
+.myScroll::-webkit-scrollbar-track
 {
 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.1);
 	background-color: #fff;
 	border-radius: 10px;
 }
 
-#news::-webkit-scrollbar
+.myScroll::-webkit-scrollbar
 {
 	width: 10px;
 	background-color: #fff;
 }
 
-#news::-webkit-scrollbar-thumb
+.myScroll::-webkit-scrollbar-thumb
 {
 	border-radius: 10px;
-	background-color: darkgray;
+	background-color: #31B86F;
 
 }

@@ -145,7 +145,7 @@ class NewsController extends Controller
             File::delete($file_path);
             $news->path = "";
             $news->news_picture = "";
-        }else
+        }elseif($request->flag_hidden == "false")
         {
             $news->path = $news->path;
             $news->news_picture = $news->news_picture;
