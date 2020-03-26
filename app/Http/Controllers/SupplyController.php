@@ -17,9 +17,9 @@ class SupplyController extends Controller
         $user = Auth::user();
         $idtype = Auth::user()->id_type_user;
         
-        $id_menu=5;
+        $id_menu=15;
         $menu = menu($user,$id_menu);
-        if($menu['validate'] && !$user->id_type_user==1){  
+        if($menu['validate'] && $idtype!=1){  
            
                 $typeuser = TypeUserModel::all();
 

@@ -67,7 +67,7 @@ class ProviderController extends Controller
         
         $this->validate(request(), [
             'name' => 'required|max:60',
-            'rfc' => 'required|regex:/^[a-zA-Z]{3,4}\d{6}$/',
+            'rfc' => 'required|regex:/^[a-zA-Z]{3,4}\d{6}([a-z0-9]{3})$/',
             'phone' => 'required|max:12|regex:/^[0-9]{0,20}(\.?)[0-9]{0,2}$/',
             'email' => 'required|email',
         ]); 

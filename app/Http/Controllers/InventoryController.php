@@ -77,6 +77,38 @@ class InventoryController extends Controller
              'total_price' => 'required',
         ]);
     }
+
+    public function ValidateExtraInventory($request,$supply_id){
+        $ExtraSupplyValidation=[]; 
+        $n ="";
+        $data = [];
+
+        $name = SupplyModel::where('name', $request->name)
+        ->whereIn('status', [1,2]);
+
+        if($supply_id > 0){
+            $name->where('id','!=',$supply_id);
+        }
+            
+        $nameV = $name->count();
+
+        if($nameV > 0){      
+            $n = 'Another user type already has that Name';
+            
+        }
+        if($n==''){
+            $data=[];
+
+          }else{
+              $data=[
+                  'No' =>2,
+                  'name'=>$n,
+                ];
+
+              array_push($ExtraSupplyValidation,$data);
+          }
+        return $ExtraSupplyValidation;
+    }
     
     public function show($id)
     {
@@ -109,6 +141,14 @@ class InventoryController extends Controller
 
     public function update(Request $request, $supply_id)
     {
+        $var = count(InventoryController::ValidateExtraInventory($request,$supply_id));
+        $answer=InventoryController::ValidateExtraInventory($request,0);
+      
+        if($var>0){
+
+              return response()->json($answer);
+
+        }else{
 
             InventoryController::validateInventory($request);
             $inventory = SupplyModel::find($supply_id);
@@ -127,7 +167,7 @@ class InventoryController extends Controller
             $inventory2 = InventoryController::resultdata($id);
 
             return response()->json($inventory2);
-
+        }
             
     }
 
