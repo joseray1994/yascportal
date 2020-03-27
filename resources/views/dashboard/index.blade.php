@@ -65,6 +65,12 @@
                                 </ul>                                        
                             </div>
                         </div>
+                        <div class="loading-comments text-center" style="display:none">
+                            <div class="spinner-grow text-success"></div>
+                            <div class="spinner-grow text-info"></div>
+                            <div class="spinner-grow text-warning"></div>
+                            <div class="spinner-grow text-danger"></div>
+                        </div>
                         <div class="section-comment{{$news->id}}" style="display:none">
                             <div class="body">
                                 <ul class="comment-reply list-unstyled">
