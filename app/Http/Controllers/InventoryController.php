@@ -69,13 +69,14 @@ class InventoryController extends Controller
     }
 
     public function validateInventory($request){
+              
         $this->validate(request(), [
-             'name' => 'required|max:60',
-             'quantity' => 'required|numeric|min:0',
-             'price' => 'required|numeric|min:0',
-             'cost' => 'required|numeric|min:0',
-             'total_price' => 'required',
-        ]);
+            'name' => 'required|max:60',
+            'quantity' => 'required|numeric|min:0|max:999999',
+            'price' => 'required|numeric|min:0|max:999999',
+            'cost' => 'required|numeric|min:0|max:999999',
+            'total_price' => 'required',
+        ]); 
     }
 
     public function ValidateExtraInventory($request,$supply_id){
