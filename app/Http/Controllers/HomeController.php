@@ -48,7 +48,7 @@ class HomeController extends Controller
             // NEWS QUE PUEDE VER ESTE USUARIO
             $userView = UserViewsNewsModel::select('id_new')
             ->join('news', 'user_view_news.id_new', 'news.id')
-            ->where('news.status', 1)
+            ->whereIn('news.status', [1,2])
             ->where('id_type_user', $user->id_type_user)->orderBy('id_new', 'desc')->get();
             
             // NEWS
@@ -56,7 +56,7 @@ class HomeController extends Controller
                 $data = NewsModel::select('news.id', 'news.title','news.description', 'news.news_picture', 'news.path', 'news.status', 'news.created_at', 'users.nickname', 'users_info.path_image')
                 ->join('users', 'news.id_user', 'users.id')
                 ->join('users_info', 'news.id_user', 'users_info.id_user')
-                ->where('status', 1)
+                ->whereIn('status', [1,2])
                 ->orderBy('news.id', 'desc')
                 ->where('news.id', $news->id_new)
                 ->first();

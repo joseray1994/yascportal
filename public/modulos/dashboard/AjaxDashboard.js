@@ -3,6 +3,7 @@ $(document).ready(function() {
     var baseUrl = $('#baseUrl').val();
     var nameDeli='<a href="/home">Dashboard</i></a>';
     $('.nameDeli').html(nameDeli);
+    $('#sidebar14').addClass('active'); 
 });
 
 function toggleDescription(id) {
@@ -17,7 +18,7 @@ function toggleDescription(id) {
     }
 }
 function getComments(id) {
-   
+
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -63,7 +64,6 @@ function getComments(id) {
                 `;
             });
             $("#comments"+id).html(comments);
-           
         },
         error: function(err){
             console.log(err);
@@ -72,13 +72,16 @@ function getComments(id) {
 }
 
 function toggleComments(id){
+    $(".loading-comments").show();
     getComments(id);
     seccionComment = document.getElementsByClassName('section-comment'+id);
             
     if (seccionComment[0].style.display === "none") {
         $(".section-comment"+id).show();
         location.href = "#comment"+id;
+        $(".loading-comments").hide();
     } else {
+        $(".loading-comments").hide();
         $(".section-comment"+id).hide();
         location.href = "#news"+id;
     }
