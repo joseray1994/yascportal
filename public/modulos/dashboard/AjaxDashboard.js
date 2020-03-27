@@ -3,13 +3,6 @@ $(document).ready(function() {
     var baseUrl = $('#baseUrl').val();
     var nameDeli='<a href="/home">Dashboard</i></a>';
     $('.nameDeli').html(nameDeli);
-    $('#sidebar13').addClass('active'); 
-    
-    // LIKES
-    $(".btn-like").click(function(e){
-        e.preventDefault();
-        id = $(this).val();
-    });
 });
 
 function toggleDescription(id) {
@@ -84,8 +77,10 @@ function toggleComments(id){
             
     if (seccionComment[0].style.display === "none") {
         $(".section-comment"+id).show();
+        location.href = "#comment"+id;
     } else {
         $(".section-comment"+id).hide();
+        location.href = "#news"+id;
     }
 }
 

@@ -9,9 +9,11 @@
                 </div>
             </div>
             <div class="col-md-6 col-sm-12 myScroll" style="max-height:75vh; overflow-y: scroll;">
+                <div class="gallery b4gallery" style="display:none;">
+                </div>
                 @forelse($data as $news)
                     <div class="card single_post" >
-                        <div class="header">
+                        <div class="header" id="news{{$news->id}}">
                             <div class="icon-box col-md-12 col-4">
                                 <legend>{{$news->title}}</legend>
                                 <div class="icon">
@@ -22,7 +24,7 @@
                         </div>
                         <div class="body">
                             <div class="img-post">
-                                <img class="d-block img-fluid" src="{{$news->path}}" alt="First slide">
+                                <img  class="gallery-item d-block img-fluid" src="{{$news->path}}" alt="picture" />
                             </div>
                             <h5 class="mx-5">{{$news->title}}</h5>
                             <div id="more{{$news->id}}" style="display:none">
@@ -30,14 +32,14 @@
                             </div>
                             <button onclick="toggleDescription('{{$news->id}}')" type="button" class="btn btn-link"><span id="titleBtnRead{{$news->id}}">Read More...</span></button>
                         </div>
-                        <div class="footer">
+                        <div class="footer" id="comment{{$news->id}}">
                             <ul class="stats my-2">
                                     @foreach($likes as $like)
                                         @if($news->id ==  $like['id_news'])
                                             @if($like['flagLike'])
-                                                <li><button class="icon-heart btn-like btn btn-danger" id="btnLikes{{$news->id}}" onclick="addLike('{{$news->id}}')"> <span id="countLikes{{$news->id}}">{{$like['likes']}}</span></button></li>
+                                                <li><button class="icon-heart btn btn-danger" id="btnLikes{{$news->id}}" onclick="addLike('{{$news->id}}')"> <span id="countLikes{{$news->id}}">{{$like['likes']}}</span></button></li>
                                             @else
-                                                <li><button class="icon-heart btn-like btn btn-secondary" id="btnLikes{{$news->id}}" onclick="addLike('{{$news->id}}')"> <span id="countLikes{{$news->id}}">{{$like['likes']}}</span></button></li>
+                                                <li><button class="icon-heart btn btn-secondary" id="btnLikes{{$news->id}}" onclick="addLike('{{$news->id}}')"> <span id="countLikes{{$news->id}}">{{$like['likes']}}</span></button></li>
                                             @endif
                                         @endif
                                     @endforeach
@@ -57,7 +59,7 @@
                             <div class="header">
                                 <h2 id="totalComments{{$news->id}}"></h2>
                             </div>
-                            <div class="body" >
+                            <div class="body myScrollComments" style="max-height:40vh; overflow: scroll;">
                                 <ul class="comment-reply list-unstyled more2" id="comments{{$news->id}}">
                                     
                                 </ul>                                        
@@ -106,4 +108,6 @@
 @section('script')
 <script src="{{asset('modulos/ajaxscript_actions.js')}}"></script>
 <script src="{{asset('modulos/dashboard/AjaxDashboard.js')}}"></script>
+<script src="{{asset('/vendor/LightboxGallery/mauGallery.min.js')}}"></script>
+<script src="{{asset('/vendor/LightboxGallery/scripts.js')}}"></script>
 @endsection
