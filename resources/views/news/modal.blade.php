@@ -7,7 +7,7 @@
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div style="max-height: 85vh; overflow: scroll;">
+            <div class="myScroll" style="max-height: 85vh; overflow: scroll;">
                 <div class="modal-body">
                     <div class="form-group text-center seccion-image">
                         <img src="" class="rounded-lg user-photo" id="picture_news" alt="News" style="max-width:100%;max-height:350px">

@@ -37,9 +37,9 @@
                                     @foreach($likes as $like)
                                         @if($news->id ==  $like['id_news'])
                                             @if($like['flagLike'])
-                                                <li><button class="icon-heart btn-like btn btn-danger" id="btnLikes{{$news->id}}" onclick="addLike('{{$news->id}}')"> <span id="countLikes{{$news->id}}">{{$like['likes']}}</span></button></li>
+                                                <li><button class="icon-heart btn btn-danger" id="btnLikes{{$news->id}}" onclick="addLike('{{$news->id}}')"> <span id="countLikes{{$news->id}}">{{$like['likes']}}</span></button></li>
                                             @else
-                                                <li><button class="icon-heart btn-like btn btn-secondary" id="btnLikes{{$news->id}}" onclick="addLike('{{$news->id}}')"> <span id="countLikes{{$news->id}}">{{$like['likes']}}</span></button></li>
+                                                <li><button class="icon-heart btn btn-secondary" id="btnLikes{{$news->id}}" onclick="addLike('{{$news->id}}')"> <span id="countLikes{{$news->id}}">{{$like['likes']}}</span></button></li>
                                             @endif
                                         @endif
                                     @endforeach
