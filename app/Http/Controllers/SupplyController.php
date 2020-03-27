@@ -83,11 +83,10 @@ class SupplyController extends Controller
         
         $this->validate(request(), [
             'name' => 'required|max:60',
-            'quantity' => 'required|numeric|min:0',
-            'price' => 'required|numeric|min:0',
-            'cost' => 'required|numeric|min:0',
+            'quantity' => 'required|numeric|min:0|max:999999',
+            'price' => 'required|numeric|min:0|max:999999',
+            'cost' => 'required|numeric|min:0|max:999999',
             'total_price' => 'required',
-            
         ]); 
        
     }
