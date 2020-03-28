@@ -14,7 +14,7 @@
                                     <div class="input-group-prepend">
                                         <select class="form-control" id="typesearch">
                                             <option value="name">name</option>
-                                            <option value="id">id</option>
+                                            <option value="rfc">RFC</option>
                                         </select>
                                     </div>
                                     <input type="text" class="form-control" id="search">

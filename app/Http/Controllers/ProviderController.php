@@ -9,6 +9,27 @@ use App\TypeUserModel;
 
 class ProviderController extends Controller
 {
+
+    public function search_settings($type){
+        $result='';
+
+        switch ($type) {
+
+            case 'name':
+                $result='providers.name';
+                break;
+            case 'rfc':
+                $result='providers.rfc';
+                break;
+            
+            default:
+               $result='';
+                break;
+
+        }
+        return $result;
+    }
+
     public function index(Request $request)
     {       
         $user = Auth::user();
@@ -23,6 +44,7 @@ class ProviderController extends Controller
                 $search = trim($request->dato);
 
                 if(strlen($request->type) > 0 &&  strlen($search) > 0){
+                    $type = ProviderController::search_settings($request->type);
 
                     $data2 = ProviderModel::select('providers.id as id', 'typeuser.name as name_dep', 'providers.name as name',
                     'providers.rfc as rfc', 'providers.phone as phone', 'providers.email as email', 'providers.status as status')
