@@ -28,6 +28,7 @@ class MenuTable extends Seeder
             ['name'=> 'Zoom','icon'=> 'fa  fa-video-camera','link'=>'/zoom','prioridad'=> '1','status'=> 1,],
             ['name'=> 'News','icon'=> 'fa icon-paper-clip','link'=>'/news','prioridad'=> '1','status'=> 1,],
             ['name'=> 'Dashboard','icon'=> 'fa icon-home','link'=>'/home','prioridad'=> '1','status'=> 1,],
+            ['name'=> 'Reminder','icon'=> 'fa fa-file-text-o','link'=>'/reminder','prioridad'=> '1','status'=> 1,],
 
         ];
       
