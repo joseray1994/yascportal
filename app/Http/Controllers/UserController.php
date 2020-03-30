@@ -74,7 +74,7 @@ class UserController extends Controller
             'emergency_contact_name' => 'sometimes|max:150|nullable|regex:/^([a-zA-Z]+)(\s[a-zA-Z]+)*$/',
             'emergency_contact_phone' => 'sometimes|nullable|regex:/^[0-9]{0,20}(\.?)[0-9]{0,2}$/',
             'email' => $email,
-            'birthdate' => 'required|date|before:18 years ago',
+            'birthdate' => 'required|date|before:18 years ago|after:1920-01-01',
             'entrance_date' => 'required|date|after:2014-01-01',
             'image' => 'image',
             'id_type_user' => 'gt:0',
@@ -124,7 +124,7 @@ class UserController extends Controller
             DB::beginTransaction();
                 $input = $request->input();
                 $input['id_status'] = 1;
-                $input['nickname'] = 'nick'.$input['name'];
+                $input['nickname'] = $request->nickname;
                 $input['password'] = Hash::make($input['password']);
                 $user = User::create($input);
 
@@ -196,6 +196,7 @@ class UserController extends Controller
         }
         $user->email == $request->email ? $user->email = $request->email : '';
         $user->id_type_user = $request->id_type_user;
+        $user->nickname = $request->nickname;
         if($request->password != null)
         {
             $user->password = Hash::make($request->password);

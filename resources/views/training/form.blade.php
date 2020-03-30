@@ -3,7 +3,7 @@
       <div class="">
         <div class="">
           <div class="modal-header" >
-            <h4 class="modal-title" id="myModalLabel">Settings Register <i class="fa fa-user-plus"></i></h4>
+            <h4 class="modal-title" id="title"> <i class="fa fa-user-plus"></i></h4>
           </div>
           <form enctype="multipart/form-data" method="POST" id="traineeNewForm" class="form-horizontal">
             <div class="modal-body">
@@ -90,8 +90,8 @@
                         </div>
                       </div>
                     </div>
+                    <hr/>
                     <div class="col-xl-12 col-xs-12 col-md-12 col-sm-12 form-group">
-                      <hr>
                       <div class="row segunda-seccion" style="display:none">
                       <input type="hidden" id="flag">
                       <div class="col-xl-7 col-xs-12 col-md-7 col-sm-12">
@@ -110,7 +110,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-xl-5 col-xs-12 col-md-5 col-sm-12">
+                      <div class="col-xl-5 col-xs-12 col-md-5 col-sm-12 import_noti">
                         <div class="text-center">
                           <h4 style="color:red">Important:</h4>
                           <label>Remember to take note of the email and password of the new Trainee to give it to the Trainee</label>
@@ -120,8 +120,9 @@
                   </div>
                 </div>
               </div>
-              <hr/>
-                <div class="col-xl-12 col-xs-12 col-md-12 col-sm-12">
+              <div class="col-xl-12 col-xs-12 col-md-12 col-sm-12">
+                <hr/>
+                  <div class="Edit_TS">
                   <h5>Training Schedule</h5><br>
                   <div class="row">
                     <div class="col-xl-2 col-xs-12 col-md-2 col-sm-12 form-group">
@@ -291,8 +292,10 @@
                     </div>
                   </div>
                 </div>
-                <hr/>
-                <div class="col-xl-12 col-xs-12 col-md-12 col-sm-12">
+              </div>
+              <hr/>
+            </div>
+              <div class="col-xl-12 col-xs-12 col-md-12 col-sm-12">
                   <h5>Aditional Information</h5><br>
                   <div class="row">
                       <div class="col-sm-12 form-group">
@@ -305,8 +308,6 @@
                       </div>
                   </div>
                 </div>
-              </div>
-              <hr/>
             </div>
             <div class="modal-footer">
               <div class="text-center col-sm-12">

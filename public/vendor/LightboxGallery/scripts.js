@@ -9,7 +9,7 @@ $(document).ready(function() {
         },
         lightBox: true,
         lightboxId: 'myAwesomeLightbox',
-        showTags: true,
-        tagsPosition: 'top'
+        showTags: false,
+        tagsPosition: 'center'
     });
 });

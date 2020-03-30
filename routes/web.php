@@ -59,8 +59,11 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
 
     //Training
     Route::get('/training', 'TrainingController@index');
+    Route::get('/training/{trainee_id}', 'TrainingController@show');
+    Route::get('/training/schedule/{trainee_id}', 'TrainingController@showSchedule');
     Route::post('/training', 'TrainingController@store');
     Route::put('/training/{trainee_id}', 'TrainingController@update');
+    Route::put('/training/schedule/{trainee_id}', 'TrainingController@updateSchedule');
     Route::delete('/training/{trainee_id}', 'TrainingController@destroy');
     Route::delete('/training/delete/{id}', 'TrainingController@delete');
     Route::post('/training/generateWeekTraining', 'TrainingController@generateEnd_training');
@@ -194,6 +197,8 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
 
     // DASHBOARD
     Route::post('/like', 'HomeController@addLike');
+    Route::post('/getComments', 'HomeController@getComments');
+    Route::post('/addComments', 'HomeController@addComment');
     //suspended work 
     Route::get('/suspended', 'SuspendedWorkController@index');
     Route::get('/suspended/{UserType_id?}', 'SuspendedWorkController@show');
@@ -213,7 +218,9 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
      //Display Index Page Inventory
     Route::get('/inventory', 'InventoryController@index');
     Route::get('/inventory/{supply_id?}', 'InventoryController@show');
+    Route::get('/inventory/show/{supply_id?}', 'InventoryController@showProv');
     Route::post('/inventory/{supply_id?}', 'InventoryController@update');
+    Route::put('/inventory/updateProv/{supply_id?}', 'InventoryController@updateProv');
     Route::delete('/inventory/{supply_id?}', 'InventoryController@destroy');
     Route::delete('/inventory/delete/{supply_id?}', 'InventoryController@delete');
 

@@ -2,7 +2,7 @@
     <thead class="text-white thead-yasc">
         <tr>
             <th width="100px">ID</th>
-			<th>Departamento</th>
+			<th>Department</th>
             <th>Name</th>
             <th>RFC</th>
 			<th>Phone</th>
@@ -15,7 +15,7 @@
         @forelse ($data as $provider)
         <tr id="provider_id{{$provider->id}}" class="rowType">
             <td>{{ $provider->id }}</td>
-			<td>{{ $provider->id_department }}</td>
+			<td>{{ $provider->name_dep }}</td>
             <td>{{ $provider->name }}</td>
             <td>{{ $provider->rfc }}</td>
 			<td>{{ $provider->phone }}</td>

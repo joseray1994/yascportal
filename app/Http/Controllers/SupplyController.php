@@ -6,39 +6,67 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\SupplyModel;
 use App\ProviderModel;
-
+use App\TypeUserModel;
 
 class SupplyController extends Controller
 {
+
+    public function search_settings($type){
+        $result='';
+
+        switch ($type) {
+
+            case 'name':
+                $result='supplies.name';
+                break;
+            case 'id':
+                $result='supplies.id';
+                break;
+            
+            default:
+               $result='';
+                break;
+
+        }
+        return $result;
+    }
 
     public function index(Request $request, $id)
     {           
       
         $user = Auth::user();
+        $idtype = Auth::user()->id_type_user;
         
-        $id_menu=5;
+        $id_menu=15;
         $menu = menu($user,$id_menu);
-        if($menu['validate']){  
+        if($menu['validate'] && $idtype!=1){  
+           
+                $typeuser = TypeUserModel::all();
 
                 $provider = ProviderModel::where('id', $id)->get();
 
                 $search = trim($request->dato);
 
                 if(strlen($request->type) > 0 &&  strlen($search) > 0){
+                    $type = SupplyController::search_settings($request->type);
                  
-                    $data2 = SupplyModel::select('supplies.id as id', 'supplies.mat as mat', 'supplies.id_department as id_department', 
+                    $data2 = SupplyModel::select('supplies.id as id', 'supplies.mat as mat', 'typeuser.name as name_dep', 
                     'prov.name as name_prov','supplies.name as name','supplies.quantity as quantity', 'supplies.price as price', 'supplies.cost as cost', 
                     'supplies.total_price as total_price', 'supplies.status as status')
+                    ->join('type_user as typeuser', 'typeuser.id', '=', 'supplies.id_department')
                     ->join('providers as prov', 'prov.id', '=', 'supplies.id_provider')
+                    ->where('supplies.id_department',$idtype)
                     ->where('supplies.id_provider',$id)
                     ->whereNotIn('supplies.status',[0])
-                    ->where($request->type,'LIKE','%'.$search.'%');
+                    ->where($type,'LIKE','%'.$search.'%');
                   
                 } else{
-                    $data2 = SupplyModel::select('supplies.id as id', 'supplies.mat as mat', 'supplies.id_department as id_department', 
+                    $data2 = SupplyModel::select('supplies.id as id', 'supplies.mat as mat', 'typeuser.name as name_dep', 
                     'prov.name as name_prov','supplies.name as name','supplies.quantity as quantity', 'supplies.price as price', 'supplies.cost as cost', 
                     'supplies.total_price as total_price', 'supplies.status as status')
+                    ->join('type_user as typeuser', 'typeuser.id', '=', 'supplies.id_department')
                     ->join('providers as prov', 'prov.id', '=', 'supplies.id_provider')
+                    ->where('supplies.id_department',$idtype)
                     ->where('supplies.id_provider',$id)
                     ->whereNotIn('supplies.status',[0]);
                   
@@ -48,7 +76,7 @@ class SupplyController extends Controller
                     return view('supplies.table', ["data"=>$data]);
                 }
   
-                return view('supplies.index',["data"=>$data, "providers"=>$provider, "menu"=>$menu]);
+                return view('supplies.index',["data"=>$data, "type_user"=>$typeuser, "providers"=>$provider, "menu"=>$menu]);
         }else{
             return redirect('/');
         }
@@ -59,11 +87,12 @@ class SupplyController extends Controller
 
         $supply = SupplyModel::select('supplies.id as id', 
                                     'supplies.mat as mat', 
-                                    'supplies.id_department as id_department', 
+                                    'typeuser.name as name_dep', 
                                     'prov.name as name_prov','supplies.name as name',
                                     'supplies.quantity as quantity', 'supplies.price as price',
                                     'supplies.cost as cost', 'supplies.total_price as total_price', 
                                     'supplies.status as status')
+        ->join('type_user as typeuser', 'typeuser.id', '=', 'supplies.id_department')
         ->join('providers as prov', 'prov.id', '=', 'supplies.id_provider')
         ->where('supplies.id',$id)
         ->first();
@@ -74,14 +103,11 @@ class SupplyController extends Controller
     public function validateSupply($request){
         
         $this->validate(request(), [
-           'id_department' => 'required',
-           'id_provider' => 'required',
             'name' => 'required|max:60',
-            'quantity' => 'required|numeric|min:0',
-            'price' => 'required|numeric|min:0',
-            'cost' => 'required|numeric|min:0',
+            'quantity' => 'required|numeric|min:0|max:999999',
+            'price' => 'required|numeric|min:0|max:999999',
+            'cost' => 'required|numeric|min:0|max:999999',
             'total_price' => 'required',
-            
         ]); 
        
     }
@@ -127,11 +153,11 @@ class SupplyController extends Controller
               return response()->json($answer);
 
         }else{
-
+        $user = Auth::user();
         $supply_id="";
         SupplyController::validateSupply($request,$supply_id);
         $supply = SupplyModel::firstOrCreate([
-       'id_department'=>$request->id_department,
+        'id_department'=>$user->id_type_user,
        'id_provider'=>$request->id_provider,
         'name'=>$request->name,
         'quantity'=>$request->quantity,
@@ -170,7 +196,6 @@ class SupplyController extends Controller
 
             SupplyController::validateSupply($request,$supply_id);
             $supply = SupplyModel::find($supply_id);
-            $supply->id_department = $request->id_department;
             $supply->id_provider = $request->id_provider;
             $supply->name = $request->name;
             $supply->quantity = $request->quantity;

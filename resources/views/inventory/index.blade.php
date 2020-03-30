@@ -7,6 +7,7 @@
                             <h1>Inventory <i class="fa fa-tasks"></i></h1>
                         </div>
                         @include('inventory.form')
+                        @include('inventory.formProv')
                         <div class="body">
                                 <div class="input-group mb-3 input-group-sm">
                                     <div class="input-group-prepend">
