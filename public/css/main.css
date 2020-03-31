@@ -309,3 +309,21 @@ body::-webkit-scrollbar-thumb
 	background-color: #31B86F;
 
 }
+
+table {
+	text-align: left;
+	position: relative;
+	border-collapse: collapse; 
+  }
+
+  th {
+	background:#dc3545;
+	position: sticky;
+	top: 0;
+	box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+  }
+
+  .no-data {
+	background:whitesmoke;
+	box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+  }
