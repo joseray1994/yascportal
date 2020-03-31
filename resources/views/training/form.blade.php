@@ -298,10 +298,10 @@
               <div class="col-xl-12 col-xs-12 col-md-12 col-sm-12">
                   <h5>Aditional Information</h5><br>
                   <div class="row">
-                      <div class="col-sm-12 form-group">
+                      {{-- <div class="col-sm-12 form-group">
                         <h6>Notes:</h6>
                         <input type="text" name="notes" id="notes" class="form-control" maxlength="300">
-                      </div>
+                      </div> --}}
                       <div class="col-sm-12 form-group">
                         <h6>Information:</h6>
                         <textarea name="description" id="description" class="form-control"></textarea>

@@ -214,7 +214,6 @@ class TrainingController extends Controller
                 'start_training' => 'required|date',
                 'end_training' => 'required|date|after_or_equal:start_training',
                 'end_coaching' => 'sometimes|nullable|after_or_equal:end_training',
-                'notes' => 'sometimes|max:180|nullable|regex:/^([a-zA-Z]+)(\s[a-zA-Z]+)*$/',
                 'description' => 'sometimes|max:380|nullable|regex:/^([a-zA-Z]+)(\s[a-zA-Z]+)*$/',
             ]);
     } 
@@ -292,7 +291,6 @@ class TrainingController extends Controller
             'phone'=>$request->phone,
             'emergency_contact_name'=>$request->emergency_contact_name,
             'emergency_contact_phone'=>$request->emergency_contact_phone,
-            'notes'=>$request->notes,
             'description'=>$request->description,
             'gender'=>$request->gender,
             'birthdate'=>$request->birthdate,
@@ -433,9 +431,11 @@ class TrainingController extends Controller
                 //Valida en que dia comienza y termina su entrenamiento
                 if ($day_start > $day_start_week) {
                     $in=$day_start;
+                    $date_add=$start_training;
                     $fin=$day_end_week;
                 }else{
                     $in=$day_start_week;
+                    $date_add=$start_week;
                     $fin=$day_end_week;
                 }
 
@@ -448,6 +448,7 @@ class TrainingController extends Controller
                 }
                 //----------------------------
                 for ($k=$in; $k <= $fin ; $k++) { 
+                    
                     $daysOff=$request->id_dayOff_T;
                     $status_dayoff=1;
                     if ($daysOff) {
@@ -462,6 +463,7 @@ class TrainingController extends Controller
                         'id_schedule'=>$schedule->id,
                         'id_operator'=> $user->id,
                         'id_day'=>$k ,
+                        'date'=>$date_add,
                         'mat'=>'TSD' ,
                         'time_start'=>$request->start ,
                         'time_end'=>$request->end ,
@@ -469,6 +471,7 @@ class TrainingController extends Controller
                         'option'=>1,
                         'status'=>$status_dayoff ,
                         ]);
+                        $date_add->addDay();
                 }
                 $start_week->addWeek();
                 $end_week->addWeek();
@@ -802,7 +805,6 @@ class TrainingController extends Controller
 
                                     //ULTIMO DIA DE SEMANA DE LA NUEVA FECHA SEA MAYOR A LA FECHA FINAL DEL REGISTRO
                                     if ($fin_semana >  $mayores_training->date_end) {
-                                        dd($mayores_training);
                                         $day_start_week=$inicio_semana->dayOfWeek;
                                         $day_end_week=$fin_semana->dayOfWeek;
                                         $weekYears=$fin_semana->weekOfYear;
@@ -824,33 +826,28 @@ class TrainingController extends Controller
                                             'status'=> 1 ,
                                             ]);
                                             
-                                            $details=TrainingDetailModel::where('id_operator', $info_schedule->detail_id_operator)->where('type_daily',2)->get();
-                                           
-                                            
-                                            $day_start=$start_date->dayOfWeek;
-                                            $day_end=Carbon::parse($request->end_training)->dayOfWeek;
-                        
-                                            $end_training=Carbon::parse($request->end_training);
-
-                                            //Valida en que dia comienza y termina su entrenamiento
-                                            if ($day_start > $day_start_week) {
-                                                $in=$day_start;
-                                                $fin=$day_end_week;
-                                            }else{
-                                                $in=$day_start_week;
-                                                $fin=$day_end_week;
-                                            }
-
-                                            if ($end_week > $end_training ) {
-                                                if ($day_end_week > $day_end) {
-                                                    $fin=$day_end;
+                                            $details=TrainingDetailModel::where('id_operator', $info_schedule->detail_id_operator)->where('type_daily',2)->get()->last();
+                                            $lastDate=Carbon::parse($details->date)->addDay();
+                                            while (true) {
+                                                $id_day=$lastDate->dayOfWeek;
+                                                if($lastDate < $request->end_training){
+                                                    $training_detail =  TrainingDetailModel::Create([
+                                                        'id_schedule'=>$schedule->id,
+                                                        'id_operator'=> $info_schedule->detail_id_operator,
+                                                        'id_day'=>$id_day ,
+                                                        'date'=>$lastDate,
+                                                        'mat'=>'TSD' ,
+                                                        'time_start'=>$details->time_start ,
+                                                        'time_end'=>$details->time_end ,
+                                                        'type_daily'=>2,
+                                                        'option'=>1,
+                                                        'status'=>1 ,
+                                                        ]);
                                                 }else{
-                                                    $fin=$day_end_week;
-                                                } 
+                                                    break;
+                                                }
+                                                $lastDate->addDay();
                                             }
-                                            //----------------------------
-                                            dd($details);
-                                            dd($row->id, $info_schedule->detail_id_operator,$info_schedule->schedule_id_client,$inicio_semana,$fin_semana, $weekYears,$month_I, $year);
                                     }else{
                                         dd('else mmenor');
 
