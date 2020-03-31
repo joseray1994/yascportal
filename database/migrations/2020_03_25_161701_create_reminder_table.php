@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDetailScheduleTraining extends Migration
+class CreateReminderTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,13 @@ class CreateDetailScheduleTraining extends Migration
      */
     public function up()
     {
-        Schema::create('training_schedule_detail', function (Blueprint $table) {
+        Schema::create('reminder', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('mat', 3)->default('TSD');
             $table->integer('id_user');
-            $table->integer('id_schedule');
-            $table->integer('id_day');
-            $table->time('start_time');
-            $table->time('end_time');
-            $table->string('options');
+            $table->string('title');
+            $table->string('reminder');
+            $table->string('start_date');
+            $table->string('end_date');
             $table->integer('status')->default(1);
             $table->timestamps();
         });
@@ -34,6 +32,6 @@ class CreateDetailScheduleTraining extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('training_schedule_detail');
+        Schema::dropIfExists('reminder');
     }
 }

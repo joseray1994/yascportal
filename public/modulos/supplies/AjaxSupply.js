@@ -235,7 +235,7 @@ const success = {
            
                 var supply = `<tr id="supply_id${dato.id}">
                                     <td>${dato.id}</td>
-                                    <td>${dato.id_department}</td>
+                                    <td>${dato.name_dep}</td>
                                     <td>${dato.name_prov}</td>
                                     <td>${dato.name}</td>
                                     <td>${dato.quantity}</td>
@@ -289,7 +289,7 @@ const success = {
         if(dato.status != 0){
             var supply = `<tr id="supply_id${dato.id}">
                                 <td>${dato.id}</td>
-                                <td>${dato.id_department}</td>
+                                <td>${dato.name_dep}</td>
                                 <td>${dato.name_prov}</td>
                                 <td>${dato.name}</td>
                                 <td>${dato.quantity}</td>

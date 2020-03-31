@@ -59,8 +59,11 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
 
     //Training
     Route::get('/training', 'TrainingController@index');
+    Route::get('/training/{trainee_id}', 'TrainingController@show');
+    Route::get('/training/schedule/{trainee_id}', 'TrainingController@showSchedule');
     Route::post('/training', 'TrainingController@store');
     Route::put('/training/{trainee_id}', 'TrainingController@update');
+    Route::put('/training/schedule/{trainee_id}', 'TrainingController@updateSchedule');
     Route::delete('/training/{trainee_id}', 'TrainingController@destroy');
     Route::delete('/training/delete/{id}', 'TrainingController@delete');
     Route::post('/training/generateWeekTraining', 'TrainingController@generateEnd_training');
@@ -221,6 +224,8 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::delete('/inventory/{supply_id?}', 'InventoryController@destroy');
     Route::delete('/inventory/delete/{supply_id?}', 'InventoryController@delete');
 
+    //Reminder 
+    Route::get('/reminder', 'ReminderController@index');
 
 });
 

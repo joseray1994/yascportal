@@ -28,21 +28,21 @@
 							<div class="form-group error">
 								<div class="btn-group col-sm-12">
 									<button class="btn modaldelichef" disabled><i class="fa fa-balance-scale"></i></button>
-									<input type="number" class="form-control has-error add-price" id="quantity" name="quantity" placeholder="Quantity" value="">
+									<input type="" class="form-control has-error add-price" id="quantity" name="quantity" placeholder="Quantity" value="">
 								</div>
 							</div>
 
 							<div class="form-group error">
 								<div class="btn-group col-sm-12">
 									<button class="btn modaldelichef" disabled><i class="fa fa-money"></i></button>
-									<input type="number" class="form-control has-error add-price" id="price" name="price" placeholder="Price" value="">
+									<input type="" class="form-control has-error add-price" id="price" name="price" placeholder="Price" value="">
 								</div>
                             </div>
                             
                             <div class="form-group error">
 								<div class="btn-group col-sm-12">
 									<button class="btn modaldelichef" disabled><i class="fa fa-money"></i></button>
-									<input type="number" class="form-control has-error" id="cost" name="cost" placeholder="Cost" value="">
+									<input type="" class="form-control has-error" id="cost" name="cost" placeholder="Cost" value="">
 								</div>
                             </div>
                             

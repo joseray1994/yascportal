@@ -4,7 +4,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="header">
-                            <h1>Providers <i class="fa fa-id-badge"></i></h1>
+                            <h1>Providers <i class="fa fa-users"></i></h1>
                             <ul class="header-dropdown">
                                 <li><a href="javascript:void(0);" class="btn btn-success" disabled id="btn_add" >New Provider <i class="fa fa-plus"></i></a></li>
                             </ul>
@@ -14,7 +14,7 @@
                                     <div class="input-group-prepend">
                                         <select class="form-control" id="typesearch">
                                             <option value="name">name</option>
-                                            <option value="id">id</option>
+                                            <option value="rfc">RFC</option>
                                         </select>
                                     </div>
                                     <input type="text" class="form-control" id="search">

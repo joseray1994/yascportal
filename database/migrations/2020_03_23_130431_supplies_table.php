@@ -22,7 +22,7 @@ class SuppliesTable extends Migration
             $table->integer('quantity');
             $table->float('price', 8, 2)->default(00.00);
             $table->float('cost', 8, 2)->default(00.00);
-            $table->float('total_price',8, 2)->default(00.00);
+            $table->float('total_price',14, 2)->default(00.00);
             $table->boolean('status')->default(1);
             $table->timestamps();
         });
