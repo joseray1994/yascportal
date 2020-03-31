@@ -7,7 +7,7 @@
     </thead>
     <tbody id="dayoff-list" class="table-data" >
             <tr id="off-row" class="text-center">
-                <th colspan="3" class="text-center">
+                <th colspan="2" class="text-center no-data">
                     <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
                 </th>
             </tr>

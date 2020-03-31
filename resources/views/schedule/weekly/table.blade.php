@@ -1,14 +1,14 @@
 <table class="table table-striped text-center" id="tag_container">
     <thead class="text-white thead-yasc">
         <tr>
-            <th scope="col">Operator</th>
-            <th scope="col" >Client</th>
-            <th scope="col" >Day</th>
-            <th scope="col" >Log in</th>
-            <th scope="col" >Log out</th>
-            <th scope="col" >Note</th>
-            <th scope="col" >Work Type</th>
-            <th>Options</th>
+            <th class ="stiky"scope="col">Operator</th>
+            <th class ="stiky" scope="col" >Client</th>
+            <th class ="stiky" scope="col" >Day</th>
+            <th class ="stiky" scope="col" >Log in</th>
+            <th class ="stiky" scope="col" >Log out</th>
+            <th class ="stiky" scope="col" >Note</th>
+            <th class ="stiky" scope="col" >Work Type</th>
+            <th class ="stiky" >Options</th>
         </tr>
     </thead>
     <tbody id="shcedule-list" class="table-data" >
@@ -110,7 +110,7 @@
         </tr>
         @empty
             <tr id="table-row" class="text-center">
-                <th colspan="9" class="text-center">
+                <th colspan="9" class="text-center no-data">
                     <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
                 </th>
             </tr>
@@ -118,4 +118,3 @@
     </tbody>
 </table>
 
-{!! $data->render() !!}

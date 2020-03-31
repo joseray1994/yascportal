@@ -224,6 +224,8 @@ Route::delete('/assignmenttype/{id}/{detailfood_id}', 'AssignamentTypeController
     Route::delete('/inventory/{supply_id?}', 'InventoryController@destroy');
     Route::delete('/inventory/delete/{supply_id?}', 'InventoryController@delete');
 
+    //Reminder 
+    Route::get('/reminder', 'ReminderController@index');
 
 });
 

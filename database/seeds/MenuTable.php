@@ -30,6 +30,7 @@ class MenuTable extends Seeder
             ['name'=> 'Dashboard','icon'=> 'fa icon-home','link'=>'/home','prioridad'=> '1','status'=> 1,],
             ['name'=> 'Providers','icon'=> 'fa fa-users','link'=>'/providers','prioridad'=> '1','status'=> 1,],
             ['name'=> 'Inventory','icon'=> 'fa fa-tasks','link'=>'/inventory','prioridad'=> '1','status'=> 1,],
+            ['name'=> 'Reminder','icon'=> 'fa fa-file-text-o','link'=>'/reminder','prioridad'=> '1','status'=> 1,],
 
         ];
       

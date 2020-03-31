@@ -9,19 +9,42 @@ use App\TypeUserModel;
 
 class ProviderController extends Controller
 {
+
+    public function search_settings($type){
+        $result='';
+
+        switch ($type) {
+
+            case 'name':
+                $result='providers.name';
+                break;
+            case 'rfc':
+                $result='providers.rfc';
+                break;
+            
+            default:
+               $result='';
+                break;
+
+        }
+        return $result;
+    }
+
     public function index(Request $request)
     {       
         $user = Auth::user();
         $idtype = Auth::user()->id_type_user;
+     
         
-        $id_menu=5;
+        $id_menu=15;
         $menu = menu($user,$id_menu);
-        if($menu['validate'] && !$user->id_type_user==1){   
+        if($menu['validate'] &&  $idtype!=1){   
             $typeuser = TypeUserModel::all();
 
                 $search = trim($request->dato);
 
                 if(strlen($request->type) > 0 &&  strlen($search) > 0){
+                    $type = ProviderController::search_settings($request->type);
 
                     $data2 = ProviderModel::select('providers.id as id', 'typeuser.name as name_dep', 'providers.name as name',
                     'providers.rfc as rfc', 'providers.phone as phone', 'providers.email as email', 'providers.status as status')
@@ -66,7 +89,7 @@ class ProviderController extends Controller
         
         $this->validate(request(), [
             'name' => 'required|max:60',
-            'rfc' => 'required|regex:/^[a-zA-Z]{3,4}\d{6}$/',
+            'rfc' => 'required|regex:/^[a-zA-Z]{3,4}\d{6}([a-z0-9]{3})$/',
             'phone' => 'required|max:12|regex:/^[0-9]{0,20}(\.?)[0-9]{0,2}$/',
             'email' => 'required|email',
         ]); 

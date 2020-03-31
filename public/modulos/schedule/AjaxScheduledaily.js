@@ -315,7 +315,7 @@ const schedule ={
 
                     }else{
                         dato += `<tr id="off-row" class="text-center">
-                                        <th colspan="7" class="text-center">
+                                        <th colspan="7" class="text-center no-data">
                                         <h2><span class="badge  badge-pill badge-info">Data Not Found</span></h2>
                                         </th>
                                     </tr>`;

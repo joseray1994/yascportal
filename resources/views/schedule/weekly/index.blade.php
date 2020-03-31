@@ -22,7 +22,7 @@
                         </div>
                         <div class="body">
                                  @include('schedule.weekly.search')
-                                <div class="table-responsive"  style="max-height:65vh; overflow: scroll;">
+                                <div class="table-responsive myScroll"  style="max-height:65vh; overflow: scroll;">
                                     @include('schedule.weekly.table')
                                 </div>
                                 <div class="loading-table col-sm-12 text-center">

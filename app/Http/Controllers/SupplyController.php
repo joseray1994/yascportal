@@ -11,15 +11,35 @@ use App\TypeUserModel;
 class SupplyController extends Controller
 {
 
+    public function search_settings($type){
+        $result='';
+
+        switch ($type) {
+
+            case 'name':
+                $result='supplies.name';
+                break;
+            case 'id':
+                $result='supplies.id';
+                break;
+            
+            default:
+               $result='';
+                break;
+
+        }
+        return $result;
+    }
+
     public function index(Request $request, $id)
     {           
       
         $user = Auth::user();
         $idtype = Auth::user()->id_type_user;
         
-        $id_menu=5;
+        $id_menu=15;
         $menu = menu($user,$id_menu);
-        if($menu['validate'] && !$user->id_type_user==1){  
+        if($menu['validate'] && $idtype!=1){  
            
                 $typeuser = TypeUserModel::all();
 
@@ -28,6 +48,7 @@ class SupplyController extends Controller
                 $search = trim($request->dato);
 
                 if(strlen($request->type) > 0 &&  strlen($search) > 0){
+                    $type = SupplyController::search_settings($request->type);
                  
                     $data2 = SupplyModel::select('supplies.id as id', 'supplies.mat as mat', 'typeuser.name as name_dep', 
                     'prov.name as name_prov','supplies.name as name','supplies.quantity as quantity', 'supplies.price as price', 'supplies.cost as cost', 
@@ -37,7 +58,7 @@ class SupplyController extends Controller
                     ->where('supplies.id_department',$idtype)
                     ->where('supplies.id_provider',$id)
                     ->whereNotIn('supplies.status',[0])
-                    ->where($request->type,'LIKE','%'.$search.'%');
+                    ->where($type,'LIKE','%'.$search.'%');
                   
                 } else{
                     $data2 = SupplyModel::select('supplies.id as id', 'supplies.mat as mat', 'typeuser.name as name_dep', 
@@ -83,11 +104,10 @@ class SupplyController extends Controller
         
         $this->validate(request(), [
             'name' => 'required|max:60',
-            'quantity' => 'required|numeric|min:0',
-            'price' => 'required|numeric|min:0',
-            'cost' => 'required|numeric|min:0',
+            'quantity' => 'required|numeric|min:0|max:999999',
+            'price' => 'required|numeric|min:0|max:999999',
+            'cost' => 'required|numeric|min:0|max:999999',
             'total_price' => 'required',
-            
         ]); 
        
     }

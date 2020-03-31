@@ -28,8 +28,10 @@ class ProfileDetailTable extends Seeder
             ['id_type_user'=> 1,'id_menu'=> 12,'status'=> 1,],
             ['id_type_user'=> 1,'id_menu'=> 13,'status'=> 1,],
             ['id_type_user'=> 1,'id_menu'=> 14,'status'=> 1,],
-            ['id_type_user'=> 1,'id_menu'=> 15,'status'=> 1,],
             ['id_type_user'=> 1,'id_menu'=> 16,'status'=> 1,],
+            ['id_type_user'=> 1,'id_menu'=> 14,'status'=> 1,],
+            ['id_type_user'=> 1,'id_menu'=> 15,'status'=> 1,],
+
 
             ['id_type_user'=> 2,'id_menu'=> 1,'status'=> 1,],
             ['id_type_user'=> 2,'id_menu'=> 2,'status'=> 1,],
@@ -44,6 +46,7 @@ class ProfileDetailTable extends Seeder
             ['id_type_user'=> 2,'id_menu'=> 11,'status'=> 1,],
             ['id_type_user'=> 2,'id_menu'=> 12,'status'=> 1,],
             ['id_type_user'=> 2,'id_menu'=> 13,'status'=> 1,],
+            ['id_type_user'=> 2,'id_menu'=> 14,'status'=> 1,],
             ['id_type_user'=> 2,'id_menu'=> 15,'status'=> 1,],
 
 
@@ -60,6 +63,7 @@ class ProfileDetailTable extends Seeder
             ['id_type_user'=> 3,'id_menu'=> 11,'status'=> 1,],
             ['id_type_user'=> 3,'id_menu'=> 12,'status'=> 1,],
             ['id_type_user'=> 3,'id_menu'=> 13,'status'=> 1,],
+            ['id_type_user'=> 3,'id_menu'=> 14,'status'=> 1,],
             ['id_type_user'=> 3,'id_menu'=> 15,'status'=> 1,],
 
 
@@ -76,7 +80,9 @@ class ProfileDetailTable extends Seeder
             ['id_type_user'=> 4,'id_menu'=> 11,'status'=> 1,],
             ['id_type_user'=> 4,'id_menu'=> 12,'status'=> 1,],
             ['id_type_user'=> 4,'id_menu'=> 13,'status'=> 1,],
+            ['id_type_user'=> 4,'id_menu'=> 14,'status'=> 1,],
             ['id_type_user'=> 4,'id_menu'=> 15,'status'=> 1,],
+
 
             ['id_type_user'=> 5,'id_menu'=> 1,'status'=> 1,],
             ['id_type_user'=> 5,'id_menu'=> 2,'status'=> 1,],
@@ -91,7 +97,9 @@ class ProfileDetailTable extends Seeder
             ['id_type_user'=> 5,'id_menu'=> 11,'status'=> 1,],
             ['id_type_user'=> 5,'id_menu'=> 12,'status'=> 1,],
             ['id_type_user'=> 5,'id_menu'=> 13,'status'=> 1,],
+            ['id_type_user'=> 5,'id_menu'=> 14,'status'=> 1,],
             ['id_type_user'=> 5,'id_menu'=> 15,'status'=> 1,],
+
 
             ['id_type_user'=> 6,'id_menu'=> 1,'status'=> 1,],
             ['id_type_user'=> 6,'id_menu'=> 2,'status'=> 1,],
@@ -106,7 +114,9 @@ class ProfileDetailTable extends Seeder
             ['id_type_user'=> 6,'id_menu'=> 11,'status'=> 1,],
             ['id_type_user'=> 6,'id_menu'=> 12,'status'=> 1,],
             ['id_type_user'=> 6,'id_menu'=> 13,'status'=> 1,],
+            ['id_type_user'=> 6,'id_menu'=> 14,'status'=> 1,],
             ['id_type_user'=> 6,'id_menu'=> 15,'status'=> 1,],
+
 
             ['id_type_user'=> 7,'id_menu'=> 1,'status'=> 1,],
             ['id_type_user'=> 7,'id_menu'=> 2,'status'=> 1,],
@@ -121,7 +131,9 @@ class ProfileDetailTable extends Seeder
             ['id_type_user'=> 7,'id_menu'=> 11,'status'=> 1,],
             ['id_type_user'=> 7,'id_menu'=> 12,'status'=> 1,],
             ['id_type_user'=> 7,'id_menu'=> 13,'status'=> 1,],
+            ['id_type_user'=> 7,'id_menu'=> 14,'status'=> 1,],
             ['id_type_user'=> 7,'id_menu'=> 15,'status'=> 1,],
+
 
             ['id_type_user'=> 8,'id_menu'=> 1,'status'=> 1,],
             ['id_type_user'=> 8,'id_menu'=> 2,'status'=> 1,],
@@ -136,7 +148,9 @@ class ProfileDetailTable extends Seeder
             ['id_type_user'=> 8,'id_menu'=> 11,'status'=> 1,],
             ['id_type_user'=> 8,'id_menu'=> 12,'status'=> 1,],
             ['id_type_user'=> 8,'id_menu'=> 13,'status'=> 1,],
+            ['id_type_user'=> 8,'id_menu'=> 14,'status'=> 1,],
             ['id_type_user'=> 8,'id_menu'=> 15,'status'=> 1,],
+
 
             ['id_type_user'=> 9,'id_menu'=> 1,'status'=> 1,],
             ['id_type_user'=> 9,'id_menu'=> 2,'status'=> 1,],
@@ -151,7 +165,9 @@ class ProfileDetailTable extends Seeder
             ['id_type_user'=> 9,'id_menu'=> 11,'status'=> 1,],
             ['id_type_user'=> 9,'id_menu'=> 12,'status'=> 1,],
             ['id_type_user'=> 9,'id_menu'=> 13,'status'=> 1,],
+            ['id_type_user'=> 9,'id_menu'=> 14,'status'=> 1,],
             ['id_type_user'=> 9,'id_menu'=> 15,'status'=> 1,],
+
 
             ['id_type_user'=> 10,'id_menu'=> 1,'status'=> 1,],
             ['id_type_user'=> 10,'id_menu'=> 2,'status'=> 1,],
@@ -166,7 +182,9 @@ class ProfileDetailTable extends Seeder
             ['id_type_user'=> 10,'id_menu'=> 11,'status'=> 1,],
             ['id_type_user'=> 10,'id_menu'=> 12,'status'=> 1,],
             ['id_type_user'=> 10,'id_menu'=> 13,'status'=> 1,],
+            ['id_type_user'=> 10,'id_menu'=> 14,'status'=> 1,],
             ['id_type_user'=> 10,'id_menu'=> 15,'status'=> 1,],
+
 
             ['id_type_user'=> 11,'id_menu'=> 1,'status'=> 1,],
             ['id_type_user'=> 11,'id_menu'=> 2,'status'=> 1,],
@@ -181,7 +199,9 @@ class ProfileDetailTable extends Seeder
             ['id_type_user'=> 11,'id_menu'=> 11,'status'=> 1,],
             ['id_type_user'=> 11,'id_menu'=> 12,'status'=> 1,],
             ['id_type_user'=> 11,'id_menu'=> 13,'status'=> 1,],
+            ['id_type_user'=> 11,'id_menu'=> 14,'status'=> 1,],
             ['id_type_user'=> 11,'id_menu'=> 15,'status'=> 1,],
+
           ];
 
       foreach($tu_prof as $tu_prof){

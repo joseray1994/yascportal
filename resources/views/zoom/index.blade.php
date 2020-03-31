@@ -46,7 +46,6 @@
         <input id="url" type="hidden" value="{{ \Request::url() }}">
         <input id="baseUrl" type="hidden" value="{{ \Request::root() }}">
         <input type="hidden" id="mat" value="CDO">
-        @include('zoom.modal')
 @endsection
 @section('script')
 <script src="{{asset('modulos/ajaxscript_actions.js')}}"></script>

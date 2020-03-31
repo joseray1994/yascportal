@@ -82,7 +82,7 @@ class ScheduleWeeklyController extends Controller
                     ->whereIn('detail_schedule_user.status',[1,2,3]);
                     
                 } 
-                $data=$data2->orderBy('detail_schedule_user.id_day')->paginate(100);
+                $data=$data2->orderBy('detail_schedule_user.id_day')->get();
                 if ($request->ajax()) {
                     return view('schedule.weekly.table', ["data"=>$data]);
                 }
