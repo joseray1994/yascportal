@@ -60,6 +60,8 @@ class ScheduleTableSeeder extends Seeder
                         'year' => Carbon::parse($now)->year,
                         'status' => 1
                     ]) ;
+
+                    $diaInicio3 = Carbon::parse($now)->startOfWeek(Carbon::SUNDAY);
     
                     // CREAR DETALLES DE LA SEMANA UNO
                     foreach ($getScheduleDetail as $detailSchedule) {
@@ -68,6 +70,7 @@ class ScheduleTableSeeder extends Seeder
                             "id_schedule"=>$schedulesSemanaUno->id,
                             "id_operator"=>$detailSchedule['id_operator'],
                             "id_day"=>$detailSchedule['id_day'],
+                            "date"=>$diaInicio3,
                             "time_start"=>$detailSchedule['time_start'],
                             "time_end"=>$detailSchedule['time_end'],
                             "hours"=>$detailSchedule['hours'],
@@ -76,6 +79,8 @@ class ScheduleTableSeeder extends Seeder
                             "option"=>$detailSchedule['option'],
                             "status"=>1,
                         ]);
+                        $diaInicio3->addDay();
+
                     }
 
                     // CREAR SEMANA DOS
@@ -91,7 +96,7 @@ class ScheduleTableSeeder extends Seeder
                         'status' => 1
                     ]) ;
 
-    
+                    $diaInicio4 = Carbon::parse($now)->addWeek()->startOfWeek(Carbon::SUNDAY);
                     // CREAR DETALLES DE LA SEMANA DOS
                     foreach ($getScheduleDetail as $detailSchedule) {
     
@@ -99,6 +104,7 @@ class ScheduleTableSeeder extends Seeder
                             "id_schedule"=>$schedulesSemanaDos->id,
                             "id_operator"=>$detailSchedule['id_operator'],
                             "id_day"=>$detailSchedule['id_day'],
+                            "date"=>$diaInicio4,
                             "time_start"=>$detailSchedule['time_start'],
                             "time_end"=>$detailSchedule['time_end'],
                             "hours"=>$detailSchedule['hours'],
@@ -107,6 +113,7 @@ class ScheduleTableSeeder extends Seeder
                             "option"=>$detailSchedule['option'],
                             "status"=>1,
                         ]);
+                        $diaInicio4->addDay();
                     }
                 }
                 
@@ -131,15 +138,16 @@ class ScheduleTableSeeder extends Seeder
     
                 // OBTENER LOS DIAS DE LA SEMANA
                 $days = DaysModel::select('id')->get();
-                
+                $diaInicio = Carbon::parse($now)->startOfWeek(Carbon::SUNDAY);
                 // CREAR DETALLES DE LA SEMANA UNO
                 foreach($days as $day){
-    
+                   
                     $detail = [
                     [
                         "id_schedule"=>$schedulesSemanaUno->id,
                         "id_operator"=>$operator['id_user'], 
                         "id_day"=>$day['id'],
+                        "date"=> $diaInicio,
                         "time_start"=>'08:00:00',
                         "time_end"=>'16:30:00',
                         "type_daily"=>1,
@@ -148,6 +156,8 @@ class ScheduleTableSeeder extends Seeder
                         ]
                     ];
                     DB::table('detail_schedule_user')->insert($detail);
+
+                    $diaInicio->addDay();
                 }   
 
                  // CREAR SCHEDULE DE SEMANA DOS
@@ -165,7 +175,9 @@ class ScheduleTableSeeder extends Seeder
     
                 // OBTENER LOS DIAS DE LA SEMANA
                 $days = DaysModel::select('id')->get();
-                
+
+                $diaInicio2 = Carbon::parse($now)->addWeek()->startOfWeek(Carbon::SUNDAY);
+
                 // CREAR DETALLES DE LA SEMANA DOS
                 foreach($days as $day){
     
@@ -174,6 +186,7 @@ class ScheduleTableSeeder extends Seeder
                         "id_schedule"=>$schedulesSemanaDos->id,
                         "id_operator"=>$operator['id_user'], 
                         "id_day"=>$day['id'],
+                        "date"=>$diaInicio2,
                         "time_start"=>'08:00:00',
                         "time_end"=>'16:30:00',
                         "type_daily"=>1,
@@ -182,6 +195,8 @@ class ScheduleTableSeeder extends Seeder
                         ]
                     ];
                     DB::table('detail_schedule_user')->insert($detail);
+                    $diaInicio2->addDay();
+
                 }   
             }            
         }
