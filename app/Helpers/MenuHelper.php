@@ -32,6 +32,7 @@ if (!function_exists('menu')) {
             ->join('basic_menu as bm', 'bm.id', '=', 'tu_detail.id_menu')
             ->where('tu_detail.status', 1)
             ->where('tu_detail.id_type_user',  $user->id_type_user)
+            ->orderBy('bm.prioridad')
             ->get();
 
             $menuNum = AssignamentTypeModel::select('tu_detail.id_menu as id_menu','bm.name as name', 'bm.icon as icon', 'bm.link as link', 'tu_detail.status as status', 'tu_detail.id_type_user as id_tu')

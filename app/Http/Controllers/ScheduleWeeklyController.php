@@ -51,7 +51,7 @@ class ScheduleWeeklyController extends Controller
                     ->where('sch.month',"=", $now->month)
                     ->where('sch.year',"=", $now->year)
                     ->whereIn('sch.status',[1,2])
-                    ->whereIn('detail_schedule_user.status',[1,2,3]);
+                    ->whereIn('detail_schedule_user.status',[1,2,3,6]);
 
                     if($request->day != "allDays"){
                         $data2->where('detail_schedule_user.id_day',"=", $request->day);
@@ -79,7 +79,7 @@ class ScheduleWeeklyController extends Controller
                     ->where('sch.month',"=", $now->month)
                     ->where('sch.year',"=", $now->year)
                     ->whereIn('sch.status',[1,2])
-                    ->whereIn('detail_schedule_user.status',[1,2,3]);
+                    ->whereIn('detail_schedule_user.status',[1,2,3,6]);
                     
                 } 
                 $data=$data2->orderBy('detail_schedule_user.id_day')->get();

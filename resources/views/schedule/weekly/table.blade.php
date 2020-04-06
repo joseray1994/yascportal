@@ -29,6 +29,9 @@
                         @case(3)
                         <span class="badge badge-pill badge-danger">Quit</span>
                         @break
+                        @case(6)
+                        <span class="badge badge-pill badge-warning">Suspended</span>
+                        @break
                     @endswitch
             </td>
             @switch($type->type)
@@ -56,6 +59,13 @@
                             @case(3)
                                 <td>
                                     <button type="button" class="btn btn-sm btn-outline-primary open_detail" data-toggle="tooltip" title="Audit" id="btn-edit" value="{{$type->id}}"  ><i class="fa fa-info-circle"></i><input type="hidden" id="tokenSch{{$type->id}}" value="2"></button>
+                                </td>
+                            @break
+                            @case(6)
+                                <td>
+                                <button type="button" class="btn btn-sm btn-outline-primary open_detail" data-toggle="tooltip" title="Audit" id="btn-edit" value="{{$type->id}}"  ><i class="fa fa-info-circle"></i><input type="hidden" id="tokenSch{{$type->id}}" value="2"></button>
+                                    <button type="button" class="btn btn-sm btn-outline-warning text-dark open_detail" data-toggle="tooltip" title="Supended" id="btn-edit" value="{{$type->id}}"  ><i class="fa fa-level-up"></i><input type="hidden" id="tokenSch{{$type->id}}" value="1"></button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger text-dark quitschedule" data-toggle="tooltip" title="Quit" id="btn-edit" value="{{$type->id}}"  ><i class="fa fa-ban"></i></button>
                                 </td>
                             @break
                         @endswitch
@@ -99,6 +109,13 @@
                             @case(3)
                                 <td>
                                     <button type="button" class="btn btn-sm btn-outline-primary open_detail" data-toggle="tooltip" title="Audit" id="btn-edit" value="{{$type->id}}"  ><i class="fa fa-info-circle"></i><input type="hidden" id="tokenSch{{$type->id}}" value="2"></button>
+                                </td>
+                            @break
+                            @case(6)
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-outline-primary open_detail" data-toggle="tooltip" title="Audit" id="btn-edit" value="{{$type->id}}"  ><i class="fa fa-info-circle"></i><input type="hidden" id="tokenSch{{$type->id}}" value="2"></button>
+                                    <button type="button" class="btn btn-sm btn-outline-warning text-dark open_detail" data-toggle="tooltip" title="Supended" id="btn-edit" value="{{$type->id}}"  ><i class="fa fa-level-up"></i><input type="hidden" id="tokenSch{{$type->id}}" value="1"></button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger text-dark quitschedule" data-toggle="tooltip" title="Quit" id="btn-edit" value="{{$type->id}}"  ><i class="fa fa-ban"></i></button>
                                 </td>
                             @break
                         @endswitch

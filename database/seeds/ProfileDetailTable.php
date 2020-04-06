@@ -29,7 +29,6 @@ class ProfileDetailTable extends Seeder
             ['id_type_user'=> 1,'id_menu'=> 13,'status'=> 1,],
             ['id_type_user'=> 1,'id_menu'=> 14,'status'=> 1,],
             ['id_type_user'=> 1,'id_menu'=> 16,'status'=> 1,],
-            ['id_type_user'=> 1,'id_menu'=> 14,'status'=> 1,],
             ['id_type_user'=> 1,'id_menu'=> 15,'status'=> 1,],
 
 

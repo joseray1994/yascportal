@@ -18,7 +18,8 @@ class StatusTableSeed extends Seeder
             ['status'=> 2,'description'=>'Inactivo'],
             ['status'=> 3,'description'=>'En Espera'],
             ['status'=> 4,'description'=>'Cancelado'],
-            ['status'=> 4,'description'=>'Rechazado'],
+            ['status'=> 5,'description'=>'Rechazado'],
+            ['status'=> 6,'description'=>'Suspendido'],
         ];
       
       foreach($status as $status){

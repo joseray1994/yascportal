@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 use App\User;
 use App\SuspendedModel;
+use App\ScheduleDetailModel;
+use App\DaysModel;
+use App\ClientModel;
+use App\DayOffModel;
+use App\ScheduleModel;
 use Illuminate\Http\Request;
 use Carbon\Carbon; 
 use Illuminate\Support\Facades\Auth;
@@ -81,7 +86,26 @@ class SuspendedWorkController extends Controller
         $data=['No'=>2,'suspended'=>$suspended];
         return response()->json($data);
     }
+    public function updateSchedualSuspended($start,$end,$id_operator){
 
+        $from = date($start);
+        $to = date($end);
+
+        $detail_sch = ScheduleDetailModel::where('id_operator',$id_operator)
+                                         ->whereBetween('date', [$from, $to])
+                                         ->update(['status' => 6]);
+
+    
+    }
+    public function updateSchedualNotSuspended($start,$end,$id_operator){
+
+        $detail_sch = ScheduleDetailModel::where('id_operator',$id_operator)
+                                         ->where('date','<=',$start)
+                                         ->where('date','>=',$end)
+                                         ->update(['status' => 1]);
+
+    
+    }
     public function update(Request $request, $suspended_id)
     {
        
@@ -91,6 +115,11 @@ class SuspendedWorkController extends Controller
             $suspended->date_end = $request->date_end;
             $suspended->status=1;
             $suspended->save();
+
+           
+            SuspendedWorkController::updateSchedualSuspended($suspended->date_start,$suspended->date_end,$suspended->id_operator);
+            SuspendedWorkController::updateSchedualNotSuspended($suspended->date_start,$suspended->date_end,$suspended->id_operator);
+
             $suspended2 = SuspendedWorkController::data_suspended($suspended->id);
 
             $data=['No'=>4,'suspended'=>$suspended2];
